@@ -17,7 +17,7 @@
 
                       <div class="col-2">
                         <select (change)="onGoodsTypeChange($event)">
-                          <option value="">--商品类别--</option>
+                          <option value="">--产品类别--</option>
                           <option [value]="option.id" *ngFor="let option of goodsType">
                             {{ option.name }}
                           </option>

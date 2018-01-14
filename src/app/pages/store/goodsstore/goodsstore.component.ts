@@ -21,7 +21,7 @@ import * as _ from 'lodash';
 export class GoodsstoreComponent implements OnInit {
 
   loading = false;
-  title = '货品库存';
+  title = '产品库存';
   query: string = '';
 
   settings = {
@@ -29,31 +29,33 @@ export class GoodsstoreComponent implements OnInit {
     mode: 'external',
     hideSubHeader: true,
     columns: {
-      id: {
-        title: 'ID',
-        type: 'number',
-        editable: false,
-        filter: false,
-        width: '30px',
-      },
       storeIdTxt: {
         title: '仓库',
         type: 'string',
         filter: false,
       },
       goodsTypeIdTxt: {
-        title: '商品类别',
+        title: '产品类别',
         type: 'string',
         filter: false,
       },
       goodsIdTxt: {
-        title: '商品',
+        title: '产品',
         type: 'string',
-        width: '80px',
       },
       number: {
         title: '库存量',
         type: 'number',
+        filter: false,
+      },
+      goodsSite: {
+        title: '货位',
+        type: 'string',
+        filter: false,
+      },
+      orgTxt: {
+        title: '所属部门',
+        type: 'string',
         filter: false,
       },
       amount: {
@@ -126,7 +128,7 @@ export class GoodsstoreComponent implements OnInit {
 
   getDataList(): void {
     this._dicService.getDicByName('仓库', (data) => { this.stores = data; });
-    this._dicService.getDicByName('商品类别', (data) => { this.goodsType = data; });
+    this._dicService.getDicByName('产品类别', (data) => { this.goodsType = data; });
     this.loading = true;
     this.goodsstoreService.getGoodsstores().then((data) => {
       this.storeData = data;

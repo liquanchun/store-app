@@ -114,7 +114,7 @@ export class StoreinComponent implements OnInit {
     noDataMessage: '',
     columns: {
       goodsTypeIdTxt: {
-        title: '商品类别',
+        title: '产品类别',
         type: 'string',
         filter: false
       },

@@ -1,4 +1,4 @@
-import { Component, ViewContainerRef, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, ViewContainerRef, AfterViewInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
 import * as $ from 'jquery';
 import { Router } from '@angular/router';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
@@ -7,7 +7,7 @@ import { HttpService } from './providers/httpClient';
 import { BaImageLoaderService, BaThemePreloader, BaThemeSpinner } from './theme/services';
 import { BaThemeConfig } from './theme/theme.config';
 import { layoutPaths } from './theme/theme.constants';
-
+import { Observable, Subscription } from 'rxjs/Rx';
 /*
  * App Component
  * Top Level Component
@@ -22,9 +22,9 @@ import { layoutPaths } from './theme/theme.constants';
     </main>
   `,
 })
-export class App implements AfterViewInit {
+export class App implements AfterViewInit, OnDestroy {
   isMenuCollapsed: boolean = false;
-
+  private sub: Subscription;
   constructor(
     private _router: Router,
     private modalService: NgbModal,
@@ -34,7 +34,7 @@ export class App implements AfterViewInit {
     private _spinner: BaThemeSpinner,
     private viewContainerRef: ViewContainerRef,
     private themeConfig: BaThemeConfig) {
-    if(!sessionStorage.getItem('userId')){
+    if (!sessionStorage.getItem('userId')) {
       this._router.navigate(['login']);
     }
     themeConfig.config();
@@ -55,6 +55,17 @@ export class App implements AfterViewInit {
     window.addEventListener('storage', function onStorageChange(event) {
       console.log(event.key);
     });
+
+    let timer = Observable.timer(3000, 10000);
+    this.sub = timer.subscribe(t => {
+      this._httpService
+        .getModelList('TokenAuth')
+        .then(function (data) { }, (err) => {
+          if (err.indexOf('401') > -1) {
+            this._router.navigate(['login']);
+          }
+        });
+    });
   }
 
   ngAfterViewInit(): void {
@@ -68,5 +79,9 @@ export class App implements AfterViewInit {
     // register some loaders
     BaThemePreloader.registerLoader(this._imageLoader.load('/assets/img/sky-bg.jpg'));
   }
-
+  ngOnDestroy() {
+    if (this.sub) {
+      this.sub.unsubscribe();
+    }
+  }
 }

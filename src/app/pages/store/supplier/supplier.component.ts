@@ -40,14 +40,13 @@ export class SupplierComponent implements OnInit {
     },
     hideSubHeader: true,
     columns: {
-      id: {
-        title: 'ID',
-        type: 'number',
-        editable: false,
-        filter: false,
-      },
       name: {
         title: '名称',
+        type: 'string',
+        filter: false,
+      },
+      city: {
+        title: '城市',
         type: 'string',
         filter: false,
       },
@@ -56,33 +55,38 @@ export class SupplierComponent implements OnInit {
         type: 'string',
         filter: false,
       },
-      linkMan: {
-        title: '联系人',
-        type: 'string',
-        filter: false,
-      },
       tel: {
         title: '联系电话',
         type: 'string',
         filter: false,
       },
-      bankName: {
-        title: '银行',
+      faxNo: {
+        title: '传真号码',
         type: 'string',
         filter: false,
       },
-      bankAcc: {
-        title: '账户名',
+      linkMan: {
+        title: '联系人',
         type: 'string',
         filter: false,
       },
-      bankAccNo: {
-        title: '账号',
+      linkManTitle: {
+        title: '联系人职位',
+        type: 'string',
+        filter: false,
+      },
+      linkManTel: {
+        title: '联系人电话',
+        type: 'string',
+        filter: false,
+      },
+      remark: {
+        title: '备注',
         type: 'string',
         filter: false,
       },
       createdBy: {
-        title: '操作员',
+        title: '录入人',
         type: 'string',
         filter: false
       },
@@ -99,15 +103,15 @@ export class SupplierComponent implements OnInit {
     },
     {
       type: 'input',
-      label: '地址',
-      name: 'address',
-      placeholder: '输入地址',
+      label: '城市',
+      name: 'city',
+      placeholder: '输入城市',
     },
     {
       type: 'input',
-      label: '联系人',
-      name: 'linkMan',
-      placeholder: '输入联系人',
+      label: '地址',
+      name: 'address',
+      placeholder: '输入地址',
     },
     {
       type: 'input',
@@ -117,21 +121,27 @@ export class SupplierComponent implements OnInit {
     },
     {
       type: 'input',
-      label: '银行',
-      name: 'bankName',
-      placeholder: '输入银行',
+      label: '传真号码',
+      name: 'faxNo',
+      placeholder: '输入传真号码',
     },
     {
       type: 'input',
-      label: '账户名',
-      name: 'bankAcc',
-      placeholder: '输入账户名',
+      label: '联系人',
+      name: 'linkMan',
+      placeholder: '输入联系人',
     },
     {
       type: 'input',
-      label: '账号',
-      name: 'bankAccNo',
-      placeholder: '输入账号',
+      label: '联系人职位',
+      name: 'linkManTitle',
+      placeholder: '输入联系人职位',
+    },
+    {
+      type: 'input',
+      label: '联系人电话',
+      name: 'linkManTel',
+      placeholder: '输入联系人电话',
     },
     {
       type: 'input',
@@ -165,9 +175,10 @@ export class SupplierComponent implements OnInit {
 
   onSearch(query: string = '') {
     this.source.setFilter([
-      { field: 'supplierMan', search: query },
-      { field: 'houseCode', search: query },
-      { field: 'createdBy', search: query },
+      { field: 'name', search: query },
+      { field: 'address', search: query },
+      { field: 'linkManTitle', search: query },
+      { field: 'linkManTel', search: query },
     ], false);
   }
 

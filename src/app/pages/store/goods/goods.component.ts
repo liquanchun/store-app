@@ -21,7 +21,7 @@ import * as _ from 'lodash';
 export class GoodsComponent implements OnInit {
 
   loading = false;
-  title = '货品信息';
+  title = '产品信息';
   query: string = '';
 
   settings = {
@@ -39,81 +39,80 @@ export class GoodsComponent implements OnInit {
     },
     hideSubHeader: true,
     columns: {
-      id: {
-        title: 'ID',
-        type: 'number',
-        editable: false,
-        filter: false,
-        width: '30px',
-      },
-      name: {
-        title: '名称',
-        type: 'string',
-        filter: false,
-      },
       typeName: {
         title: '类别',
         type: 'string',
         filter: false,
       },
-      unit: {
-        title: '单位',
+      name: {
+        title: '产品名称',
         type: 'string',
         filter: false,
       },
-      price: {
-        title: '单价',
-        type: 'number',
+      unit: {
+        title: '产品型号',
+        type: 'string',
         filter: false,
       },
-      maxAmount: {
-        title: '最大库存',
-        type: 'number',
-        filter: false
+      goodsCode: {
+        title: '产品代码',
+        type: 'string',
+        filter: false,
+      },
+      goodsNo: {
+        title: '产品编码',
+        type: 'string',
+        filter: false,
       },
       minAmount: {
-        title: '最小库存',
+        title: '最低库存',
         type: 'number',
         filter: false
       },
       remark: {
-        title: '备注',
+        title: '产品说明',
         type: 'string',
         filter: false
       },
-      createdBy: {
-        title: '操作员',
-        type: 'string',
-        filter: false
-      },
+      price: {
+        title: '参考价格',
+        type: 'number',
+        filter: false,
+      }
     }
   };
 
   config: FieldConfig[] = [
     {
       type: 'input',
-      label: '名称',
+      label: '产品名称',
       name: 'name',
-      placeholder: '输入名称',
+      placeholder: '输入产品名称',
       validation: [Validators.required],
     },
     {
       type: 'select',
-      label: '类别',
+      label: '产品类别',
       name: 'typeId',
       options: [],
     },
     {
       type: 'input',
-      label: '单位',
+      label: '产品型号',
       name: 'unit',
-      placeholder: '输入单位',
+      placeholder: '输入产品型号',
     },
     {
       type: 'input',
-      label: '最大库存',
-      name: 'maxAmount',
-      placeholder: '输入最大库存',
+      label: '产品代码',
+      name: 'goodsCode',
+      placeholder: '输入产品代码',
+    },
+    {
+      type: 'input',
+      label: '产品编码',
+      name: 'goodsNo',
+      placeholder: '输入产品编码',
     },
     {
       type: 'input',
@@ -123,9 +122,15 @@ export class GoodsComponent implements OnInit {
     },
     {
       type: 'input',
-      label: '备注',
+      label: '产品说明',
       name: 'remark',
-      placeholder: '输入备注',
+      placeholder: '输入产品说明',
+    },
+    {
+      type: 'input',
+      label: '参考价格',
+      name: 'price',
+      placeholder: '输入参考价格',
     }
   ];
 
@@ -156,9 +161,10 @@ export class GoodsComponent implements OnInit {
 
   onSearch(query: string = '') {
     this.source.setFilter([
-      { field: 'goodsstoreMan', search: query },
-      { field: 'houseCode', search: query },
-      { field: 'createdBy', search: query },
+      { field: 'name', search: query },
+      { field: 'goodsCode', search: query },
+      { field: 'goodsNo', search: query },
+      { field: 'unit', search: query },
     ], false);
   }
 
@@ -177,7 +183,7 @@ export class GoodsComponent implements OnInit {
   onCreate(): void {
     const that = this;
     const modalRef = this.modalService.open(NgbdModalContent);
-    modalRef.componentInstance.title = '新增货品信息';
+    modalRef.componentInstance.title = '新增产品信息';
     modalRef.componentInstance.config = this.config;
     modalRef.componentInstance.saveFun = (result, closeBack) => {
       that.goodsService.create(JSON.parse(result)).then((data) => {
@@ -198,7 +204,7 @@ export class GoodsComponent implements OnInit {
   onEdit(event){
     const that = this;
     const modalRef =this.modalService.open(NgbdModalContent);
-    modalRef.componentInstance.title = '修改货品信息';
+    modalRef.componentInstance.title = '修改产品信息';
     modalRef.componentInstance.config = this.config;
     modalRef.componentInstance.formValue = event.data;
     modalRef.componentInstance.saveFun = (result, closeBack) => {
@@ -230,7 +236,7 @@ export class GoodsComponent implements OnInit {
   }
 
   onGetGoodsType() {
-    this._dicService.getDicByName('商品类别', (data) => {
+    this._dicService.getDicByName('产品类别', (data) => {
       let cfg = _.find(this.config, f => { return f['name'] == 'typeId'; });
       if (cfg) {
         cfg.options = data;

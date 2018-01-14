@@ -26,7 +26,7 @@ import { ReturnStatement } from '@angular/compiler/src/output/output_ast';
 })
 export class StoreinNewComponent implements OnInit {
   @Input() showEditButton: boolean = true;
-  title = '新增商品入库';
+  title = '新增产品入库';
   isSaved: boolean = false;
 
   storeIn: any = {
@@ -53,13 +53,13 @@ export class StoreinNewComponent implements OnInit {
   operator: any = [];
   //用户
   users: any = [];
-  //商品类别
+  //产品类别
   goodsType: any = [];
-  //商品信息
+  //产品信息
   goodsInfo: any = [];
-  //选中的商品信息
+  //选中的产品信息
   selectedGoods: any = [];
-  //选中的商品信息表格
+  //选中的产品信息表格
   selectedGrid: LocalDataSource = new LocalDataSource();
   //弹出框表格
   popGrid: LocalDataSource = new LocalDataSource();
@@ -86,19 +86,24 @@ export class StoreinNewComponent implements OnInit {
     },
     columns: {
       name: {
-        title: '商品名称',
+        title: '产品名称',
         type: 'string',
         filter: false,
         editable: false
       },
       unit: {
-        title: '单位规格',
+        title: '产品型号',
         type: 'string',
         filter: false,
         editable: false
       },
+      goodssite: {
+        title: '货位',
+        type: 'string',
+        filter: false
+      },
       goodscode: {
-        title: '编码',
+        title: '产品编码',
         type: 'string',
         filter: false
       },
@@ -109,6 +114,11 @@ export class StoreinNewComponent implements OnInit {
       },
       number: {
         title: '数量',
+        type: 'number',
+        filter: false
+      },
+      remark: {
+        title: '备注',
         type: 'number',
         filter: false
       },
@@ -137,7 +147,7 @@ export class StoreinNewComponent implements OnInit {
         filter: false,
       },
       name: {
-        title: '商品名称',
+        title: '产品名称',
         type: 'string',
         filter: false,
       },
@@ -194,7 +204,7 @@ export class StoreinNewComponent implements OnInit {
     });
     this._dicService.getDicByName('仓库', (data) => { this.stores = data; });
     this._dicService.getDicByName('入库类型', (data) => { this.inType = data; });
-    this._dicService.getDicByName('商品类别', (data) => { this.goodsType = data; });
+    this._dicService.getDicByName('产品类别', (data) => { this.goodsType = data; });
   }
 
   //选择房间
@@ -268,7 +278,7 @@ export class StoreinNewComponent implements OnInit {
       { field: 'id', search: query },
     ], false);
   }
-  //选择商品类型
+  //选择产品类型
   onSelectGoodsType(id: number) {
     this.popGrid.load(_.filter(this.goodsInfo, (f) => { return f['typeId'] == id; }));
   }
@@ -310,7 +320,7 @@ export class StoreinNewComponent implements OnInit {
       return;
     }
     if (this.selectedGoods.length == 0) {
-      this.toastOptions.msg = "请选择商品。";
+      this.toastOptions.msg = "请选择产品。";
       this.toastyService.warning(this.toastOptions);
       return;
     }
