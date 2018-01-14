@@ -1,0 +1,38 @@
+<div class="row">
+  <!--用户角色信息card  -->
+  <div class="col-5 card">
+    <div class="btn-group margin8" role="group" aria-label="Basic example">
+      <button (click)="onNewMenu(tree)" type="button" class="btn btn-info"><i class="fa fa-plus" aria-hidden="true"></i> 新增子节点</button>
+      <button (click)="onDeleteMenu(tree)" [disabled]="selectedMenu==null" type="button" class="btn btn-info"><i class="fa fa-times" aria-hidden="true"></i> 删除</button>
+    </div>
+
+    <tree-root #tree [nodes]="nodes" [focused]="true" [options]="customTemplateStringOptions" (initialized)="onInitialized(tree)"
+      (event)="onEvent($event)">
+      <ng-template #treeNodeFullTemplate let-node let-index="index" let-templates="templates">
+
+        <div [class]="node.getClass()" [class.tree-node]="true" [class.tree-node-expanded]="node.isExpanded && node.hasChildren"
+          [class.tree-node-collapsed]="node.isCollapsed && node.hasChildren" [class.tree-node-leaf]="node.isLeaf" [class.tree-node-active]="node.isActive"
+          [class.tree-node-focused]="node.isFocused">
+
+          <tree-node-drop-slot *ngIf="index === 0" [dropIndex]="node.index" [node]="node.parent">
+          </tree-node-drop-slot>
+
+          <tree-node-wrapper [node]="node" [index]="index" [templates]="templates">
+          </tree-node-wrapper>
+
+          <tree-node-children [node]="node" [templates]="templates">
+          </tree-node-children>
+          <tree-node-drop-slot [dropIndex]="node.index + 1" [node]="node.parent">
+          </tree-node-drop-slot>
+        </div>
+      </ng-template>
+    </tree-root>
+  </div>
+
+  <div class="col-7 card">
+    <ngb-alert *ngIf="successMessage" type="success" (close)="successMessage = null">{{ successMessage }}</ngb-alert>
+    <dynamic-form [config]="config" #form="dynamicForm" (back)="backTop($event)" (submit)="submit($event)">
+    </dynamic-form>
+    {{ form.valid }} {{ form.value | json }}
+  </div>
+</div>

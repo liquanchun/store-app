@@ -1,0 +1,36 @@
+<div class="row">
+    <div class="col-md-12">
+        <ng2-toasty></ng2-toasty>
+        <ba-card title="用户中心" baCardClass="with-scroll">
+            <div class="form-group row">
+                <label for="staticEmail" class="offset-sm-1 col-sm-1 col-form-label">登录Id</label>
+                <div class="col-sm-5">
+                    <input type="text" readonly class="form-control readonly" [value]="user.userId">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="inputPassword" class="offset-sm-1 col-sm-1 col-form-label">姓名</label>
+                <div class="col-sm-5">
+                    <input type="text" class="form-control" [(ngModel)]="user.userName">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="inputPassword" class="offset-sm-1 col-sm-1 col-form-label">电话号码</label>
+                <div class="col-sm-5">
+                    <input type="text" class="form-control" [(ngModel)]="user.mobile">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="inputPassword" class="offset-sm-1 col-sm-1 col-form-label">微信号</label>
+                <div class="col-sm-5">
+                    <input type="text" class="form-control" [(ngModel)]="user.weixin">
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-sm-5 offset-sm-2">
+                    <button (click)="onUpdate()" class="btn btn-info"><i class="fa fa-floppy-o" aria-hidden="true"></i>  修改  </button>
+                </div>
+            </div>
+        </ba-card>
+    </div>
+</div>

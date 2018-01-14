@@ -1,0 +1,39 @@
+@media screen and (min-width: 1620px) {
+  .row.shift-up {
+    > * {
+      margin-top: -573px;
+    }
+  }
+}
+
+@media screen and (max-width: 1620px) {
+  .card.feed-panel.large-card {
+    height: 824px;
+  }
+}
+
+.user-stats-card {
+  .card-title {
+    padding: 0 0 15px;
+  }
+}
+
+.blurCalendar {
+  height: 475px;
+}
+
+.demo-chart1 {
+  height: 200px;
+}
+.demo-chart2 {
+  height: 300px;
+}
+.demo-chart3 {
+  height: 300px;
+}
+.demo-chart4 {
+  height: 300px;
+}
+.demo-chart5 {
+  height: 300px;
+}

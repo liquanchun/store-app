@@ -1,0 +1,134 @@
+@import "../../../theme/sass/conf/conf";
+:host /deep/ .widgets {
+    .smart-table-container {
+        width: 100%;
+    }
+    select {
+        padding: 7px 8px;
+    }
+}
+
+:host /deep/ {
+    ng2-smart-table {
+        th,
+        td {
+            // border: 1px solid $border-light !important;
+            line-height: 25px;
+            vertical-align: middle;
+        }
+        table tr td {
+            padding: 0 8px;
+        }
+        color: $default-text;
+        input {
+            line-height: 1.3 !important;
+        }
+        ng2-smart-table-cell {
+            color: $default-text;
+            line-height: 31px;
+        }
+        tbody {
+            tr {
+                color: $default-text;
+            }
+            tr:hover {
+                background: rgba(0, 0, 0, 0.03);
+            }
+        }
+        a.ng2-smart-sort-link {
+            font-size: 14px !important;
+            font-weight: $font-bolder;
+            &.sort {
+                font-weight: $font-bolder !important;
+                &::after {
+                    border-bottom-color: $default-text !important;
+                }
+            }
+        }
+        .ng2-smart-actions {
+            width: 70px;
+            text-align: center;
+            .actions {
+                float: none;
+                text-align: center;
+            }
+        }
+        .ng2-smart-actions-title-add {
+            text-align: center;
+        }
+        a.ng2-smart-action,
+        .ng2-smart-title {
+            font-size: 14px !important;
+            padding: 0 5px;
+            display: inline-block;
+            &.ng2-smart-action-add-add {
+                font-size: 25px !important;
+            }
+        }
+        .ng2-smart-filters th {
+            padding: 2px 3px;
+        }
+        .ng2-smart-titles th {
+            padding: 5px;
+            font-size: 120%;
+        }
+        nav.ng2-smart-pagination-nav {
+            display: flex;
+            justify-content: center;
+        }
+        .filterInputClass {
+            width: 100px;
+        }
+        .searchCol3 {
+            padding-left: 0 !important;
+        }
+        .searchInputgroup {
+            margin-bottom: 0 !important;
+        }
+        ng2-st-thead-form-row td {
+            padding: 0;
+        }
+        table tr:hover {
+            background-color: #fbf8e9;
+            transition: all 0.1s ease-in-out;
+        }
+        table th,
+        table td {
+            border-left: 1px solid #ccc;
+            border-top: 1px solid #ccc;
+            padding: 10px;
+            text-align: left;
+        }
+        table thead tr:first-child th {
+            background-color: #dce9f9;
+            border-top: none;
+        }
+        table thead tr:nth-child(2) th {
+            border: none;
+        }
+        table td:first-child,
+        table th:first-child {
+            border-left: none;
+        }
+        table th:first-child {
+            border-radius: 6px 0 0 0;
+        }
+        table th:last-child {
+            border-radius: 0 6px 0 0;
+        }
+        table tr:last-child td:first-child {
+            border-radius: 0 0 0 6px;
+        }
+        table tr:last-child td:last-child {
+            border-radius: 0 0 6px 0;
+        }
+        table {
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            box-shadow: 0 1px 1px #ccc;
+        }
+        .ng2-smart-action-multiple-select{
+            width: 50px;
+        }
+    }
+}

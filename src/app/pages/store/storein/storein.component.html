@@ -1,0 +1,79 @@
+<div class="row">
+  <ng2-toasty></ng2-toasty>
+  <div class="col-md-12">
+    <ba-card [title]="title" class="card-primary" baCardClass="with-scroll">
+      <div>
+        <div class="row">
+          <div class="col-2">
+            <search-input (searchClick)="onSearch($event)"></search-input>
+          </div>
+          <div class="col-2">
+            <div class="input-group" style="height:32px;">
+              <input type="text" [value]="orgName" style="padding:3px;" class="form-control" placeholder="采购部门">
+              <span class="input-group-btn btn-group">
+                <button class="btn btn-secondary" placement="bottom" (shown)="showPopOrg()" [ngbPopover]="popContentOrg" container="body"
+                  popoverTitle="组织架构" type="button">
+                  <i class="fa fa-search" aria-hidden="true"></i> 选择</button>
+              </span>
+            </div>
+          </div>
+          <div class="col-2">
+            <select (change)="onInTypeChange($event)">
+              <option value="">--入库类型--</option>
+              <option [value]="option.id" *ngFor="let option of inType">
+                {{ option.name }}
+              </option>
+            </select>
+          </div>
+          <div class="col-2">
+            <select (change)="onStoresChange($event)">
+              <option value="">--仓库--</option>
+              <option [value]="option.id" *ngFor="let option of stores">
+                {{ option.name }}
+              </option>
+            </select>
+          </div>
+
+          <div class="col-2">
+            <select (change)="onSupplierChange($event)">
+              <option value="">--供应商--</option>
+              <option [value]="option.id" *ngFor="let option of suppliers">
+                {{ option.name }}
+              </option>
+            </select>
+          </div>
+
+          <div class="col-2">
+            <div class="btn-group margin8 pull-right" role="group" aria-label="Basic example">
+                <button (click)="newStorein()" type="button" class="btn btn-info btn-sm">
+                  <i class="fa fa-refresh" aria-hidden="true"></i> 新增入库</button>
+                <button (click)="print()" type="button" class="btn btn-info btn-sm">
+                    <i class="fa fa-refresh" aria-hidden="true"></i> 打印</button>
+            </div>
+          </div>
+        </div>
+        <ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '4px' }"></ngx-loading>
+        <div id="printDiv">
+          <ng2-smart-table [settings]="settings" [source]="source" (edit)="open($event,popContent)" (delete)="onDelete($event)"></ng2-smart-table>
+        </div>
+      </div>
+    </ba-card>
+  </div>
+
+  <ng-template #popContent let-c="close" let-d="dismiss">
+    <div class="modal-header">
+      <h4 class="modal-title">订单商品信息</h4>
+      <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <ng2-smart-table [settings]="settingsGoods" [source]="selectedGrid">
+      </ng2-smart-table>
+    </div>
+  </ng-template>
+
+  <ng-template #popContentOrg>
+    <app-sys-org [editable]="false" (selected)="onSelectedOrg($event)"></app-sys-org>
+  </ng-template>
+</div>

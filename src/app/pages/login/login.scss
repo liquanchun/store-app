@@ -1,0 +1,10 @@
+@import '../../theme/sass/auth';
+$mainBgUrl: $assets-root+$images-root+'blur-bg.jpg';
+.auth-main {
+    background: url($mainBgUrl) no-repeat center center;
+}
+
+button.btn.btn-default {
+    background-color: #285eb8;
+    width: 150px;
+}

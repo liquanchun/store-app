@@ -1,0 +1,24 @@
+<div class="row">
+    <div class="col-md-12">
+        <ng2-toasty></ng2-toasty>
+        <ba-card [title]="title" class="card-primary" baCardClass="with-scroll">
+            <div>
+                <div class="row">
+                    <div class="col-3">
+                        <search-input (searchClick)="onSearch($event)"></search-input>
+                    </div>
+
+                    <div class="col-9">
+                        <div class="btn-group margin8 pull-right" role="group" aria-label="Basic example">
+                            <button (click)="newHouse()" type="button" class="btn btn-info btn-sm">
+                <i class="fa fa-refresh" aria-hidden="true"></i> 新增房间</button>
+                        </div>
+                    </div>
+                </div>
+                <ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '4px' }"></ngx-loading>
+                <ng2-smart-table [settings]="settings" [source]="source" (edit)="onEdit($event)" (delete)="onDelete($event)">
+                </ng2-smart-table>
+            </div>
+        </ba-card>
+    </div>
+</div>

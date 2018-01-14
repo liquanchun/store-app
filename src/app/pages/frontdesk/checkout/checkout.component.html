@@ -1,0 +1,132 @@
+<div class="row">
+    <div class="col-md-12">
+        <ng2-toasty></ng2-toasty>
+        <ba-card [title]="title" class="card-primary" baCardClass="with-scroll">
+            <div class="row">
+                <div class="col-md-5">
+                    <div class="form-group row">
+                        <label for="inputId" class="col-sm-2 col-form-label">入住房号</label>
+                        <div class="col-sm-10">
+                            <input #search [(ngModel)]="checkIn.houseCode" (keydown.enter)="onSearch(search.value)" type="text" class="form-control" id="inputId" placeholder="输入房号按回车键">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="inputName" class="col-sm-2 col-form-label">订单号</label>
+                        <div class="col-sm-10">
+                            <input [(ngModel)]="checkIn.orderNo" readonly type="text" class="form-control readonly" id="inputName">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="inputName" class="col-sm-2 col-form-label">客人姓名</label>
+                        <div class="col-sm-10">
+                            <input [(ngModel)]="checkIn.cusName" readonly type="text" class="form-control readonly" id="inputName">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="inputId" class="col-sm-2 col-form-label">身份证号</label>
+                        <div class="col-sm-10">
+                            <input [(ngModel)]="checkIn.idCard" readonly type="text" class="form-control readonly" id="inputId">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="inputMobile" class="col-sm-2 col-form-label">电话号码</label>
+                        <div class="col-sm-10">
+                            <input [(ngModel)]="checkIn.cusPhone" readonly type="text" class="form-control readonly" id="inputMobile">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="inputMobile" class="col-sm-2 col-form-label">入住方式</label>
+                        <div class="col-sm-10">
+                            <input [(ngModel)]="checkIn.inType" readonly type="text" class="form-control readonly" id="inputMobile">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="inputMobile" class="col-sm-2 col-form-label">客源</label>
+                        <div class="col-sm-10">
+                            <input [(ngModel)]="checkIn.comeTypeTxt" readonly type="text" class="form-control readonly" id="inputMobile">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-10">
+                    <fieldset class="form-group">
+                        <div class="row">
+                            <legend class="col-form-legend col-sm-1">房间信息</legend>
+                            <div class="col-sm-11">
+                                <ng2-smart-table [settings]="settingsHouse" [source]="selectedGrid">
+                                </ng2-smart-table>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+
+                <div class="col-md-10">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group row">
+                                <label for="inputName" class="col-sm-3 col-form-label">预收押金</label>
+                                <div style="margin-left:20px;">
+                                    <input type="text" [(ngModel)]="checkIn.preReceivefee" readonly class="form-control readonly" id="inputprefee">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group row">
+                                <label for="inputName" class="col-sm-4 col-form-label">押金支付方式</label>
+                                <div>
+                                    <input type="text" [(ngModel)]="checkIn.payTypeTxt" readonly class="form-control readonly" id="inputprefee">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group row">
+                                <label for="inputName" class="col-sm-4 col-form-label">单据号/授权码</label>
+                                <div>
+                                    <input type="text" [(ngModel)]="checkIn.billNo" readonly class="form-control readonly" id="inputbillno">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-10">
+                    <div class="row">
+                        <div class="col-md-5">
+                            <div class="form-group row">
+                                <label for="inputName" class="col-sm-3 col-form-label">合计房费</label>
+                                <div>
+                                    <input type="text" [(ngModel)]="checkIn.houseFee" class="form-control" id="inputhousefee">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-7">
+                            <div class="form-group row">
+                                <label for="inputName" class="col-sm-2 col-form-label">支付方式</label>
+                                <div style="margin-top:4px;" *ngFor="let pt of paytype" class="form-check form-check-inline">
+                                    <label class="form-check-label">
+                                      <input [(ngModel)]="checkIn.payType" class="form-check-input" type="radio" name="inlineRadioOptionspay" [value]="pt.id"> {{pt.name}}
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-5">
+                    <div class="form-group row">
+                        <label for="inputremark" class="col-sm-2 col-form-label">备注</label>
+                        <div class="col-sm-10">
+                            <input [(ngModel)]="checkIn.remark" type="text" class="form-control" id="inputremark" placeholder="输入备注信息">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-sm-10 offset-sm-2 btn-group">
+                            <button type="button" [disabled]="isSaved" (click)="onConfirm()" class="btn btn-info">{{ isSaved ? '正在保存...':'确认结算'}}</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </ba-card>
+    </div>
+</div>

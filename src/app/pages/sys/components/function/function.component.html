@@ -1,0 +1,150 @@
+<div class="row">
+    <div class="col-md-12">
+        <ba-card title="用户角色" baCardClass="with-scroll">
+            <div class="row">
+                <!--用户角色信息card  -->
+                <div class="col-2 card">
+                    <div class="btn-group margin8" role="group" aria-label="Basic example">
+                        <button (click)="onSaveRole()" type="button" class="btn btn-info" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample"><i class="fa fa-plus" aria-hidden="true"></i> {{isNewRole?'新增角色':'保存'}}</button>
+                        <button (click)="onDeleteRole(content)" [disabled]="selectedRole==null" type="button" class="btn btn-info"><i class="fa fa-times" aria-hidden="true"></i> 删除</button>
+                    </div>
+                    <div class="collapse" id="collapseExample">
+                        <div class="card card-block">
+                            <form>
+                                <div class="form-group">
+                                    <label class="form-control-label" for="formRoleName">角色名称：</label>
+                                    <input required [(ngModel)]="newRoleName" name="newRoleName" type="text" class="form-control" id="formRoleName" placeholder="输入角色名称">
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="list-group" id="myList" role="tablist">
+                        <a *ngFor="let role of roles" (click)="onSelectedRole(role)" class="list-group-item list-group-item-action" data-toggle="list" href="#home" role="tab">{{role.role_name}}</a>
+                    </div>
+                </div>
+                <!--用户信息card  -->
+                <div class="col-10 card">
+                    <!-- 按钮 -->
+                    <div *ngIf="!isNewUser" class="row">
+
+                        <div class="col-4">
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="Search for..." aria-label="Search for...">
+                                <span class="input-group-btn btn-group">
+                                <button class="btn btn-secondary" type="button"><i class="fa fa-search" aria-hidden="true"></i> 查询</button>
+                            </span>
+                            </div>
+                        </div>
+                        <div class="col-8">
+                            <div class="btn-group margin8 pull-right" role="group" aria-label="Basic example">
+                                <button (click)="onNewUser()" type="button" class="btn btn-info"><i class="fa fa-plus" aria-hidden="true"></i> 新增用户 </button>
+                                <button (click)="onDeleteUser(content)" [disabled]="selectedUser==null" type="button" class="btn btn-info"><i class="fa fa-times" aria-hidden="true"></i> 删除</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--新增用户表单  -->
+                    <div *ngIf="isNewUser" class="container">
+                        <form [formGroup]="userForm" (ngSubmit)="onSubmit(userForm.value)" class="form-horizontal">
+                            <div class="form-group row " [ngClass]="{'has-error': (!userid.valid && userid.touched), 'has-success': (userid.valid && userid.touched)}">
+                                <label for="userid" class="col-sm-1 col-form-label offset-sm-2">用户ID</label>
+                                <div class="col-sm-5">
+                                    <input [formControl]="userid" type="userid" class="form-control" id="userid" name="userid" placeholder="请输入用户ID">
+                                </div>
+                            </div>
+                            <div class="form-group row" [ngClass]="{'has-error': (!username.valid && username.touched), 'has-success': (username.valid && username.touched)}">
+                                <label for="username" class="col-sm-1 col-form-label  offset-sm-2">用户名</label>
+                                <div class="col-sm-5">
+                                    <input [formControl]="username" type="username" class="form-control" id="username" name="username" placeholder="请输入用户名">
+                                </div>
+                            </div>
+                            <div class="form-group row" [ngClass]="{'has-error': (!mobile.valid && mobile.touched), 'has-success': (mobile.valid && mobile.touched)}">
+                                <label for="mobile" class="col-sm-1 col-form-label  offset-sm-2">电话号码</label>
+                                <div class="col-sm-5">
+                                    <input [formControl]="mobile" type="mobile" class="form-control" id="mobile" name="mobile" placeholder="请输入电话号码">
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="weixin" class="col-sm-1 col-form-label  offset-sm-2">微信号</label>
+                                <div class="col-sm-5">
+                                    <input [formControl]="weixin" type="weixin" class="form-control" id="weixin" name="weixin" placeholder="请输入微信号">
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="email" class="col-sm-1 col-form-label  offset-sm-2">Email</label>
+                                <div class="col-sm-5">
+                                    <input [formControl]="email" type="email" class="form-control" id="email" name="email" placeholder="请输入Email">
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="email" class="col-sm-1 col-form-label  offset-sm-2">用户角色</label>
+                                <div class="col-sm-9">
+                                    <div *ngFor="let role of roles" class="form-check form-check-inline">
+                                        <label class="form-check-label">
+                                            <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="{{role.role_id}}"> {{role.role_name}}
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group row" [ngClass]="{'has-error': (!password.valid && password.touched), 'has-success': (password.valid && password.touched)}">
+                                <label for="password" class="col-sm-1 col-form-label  offset-sm-2">密码</label>
+                                <div class="col-sm-5">
+                                    <input [formControl]="password" type="password" class="form-control" id="password" name="password" placeholder="请输入登录密码">
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="col-sm-5 offset-sm-3">
+                                    <div class="form-check">
+                                        <label class="form-check-label">
+                                            <input class="form-check-input" [formControl]="isvalid" name="isvalid" type="checkbox"> 是否有效
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="offset-sm-3 col-sm-6">
+                                    <button type="submit" [disabled]="!userForm.valid" class="btn btn-info"><i class="fa fa-floppy-o" aria-hidden="true"></i> 保存</button>
+                                    <button type="button" (click)="onBack()" class="btn btn-info"><i class="fa fa-backward" aria-hidden="true"></i> 返回</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <!--用户表格  -->
+                    <div *ngIf="!isNewUser" class="vertical-scroll">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th class="table-id">#</th>
+                                    <th>用户ID</th>
+                                    <th>用户名</th>
+                                    <th>电话号码</th>
+                                    <th>微信号</th>
+                                    <th>Email</th>
+                                    <th>用户角色</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of smartTableData">
+                                    <td class="table-id">{{ item.id }}</td>
+                                    <td>{{ item.firstName }}</td>
+                                    <td>{{ item.lastName }}</td>
+                                    <td>{{ item.username }}</td>
+                                    <td>{{ item.username }}</td>
+                                    <td><a class="email-link" href="mailto:{{ item.email }}">{{ item.email }}</a></td>
+                                    <td>{{ item.age }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </ba-card>
+    </div>
+</div>

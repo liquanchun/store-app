@@ -1,0 +1,28 @@
+<ul class="al-msg-center clearfix">
+  <li class="dropdown">
+    <a href class="dropdown-toggle" id="msg-dd1" data-toggle="dropdown" aria-expanded="false">
+      <i class="fa fa-bell-o"></i><span>{{ notifications.length }}</span>
+
+      <div class="notification-ring"></div>
+    </a>
+
+    <div class="top-dropdown-menu dropdown-menu" aria-labelledby="msg-dd1">
+      <i class="dropdown-arr"></i>
+
+      <div class="header clearfix">
+        <strong>提醒消息</strong>
+        <a href>标记全部已读</a>
+        <a href>设置</a>
+      </div>
+      <div class="msg-list">
+        <a *ngFor="let msg of notifications" href class="clearfix">
+          <div class="msg-area">
+            <div>{{ msg.text }}</div>
+            <span>{{ msg.time }}</span>
+          </div>
+        </a>
+      </div>
+      <a href>查看全部消息</a>
+    </div>
+  </li>
+</ul>

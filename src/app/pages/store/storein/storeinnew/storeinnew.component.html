@@ -1,0 +1,150 @@
+<div class="row">
+  <div class="col-md-12">
+    <ng2-toasty></ng2-toasty>
+    <ba-card [title]="title" class="card-primary" baCardClass="with-scroll">
+      <div class="row">
+        <div class="col-md-5">
+          <div class="form-group row">
+            <label for="inputId" class="col-md-2 col-form-label">入库类型</label>
+            <div style="margin-top:4px;" class="col-md-10">
+              <div *ngFor="let ct of inType" class="form-check form-check-inline">
+                <label class="form-check-label">
+                  <input [(ngModel)]="storeIn.typeId" class="form-check-input" type="radio" name="inTypeRadioOptions" [value]="ct.id"> {{ct.name}}
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label for="inputId" class="col-md-2 col-form-label">仓库</label>
+            <div style="margin-top:4px;" class="col-md-10">
+              <div *ngFor="let ct of stores" class="form-check form-check-inline">
+                <label class="form-check-label">
+                  <input [(ngModel)]="storeIn.storeId" class="form-check-input" type="radio" name="storeCodeRadioOptions" [value]="ct.id"> {{ct.name}}
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label for="inputId" class="col-md-2 col-form-label">日期</label>
+            <div class="input-group col-md-6">
+              <input class="form-control" placeholder="yyyy-mm-dd" [(ngModel)]="storeIn.inTime" ngbDatepicker #d="ngbDatepicker">
+              <div class="input-group-addon" (click)="d.toggle()">
+                <i class="fa fa-calendar" aria-hidden="true"></i>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group row">
+              <label for="inputremark" class="col-md-2 col-form-label">采购单号</label>
+              <div class="col-md-9">
+                <input [(ngModel)]="storeIn.billNo" type="text" class="form-control" placeholder="输入采购单号">
+              </div>
+          </div>
+
+          <div class="form-group row">
+            <label for="inputId" class="col-md-2 col-form-label">供应商</label>
+            <div class="col-md-9">
+              <select [(ngModel)]="storeIn.supplierId">
+                <option value="">--请选择--</option>
+                <option [value]="option.id" *ngFor="let option of suppliers">
+                  {{ option.name }}
+                </option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label for="inputId" class="col-md-2 col-form-label">采购部门</label>
+            <div class="input-group col-md-9" style="height:32px;">
+              <input type="text" [(ngModel)]="storeIn.orgtext" style="padding:3px;" class="form-control" placeholder="采购部门">
+              <span class="input-group-btn btn-group">
+                <button class="btn btn-secondary" placement="right" (shown)="showPopOrg()" [ngbPopover]="popContentOrg" popoverTitle="组织架构" type="button">
+                  <i class="fa fa-search" aria-hidden="true"></i> 选择</button>
+              </span>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label for="inputId" class="col-md-2 col-form-label">采购人</label>
+            <div class="col-md-9">
+              <select [(ngModel)]="storeIn.operator">
+                <option value="">--请选择--</option>
+                <option [value]="option.id" *ngFor="let option of operator">
+                  {{ option.name }}
+                </option>
+              </select>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="col-md-10">
+          <fieldset class="form-group">
+            <div class="row">
+              <legend class="col-form-legend col-md-1">商品信息</legend>
+
+              <div class="col-md-11">
+                <div class="btn-group" role="group" aria-label="Basic example">
+                  <button placement="right" (shown)="showPop()" [ngbPopover]="popContent" popoverTitle="商品信息列表" type="button" class="btn btn-success btn-sm"
+                    container="body">
+                    <i class="fa fa-refresh" aria-hidden="true"></i> 选择商品</button>
+                </div>
+
+                <ng2-smart-table [settings]="settingsGoods" [source]="selectedGrid" (editConfirm)="onEditConfirm($event)" (userRowSelect)="onUserRowSelect($event)"
+                  (createConfirm)="onCreateConfirm($event)">
+                </ng2-smart-table>
+              </div>
+            </div>
+          </fieldset>
+        </div>
+
+
+        <div class="col-md-5">
+          <div class="form-group row">
+            <label for="inputremark" class="col-md-2 col-form-label">合计金额</label>
+            <div class="col-md-9">
+              <input [(ngModel)]="storeIn.amount" (keydown)="onKeyPress($event)" type="text" class="form-control" placeholder="输入备注信息">
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="inputremark" class="col-md-2 col-form-label">备注</label>
+            <div class="col-md-9">
+              <input [(ngModel)]="storeIn.remark" type="text" class="form-control" placeholder="输入备注信息">
+            </div>
+          </div>
+          <div class="form-group row">
+            <div class="col-md-10 offset-sm-2 btn-group">
+              <button type="button" [disabled]="isSaved" (click)="onConfirm()" class="btn btn-info">{{ isSaved ? '正在保存...':'确认入库'}}</button>
+              <button type="button" (click)="onBack()" class="btn btn-warning">返回列表</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <ng-template #popContent>
+        <search-input (searchClick)="onSearch($event)"></search-input>
+        <div class="form-group row">
+          <label for="inputId" class="col-md-2 col-form-label">类别</label>
+          <div class="col-md-6">
+            <select (change)="onChange($event)">
+              <option value="">--请选择--</option>
+              <option [value]="option.id" *ngFor="let option of goodsType">
+                {{ option.name }}
+              </option>
+            </select>
+          </div>
+        </div>
+        <ng2-smart-table [settings]="settings" [source]="popGrid" (userRowSelect)="rowClicked($event)">
+        </ng2-smart-table>
+      </ng-template>
+
+      <ng-template #popContentOrg>
+        <app-sys-org [editable]="false" (selected)="onSelectedOrg($event)"></app-sys-org>
+      </ng-template>
+
+    </ba-card>
+  </div>
+</div>

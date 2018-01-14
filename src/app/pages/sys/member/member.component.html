@@ -1,0 +1,58 @@
+<div class="row">
+    <div class="col-md-12">
+        <ng2-toasty></ng2-toasty>
+        <ngb-tabset>
+            <ngb-tab title="级别与价格">
+                <ng-template ngbTabContent>
+                    <div class="btn-group margin8 pull-right" role="group" aria-label="Basic example">
+                        <button (click)="onCreate('SetCard','新增级别与价格')" type="button" class="btn btn-info btn-sm">
+              <i class="fa fa-refresh" aria-hidden="true"></i> 新增级别与价格</button>
+                    </div>
+                    <ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '4px' }"></ngx-loading>
+                    <ng2-smart-table [settings]="settingsCard" [source]="sourceCard" (edit)="onEdit('SetCard','修改级别与价格',$event)" (delete)="onDelete('SetCard',$event)"></ng2-smart-table>
+                </ng-template>
+            </ngb-tab>
+            <ngb-tab title="积分规则">
+                <ng-template ngbTabContent>
+                    <div class="btn-group margin8 pull-right" role="group" aria-label="Basic example">
+                        <button (click)="onCreate('SetIntegral','新增积分规则')" type="button" class="btn btn-info btn-sm">
+              <i class="fa fa-refresh" aria-hidden="true"></i> 新增积分规则</button>
+                    </div>
+                    <ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '4px' }"></ngx-loading>
+                    <ng2-smart-table [settings]="settingsIntegral" [source]="sourceIntegral" (edit)="onEdit('SetIntegral','修改积分规则',$event)" (delete)="onDelete('SetIntegral',$event)"></ng2-smart-table>
+                </ng-template>
+            </ngb-tab>
+            <ngb-tab title="积分兑换规则">
+                <ng-template ngbTabContent>
+                    <div class="btn-group margin8 pull-right" role="group" aria-label="Basic example">
+                        <button (click)="onCreate('SetInteExchange','新增积分兑换规则')" type="button" class="btn btn-info btn-sm">
+              <i class="fa fa-refresh" aria-hidden="true"></i> 新增积分兑换规则</button>
+                    </div>
+                    <ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '4px' }"></ngx-loading>
+                    <ng2-smart-table [settings]="settingsInteExchange" [source]="sourceInteExchange" (edit)="onEdit('SetInteExchange','修改积分兑换规则',$event)" (delete)="onDelete('SetInteExchange',$event)"></ng2-smart-table>
+                </ng-template>
+            </ngb-tab>
+            <ngb-tab title="升级规则">
+                <ng-template ngbTabContent>
+                    <div class="btn-group margin8 pull-right" role="group" aria-label="Basic example">
+                        <button (click)="onCreate('SetCardUpgrade','新增升级规则')" type="button" class="btn btn-info btn-sm">
+              <i class="fa fa-refresh" aria-hidden="true"></i> 新增升级规则</button>
+                    </div>
+                    <ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '4px' }"></ngx-loading>
+                    <ng2-smart-table [settings]="settingsCardUpgrade" [source]="sourceCardUpgrade" (edit)="onEdit('SetCardUpgrade','修改升级规则',$event)" (delete)="onDelete('SetCardUpgrade',$event)"></ng2-smart-table>
+                </ng-template>
+            </ngb-tab>
+            <ngb-tab title="积分换房活动">
+                <ng-template ngbTabContent>
+                    <div class="btn-group margin8 pull-right" role="group" aria-label="Basic example">
+                        <button (click)="onCreate('SetInteHouse','新增积分换房活动')" type="button" class="btn btn-info btn-sm">
+              <i class="fa fa-refresh" aria-hidden="true"></i> 新增积分换房活动</button>
+                    </div>
+                    <ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '4px' }"></ngx-loading>
+                    <ng2-smart-table [settings]="settingsInteHouse" [source]="sourceInteHouse" (edit)="onEdit('SetInteHouse','修改积分换房活动',$event)" (delete)="onDelete('SetInteHouse',$event)"></ng2-smart-table>
+                </ng-template>
+            </ngb-tab>
+        </ngb-tabset>
+
+    </div>
+</div>

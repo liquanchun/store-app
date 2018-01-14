@@ -1,0 +1,11 @@
+<div class="row">
+    <div class="card">
+        <div class="btn-group margin8" role="group" aria-label="Basic example">
+            <button (click)="onNewRole()" type="button" class="btn btn-info"><i class="fa fa-plus" aria-hidden="true"></i>新增角色</button>
+            <button (click)="onDeleteRole(content)" [disabled]="selectedRole==null" type="button" class="btn btn-info"><i class="fa fa-times" aria-hidden="true"></i> 删除</button>
+        </div>
+        <div class="list-group" id="myList" role="tablist">
+            <a *ngFor="let role of roles" [class.active]="selectedRole && role['roleName'] === selectedRole['roleName']" (click)="onSelectedRole(role)" class="list-group-item list-group-item-action" href="javascript:void(0);">{{role.roleName}}</a>
+        </div>
+    </div>
+</div>

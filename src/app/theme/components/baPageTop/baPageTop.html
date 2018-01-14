@@ -1,0 +1,61 @@
+<div class="page-top clearfix" baScrollPosition maxHeight="50" (scrollChange)="scrolledChanged($event)" [ngClass]="{scrolled: isScrolled}">
+    <a routerLink="/pages/dashboard" class="al-logo clearfix"><span>格慢酒店管理</span>  </a>
+    <a href (click)="toggleMenu()" class="collapse-menu-link ion-navicon"></a>
+    <!-- <div class="menudiv">
+    <a href (click)="openMenu($event)" class="menulink"><span class="fa-stack fa-lg">
+      <i class="fa fa-desktop fa-stack-1x"></i>
+    </span>
+    前台营业</a>
+
+    <a href (click)="openMenu($event)" class="menulink"><span class="fa-stack fa-lg">
+      <i class="fa fa-university fa-stack-1x"></i>
+    </span>
+    房务管理</a>
+
+    <a href (click)="openMenu($event)" class="menulink"><span class="fa-stack fa-lg">
+      <i class="fa fa-jpy fa-stack-1x"></i>
+    </span>
+    财务管理</a>
+
+    <a href (click)="openMenu($event)" class="menulink"><span class="fa-stack fa-lg">
+      <i class="fa fa-cubes fa-stack-1x"></i>
+    </span>
+    库存管理</a>
+
+    <a href (click)="openMenu($event)" class="menulink"><span class="fa-stack fa-lg">
+      <i class="fa fa-paw fa-stack-1x"></i>
+    </span>
+    营销管理</a>
+
+    <a href (click)="openMenu($event)" class="menulink"><span class="fa-stack fa-lg">
+      <i class="fa fa-bar-chart fa-stack-1x"></i>
+    </span>
+    报表管理</a>
+
+    <a href (click)="openMenu($event)" class="menulink"><span class="fa-stack fa-lg">
+      <i class="fa fa-server fa-stack-1x"></i>
+    </span>
+    系统管理</a>
+  </div> -->
+    <ng2-toasty></ng2-toasty>
+    <div class="search">
+        <i class="ion-ios-search-strong" ng-click="startSearch()"></i>
+        <input id="searchInput" type="text" placeholder="Search for...">
+    </div>
+
+    <div class="user-profile clearfix">
+        <div class="al-user-profile">
+            <a href="javascript:void(0)" (click)="signout()"> <i class="fa fa-sign-out" aria-hidden="true"></i> 注销 </a>
+        </div>
+        <div class="dropdown al-user-profile">
+            <a class="profile-toggle-link dropdown-toggle" id="user-profile-dd" data-toggle="dropdown" aria-expanded="false">
+                <i class="fa fa-user-o" aria-hidden="true"></i> {{userName}}
+            </a>
+            <ul class="dropdown-menu top-dropdown-menu profile-dropdown" aria-labelledby="user-profile-dd">
+                <li class="dropdown-item"><a href="javascript:void(0)" (click)="userInfo()"><i class="fa fa-user"></i>个人中心</a></li>
+                <li class="dropdown-item"><a href="javascript:void(0)" (click)="changpwd()"><i class="fa fa-cog"></i>修改密码</a></li>
+            </ul>
+        </div>
+        <ba-msg-center></ba-msg-center>
+    </div>
+</div>

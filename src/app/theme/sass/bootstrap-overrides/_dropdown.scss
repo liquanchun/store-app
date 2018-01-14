@@ -1,0 +1,33 @@
+.dropdown-item {
+    line-height: 1.5;
+}
+
+.dropdown-menu {
+    font-size: inherit;
+}
+
+.dropdown .dropdown-item a {
+    color: blue;
+}
+
+ss-multiselect-dropdown ul :first-of-type {
+    padding: 0px;
+}
+
+ss-multiselect-dropdown .dropdown-item :first-of-type {
+    margin-bottom: 2px;
+}
+
+ss-multiselect-dropdown .dropdown-menu {
+    margin-top: 0px;
+    padding-top: 0px;
+}
+
+ss-multiselect-dropdown .dropdown {
+    display: block !important;
+}
+
+ss-multiselect-dropdown .dropdown .btn {
+    line-height: 1.5;
+    text-align: left;
+}

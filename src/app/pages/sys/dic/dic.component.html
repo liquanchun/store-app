@@ -1,0 +1,47 @@
+<div class="row">
+  <ba-card title="系统词典" baCardClass="with-scroll">
+    <!--用户角色信息card  -->
+    <ng2-toasty></ng2-toasty>
+    <div class="col-12">
+      <div class="btn-group margin8" role="group" aria-label="Basic example">
+        <button (click)="onSaveDic(tree)" type="button" class="btn btn-info" data-toggle="collapse" data-target="#collapseExample"
+          aria-expanded="false" aria-controls="collapseExample">
+          <i class="fa fa-plus" aria-hidden="true"></i> {{isNewDic?'新增子节点':'保存'}}</button>
+        <button (click)="onDeleteDic(tree)" [disabled]="selectedDic==null" type="button" class="btn btn-info">
+          <i class="fa fa-times" aria-hidden="true"></i> 删除</button>
+      </div>
+      <div class="collapse" id="collapseExample">
+        <div class="card card-block">
+          <form>
+            <div class="form-group">
+              <label class="form-control-label" for="formDicName">子节点名称：</label>
+              <input required [(ngModel)]="newDicName" name="newDicName" type="text" class="form-control" id="formDicName" placeholder="输入节点名称">
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <tree-root #tree [nodes]="nodes" [focused]="true" [options]="customTemplateStringOptions" (initialized)="onInitialized(tree)"
+        (event)="onEvent($event)">
+        <ng-template #treeNodeFullTemplate let-node let-index="index" let-templates="templates">
+
+          <div [class]="node.getClass()" [class.tree-node]="true" [class.tree-node-expanded]="node.isExpanded && node.hasChildren"
+            [class.tree-node-collapsed]="node.isCollapsed && node.hasChildren" [class.tree-node-leaf]="node.isLeaf" [class.tree-node-active]="node.isActive"
+            [class.tree-node-focused]="node.isFocused">
+
+            <tree-node-drop-slot *ngIf="index === 0" [dropIndex]="node.index" [node]="node.parent">
+            </tree-node-drop-slot>
+
+            <tree-node-wrapper [node]="node" [index]="index" [templates]="templates">
+            </tree-node-wrapper>
+
+            <tree-node-children [node]="node" [templates]="templates">
+            </tree-node-children>
+            <tree-node-drop-slot [dropIndex]="node.index + 1" [node]="node.parent">
+            </tree-node-drop-slot>
+          </div>
+        </ng-template>
+      </tree-root>
+    </div>
+  </ba-card>
+</div>
