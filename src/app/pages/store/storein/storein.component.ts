@@ -26,6 +26,9 @@ export class StoreinComponent implements OnInit {
   query: string = '';
 
   settings = {
+    pager: {
+      perPage: 15
+    },
     mode: 'external',
     actions: {
       columnTitle: '操作'
@@ -124,7 +127,12 @@ export class StoreinComponent implements OnInit {
         filter: false
       },
       goodscode: {
-        title: '编号',
+        title: '编码',
+        type: 'string',
+        filter: false,
+      },
+      goodssite: {
+        title: '货位',
         type: 'string',
         filter: false,
       },
@@ -142,7 +150,12 @@ export class StoreinComponent implements OnInit {
         title: '金额',
         type: 'number',
         filter: false
-      }
+      },
+      remarl: {
+        title: '备注',
+        type: 'string',
+        filter: false,
+      },
     }
   };
 
@@ -195,8 +208,8 @@ export class StoreinComponent implements OnInit {
   }
   showPopOrg(event): void {
     _.delay(function (text) {
-      $(".popover").css("max-width", "320px");
-      $(".popover").css("min-width", "200px");
+      $(".popover").css("max-width", "380px");
+      $(".popover").css("min-width", "300px");
     }, 100, 'later');
   }
   //查看明细

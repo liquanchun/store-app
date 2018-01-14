@@ -25,6 +25,9 @@ export class GoodsComponent implements OnInit {
   query: string = '';
 
   settings = {
+    pager: {
+      perPage: 15
+    },
     mode: 'external',
     actions: {
       columnTitle: '操作'
@@ -201,9 +204,9 @@ export class GoodsComponent implements OnInit {
     }
   }
 
-  onEdit(event){
+  onEdit(event) {
     const that = this;
-    const modalRef =this.modalService.open(NgbdModalContent);
+    const modalRef = this.modalService.open(NgbdModalContent);
     modalRef.componentInstance.title = '修改产品信息';
     modalRef.componentInstance.config = this.config;
     modalRef.componentInstance.formValue = event.data;
@@ -222,7 +225,7 @@ export class GoodsComponent implements OnInit {
     };
   }
 
-  onDelete(event){
+  onDelete(event) {
     if (window.confirm('你确定要删除吗?')) {
       this.goodsService.delete(event.data.id).then((data) => {
         this.toastOptions.msg = "删除成功。";
