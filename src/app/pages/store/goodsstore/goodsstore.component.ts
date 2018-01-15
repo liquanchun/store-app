@@ -25,6 +25,9 @@ export class GoodsstoreComponent implements OnInit {
   query: string = '';
 
   settings = {
+    pager: {
+      perPage: 15
+    },
     actions: false,
     mode: 'external',
     hideSubHeader: true,
