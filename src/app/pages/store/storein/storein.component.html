@@ -9,12 +9,13 @@
           </div>
           <div class="col-2">
             <div class="input-group" style="height:32px;">
-              <input type="text" [value]="orgName" style="padding:3px;" class="form-control" placeholder="采购部门">
+              <!-- <input type="text" [value]="orgName" style="padding:3px;" class="form-control" placeholder="采购部门">
               <span class="input-group-btn btn-group">
                 <button class="btn btn-secondary" placement="bottom" (shown)="showPopOrg()" [ngbPopover]="popContentOrg" container="body"
                   popoverTitle="组织架构" type="button">
                   <i class="fa fa-search" aria-hidden="true"></i> 选择</button>
-              </span>
+              </span> -->
+              <ss-multiselect-dropdown [settings]="mySettings" [texts]="myTextsOrg" [options]="myOptions" [(ngModel)]="selectedOrg" (ngModelChange)="onChangeOrg($event)"></ss-multiselect-dropdown>
             </div>
           </div>
           <div class="col-2">
@@ -35,20 +36,23 @@
           </div>
 
           <div class="col-2">
-            <select (change)="onSupplierChange($event)">
+            <!-- <select (change)="onSupplierChange($event)">
               <option value="">--供应商--</option>
               <option [value]="option.id" *ngFor="let option of suppliers">
                 {{ option.name }}
               </option>
-            </select>
+            </select> -->
+            <ss-multiselect-dropdown [settings]="mySettings" [texts]="myTexts" [options]="myOptionsSup" [(ngModel)]="selectedSup" (ngModelChange)="onChange($event)"></ss-multiselect-dropdown>
           </div>
 
           <div class="col-2">
             <div class="btn-group margin8 pull-right" role="group" aria-label="Basic example">
-                <button (click)="newStorein()" type="button" class="btn btn-info btn-sm">
-                  <i class="fa fa-refresh" aria-hidden="true"></i> 新增入库</button>
-                <button (click)="print()" type="button" class="btn btn-info btn-sm">
-                    <i class="fa fa-refresh" aria-hidden="true"></i> 打印</button>
+              <button (click)="newStorein()" type="button" class="btn btn-info btn-sm">
+                <i class="fa fa-refresh" aria-hidden="true"></i> 新增入库</button>
+              <button (click)="getDataList()" type="button" class="btn btn-info btn-sm">
+                <i class="fa fa-refresh" aria-hidden="true"></i> 刷新</button>
+              <button (click)="print()" type="button" class="btn btn-info btn-sm">
+                <i class="fa fa-refresh" aria-hidden="true"></i> 打印</button>
             </div>
           </div>
         </div>

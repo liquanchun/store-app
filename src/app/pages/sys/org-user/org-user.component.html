@@ -7,7 +7,7 @@
           <app-sys-org></app-sys-org>
         </div>
         <div class="col-9">
-          <app-sys-selectuser (foo)="selectedUser($event)"></app-sys-selectuser>
+          <app-sys-user [editable]="false" [checkable]="true"></app-sys-user>
         </div>
       </div>
     </ba-card>

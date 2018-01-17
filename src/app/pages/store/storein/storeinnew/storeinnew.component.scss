@@ -39,11 +39,17 @@
   max-width: 18%;
   padding-right: 0px;
 }
+
 .card-primary .col-md-1 {
   max-width: 6.3%;
 }
+
 .card-primary .offset-md-3 {
-   margin-left: 18%;
+  margin-left: 18%;
+}
+
+.dropdown .dropdown-item a {
+  color: rgba(27, 31, 35, 0.85);
 }
 
 select {
@@ -74,9 +80,33 @@ select {
   }
 }
 
+:host /deep/ ss-multiselect-dropdown .dropdown {
+  width: 305px;
+  display: block;
+}
+
+:host /deep/ ss-multiselect-dropdown .dropdown button.btn.btn-default.dropdown-toggle {
+  background-color: #fff !important;
+}
+
+:host /deep/ ss-multiselect-dropdown .dropdown .dropdown-item a {
+  color: rgba(27, 31, 35, 0.85);
+}
+
+ :host /deep/ ss-multiselect-dropdown .dropdown-toggle {
+  width: 100%;
+  text-align: left;
+}
+
+ :host /deep/ ss-multiselect-dropdown .caret {
+  float: right;
+  margin-top: 8px;
+}
+
 :host /deep/ {
   .card-body {
     padding-left: 20px;
+    min-height: 600px;
   }
   ng2-smart-table {
     th,

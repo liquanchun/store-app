@@ -2,6 +2,8 @@ import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { FormGroup, AbstractControl, FormBuilder, Validators } from '@angular/forms';
 import { ToastyService, ToastyConfig, ToastOptions, ToastData } from 'ng2-toasty';
+import { IMultiSelectOption, IMultiSelectSettings, IMultiSelectTexts } from 'angular-2-dropdown-multiselect';
+import { OrgService } from '../../sys/components/org/org.services';
 import { LocalDataSource } from 'ng2-smart-table';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { StoreinService } from './storein.services';
@@ -17,7 +19,7 @@ import * as _ from 'lodash';
   selector: 'app-storein',
   templateUrl: './storein.component.html',
   styleUrls: ['./storein.component.scss'],
-  providers: [StoreinService, DicService, SupplierService],
+  providers: [StoreinService, DicService, SupplierService, OrgService],
 })
 export class StoreinComponent implements OnInit {
 
@@ -174,6 +176,27 @@ export class StoreinComponent implements OnInit {
   //组织架构
   orgName: any = '';
 
+  selectedSup = [];
+  selectedOrg = [];
+
+  myOptionsSup: IMultiSelectOption[];
+  myOptions: IMultiSelectOption[];
+  mySettings: IMultiSelectSettings = {
+    enableSearch: true,
+    checkedStyle: 'fontawesome',
+    buttonClasses: 'btn btn-default btn-block',
+    dynamicTitleMaxItems: 3,
+    selectionLimit: 1,
+    autoUnselect: true,
+  };
+  myTextsOrg: IMultiSelectTexts = {
+    defaultTitle: '--选择部门--',
+    searchPlaceholder: '查询...'
+  }
+  myTexts: IMultiSelectTexts = {
+    defaultTitle: '--选择供应商--',
+    searchPlaceholder: '查询...'
+  }
   private toastOptions: ToastOptions = {
     title: "提示信息",
     msg: "The message",
@@ -190,6 +213,7 @@ export class StoreinComponent implements OnInit {
     private toastyService: ToastyService,
     private toastyConfig: ToastyConfig,
     private _supplierService: SupplierService,
+    private _orgService: OrgService, 
     private modalService: NgbModal,
     private _state: GlobalState) {
     this.toastyConfig.position = 'top-center';
@@ -259,6 +283,22 @@ export class StoreinComponent implements OnInit {
     }
   }
 
+  onChange(event) {
+    if (event && event.length > 0) {
+      this.source.load(_.filter(this.storeInData, f => { return f['supplierId'] == event[0] }));
+    } else {
+      this.source.load(this.storeInData);
+    }
+  }
+
+  onChangeOrg(event) {
+    if (event && event.length > 0) {
+      this.source.load(_.filter(this.storeInData, f => { return f['orgId'] == event[0] }));
+    } else {
+      this.source.load(this.storeInData);
+    }
+  }
+
   onSupplierChange(supp) {
     if (supp.target.value) {
       this.source.load(_.filter(this.storeInData, f => { return f['supplierId'] == supp.target.value }));
@@ -288,6 +328,15 @@ export class StoreinComponent implements OnInit {
       _.each(data, f => {
         that.suppliers.push({ id: f.id, name: f.name });
       })
+      this.myOptionsSup = this.suppliers;
+    });
+    this._orgService.getAll().then((data) => {
+      const that = this;
+      const optData = [];
+      _.each(data, f => {
+        optData.push({ id: f['id'], name: f['deptName'] });
+      });
+      this.myOptions = optData;
     });
 
     this.loading = true;

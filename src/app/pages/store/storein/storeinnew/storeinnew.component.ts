@@ -1,6 +1,7 @@
 import { Component, ViewChild, OnInit, AfterViewInit, Input } from '@angular/core';
 import { NgbModal, ModalDismissReasons, NgbAlert } from '@ng-bootstrap/ng-bootstrap';
 import { FormGroup, AbstractControl, FormBuilder, Validators } from '@angular/forms';
+import { IMultiSelectOption, IMultiSelectSettings, IMultiSelectTexts } from 'angular-2-dropdown-multiselect';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { LocalDataSource } from 'ng2-smart-table';
 import { ToastyService, ToastyConfig, ToastOptions, ToastData } from 'ng2-toasty';
@@ -12,6 +13,7 @@ import { StoreinNewService } from './storeinnew.services';
 import { DicService } from '../../../sys/dic/dic.services';
 import { SupplierService } from '../../supplier/supplier.services';
 import { UserService } from '../../../sys/components/user/user.services';
+import { OrgService } from '../../../sys/components/org/org.services';
 
 import { GlobalState } from '../../../../global.state';
 import { GoodsService } from '../../goods/goods.services';
@@ -22,7 +24,7 @@ import { ReturnStatement } from '@angular/compiler/src/output/output_ast';
   selector: 'app-storeinnew',
   templateUrl: './storeinnew.component.html',
   styleUrls: ['./storeinnew.component.scss'],
-  providers: [StoreinNewService, DicService, GoodsService, SupplierService, UserService],
+  providers: [StoreinNewService, DicService, GoodsService, SupplierService, UserService, OrgService],
 })
 export class StoreinNewComponent implements OnInit {
   @Input() showEditButton: boolean = true;
@@ -32,11 +34,11 @@ export class StoreinNewComponent implements OnInit {
   storeIn: any = {
     typeId: 0,
     inTime: '',
-    supplierId: 0,
+    supplierId: [],
     storeId: '',
-    orgid: 0,
+    orgid: [],
     orgtext: '',
-    operator: '',
+    operator: 0,
     amount: 0,
     billNo: '',
     remark: ''
@@ -49,12 +51,12 @@ export class StoreinNewComponent implements OnInit {
   inType: any = [];
   //供应商
   suppliers: any = [];
-  //操作人
-  operator: any = [];
   //用户
   users: any = [];
   //产品类别
   goodsType: any = [];
+  //采购人
+  operatorList = [];
   //产品信息
   goodsInfo: any = [];
   //选中的产品信息
@@ -159,6 +161,27 @@ export class StoreinNewComponent implements OnInit {
     }
   };
 
+  myOptions: IMultiSelectOption[];
+  myOptionsOper: IMultiSelectOption[];
+  myOptionsSup: IMultiSelectOption[];
+  mySettings: IMultiSelectSettings = {
+    enableSearch: true,
+    checkedStyle: 'fontawesome',
+    buttonClasses: 'btn btn-default btn-block',
+    dynamicTitleMaxItems: 3,
+    selectionLimit: 1,
+    autoUnselect: true,
+  };
+  mySettingsOper: IMultiSelectSettings = {
+    enableSearch: true,
+    checkedStyle: 'fontawesome',
+    buttonClasses: 'btn btn-default btn-block',
+    dynamicTitleMaxItems: 3,
+  };
+  myTexts: IMultiSelectTexts = {
+    defaultTitle: '--选择--',
+    searchPlaceholder: '查询...'
+  }
 
   private toastOptions: ToastOptions = {
     title: "提示信息",
@@ -176,6 +199,7 @@ export class StoreinNewComponent implements OnInit {
     private _supplierService: SupplierService,
     private _userService: UserService,
     private _dicService: DicService,
+    private _orgService: OrgService,
     private toastyService: ToastyService,
     private toastyConfig: ToastyConfig,
     private _router: Router,
@@ -198,10 +222,20 @@ export class StoreinNewComponent implements OnInit {
       _.each(data, f => {
         that.suppliers.push({ id: f.id, name: f.name });
       })
+      this.myOptionsSup = this.suppliers;
     });
     this._userService.getUsers().then((data) => {
       this.users = data;
     });
+    this._orgService.getAll().then((data) => {
+      const that = this;
+      const optData = [];
+      _.each(data, f => {
+        optData.push({ id: f['id'], name: f['deptName'] });
+      });
+      this.myOptions = optData;
+    });
+
     this._dicService.getDicByName('仓库', (data) => { this.stores = data; });
     this._dicService.getDicByName('入库类型', (data) => { this.inType = data; });
     this._dicService.getDicByName('产品类别', (data) => { this.goodsType = data; });
@@ -213,6 +247,7 @@ export class StoreinNewComponent implements OnInit {
       if (!_.some(this.selectedGoods, ['id', event.data.id])) {
         this.selectedGoods.push(
           {
+            id: event.data.id,
             goodsTypeId: event.data.typeId,
             goodsId: event.data.id,
             price: event.data.price,
@@ -228,12 +263,14 @@ export class StoreinNewComponent implements OnInit {
         return n['id'] == event.data.id;
       });
     }
-    this.refreshTable();
+    this.selectedGrid.load(this.selectedGoods);
+    this.storeIn.amount = _.sumBy(this.selectedGoods, function (o) { return o['amount']; });
   }
   //刷新表格数据
   refreshTable() {
-    this.storeIn.amount = _.sumBy(this.selectedGoods, function (o) { return o['amount']; });
-    this.selectedGrid.load(this.selectedGoods);
+    this.selectedGrid.refresh();
+    //this.storeIn.amount = _.sumBy(this.selectedGoods, function (o) { return o['amount']; });
+    //this.selectedGrid.load(this.selectedGoods);
   }
   // 删除
   onDeleteConfirm(event): void {
@@ -248,13 +285,28 @@ export class StoreinNewComponent implements OnInit {
     }
   }
   onEditConfirm(event): void {
-    _.remove(this.selectedGoods, function (n) {
-      return n['id'] == event.data.id;
-    });
-    event.newData['amount'] = event.newData['price'] * event.newData['number'];
-    this.selectedGoods.push(event.newData);
-    this.refreshTable();
+    // _.remove(this.selectedGoods, function (n) {
+    //   return n['id'] == event.data.id;
+    // });
+    // event.newData['amount'] = event.newData['price'] * event.newData['number'];
+    // this.selectedGoods.push(event.newData);
+    // _.each(this.selectedGoods, f => {
+    //   if (f['id'] == event.data.id) {
+    //     f['amount'] = _.toNumber((_.toNumber(event.newData['price']) * _.toNumber(event.newData['number'])).toFixed(2));
+    //   }
+    // });
+    const dt = { that: this, data: event.newData };
     event.confirm.resolve();
+    _.delay(function (dt) {
+      const that = dt.that;
+      _.each(that.selectedGoods, f => {
+        if (f['id'] == event.data.id) {
+          f['amount'] = _.toNumber((_.toNumber(dt.data['price']) * _.toNumber(dt.data['number'])).toFixed(2));
+        }
+      });
+      that.selectedGrid.load(that.selectedGoods);
+      that.storeIn.amount = _.sumBy(that.selectedGoods, function (o) { return o['amount']; });
+    }, 50, dt);
   }
 
   onUserRowSelect(event) {
@@ -284,7 +336,7 @@ export class StoreinNewComponent implements OnInit {
   }
 
   onChange(event) {
-    this.onSearch(event.target.value);
+    this.onSelectGoodsType(event.target.value);
   }
   onKeyPress(event: any) {
     event.returnValue = false;
@@ -295,19 +347,25 @@ export class StoreinNewComponent implements OnInit {
     //   event.returnValue = false;
     // }
   }
-  onSelectedOrg(org) {
-    if (org) {
-      this.storeIn.orgid = org.id;
-      this.storeIn.orgtext = org.name;
+  onSelectedOrg(orgId) {
+    if (orgId) {
+      this.storeIn.orgid = orgId;
+      //this.storeIn.orgtext = org.name;
       const that = this;
-      const orguser = _.filter(this.users, f => { return f['orgId'] == org.id; });
-      that.operator = [];
+      const orguser = _.filter(this.users, f => { return f['orgId'] == orgId; });
+      this.operatorList = [];
       _.each(orguser, f => {
-        that.operator.push({ id: f['userId'], name: f['userName'] });
+        that.operatorList.push({ id: f['id'], name: f['userName'] });
       })
+      //that.myOptionsOper = operatorList;
     }
   }
-  onBack(){
+  //选择部门
+  onChangeOrg(event) {
+    console.log(event);
+    this.onSelectedOrg(event[0]);
+  }
+  onBack() {
     this._router.navigate(['/pages/store/storein']);
   }
   //确认入住
@@ -327,6 +385,8 @@ export class StoreinNewComponent implements OnInit {
     this.isSaved = true;
     const that = this;
     this.storeIn.inTime = this._common.getDateString(this.storeIn.inTime);
+    this.storeIn.orgid = _.toString(this.storeIn.orgid);
+    this.storeIn.supplierId = _.toString(this.storeIn.supplierId);
     console.log(this.storeIn);
     console.log(this.selectedGoods);
     this._storeinNewService.create(
@@ -341,9 +401,9 @@ export class StoreinNewComponent implements OnInit {
         that.isSaved = false;
         that.storeIn.inType = '';
         that.storeIn.inTime = '';
-        that.storeIn.supplierId = '';
+        that.storeIn.supplierId = [];
         that.storeIn.storeCode = '';
-        that.storeIn.orgid = 0;
+        that.storeIn.orgid = [];
         that.storeIn.orgtext = '';
         that.storeIn.operator = '';
         that.storeIn.amount = 0;

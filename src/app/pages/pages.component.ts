@@ -59,9 +59,9 @@ export class Pages implements OnInit {
         const secondItem = [];
         _.each(mi2, (m) => {
           const childrenItem = that.getChildrenItem(m['id']);
-
+          let uri = m['menuAddr'];
           const newMenu = {
-            path: m['menuAddr'],
+            path: uri,
             data: {
               menu: {
                 title: m['menuName'],
@@ -76,15 +76,16 @@ export class Pages implements OnInit {
           secondItem.push(newMenu);
         });
         // console.log(mi2);
+        let uri = mi['menuAddr'];
         const newMenu = {
-          path: mi['menuAddr'],
+          path: uri,
           data: {
             menu: {
               title: mi['menuName'],
               icon: mi['icon'],
               selected: false,
-              expanded: false,
-              order: mi['menuAddr'],
+              expanded: mi['id'] == 10005,
+              order: mi['MenuOrder'],
             }
           },
           children: secondItem
@@ -98,8 +99,9 @@ export class Pages implements OnInit {
     const mi = _.filter(this.menuItems, ['parentId', menuId]);
     const childrenItem = [];
     _.each(mi, (m) => {
+      let uri = m['menuAddr'];
       const newMenu = {
-        path: m['menuAddr'],
+        path: uri,
         data: {
           menu: {
             title: m['menuName'],

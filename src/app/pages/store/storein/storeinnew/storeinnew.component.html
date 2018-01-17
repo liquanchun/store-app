@@ -57,12 +57,13 @@
           <div class="form-group row">
             <label for="inputId" class="col-md-3 col-form-label">采购部门</label>
             <div class="input-group col-md-9" style="height:32px;">
-              <input type="text" [(ngModel)]="storeIn.orgtext" style="padding:3px;" class="form-control" placeholder="采购部门">
+                <ss-multiselect-dropdown [settings]="mySettings" [texts]="myTexts" [options]="myOptions" [(ngModel)]="storeIn.orgid" (ngModelChange)="onChangeOrg($event)"></ss-multiselect-dropdown>
+              <!-- <input type="text" [(ngModel)]="storeIn.orgtext" style="padding:3px;" class="form-control" placeholder="采购部门">
               <span class="input-group-btn btn-group">
                 <button class="btn btn-secondary" placement="right" (shown)="showPopOrg()" [ngbPopover]="popContentOrg" popoverTitle="组织架构"
                   type="button">
                   <i class="fa fa-search" aria-hidden="true"></i> 选择</button>
-              </span>
+              </span> -->
             </div>
           </div>
         </div>
@@ -70,9 +71,10 @@
           <div class="form-group row">
             <label for="inputId" class="col-md-3 col-form-label">采购人</label>
             <div class="col-md-9">
+                <!-- <ss-multiselect-dropdown [settings]="mySettingsOper" [texts]="myTexts" [options]="myOptionsOper" [(ngModel)]="storeIn.operator"></ss-multiselect-dropdown> -->
               <select [(ngModel)]="storeIn.operator">
                 <option value="">--请选择--</option>
-                <option [value]="option.id" *ngFor="let option of operator">
+                <option [value]="option.id" *ngFor="let option of operatorList">
                   {{ option.name }}
                 </option>
               </select>
@@ -83,12 +85,13 @@
             <div class="form-group row">
               <label for="inputId" class="col-md-3 col-form-label">供应商</label>
               <div class="col-md-9">
-                <select [(ngModel)]="storeIn.supplierId">
+                  <ss-multiselect-dropdown [settings]="mySettings" [texts]="myTexts" [options]="myOptionsSup" [(ngModel)]="storeIn.supplierId"></ss-multiselect-dropdown>
+                <!-- <select [(ngModel)]="storeIn.supplierId">
                   <option value="">--请选择--</option>
                   <option [value]="option.id" *ngFor="let option of suppliers">
                     {{ option.name }}
                   </option>
-                </select>
+                </select> -->
               </div>
             </div>
           </div>
@@ -107,7 +110,7 @@
                     <i class="fa fa-refresh" aria-hidden="true"></i> 选择产品</button>
                 </div>
 
-                <ng2-smart-table [settings]="settingsGoods" [source]="selectedGrid" (editConfirm)="onEditConfirm($event)" (userRowSelect)="onUserRowSelect($event)"
+                <ng2-smart-table [settings]="settingsGoods" [source]="selectedGrid" (editConfirm)="onEditConfirm($event)"  (deleteConfirm)="onDeleteConfirm($event)"  (userRowSelect)="onUserRowSelect($event)"
                   (createConfirm)="onCreateConfirm($event)">
                 </ng2-smart-table>
               </div>
@@ -159,13 +162,13 @@
             </select>
           </div>
         </div>
-        <ng2-smart-table [settings]="settings" [source]="popGrid" (userRowSelect)="rowClicked($event)">
+        <ng2-smart-table [settings]="settings" [source]="popGrid" (edit)="onEditConfirm($event)" (userRowSelect)="rowClicked($event)">
         </ng2-smart-table>
       </ng-template>
 
-      <ng-template #popContentOrg>
+      <!-- <ng-template #popContentOrg>
         <app-sys-org [editable]="false" (selected)="onSelectedOrg($event)"></app-sys-org>
-      </ng-template>
+      </ng-template> -->
 
     </ba-card>
   </div>

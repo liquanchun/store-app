@@ -26,6 +26,9 @@ export class SupplierComponent implements OnInit {
   query: string = '';
 
   settings = {
+    pager: {
+      perPage: 15
+    },
     mode: 'external',
     actions: {
       columnTitle: '操作'

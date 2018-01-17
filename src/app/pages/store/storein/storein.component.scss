@@ -5,7 +5,6 @@
   }
 }
 
-
 select {
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -27,7 +26,14 @@ select {
   }
 }
 
+:host /deep/ ss-multiselect-dropdown .dropdown button.btn.btn-default.dropdown-toggle {
+  background-color: #fff !important;
+}
+
 :host /deep/ {
+  .card-body {
+    min-height: 600px;
+  }
   ng2-smart-table {
     th,
     td {
@@ -77,8 +83,7 @@ select {
     }
     a.ng2-smart-action,
     .ng2-smart-title {
-      font-size: 14px !important;
-      // color: $default-text;
+      font-size: 14px !important; // color: $default-text;
       padding: 0 5px;
       display: inline-block;
       &.ng2-smart-action-add-add {

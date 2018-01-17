@@ -1,11 +1,11 @@
-import { Component, ViewChild, OnInit, AfterViewInit, Input } from '@angular/core';
+import { Component, ViewChild, OnInit, AfterViewInit, Input, Output } from '@angular/core';
 import { NgbModal, ModalDismissReasons, NgbAlert } from '@ng-bootstrap/ng-bootstrap';
 import { FormGroup, AbstractControl, FormBuilder, Validators } from '@angular/forms';
 import { LocalDataSource } from 'ng2-smart-table';
 import { FieldConfig } from '../../../../theme/components/dynamic-form/models/field-config.interface';
 import { NgbdModalContent } from '../../../../modal-content.component'
 import { ToastyService, ToastyConfig, ToastOptions, ToastData } from 'ng2-toasty';
-
+import { OrgService } from '../../components/org/org.services';
 import * as $ from 'jquery';
 import * as _ from 'lodash';
 import { Md5 } from 'ts-md5/dist/md5';
@@ -19,17 +19,22 @@ import { GlobalState } from '../../../../global.state';
   selector: 'app-sys-user',
   templateUrl: './user.component.html',
   styleUrls: ['./user.component.scss'],
-  providers: [UserService],
+  providers: [UserService, OrgService],
 })
 export class UserComponent implements OnInit, AfterViewInit {
 
+  @Input() editable: boolean = true;
+  @Input() checkable: boolean = false;
+
   public loading = false;
   private roles: any = [];
+  newSettings;
   settings = {
-    mode: 'external',
-    actions: {
-      columnTitle: '操作'
+    pager: {
+      perPage: 15
     },
+    selectMode: '',
+    mode: 'external',
     edit: {
       editButtonContent: '<i class="ion-edit"></i>',
       confirmSave: true,
@@ -40,42 +45,45 @@ export class UserComponent implements OnInit, AfterViewInit {
     },
     hideSubHeader: true,
     columns: {
-      id: {
-        title: 'Id',
-        type: 'number',
-        editable: false,
-        filter: false,
-        width: '30px',
-      },
       userName: {
         title: '用户名',
         type: 'string',
         filter: false,
-        width: '80px',
       },
       userId: {
         title: '用户ID',
         type: 'string',
         filter: false,
-        width: '80px',
+      },
+      orgIdTxt: {
+        title: '所属部门',
+        type: 'string',
+        filter: false,
       },
       mobile: {
         title: '电话',
         type: 'string',
         filter: false,
-        width: '80px',
       },
-      weixin: {
-        title: '微信',
+      tel: {
+        title: '分机',
         type: 'string',
         filter: false,
-        width: '80px',
+      },
+      works: {
+        title: '工种',
+        type: 'string',
+        filter: false,
+      },
+      title: {
+        title: '分机',
+        type: 'string',
+        filter: false,
       },
       roleNames: {
         title: '角色',
         type: 'string',
         filter: false,
-        width: '80px',
       },
       isValid: {
         title: '是否启用',
@@ -115,9 +123,21 @@ export class UserComponent implements OnInit, AfterViewInit {
     },
     {
       type: 'input',
-      label: '微信',
-      name: 'weixin',
-      placeholder: '输入微信',
+      label: '分机',
+      name: 'tel',
+      placeholder: '输入分机',
+    },
+    {
+      type: 'input',
+      label: '工种',
+      name: 'works',
+      placeholder: '输入工种',
+    },
+    {
+      type: 'input',
+      label: '头衔',
+      name: 'title',
+      placeholder: '输入头衔',
     },
     {
       type: 'check',
@@ -133,6 +153,9 @@ export class UserComponent implements OnInit, AfterViewInit {
     },
   ];
   source: LocalDataSource = new LocalDataSource();
+
+  userData: any;
+  selectOrg: any;
   private toastOptions: ToastOptions = {
     title: "提示信息",
     msg: "The message",
@@ -146,6 +169,7 @@ export class UserComponent implements OnInit, AfterViewInit {
     private _state: GlobalState,
     private toastyService: ToastyService,
     private toastyConfig: ToastyConfig,
+    private _orgService: OrgService,
     private userService: UserService) {
 
     this.toastyConfig.position = 'top-center';
@@ -156,11 +180,27 @@ export class UserComponent implements OnInit, AfterViewInit {
       })
     });
     this._state.subscribe('role.selectedChanged', (role) => {
-      this.onSearch(role.roleName);
+      this.onSearchRole(role.roleName);
+    });
+    this._state.subscribe('org.selectedChanged', (org) => {
+      this.selectOrg = org.data;
+      this.onSearchOrg(org.data.id);
     });
   }
 
   ngOnInit() {
+    if (this.checkable) {
+      this.settings.selectMode = 'multi';
+      this.settings['actions'] = false;
+      this.newSettings = Object.assign({}, this.settings)
+    } else {
+      this.settings['actions'] = {
+        columnTitle: '操作',
+        edit: true,
+        delete: true
+      };
+      this.newSettings = Object.assign({}, this.settings)
+    }
     this.getUserList();
   }
 
@@ -169,6 +209,7 @@ export class UserComponent implements OnInit, AfterViewInit {
     this.userService.getUsers().then((data) => {
       this.source.reset();
       this.source.load(data);
+      this.userData = data;
       this.loading = false;
     }, (err) => {
       this.loading = false;
@@ -178,10 +219,33 @@ export class UserComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
+
+  }
+  //选择房间
+  rowClicked(event): void {
+    if (this.checkable && this.selectOrg.id > 0) {
+      if (event.isSelected) {
+        event.data.orgIdTxt = this.selectOrg.name;
+        this._orgService.createOrg(this.selectOrg.id, event.data.id);
+      } else {
+        event.data.orgIdTxt = '';
+        this._orgService.deleteOrg(this.selectOrg.id, event.data.id);
+      }
+      this.source.refresh();
+    }
+  }
+
+  onSearchRole(orgid: number) {
+    this.source.reset();
+    this.source.load(_.filter(this.userData, f => { return f['roleNames'].indexOf(orgid) > -1; }));
+  }
+  onSearchOrg(orgid: number) {
+    this.source.reset();
+    this.source.load(_.filter(this.userData, f => { return f['orgId'] == orgid; }));
   }
   onSearch(query: string = '') {
     this.source.setFilter([
-      { field: 'roleNames', search: query },
+      { field: 'userName', search: query },
     ], false);
   }
   onNewUser() {

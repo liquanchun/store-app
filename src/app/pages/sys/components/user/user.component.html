@@ -1,15 +1,24 @@
 <div class="my-container">
-    <div class="row">
-        <ng2-toasty></ng2-toasty>
-        <div class="col-12">
-            <div class="btn-group margin8 pull-right" role="group" aria-label="Basic example">
-                <button (click)="onNewUser()" type="button" class="btn btn-info"><i class="fa fa-plus" aria-hidden="true"></i> 新增用户 </button>
-                <button (click)="getUserList()" type="button" class="btn btn-info"><i class="fa fa-refresh" aria-hidden="true"></i> 刷新 </button>
-            </div>
-            <ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '4px' }"></ngx-loading>
-            <ng2-smart-table [settings]="settings" [source]="source" (edit)="onEdit($event)" (delete)="onDelete($event)">
-            </ng2-smart-table>
+  <div class="row">
+    <ng2-toasty></ng2-toasty>
+    <div class="col-12">
+      <div class="row">
+        <div class="col-3">
+          <search-input (searchClick)="onSearch($event)"></search-input>
         </div>
-
+        <div class="col-9 pullright">
+          <div class="btn-group margin8 pull-right" role="group" aria-label="Basic example">
+            <button  *ngIf="editable" (click)="onNewUser()" type="button" class="btn btn-info">
+              <i class="fa fa-plus" aria-hidden="true"></i> 新增用户 </button>
+            <button (click)="getUserList()" type="button" class="btn btn-info">
+              <i class="fa fa-refresh" aria-hidden="true"></i> 刷新 </button>
+          </div>
+        </div>
+      </div>
+      <ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '4px' }"></ngx-loading>
+      <ng2-smart-table [settings]="newSettings" [source]="source" (edit)="onEdit($event)" (delete)="onDelete($event)" (userRowSelect)="rowClicked($event)">
+      </ng2-smart-table>
     </div>
+
+  </div>
 </div>
