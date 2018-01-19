@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AngularEchartsModule } from 'ngx-echarts';
+import { OrgService } from '../sys/components/org/org.services';
 import * as $ from 'jquery';
 import * as _ from 'lodash';
 
@@ -8,9 +9,11 @@ import * as _ from 'lodash';
   selector: 'dashboard',
   styleUrls: ['./dashboard.scss'],
   templateUrl: './dashboard.html',
+  providers: [OrgService],
 })
 export class Dashboard implements OnInit {
 
+  colorList = ['#c487ee', '#deb140', '#49dff0', '#034079', '#6f81da', '#BFEFFF', '#98FB98', '#9F79EE', '#7CCD7C', '#737373', '#008B00'];
   //部门D部门
   echartData = [{
     value: 2154,
@@ -122,7 +125,7 @@ export class Dashboard implements OnInit {
     color: ['#deb140', '#01F2FF', '#A635FF', '#009AFF'],
     title: {
       text: '采购单月份对比',
-      x:'center',
+      x: 'center',
       textStyle: {
         fontSize: '22',
         color: '#268bd2',
@@ -255,10 +258,25 @@ export class Dashboard implements OnInit {
       }
     }]
   }
-  constructor(private _router: Router) {
+
+  orgList: any;
+
+  constructor(private _router: Router,
+    private _orgService: OrgService,
+  ) {
 
   }
   ngOnInit() {
 
+  }
+  getOrgList() {
+    this._orgService.getAll().then((data) => {
+      this.orgList = _.filter(data, f => { return f.parentId > 0; });
+      this.echartData = [];
+      const that = this;
+      _.each(this.orgList,f =>{
+          //that.echartData.push({});
+      });
+    });
   }
 }

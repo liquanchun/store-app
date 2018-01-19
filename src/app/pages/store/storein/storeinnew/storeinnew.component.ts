@@ -34,13 +34,16 @@ export class StoreinNewComponent implements OnInit {
   storeIn: any = {
     typeId: 0,
     inTime: '',
-    supplierId: [],
+    inTimeNg: {},
+    supplierId: '',
+    supplierIdNg: [],
     storeId: '',
-    orgid: [],
+    orgid: '',
+    orgidNg: [],
     orgtext: '',
     operator: 0,
     amount: 0,
-    billNo: '',
+    orderNo: '',
     remark: ''
   };
   //选择的行
@@ -209,7 +212,7 @@ export class StoreinNewComponent implements OnInit {
   }
   ngOnInit() {
     this.getDataList();
-    this.storeIn.inTime = this._common.getTodayObj();
+    this.storeIn.inTimeNg = this._common.getTodayObj();
   }
 
   getDataList(): void {
@@ -226,6 +229,9 @@ export class StoreinNewComponent implements OnInit {
     });
     this._userService.getUsers().then((data) => {
       this.users = data;
+    });
+    this._storeinNewService.getOrderNo().then((data) => {
+      this.storeIn.orderNo = data['data'];
     });
     this._orgService.getAll().then((data) => {
       const that = this;
@@ -244,10 +250,9 @@ export class StoreinNewComponent implements OnInit {
   //选择房间
   rowClicked(event): void {
     if (event.isSelected) {
-      if (!_.some(this.selectedGoods, ['id', event.data.id])) {
+      if (!_.some(this.selectedGoods, ['name', event.data.name])) {
         this.selectedGoods.push(
           {
-            id: event.data.id,
             goodsTypeId: event.data.typeId,
             goodsId: event.data.id,
             price: event.data.price,
@@ -260,7 +265,7 @@ export class StoreinNewComponent implements OnInit {
       }
     } else {
       _.remove(this.selectedGoods, function (n) {
-        return n['id'] == event.data.id;
+        return n['name'] == event.data.name;
       });
     }
     this.selectedGrid.load(this.selectedGoods);
@@ -276,7 +281,7 @@ export class StoreinNewComponent implements OnInit {
   onDeleteConfirm(event): void {
     if (window.confirm('你确定要删除吗?')) {
       _.remove(this.selectedGoods, function (n) {
-        return n['id'] == event.data.id;
+        return n['name'] == event.data.name;
       });
       this.refreshTable();
       event.confirm.resolve();
@@ -300,7 +305,7 @@ export class StoreinNewComponent implements OnInit {
     _.delay(function (dt) {
       const that = dt.that;
       _.each(that.selectedGoods, f => {
-        if (f['id'] == event.data.id) {
+        if (f['name'] == event.data.name) {
           f['amount'] = _.toNumber((_.toNumber(dt.data['price']) * _.toNumber(dt.data['number'])).toFixed(2));
         }
       });
@@ -362,7 +367,6 @@ export class StoreinNewComponent implements OnInit {
   }
   //选择部门
   onChangeOrg(event) {
-    console.log(event);
     this.onSelectedOrg(event[0]);
   }
   onBack() {
@@ -370,9 +374,9 @@ export class StoreinNewComponent implements OnInit {
   }
   //确认入住
   onConfirm(): void {
-    if (!this.storeIn.typeId || !this.storeIn.inTime || !this.storeIn.billNo
-      || !this.storeIn.supplierId || !this.storeIn.storeId
-      || !this.storeIn.orgid || !this.storeIn.operator) {
+    if (!this.storeIn.typeId || !this.storeIn.inTimeNg || !this.storeIn.orderNo
+      || !this.storeIn.supplierIdNg || !this.storeIn.storeId
+      || !this.storeIn.orgidNg || !this.storeIn.operator) {
       this.toastOptions.msg = "请填写完整。";
       this.toastyService.warning(this.toastOptions);
       return;
@@ -384,9 +388,9 @@ export class StoreinNewComponent implements OnInit {
     }
     this.isSaved = true;
     const that = this;
-    this.storeIn.inTime = this._common.getDateString(this.storeIn.inTime);
-    this.storeIn.orgid = _.toString(this.storeIn.orgid);
-    this.storeIn.supplierId = _.toString(this.storeIn.supplierId);
+    this.storeIn.inTime = this._common.getDateString(this.storeIn.inTimeNg);
+    this.storeIn.orgid = _.toString(this.storeIn.orgidNg);
+    this.storeIn.supplierId = _.toString(this.storeIn.supplierIdNg);
     console.log(this.storeIn);
     console.log(this.selectedGoods);
     this._storeinNewService.create(
@@ -406,8 +410,6 @@ export class StoreinNewComponent implements OnInit {
         that.storeIn.orgid = [];
         that.storeIn.orgtext = '';
         that.storeIn.operator = '';
-        that.storeIn.amount = 0;
-        that.storeIn.billNo = '';
         that.selectedGoods = [];
         that.selectedGrid.load(that.selectedGoods);
       },

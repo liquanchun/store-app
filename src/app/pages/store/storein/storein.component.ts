@@ -60,11 +60,6 @@ export class StoreinComponent implements OnInit {
         type: 'string',
         filter: false,
       },
-      billNo: {
-        title: '采购单号',
-        type: 'string',
-        filter: false,
-      },
       storeIdTxt: {
         title: '仓库',
         type: 'string',

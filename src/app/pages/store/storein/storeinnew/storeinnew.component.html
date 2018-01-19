@@ -35,7 +35,7 @@
           <div class="form-group row">
             <label for="inputId" class="col-md-3 col-form-label">日期</label>
             <div class="input-group col-md-9">
-              <input class="form-control" placeholder="yyyy-mm-dd" [(ngModel)]="storeIn.inTime" ngbDatepicker #d="ngbDatepicker">
+              <input class="form-control" placeholder="yyyy-mm-dd" [(ngModel)]="storeIn.inTimeNg" ngbDatepicker #d="ngbDatepicker">
               <div class="input-group-addon" (click)="d.toggle()">
                 <i class="fa fa-calendar" aria-hidden="true"></i>
               </div>
@@ -44,9 +44,9 @@
         </div>
         <div class="col-md-4">
           <div class="form-group row">
-            <label for="inputremark" class="col-md-3 col-form-label">采购单号</label>
+            <label for="inputremark" class="col-md-3 col-form-label">入库单号</label>
             <div class="col-md-9">
-              <input [(ngModel)]="storeIn.billNo" type="text" class="form-control" placeholder="输入采购单号">
+              <input [(ngModel)]="storeIn.orderNo" type="text" class="form-control" placeholder="输入采购单号">
             </div>
           </div>
         </div>
@@ -57,7 +57,7 @@
           <div class="form-group row">
             <label for="inputId" class="col-md-3 col-form-label">采购部门</label>
             <div class="input-group col-md-9" style="height:32px;">
-                <ss-multiselect-dropdown [settings]="mySettings" [texts]="myTexts" [options]="myOptions" [(ngModel)]="storeIn.orgid" (ngModelChange)="onChangeOrg($event)"></ss-multiselect-dropdown>
+                <ss-multiselect-dropdown [settings]="mySettings" [texts]="myTexts" [options]="myOptions" [(ngModel)]="storeIn.orgidNg" (ngModelChange)="onChangeOrg($event)"></ss-multiselect-dropdown>
               <!-- <input type="text" [(ngModel)]="storeIn.orgtext" style="padding:3px;" class="form-control" placeholder="采购部门">
               <span class="input-group-btn btn-group">
                 <button class="btn btn-secondary" placement="right" (shown)="showPopOrg()" [ngbPopover]="popContentOrg" popoverTitle="组织架构"
@@ -85,7 +85,7 @@
             <div class="form-group row">
               <label for="inputId" class="col-md-3 col-form-label">供应商</label>
               <div class="col-md-9">
-                  <ss-multiselect-dropdown [settings]="mySettings" [texts]="myTexts" [options]="myOptionsSup" [(ngModel)]="storeIn.supplierId"></ss-multiselect-dropdown>
+                  <ss-multiselect-dropdown [settings]="mySettings" [texts]="myTexts" [options]="myOptionsSup" [(ngModel)]="storeIn.supplierIdNg"></ss-multiselect-dropdown>
                 <!-- <select [(ngModel)]="storeIn.supplierId">
                   <option value="">--请选择--</option>
                   <option [value]="option.id" *ngFor="let option of suppliers">

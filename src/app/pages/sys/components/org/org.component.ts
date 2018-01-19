@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit,Input,Output,EventEmitter } from '@angular/core';
+import { Component, OnInit, AfterViewInit, Input, Output, EventEmitter } from '@angular/core';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { FormGroup, AbstractControl, FormBuilder, Validators } from '@angular/forms';
 
@@ -150,16 +150,12 @@ export class OrgComponent implements OnInit, AfterViewInit {
         alert('选择的节点有子节点，不能删除。');
       } else {
         const that = this;
-        const confirm = {
-          message: `${focusNode.data.name}节点`,
-          callback: () => {
-            that.orgService.delete(focusNode.data.id).then(() => {
-              that.getNodes();
-              that.selectedOrg = null;
-            });
-          },
-        };
-        that._state.notifyDataChanged('delete.confirm', confirm);
+        if (window.confirm('你确定要删除吗?')) {
+          that.orgService.delete(focusNode.data.id).then(() => {
+            that.getNodes();
+            that.selectedOrg = null;
+          });
+        }
       }
     } else {
       alert('请选择你要删除的子节点。');

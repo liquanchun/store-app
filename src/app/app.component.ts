@@ -61,7 +61,7 @@ export class App implements AfterViewInit, OnDestroy {
       this._httpService
         .getModelList('TokenAuth')
         .then(function (data) { }, (err) => {
-          if (err.indexOf('401') > -1) {
+          if (err && err.indexOf('401') > -1) {
             this._router.navigate(['login']);
           }
         });

@@ -10,9 +10,11 @@ export class StoreinNewService {
   getStoreins() {
     return this._httpService.getModelList(this.modelName);
   }
-
+  getOrderNo() {
+    return this._httpService.getModelList(this.modelName + '/OrderNo');
+  }
   delete(id: any) {
-    return this._httpService.delete(this.modelName , id);
+    return this._httpService.delete(this.modelName, id);
   }
   create(storein: any) {
     return this._httpService.create(this.modelName, storein);
