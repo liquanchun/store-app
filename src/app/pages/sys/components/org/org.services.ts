@@ -31,7 +31,7 @@ export class OrgService {
     return this._httpService.create(this.modelName, { parentId: pId, DeptName: name });
   }
 
-  createOrg(orgid: number, userid: number) {
+  createOrg(orgid: number, userid: string) {
     return this._httpService.create(this.modelName + '/' + orgid + '/' + userid, {});
   }
   createTree(jsons, pid) {

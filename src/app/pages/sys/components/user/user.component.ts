@@ -1,10 +1,9 @@
-import { Component, ViewChild, OnInit, AfterViewInit, Input, Output } from '@angular/core';
+import { Component, ViewChild, OnInit, AfterViewInit, Input, Output, EventEmitter } from '@angular/core';
 import { NgbModal, ModalDismissReasons, NgbAlert } from '@ng-bootstrap/ng-bootstrap';
 import { FormGroup, AbstractControl, FormBuilder, Validators } from '@angular/forms';
 import { LocalDataSource } from 'ng2-smart-table';
 import { FieldConfig } from '../../../../theme/components/dynamic-form/models/field-config.interface';
 import { NgbdModalContent } from '../../../../modal-content.component'
-import { ToastyService, ToastyConfig, ToastOptions, ToastData } from 'ng2-toasty';
 import { OrgService } from '../../components/org/org.services';
 import * as $ from 'jquery';
 import * as _ from 'lodash';
@@ -25,6 +24,8 @@ export class UserComponent implements OnInit, AfterViewInit {
 
   @Input() editable: boolean = true;
   @Input() checkable: boolean = false;
+  @Output()
+  message = new EventEmitter();
 
   public loading = false;
   private roles: any = [];
@@ -89,7 +90,7 @@ export class UserComponent implements OnInit, AfterViewInit {
         title: '是否启用',
         type: 'bool',
         filter: false,
-      },
+      }
     }
   };
 
@@ -156,23 +157,16 @@ export class UserComponent implements OnInit, AfterViewInit {
 
   userData: any;
   selectOrg: any;
-  private toastOptions: ToastOptions = {
-    title: "提示信息",
-    msg: "The message",
-    showClose: true,
-    timeout: 2000,
-    theme: "bootstrap",
-  };
+  orgList: any;
+
+  selectUser: any = [];
 
   constructor(
     private modalService: NgbModal,
     private _state: GlobalState,
-    private toastyService: ToastyService,
-    private toastyConfig: ToastyConfig,
     private _orgService: OrgService,
     private userService: UserService) {
 
-    this.toastyConfig.position = 'top-center';
     const that = this;
     this._state.subscribe('role.dataChanged', (roles) => {
       _.each(roles, r => {
@@ -199,7 +193,7 @@ export class UserComponent implements OnInit, AfterViewInit {
         edit: true,
         delete: true
       };
-      this.newSettings = Object.assign({}, this.settings)
+      this.newSettings = Object.assign({}, this.settings);
     }
     this.getUserList();
   }
@@ -213,8 +207,10 @@ export class UserComponent implements OnInit, AfterViewInit {
       this.loading = false;
     }, (err) => {
       this.loading = false;
-      this.toastOptions.msg = err;
-      this.toastyService.error(this.toastOptions);
+      this.message.emit({ type: 'error', msg: err });
+    });
+    this._orgService.getAll().then((data) => {
+      this.orgList = _.filter(data, f => { return f.parentId > 0; });
     });
   }
 
@@ -223,15 +219,14 @@ export class UserComponent implements OnInit, AfterViewInit {
   }
   //选择房间
   rowClicked(event): void {
-    if (this.checkable && this.selectOrg.id > 0) {
+    if (this.checkable) {
       if (event.isSelected) {
-        event.data.orgIdTxt = this.selectOrg.name;
-        this._orgService.createOrg(this.selectOrg.id, event.data.id);
+        this.selectUser.push({ id: event.data.id, name: event.data.userName });
       } else {
-        event.data.orgIdTxt = '';
-        this._orgService.deleteOrg(this.selectOrg.id, event.data.id);
+        _.remove(this.selectUser, function (n) {
+          return n['id'] == event.data.id;
+        });
       }
-      this.source.refresh();
     }
   }
 
@@ -248,6 +243,19 @@ export class UserComponent implements OnInit, AfterViewInit {
       { field: 'userName', search: query },
     ], false);
   }
+  onSetOrgClick(org) {
+    const that = this;
+    if (this.selectUser) {
+      let userIds = [];
+      _.each(this.selectUser, f => { userIds.push(f.id); });
+      that._orgService.createOrg(org.id, _.toString(userIds)).then((data) => {
+        that.message.emit({ type: 'success', msg: "设置成功。" });
+        that.getUserList();
+      });
+    } else {
+      that.message.emit({ type: 'warning', msg: "请勾选要设置的用户。" });
+    }
+  }
   onNewUser() {
     const that = this;
     const modalRef = this.modalService.open(NgbdModalContent);
@@ -258,13 +266,11 @@ export class UserComponent implements OnInit, AfterViewInit {
       user.pwd = Md5.hashStr(user.pwd).toString();
       that.userService.create(user).then((data) => {
         closeBack();
-        that.toastOptions.msg = "新增成功。";
-        that.toastyService.success(that.toastOptions);
+        that.message.emit({ type: 'success', msg: "新增成功。" });
         that.getUserList();
       },
         (err) => {
-          that.toastOptions.msg = err;
-          that.toastyService.error(that.toastOptions);
+          that.message.emit({ type: 'error', msg: err });
         }
       )
     };
@@ -281,13 +287,11 @@ export class UserComponent implements OnInit, AfterViewInit {
     modalRef.componentInstance.saveFun = (result, closeBack) => {
       that.userService.update(event.data.id, JSON.parse(result)).then((data) => {
         closeBack();
-        that.toastOptions.msg = "修改成功。";
-        that.toastyService.success(that.toastOptions);
+        that.message.emit({ type: 'success', msg: "修改成功。" });
         that.getUserList();
       },
         (err) => {
-          that.toastOptions.msg = err;
-          that.toastyService.error(that.toastOptions);
+          that.message.emit({ type: 'error', msg: err });
         }
       )
     };
@@ -296,12 +300,10 @@ export class UserComponent implements OnInit, AfterViewInit {
   onDelete(event) {
     if (window.confirm('你确定要删除吗?')) {
       this.userService.delete(event.data.id).then((data) => {
-        this.toastOptions.msg = "删除成功。";
-        this.toastyService.success(this.toastOptions);
+        this.message.emit({ type: 'success', msg: "删除成功。" });
         this.getUserList();
       }, (err) => {
-        this.toastOptions.msg = err;
-        this.toastyService.error(this.toastOptions);
+        this.message.emit({ type: 'error', msg: err });
       });
     }
   }

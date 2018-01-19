@@ -78,7 +78,7 @@ import { ToastyModule } from 'ng2-toasty';
     SetGroupComponent,
     SetAgentComponent,
     SetPaytypeComponent,
-    UserInfoComponent
+    UserInfoComponent,
   ],
   exports: [OrgComponent],
   providers: [GlobalState, Config, HttpService, AppState, Common]

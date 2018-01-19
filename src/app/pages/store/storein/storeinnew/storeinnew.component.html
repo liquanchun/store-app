@@ -105,7 +105,7 @@
 
               <div class="col-md-11">
                 <div class="btn-group" role="group" aria-label="Basic example">
-                  <button placement="right" (shown)="showPop()" [ngbPopover]="popContent" popoverTitle="产品信息列表" type="button" class="btn btn-success btn-sm"
+                  <button placement="right" (shown)="showPop()" #p="ngbPopover" [ngbPopover]="popContent" popoverTitle="产品信息列表" type="button" class="btn btn-success btn-sm"
                     container="body">
                     <i class="fa fa-refresh" aria-hidden="true"></i> 选择产品</button>
                 </div>
@@ -150,6 +150,7 @@
       </div>
 
       <ng-template #popContent>
+        <a href="javascrpit:void(0)" class="close" (click)='p.close()' aria-hidden="true">&times;</a>
         <search-input (searchClick)="onSearch($event)"></search-input>
         <div class="form-group row">
           <label for="inputId" class="col-md-2 col-form-label">类别</label>
