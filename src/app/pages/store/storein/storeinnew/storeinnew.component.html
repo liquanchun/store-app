@@ -142,7 +142,7 @@
         <div class="col-md-4">
           <div class="form-group row">
             <div class="col-md-9 offset-md-3 btn-group">
-              <button type="button" [disabled]="isSaved" (click)="onConfirm()" class="btn btn-info">{{ isSaved ? '正在保存...':'确认入库'}}</button>
+              <button type="button" [disabled]="isEnable" (click)="onConfirm()" class="btn btn-info">{{ isSaved ? '正在保存...':'确认入库'}}</button>
               <button type="button" (click)="onBack()" class="btn btn-warning">返回列表</button>
             </div>
           </div>

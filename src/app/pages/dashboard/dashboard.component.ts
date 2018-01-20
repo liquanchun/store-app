@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AngularEchartsModule } from 'ngx-echarts';
 import { OrgService } from '../sys/components/org/org.services';
+import { StoreinService } from './../store/storein/storein.services';
 import * as $ from 'jquery';
 import * as _ from 'lodash';
 
@@ -9,7 +10,7 @@ import * as _ from 'lodash';
   selector: 'dashboard',
   styleUrls: ['./dashboard.scss'],
   templateUrl: './dashboard.html',
-  providers: [OrgService],
+  providers: [OrgService, StoreinService],
 })
 export class Dashboard implements OnInit {
 
@@ -34,8 +35,8 @@ export class Dashboard implements OnInit {
   rich = {
     yellow: {
       color: "#ffc72b",
-      fontSize: 30,
-      padding: [5, 4],
+      fontSize: 23,
+      padding: [1, 4],
       align: 'center'
     },
     total: {
@@ -47,7 +48,8 @@ export class Dashboard implements OnInit {
       color: "#000",
       align: 'center',
       fontSize: 14,
-      padding: [21, 0]
+      padding: [12, 0],
+      margin: [5, 0]
     },
     blue: {
       color: '#49dff0',
@@ -62,15 +64,22 @@ export class Dashboard implements OnInit {
     }
   };
 
-  chartOption1 = {
+  StoreInOption1 = {
     title: {
       text: '各部门采购采购单占比',
       x: 'center',
       textStyle: {
         color: '#268bd2',
         fontSize: '22',
-        fontWeight: 'normal'
-      }
+        fontWeight: 'normal',
+      },
+      subtext: '统计'
+    },
+    grid: {
+      left: '3%',
+      right: '4%',
+      bottom: '3%',
+      containLabel: true
     },
     legend: {
       selectedMode: false,
@@ -110,7 +119,7 @@ export class Dashboard implements OnInit {
       },
       labelLine: {
         normal: {
-          length: 55,
+          length: 57,
           length2: 0,
           lineStyle: {
             color: '#268bd2'
@@ -121,7 +130,7 @@ export class Dashboard implements OnInit {
     }]
   };
 
-  optionmonth = {
+  StoreInOptionmonth = {
     color: ['#deb140', '#01F2FF', '#A635FF', '#009AFF'],
     title: {
       text: '采购单月份对比',
@@ -136,7 +145,7 @@ export class Dashboard implements OnInit {
       trigger: 'axis'
     },
     legend: {
-      x: 300,
+      x: 'center',
       top: 'bottom',
       textStyle: {
         color: '#268bd2',
@@ -160,8 +169,8 @@ export class Dashboard implements OnInit {
       type: 'category',
       "axisLine": {
         lineStyle: {
-          color: '#04CEDC',
-          width: 1
+          color: '#C6C4C4',
+          width: 0.5
         }
 
       },
@@ -175,18 +184,18 @@ export class Dashboard implements OnInit {
         }
       },
       boundaryGap: false,
-      data: ['2017年7月', '2017年8月', '2017年9月', '2017年10月', '2017年11月', '2017年12月', '2018年1月']
+      data: ['17年7月', '17年8月', '17年9月', '17年10月', '17年11月', '17年12月', '18年1月']
     },
     yAxis: {
       "axisLine": {
         lineStyle: {
-          color: '#268bd2'
+          color: '##C6C4C4'
         }
       },
       splitLine: {
         show: true,
         lineStyle: {
-          color: '#05415D'
+          color: '#DAD9D9'
         }
       },
       "axisTick": {
@@ -263,20 +272,53 @@ export class Dashboard implements OnInit {
 
   constructor(private _router: Router,
     private _orgService: OrgService,
+    private _storeinService: StoreinService,
   ) {
 
   }
   ngOnInit() {
-
+    this.getStoreInList();
+    this.getStoreInMonth();
   }
-  getOrgList() {
-    this._orgService.getAll().then((data) => {
-      this.orgList = _.filter(data, f => { return f.parentId > 0; });
-      this.echartData = [];
-      const that = this;
-      _.each(this.orgList,f =>{
-          //that.echartData.push({});
-      });
-    });
+  getStoreInList(): void {
+    this._storeinService.getStoreinsByOrg().then((data) => {
+      this.StoreInOption1 = Object.assign({}, this.StoreInOption1);
+      this.echartData = data;
+      this.StoreInOption1.series[0].data = this.echartData;
+      this.StoreInOption1.series[0].color = _.take(this.colorList, this.echartData.length);
+    })
+  }
+  getStoreInMonth(): void {
+    this._storeinService.getStoreinsByMonth().then((data) => {
+      this.StoreInOptionmonth = Object.assign({}, this.StoreInOptionmonth);
+      const keys = _.keys(data);
+      this.StoreInOptionmonth.legend.data = keys;
+      this.StoreInOptionmonth.color = _.take(this.colorList, keys.length);
+      this.StoreInOptionmonth.xAxis.data = _.keys(data[keys[0]]);
+
+      let series = [];
+      for (let i = 0; i < keys.length; i++) {
+        let value0S = [];
+        const value0 = _.values(data[keys[i]]);
+        _.each(value0, f => { value0S.push(f); });
+
+        series.push({
+          name: keys[i],
+          smooth: true,
+          type: 'line',
+          symbolSize: 8,
+          symbol: 'circle',
+          data: _.values(value0S),
+          itemStyle: {
+            normal: {
+              lineStyle: {
+                width: 4,
+              }
+            }
+          }
+        });
+      }
+      this.StoreInOptionmonth.series = series;
+    })
   }
 }

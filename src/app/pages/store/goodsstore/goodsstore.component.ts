@@ -56,11 +56,6 @@ export class GoodsstoreComponent implements OnInit {
         type: 'string',
         filter: false,
       },
-      orgTxt: {
-        title: '所属部门',
-        type: 'string',
-        filter: false,
-      },
       amount: {
         title: '库存金额',
         type: 'number',

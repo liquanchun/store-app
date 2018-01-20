@@ -30,7 +30,7 @@ export class StoreinNewComponent implements OnInit {
   @Input() showEditButton: boolean = true;
   title = '新增产品入库';
   isSaved: boolean = false;
-
+  isEnable: boolean = true;
   storeIn: any = {
     typeId: 0,
     inTime: '',
@@ -212,9 +212,14 @@ export class StoreinNewComponent implements OnInit {
   }
   ngOnInit() {
     this.getDataList();
+    this.getOrderNo();
     this.storeIn.inTimeNg = this._common.getTodayObj();
   }
-
+  getOrderNo(): void {
+    this._storeinNewService.getOrderNo().then((data) => {
+      this.storeIn.orderNo = data['data'];
+    });
+  }
   getDataList(): void {
     this._goodsService.getGoodss().then((data) => {
       this.popGrid.load(data);
@@ -230,9 +235,7 @@ export class StoreinNewComponent implements OnInit {
     this._userService.getUsers().then((data) => {
       this.users = data;
     });
-    this._storeinNewService.getOrderNo().then((data) => {
-      this.storeIn.orderNo = data['data'];
-    });
+
     this._orgService.getAll().then((data) => {
       const that = this;
       const optData = [];
@@ -268,6 +271,7 @@ export class StoreinNewComponent implements OnInit {
         return n['name'] == event.data.name;
       });
     }
+    this.isEnable = this.selectedGoods.length == 0;
     this.selectedGrid.load(this.selectedGoods);
     this.storeIn.amount = _.sumBy(this.selectedGoods, function (o) { return o['amount']; });
   }
@@ -283,6 +287,7 @@ export class StoreinNewComponent implements OnInit {
       _.remove(this.selectedGoods, function (n) {
         return n['name'] == event.data.name;
       });
+      this.isEnable = this.selectedGoods.length == 0;
       this.refreshTable();
       event.confirm.resolve();
     } else {
@@ -403,15 +408,11 @@ export class StoreinNewComponent implements OnInit {
         that.toastOptions.msg = "保存成功。";
         that.toastyService.success(that.toastOptions);
         that.isSaved = false;
-        that.storeIn.inType = '';
-        that.storeIn.inTime = '';
-        that.storeIn.supplierId = [];
-        that.storeIn.storeCode = '';
-        that.storeIn.orgid = [];
-        that.storeIn.orgtext = '';
-        that.storeIn.operator = '';
+        that.storeIn.amount = 0;
         that.selectedGoods = [];
+        that.isEnable = true;
         that.selectedGrid.load(that.selectedGoods);
+        that.getOrderNo();
       },
       (err) => {
         that.toastOptions.title = "保存失败";
