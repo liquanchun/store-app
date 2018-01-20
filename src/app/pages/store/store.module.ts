@@ -28,6 +28,7 @@ import { StoreinComponent } from './storein/Storein.component';
 import { StoreoutComponent } from './storeout/Storeout.component';
 import { SupplierComponent } from './supplier/Supplier.component';
 import { StoreinNewComponent } from './storein/storeinnew/storeinnew.component';
+import { StoreoutNewComponent } from './storeout/storeoutnew/storeoutnew.component';
 import { SysModule } from './../sys/sys.module';
 import {ToastyModule} from 'ng2-toasty';
 @NgModule({
@@ -56,7 +57,8 @@ import {ToastyModule} from 'ng2-toasty';
     StoreinComponent,
     StoreoutComponent,
     SupplierComponent,
-    StoreinNewComponent
+    StoreinNewComponent,
+    StoreoutNewComponent
   ],
   providers: [GlobalState, Config, HttpService, AppState,Common]
 })

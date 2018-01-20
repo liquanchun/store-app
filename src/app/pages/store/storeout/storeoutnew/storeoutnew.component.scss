@@ -1,10 +1,60 @@
-@import "../../../theme/sass/conf/conf";
-:host /deep/ .widgets {
-  .smart-table-container {
-    width: 100%;
+.vertical-scroll {
+  border: 1px;
+  border-color: black;
+}
+
+.form-control {
+  &:focus {
+    box-shadow: 0 1px 0 0 rgba(255, 255, 255, 0.12);
+    border-color: orange;
   }
 }
 
+.selectedcolor {
+  background-color: #EEE685;
+}
+
+.table-striped thead tr th {
+  background-color: #E0EEEE;
+  font-size: 15px;
+}
+
+.col-form-legend {
+  font-size: 13px;
+}
+
+.popover {
+  max-width: 500px !important;
+}
+
+.popover-content {
+  width: 500px !important;
+}
+
+.form-control[disabled] {
+  color: grey;
+}
+
+.card-primary .col-md-3 {
+  max-width: 18%;
+  padding-right: 0px;
+}
+
+.card-primary .col-md-1 {
+  max-width: 6.3%;
+}
+
+.card-primary .offset-md-3 {
+  margin-left: 18%;
+}
+
+.dropdown .dropdown-item a {
+  color: rgba(27, 31, 35, 0.85);
+}
+.close{
+  display: inline-block;
+  margin-top: -34px;
+}
 select {
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -26,12 +76,39 @@ select {
   }
 }
 
+@import "../../../../theme/sass/conf/conf";
+:host /deep/ .widgets {
+  .smart-table-container {
+    width: 100%;
+  }
+}
+
+:host /deep/ ss-multiselect-dropdown .dropdown {
+  width: 305px;
+  display: block;
+}
+
 :host /deep/ ss-multiselect-dropdown .dropdown button.btn.btn-default.dropdown-toggle {
   background-color: #fff !important;
 }
 
+:host /deep/ ss-multiselect-dropdown .dropdown .dropdown-item a {
+  color: rgba(27, 31, 35, 0.85);
+}
+
+ :host /deep/ ss-multiselect-dropdown .dropdown-toggle {
+  width: 100%;
+  text-align: left;
+}
+
+ :host /deep/ ss-multiselect-dropdown .caret {
+  float: right;
+  margin-top: 8px;
+}
+
 :host /deep/ {
   .card-body {
+    padding-left: 20px;
     min-height: 600px;
   }
   ng2-smart-table {
@@ -40,6 +117,9 @@ select {
       // border: 1px solid $border-light !important;
       line-height: 25px;
       vertical-align: middle;
+    }
+    .tablebutton {
+      line-height: 20px !important;
     }
     table tr td {
       padding: 0 8px;
@@ -71,7 +151,7 @@ select {
       }
     }
     .ng2-smart-actions {
-      width: 97px;
+      width: 70px;
       text-align: center;
       .actions {
         float: none;
@@ -83,7 +163,7 @@ select {
     }
     a.ng2-smart-action,
     .ng2-smart-title {
-      font-size: 14px !important; // color: $default-text;
+      font-size: 14px !important; //   color: $default-text;
       padding: 0 5px;
       display: inline-block;
       &.ng2-smart-action-add-add {

@@ -11,7 +11,15 @@ export class StoreoutService {
   getStoreouts() {
     return this._httpService.getModelList(this.modelName);
   }
-
+  getStoreinsByOrg() {
+    return this._httpService.getModelList(this.modelName + '/byorg');
+  }
+  getStoreinsByMonth() {
+    return this._httpService.getModelList(this.modelName + '/bymonth');
+  }
+  cancel(id:any) {
+    return this._httpService.getModelList(this.modelName + '/cancel/' + id);
+  }
   create(model: any) {
     delete model.id;
     return this._httpService.create(this.modelName, model);

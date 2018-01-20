@@ -1,6 +1,6 @@
 @media screen and (min-width: 1620px) {
   .row.shift-up {
-    > * {
+    >* {
       margin-top: -573px;
     }
   }
@@ -25,15 +25,23 @@
 .demo-chart1 {
   height: 500px;
 }
+
 .demo-chart2 {
   height: 500px;
 }
+
 .demo-chart3 {
   height: 300px;
 }
+
 .demo-chart4 {
   height: 300px;
 }
+
 .demo-chart {
-  height: 350px;
+  height: 330px;
+}
+
+.toprow {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
 }

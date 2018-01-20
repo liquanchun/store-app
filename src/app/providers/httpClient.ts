@@ -16,7 +16,12 @@ export class HttpService {
         const url = this.baseUrl + modelName;
         return this.http.get(this.newUrl(url), { headers: this.getHeaders() })
             .toPromise()
-            .then(response => response.json())
+            .then(response => {
+                console.log(response);
+                if (response) {
+                    return response.json();
+                }
+            })
             .catch(this.handleError);
     }
 

@@ -1,9 +1,13 @@
 import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { FormGroup, AbstractControl, FormBuilder, Validators } from '@angular/forms';
+import { ToastyService, ToastyConfig, ToastOptions, ToastData } from 'ng2-toasty';
+import { IMultiSelectOption, IMultiSelectSettings, IMultiSelectTexts } from 'angular-2-dropdown-multiselect';
+import { OrgService } from '../../sys/components/org/org.services';
 import { LocalDataSource } from 'ng2-smart-table';
-
+import { Router, ActivatedRoute, Params } from '@angular/router';
 import { StoreoutService } from './storeout.services';
+import { DicService } from '../../sys/dic/dic.services';
 import { GlobalState } from '../../../global.state';
 import { Common } from '../../../providers/common';
 
@@ -14,90 +18,318 @@ import * as _ from 'lodash';
   selector: 'app-storeout',
   templateUrl: './storeout.component.html',
   styleUrls: ['./storeout.component.scss'],
-  providers: [StoreoutService],
+  providers: [StoreoutService, DicService, OrgService],
 })
 export class StoreoutComponent implements OnInit {
 
+  loading = false;
   title = '出库查询';
   query: string = '';
 
   settings = {
+    pager: {
+      perPage: 15
+    },
     mode: 'external',
     actions: {
       columnTitle: '操作'
     },
+    edit: {
+      editButtonContent: '明细',
+      confirmSave: true,
+    },
+    delete: {
+      deleteButtonContent: '作废',
+      confirmDelete: true
+    },
     hideSubHeader: true,
     columns: {
-      id: {
-        title: 'ID',
-        type: 'number',
-        editable: false,
-        filter: false,
-        width: '30px',
-      },
-      storeoutTime: {
-        title: '单据号',
-        type: 'string',
-        width: '100px',
-        filter: false,
-      },
-      storeoutMan: {
-        title: '类型',
+      orderNo: {
+        title: '出库单号',
         type: 'string',
         filter: false,
-        width: '80px',
       },
-      houseCode: {
-        title: '日期',
+      typeIdTxt: {
+        title: '出库类型',
         type: 'string',
         filter: false,
-        width: '80px',
       },
-      address: {
+      outTime: {
+        title: '出库日期',
+        type: 'string',
+        filter: false,
+      },
+      storeIdTxt: {
         title: '仓库',
         type: 'string',
         filter: false,
-        width: '80px',
       },
-      isOverStay: {
-        title: '经办人',
-        type: 'number',
+      orgIdTxt: {
+        title: '领料部门',
+        type: 'string',
+        filter: false
+      },
+      operatorTxt: {
+        title: '领料人',
+        type: 'string',
+        filter: false
+      },
+      amount: {
+        title: '订单金额',
+        type: 'string',
         filter: false
       },
       remark: {
         title: '备注',
-        type: 'number',
+        type: 'string',
         filter: false
       },
       createdBy: {
-        title: '操作员',
+        title: '录入人',
+        type: 'string',
+        filter: false
+      },
+      createdAt: {
+        title: '录入时间',
+        type: 'string',
+        filter: false
+      },
+      status: {
+        title: '状态',
         type: 'string',
         filter: false
       },
     }
   };
 
+  settingsGoods = {
+    actions: false,
+    hideSubHeader: true,
+    noDataMessage: '',
+    columns: {
+      goodsTypeIdTxt: {
+        title: '产品类别',
+        type: 'string',
+        filter: false
+      },
+      goodsIdTxt: {
+        title: '名称',
+        type: 'string',
+        filter: false
+      },
+      goodscode: {
+        title: '编码',
+        type: 'string',
+        filter: false,
+      },
+      number: {
+        title: '数量',
+        type: 'number',
+        filter: false,
+      },
+      price: {
+        title: '单价',
+        type: 'number',
+        filter: false,
+      },
+      amount: {
+        title: '金额',
+        type: 'number',
+        filter: false
+      },
+      remarl: {
+        title: '备注',
+        type: 'string',
+        filter: false,
+      },
+    }
+  };
+
   source: LocalDataSource = new LocalDataSource();
+  selectedGrid: LocalDataSource = new LocalDataSource();
+
+  storeOutData: any;
+  storeOutDetailData: any;
+
+  //仓库
+  stores: any = [];
+  //出库类型
+  inType: any = [];
+  //组织架构
+  orgName: any = '';
+
+  selectedSup = [];
+  selectedOrg = [];
+
+  myOptionsSup: IMultiSelectOption[];
+  myOptions: IMultiSelectOption[];
+  mySettings: IMultiSelectSettings = {
+    enableSearch: true,
+    checkedStyle: 'fontawesome',
+    buttonClasses: 'btn btn-default btn-block',
+    dynamicTitleMaxItems: 3,
+    selectionLimit: 1,
+    autoUnselect: true,
+  };
+  myTextsOrg: IMultiSelectTexts = {
+    defaultTitle: '--选择部门--',
+    searchPlaceholder: '查询...'
+  }
+  private toastOptions: ToastOptions = {
+    title: "提示信息",
+    msg: "The message",
+    showClose: true,
+    timeout: 2000,
+    theme: "bootstrap",
+  };
 
   constructor(
     private storeoutService: StoreoutService,
+    private _dicService: DicService,
     private _common: Common,
+    private _router: Router,
+    private toastyService: ToastyService,
+    private toastyConfig: ToastyConfig,
+    private _orgService: OrgService, 
+    private modalService: NgbModal,
     private _state: GlobalState) {
+    this.toastyConfig.position = 'top-center';
   }
   ngOnInit() {
     this.getDataList();
   }
   onSearch(query: string = '') {
     this.source.setFilter([
-      { field: 'storeoutMan', search: query },
-      { field: 'houseCode', search: query },
+      { field: 'billNo', search: query },
+      { field: 'operatorTxt', search: query },
       { field: 'createdBy', search: query },
+      { field: 'typeIdTxt', search: query },
     ], false);
+  }
+  showPopOrg(event): void {
+    _.delay(function (text) {
+      $(".popover").css("max-width", "380px");
+      $(".popover").css("min-width", "300px");
+    }, 100, 'later');
+  }
+  //查看明细
+  onEdit(event) {
+
+  }
+  //作废
+  onDelete(event) {
+    if (window.confirm('你确定要作废吗?')) {
+      if (event.data.status == '作废') {
+        this.toastOptions.msg = "该出库单已经作废，不能操作。";
+        this.toastyService.warning(this.toastOptions);
+        return;
+      }
+      this.storeoutService.cancel(event.data.id).then((data) => {
+        this.toastOptions.msg = "作废成功。";
+        this.toastyService.success(this.toastOptions);
+        this.getDataList();
+      }, (err) => {
+        this.toastOptions.msg = err;
+        this.toastyService.error(this.toastOptions);
+      });
+    }
+  }
+
+  onSelectedOrg(org) {
+    if (org) {
+      this.orgName = org.name;
+      this.source.setFilter([
+        { field: 'orgIdTxt', search: org.name },
+      ], false);
+    }
+  }
+  onInTypeChange(inType) {
+    if (inType.target.value) {
+      this.source.load(_.filter(this.storeOutData, f => { return f['typeId'] == inType.target.value }));
+    } else {
+      this.source.load(this.storeOutData);
+    }
+  }
+
+  onStoresChange(store) {
+    if (store.target.value) {
+      this.source.load(_.filter(this.storeOutData, f => { return f['storeId'] == store.target.value }));
+    } else {
+      this.source.load(this.storeOutData);
+    }
+  }
+
+  onChangeOrg(event) {
+    if (event && event.length > 0) {
+      this.source.load(_.filter(this.storeOutData, f => { return f['orgId'] == event[0] }));
+    } else {
+      this.source.load(this.storeOutData);
+    }
+  }
+  open(event, content) {
+    const orderNo = event.data.orderNo;
+    const orderDetail = _.filter(this.storeOutDetailData, (f) => { return f['orderno'] == orderNo; });
+    this.selectedGrid.load(orderDetail);
+
+    this.modalService.open(content).result.then((result) => {
+    }, (reason) => {
+    });
+    _.delay(function (text) {
+      $(".modal-dialog").css("max-width", "645px");
+    }, 100, 'later');
   }
 
   getDataList(): void {
-    this.storeoutService.getStoreouts().then((data) => {
-      this.source.load(data);
+    this._dicService.getDicByName('仓库', (data) => { this.stores = data; });
+    this._dicService.getDicByName('出库类型', (data) => { this.inType = data; });
+
+    this._orgService.getAll().then((data) => {
+      const that = this;
+      const optData = [];
+      _.each(data, f => {
+        optData.push({ id: f['id'], name: f['deptName'] });
+      });
+      this.myOptions = optData;
     });
+
+    this.loading = true;
+    this.storeoutService.getStoreouts().then((data) => {
+      this.loading = false;
+      if (data && data['storeOutDetailList']) {
+        const that = this;
+        this.storeOutDetailData = data['storeOutDetailList'];
+        this.storeOutData = data['storeOutList'];
+        _.each(this.storeOutData, f => { f['outTime'] = that._common.getSplitDate(f['outTime']); });
+        this.source.load(this.storeOutData);
+      }
+    }, (err) => {
+      this.loading = false;
+      this.toastOptions.msg = err;
+      this.toastyService.error(this.toastOptions);
+    });
+  }
+
+  print() {
+
+    let printContents, popupWin;
+    printContents = document.getElementById('printDiv').innerHTML;
+    popupWin = window.open('', '_blank', 'top=0,left=0,height=100%,width=auto');
+    popupWin.document.open();
+    popupWin.document.write(`
+      <html>
+        <head>
+          <title>采购出库单</title>
+          <style>
+          //........Customized style.......
+          </style>
+        </head>
+        <body onload="window.print();window.close()">${printContents}</body>
+      </html>`
+    );
+    popupWin.document.close();
+  }
+  //新增出库
+  newStoreout(): void {
+    this._router.navigate(['/pages/store/storeoutnew']);
   }
 }

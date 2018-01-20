@@ -336,13 +336,13 @@ export class StoreinComponent implements OnInit {
 
     this.loading = true;
     this.storeinService.getStoreins().then((data) => {
-      if (data) {
+      this.loading = false;
+      if (data && data['storeInDetailList']) {
         const that = this;
         this.storeInDetailData = data['storeInDetailList'];
         this.storeInData = data['storeInList'];
         _.each(this.storeInData, f => { f['inTime'] = that._common.getSplitDate(f['inTime']); });
         this.source.load(this.storeInData);
-        this.loading = false;
       }
     }, (err) => {
       this.loading = false;

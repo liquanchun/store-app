@@ -8,6 +8,7 @@ import { BaImageLoaderService, BaThemePreloader, BaThemeSpinner } from './theme/
 import { BaThemeConfig } from './theme/theme.config';
 import { layoutPaths } from './theme/theme.constants';
 import { Observable, Subscription } from 'rxjs/Rx';
+import * as _ from 'lodash';
 /*
  * App Component
  * Top Level Component
@@ -61,7 +62,7 @@ export class App implements AfterViewInit, OnDestroy {
       this._httpService
         .getModelList('TokenAuth')
         .then(function (data) { }, (err) => {
-          if (err && err.indexOf('401') > -1) {
+          if (err && _.isString(err) && err.indexOf('401') > -1) {
             this._router.navigate(['login']);
           }
         });
