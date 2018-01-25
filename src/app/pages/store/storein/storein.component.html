@@ -57,9 +57,7 @@
           </div>
         </div>
         <ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '4px' }"></ngx-loading>
-        <div id="printDiv">
-          <ng2-smart-table [settings]="settings" [source]="source" (edit)="open($event,popContent)" (delete)="onDelete($event)"></ng2-smart-table>
-        </div>
+        <ng2-smart-table [settings]="settings" [source]="source" (edit)="open($event,popContent)" (delete)="onDelete($event)"></ng2-smart-table>
       </div>
     </ba-card>
   </div>
@@ -80,4 +78,52 @@
   <ng-template #popContentOrg>
     <app-sys-org [editable]="false" (selected)="onSelectedOrg($event)"></app-sys-org>
   </ng-template>
+  <div style="display:none" id="printDiv">
+    <p>{{printOrder.typeIdTxt}}单</p>
+    <table class="firstTable">
+      <tr>
+        <td>入库单号：</td>
+        <td>
+          <u>{{printOrder.orderNo}}</u>
+        </td>
+        <td>入库类型：</td>
+        <td>
+          <u>{{printOrder.typeIdTxt}}</u>
+        </td>
+        <td>采购日期：</td>
+        <td>
+          <u>{{printOrder.inTime}}</u>
+        </td>
+      </tr>
+      <tr>
+        <td>采购部门：</td>
+        <td>
+          <u>{{printOrder.orgIdTxt}}</u>
+        </td>
+        <td>采购人：</td>
+        <td>
+          <u>{{printOrder.operatorTxt}}</u>
+        </td>
+        <td>录入人：</td>
+        <td>
+          <u>{{printOrder.createdBy}}</u>
+        </td>
+      </tr>
+      <tr>
+        <td>供应商：</td>
+        <td colspan="5">
+          <u>{{printOrder.supplierIdTxt}}</u>
+        </td>
+      </tr>
+    </table>
+    <table class="secondtable">
+      <thead>
+        <tr><td>产品代码</td><td>产品名称</td><td>数量</td><td>单价</td><td>金额</td></tr>
+      </thead>
+      <tr *ngFor="let prod of printOrderDetail">
+        <td>{{prod.goodscode}}</td><td>{{prod.goodsIdTxt}}</td><td>{{prod.number}}</td><td>{{prod.price}}</td><td>{{prod.amount}}</td>
+      </tr>
+      <tr class="footer"><td colspan="4">合计：</td><td>{{printOrder.amount}}</td></tr>
+    </table>
+  </div>
 </div>

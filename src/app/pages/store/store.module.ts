@@ -17,6 +17,7 @@ import { MultiselectDropdownModule } from 'angular-2-dropdown-multiselect';
 import { TreeModule } from 'angular-tree-component';
 import { LoadingModule } from 'ngx-loading';
 import { ComponentsModule } from '../components/components.module';
+import { PrintComponent } from './printbutton.component';
 
 import { routing } from './store.routing';
 import { StoreComponent } from './store.component';
@@ -58,8 +59,10 @@ import {ToastyModule} from 'ng2-toasty';
     StoreoutComponent,
     SupplierComponent,
     StoreinNewComponent,
-    StoreoutNewComponent
+    StoreoutNewComponent,
+    PrintComponent
   ],
+  entryComponents: [PrintComponent],
   providers: [GlobalState, Config, HttpService, AppState,Common]
 })
 export class StoreModule {}

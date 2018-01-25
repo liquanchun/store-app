@@ -10,7 +10,7 @@ import { StoreoutService } from './storeout.services';
 import { DicService } from '../../sys/dic/dic.services';
 import { GlobalState } from '../../../global.state';
 import { Common } from '../../../providers/common';
-
+import { PrintComponent } from './../printbutton.component';
 import * as $ from 'jquery';
 import * as _ from 'lodash';
 
@@ -99,6 +99,16 @@ export class StoreoutComponent implements OnInit {
         type: 'string',
         filter: false
       },
+      button: {
+        title: '打印',
+        type: 'custom',
+        renderComponent: PrintComponent,
+        onComponentInitFunction(instance) {
+          instance.save.subscribe(row => {
+            alert(`${row.orderNo} saved!`)
+          });
+        },
+      }
     }
   };
 
@@ -183,6 +193,18 @@ export class StoreoutComponent implements OnInit {
     theme: "bootstrap",
   };
 
+  printOrder: any = {
+    orderNo: '',
+    typeIdTxt: '',
+    outTime: '',
+    orgIdTxt: '',
+    operatorTxt: '',
+    createdBy: '',
+    supplierIdTxt: '',
+    amount: 0
+  };
+  printOrderDetail = [];
+
   constructor(
     private storeoutService: StoreoutService,
     private _dicService: DicService,
@@ -194,6 +216,13 @@ export class StoreoutComponent implements OnInit {
     private modalService: NgbModal,
     private _state: GlobalState) {
     this.toastyConfig.position = 'top-center';
+    this._state.subscribe('print.storein', (data) => {
+      this.printOrder = _.find(this.storeOutData, f => { return f['id'] == data.id; });
+      this.printOrderDetail = _.filter(this.storeOutDetailData, f => { return f['orderno'] == this.printOrder.orderNo; });
+      _.delay(function (that) {
+        that.print();
+      }, 300, this);
+    });
   }
   ngOnInit() {
     this.getDataList();
@@ -299,7 +328,10 @@ export class StoreoutComponent implements OnInit {
         const that = this;
         this.storeOutDetailData = data['storeOutDetailList'];
         this.storeOutData = data['storeOutList'];
-        _.each(this.storeOutData, f => { f['outTime'] = that._common.getSplitDate(f['outTime']); });
+        _.each(this.storeOutData, f => { 
+          f['outTime'] = that._common.getSplitDate(f['outTime']);
+          f['button'] = f['id'];
+         });
         this.source.load(this.storeOutData);
       }
     }, (err) => {
@@ -313,14 +345,48 @@ export class StoreoutComponent implements OnInit {
 
     let printContents, popupWin;
     printContents = document.getElementById('printDiv').innerHTML;
-    popupWin = window.open('', '_blank', 'top=0,left=0,height=100%,width=auto');
+    popupWin = window.open('', '_blank', 'top=0,left=0,height=978px,width=1080px');
     popupWin.document.open();
     popupWin.document.write(`
       <html>
         <head>
-          <title>采购出库单</title>
+          <title style="font-size: 30px;"></title>
           <style>
-          //........Customized style.......
+          title{
+            
+          }
+          .firstTable td {
+            border: none;
+            padding: 8px;
+          }
+          
+          .firstTable {
+            width: 680px;
+            border-collapse: collapse;
+          }
+          
+          .secondtable {
+            width: 680px;
+            border-collapse: collapse;
+          }
+          
+          .secondtable td {
+            padding: 8px;
+            border: 1px solid black;
+          }
+          
+          .secondtable thead {
+            font-weight: bold;
+          }
+          
+          .secondtable .footer {
+            font-weight: bold;
+          }
+          p{
+            text-align: center;
+            font-size:30px;
+            width: 680px;
+          }
           </style>
         </head>
         <body onload="window.print();window.close()">${printContents}</body>

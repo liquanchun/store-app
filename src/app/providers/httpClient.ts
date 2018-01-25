@@ -17,8 +17,7 @@ export class HttpService {
         return this.http.get(this.newUrl(url), { headers: this.getHeaders() })
             .toPromise()
             .then(response => {
-                console.log(response);
-                if (response) {
+                if (response && response.url.indexOf('TokenAuth') == -1) {
                     return response.json();
                 }
             })

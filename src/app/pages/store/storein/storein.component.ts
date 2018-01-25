@@ -11,7 +11,7 @@ import { SupplierService } from '../supplier/supplier.services';
 import { DicService } from '../../sys/dic/dic.services';
 import { GlobalState } from '../../../global.state';
 import { Common } from '../../../providers/common';
-
+import { PrintComponent } from './../printbutton.component';
 import * as $ from 'jquery';
 import * as _ from 'lodash';
 
@@ -105,6 +105,16 @@ export class StoreinComponent implements OnInit {
         type: 'string',
         filter: false
       },
+      button: {
+        title: '打印',
+        type: 'custom',
+        renderComponent: PrintComponent,
+        onComponentInitFunction(instance) {
+          instance.save.subscribe(row => {
+            alert(`${row.orderNo} saved!`)
+          });
+        },
+      }
     }
   };
 
@@ -148,7 +158,7 @@ export class StoreinComponent implements OnInit {
         type: 'number',
         filter: false
       },
-      remarl: {
+      remark: {
         title: '备注',
         type: 'string',
         filter: false,
@@ -199,6 +209,17 @@ export class StoreinComponent implements OnInit {
     timeout: 2000,
     theme: "bootstrap",
   };
+  printOrder: any = {
+    orderNo: '',
+    typeIdTxt: '',
+    inTime: '',
+    orgIdTxt: '',
+    operatorTxt: '',
+    createdBy: '',
+    supplierIdTxt: '',
+    amount: 0
+  };
+  printOrderDetail = [];
 
   constructor(
     private storeinService: StoreinService,
@@ -208,10 +229,19 @@ export class StoreinComponent implements OnInit {
     private toastyService: ToastyService,
     private toastyConfig: ToastyConfig,
     private _supplierService: SupplierService,
-    private _orgService: OrgService, 
+    private _orgService: OrgService,
     private modalService: NgbModal,
     private _state: GlobalState) {
     this.toastyConfig.position = 'top-center';
+
+    this._state.subscribe('print.storein', (data) => {
+      this.printOrder = _.find(this.storeInData, f => { return f['id'] == data.id; });
+      this.printOrderDetail = _.filter(this.storeInDetailData, f => { return f['orderno'] == this.printOrder.orderNo; });
+      _.delay(function (that) {
+        that.print();
+      }, 300, this);
+    });
+
   }
   ngOnInit() {
     this.getDataList();
@@ -341,7 +371,10 @@ export class StoreinComponent implements OnInit {
         const that = this;
         this.storeInDetailData = data['storeInDetailList'];
         this.storeInData = data['storeInList'];
-        _.each(this.storeInData, f => { f['inTime'] = that._common.getSplitDate(f['inTime']); });
+        _.each(this.storeInData, f => {
+          f['inTime'] = that._common.getSplitDate(f['inTime']);
+          f['button'] = f['id'];
+        });
         this.source.load(this.storeInData);
       }
     }, (err) => {
@@ -355,14 +388,48 @@ export class StoreinComponent implements OnInit {
 
     let printContents, popupWin;
     printContents = document.getElementById('printDiv').innerHTML;
-    popupWin = window.open('', '_blank', 'top=0,left=0,height=100%,width=auto');
+    popupWin = window.open('', '_blank', 'top=0,left=0,height=978px,width=1080px');
     popupWin.document.open();
     popupWin.document.write(`
       <html>
         <head>
-          <title>采购入库单</title>
+          <title style="font-size: 30px;"></title>
           <style>
-          //........Customized style.......
+          title{
+            
+          }
+          .firstTable td {
+            border: none;
+            padding: 8px;
+          }
+          
+          .firstTable {
+            width: 680px;
+            border-collapse: collapse;
+          }
+          
+          .secondtable {
+            width: 680px;
+            border-collapse: collapse;
+          }
+          
+          .secondtable td {
+            padding: 8px;
+            border: 1px solid black;
+          }
+          
+          .secondtable thead {
+            font-weight: bold;
+          }
+          
+          .secondtable .footer {
+            font-weight: bold;
+          }
+          p{
+            text-align: center;
+            font-size:30px;
+            width: 680px;
+          }
           </style>
         </head>
         <body onload="window.print();window.close()">${printContents}</body>
