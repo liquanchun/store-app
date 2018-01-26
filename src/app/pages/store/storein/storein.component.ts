@@ -11,7 +11,7 @@ import { SupplierService } from '../supplier/supplier.services';
 import { DicService } from '../../sys/dic/dic.services';
 import { GlobalState } from '../../../global.state';
 import { Common } from '../../../providers/common';
-import { PrintComponent } from './../printbutton.component';
+import { StoreinPrintComponent } from './storeinprint.component';
 import * as $ from 'jquery';
 import * as _ from 'lodash';
 
@@ -108,7 +108,7 @@ export class StoreinComponent implements OnInit {
       button: {
         title: '打印',
         type: 'custom',
-        renderComponent: PrintComponent,
+        renderComponent: StoreinPrintComponent,
         onComponentInitFunction(instance) {
           instance.save.subscribe(row => {
             alert(`${row.orderNo} saved!`)

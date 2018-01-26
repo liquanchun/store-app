@@ -38,6 +38,7 @@ export class FormCheckComponent implements Field, OnInit, AfterViewInit {
     this.group.controls[this.config.name].valueChanges
       .subscribe(data => {
         that.selectVal = data.split(',');
+        $('.form-check-input').removeAttr('checked');
         $('.form-check-input').each(function (i, e) {
           if (_.indexOf(that.selectVal, $(this).attr('id')) > -1) {
             $(this).attr('checked', 'checked');

@@ -10,7 +10,7 @@ import { StoreoutService } from './storeout.services';
 import { DicService } from '../../sys/dic/dic.services';
 import { GlobalState } from '../../../global.state';
 import { Common } from '../../../providers/common';
-import { PrintComponent } from './../printbutton.component';
+import { StoreoutPrintComponent } from './storeioutprint.component';
 import * as $ from 'jquery';
 import * as _ from 'lodash';
 
@@ -102,7 +102,7 @@ export class StoreoutComponent implements OnInit {
       button: {
         title: '打印',
         type: 'custom',
-        renderComponent: PrintComponent,
+        renderComponent: StoreoutPrintComponent,
         onComponentInitFunction(instance) {
           instance.save.subscribe(row => {
             alert(`${row.orderNo} saved!`)
@@ -216,7 +216,7 @@ export class StoreoutComponent implements OnInit {
     private modalService: NgbModal,
     private _state: GlobalState) {
     this.toastyConfig.position = 'top-center';
-    this._state.subscribe('print.storein', (data) => {
+    this._state.subscribe('print.storeout', (data) => {
       this.printOrder = _.find(this.storeOutData, f => { return f['id'] == data.id; });
       this.printOrderDetail = _.filter(this.storeOutDetailData, f => { return f['orderno'] == this.printOrder.orderNo; });
       _.delay(function (that) {

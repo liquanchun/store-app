@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { ViewCell } from 'ng2-smart-table';
-import { GlobalState } from '../../global.state';
+import { GlobalState } from '../../../global.state';
 
 import * as _ from 'lodash';
 @Component({
@@ -12,7 +12,7 @@ import * as _ from 'lodash';
     `,
 })
 
-export class PrintComponent implements ViewCell, OnInit {
+export class StoreinPrintComponent implements ViewCell, OnInit {
   renderValue: string;
 
   @Input() value: string | number;

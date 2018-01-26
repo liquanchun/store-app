@@ -33,6 +33,6 @@
     <ngb-alert *ngIf="successMessage" type="success" (close)="successMessage = null">{{ successMessage }}</ngb-alert>
     <dynamic-form [config]="config" #form="dynamicForm" (back)="backTop($event)" (submit)="submit($event)">
     </dynamic-form>
-    {{ form.valid }} {{ form.value | json }}
+    <!-- {{ form.valid }} {{ form.value | json }} -->
   </div>
 </div>

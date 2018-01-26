@@ -174,6 +174,7 @@ export class MenuComponent implements OnInit, AfterViewInit {
       Icon: value.Icon,
       MenuOrder: value.MenuOrder,
       ParentId: 0,
+      RoleIds:value.Roles
     };
     if (this.isNewMenu) {
       saveMenu.ParentId = this.selectedMenu && this.selectedMenu.data ? this.selectedMenu.data.id : 0;
@@ -220,6 +221,8 @@ export class MenuComponent implements OnInit, AfterViewInit {
       this.form.setValue('Icon', this.selectedMenu.data.data.icon);
       if (this.selectedMenu.data.data.roleIds) {
         this.form.setValue('Roles', this.selectedMenu.data.data.roleIds);
+      }else{
+        this.form.setValue('Roles', '');
       }
       this.form.setValue('MenuOrder', this.selectedMenu.data.data.menuOrder);
       this.isNewMenu = false;
