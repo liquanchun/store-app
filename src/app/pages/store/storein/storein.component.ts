@@ -123,6 +123,11 @@ export class StoreinComponent implements OnInit {
     hideSubHeader: true,
     noDataMessage: '',
     columns: {
+      batchno: {
+        title: '批次',
+        type: 'string',
+        filter: false
+      },
       goodsTypeIdTxt: {
         title: '产品类别',
         type: 'string',
@@ -341,7 +346,7 @@ export class StoreinComponent implements OnInit {
     }, (reason) => {
     });
     _.delay(function (text) {
-      $(".modal-dialog").css("max-width", "645px");
+      $(".modal-dialog").css("max-width", "745px");
     }, 100, 'later');
   }
 

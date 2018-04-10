@@ -42,8 +42,20 @@ export class GoodsstoreComponent implements OnInit {
         type: 'string',
         filter: false,
       },
+      batchNo: {
+        title: '批次',
+        type: 'string',
+      },
       goodsIdTxt: {
-        title: '产品',
+        title: '产品名称',
+        type: 'string',
+      },
+      goodsCode: {
+        title: '产品代码',
+        type: 'string',
+      },
+      goodsNo: {
+        title: '产品编码',
         type: 'string',
       },
       number: {

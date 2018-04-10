@@ -117,6 +117,11 @@ export class StoreoutComponent implements OnInit {
     hideSubHeader: true,
     noDataMessage: '',
     columns: {
+      batchno: {
+        title: '批次',
+        type: 'string',
+        filter: false
+      },
       goodsTypeIdTxt: {
         title: '产品类别',
         type: 'string',

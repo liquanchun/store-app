@@ -90,6 +90,12 @@ export class StoreoutNewComponent implements OnInit {
       confirmDelete: true
     },
     columns: {
+      batchno: {
+        title: '批次',
+        type: 'string',
+        filter: false,
+        editable: false
+      },
       name: {
         title: '产品名称',
         type: 'string',
@@ -145,6 +151,11 @@ export class StoreoutNewComponent implements OnInit {
     columns: {
       goodsTypeIdTxt: {
         title: '产品类别',
+        type: 'string',
+        filter: false,
+      },
+      batchNo: {
+        title: '批次',
         type: 'string',
         filter: false,
       },
@@ -260,8 +271,9 @@ export class StoreoutNewComponent implements OnInit {
             price: goodsObj['price'],
             name: goodsObj['name'],
             unit: goodsObj['unit'],
+            goodscode:goodsObj['goodscode'],
             number: 1,
-            batchno: '',
+            batchno: event.data['batchNo'],
             amount: goodsObj['price'],
           });
       }
@@ -312,6 +324,8 @@ export class StoreoutNewComponent implements OnInit {
       _.each(that.selectedGoods, f => {
         if (f['name'] == event.data.name) {
           f['amount'] = _.toNumber((_.toNumber(dt.data['price']) * _.toNumber(dt.data['number'])).toFixed(2));
+          f['number'] = dt.data['number'];
+          f['remark'] = dt.data['remark'];
         }
       });
       that.selectedGrid.load(that.selectedGoods);
@@ -324,8 +338,8 @@ export class StoreoutNewComponent implements OnInit {
   }
   showPop(event): void {
     _.delay(function (text) {
-      $(".popover").css("max-width", "520px");
-      $(".popover").css("min-width", "400px");
+      $(".popover").css("max-width", "720px");
+      $(".popover").css("min-width", "600px");
     }, 100, 'later');
   }
 

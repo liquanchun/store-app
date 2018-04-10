@@ -10,6 +10,7 @@ import { StoreoutComponent } from './storeout/Storeout.component';
 import { SupplierComponent } from './supplier/Supplier.component';
 import { StoreinNewComponent } from './storein/storeinnew/storeinnew.component';
 import { StoreoutNewComponent } from './storeout/storeoutnew/storeoutnew.component';
+import { GoodsNewComponent } from './goods/goodsnew/goodsnew.component';
 const routes: Routes = [
   {
     path: '',
@@ -24,6 +25,8 @@ const routes: Routes = [
       { path: 'supplier', component: SupplierComponent },
       { path: 'storeinnew', component: StoreinNewComponent },
       { path: 'storeoutnew', component: StoreoutNewComponent },
+      { path: 'goodsnew', component: GoodsNewComponent },
+      { path: 'goodsnew/:id', component: GoodsNewComponent },
     ]
   }
 ];

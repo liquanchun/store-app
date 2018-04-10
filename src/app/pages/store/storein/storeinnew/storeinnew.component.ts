@@ -102,6 +102,11 @@ export class StoreinNewComponent implements OnInit {
         filter: false,
         editable: false
       },
+      batchno: {
+        title: '批次',
+        type: 'string',
+        filter: false,
+      },
       goodssite: {
         title: '货位',
         type: 'string',
@@ -305,18 +310,31 @@ export class StoreinNewComponent implements OnInit {
     //     f['amount'] = _.toNumber((_.toNumber(event.newData['price']) * _.toNumber(event.newData['number'])).toFixed(2));
     //   }
     // });
-    const dt = { that: this, data: event.newData };
-    event.confirm.resolve();
-    _.delay(function (dt) {
-      const that = dt.that;
-      _.each(that.selectedGoods, f => {
-        if (f['name'] == event.data.name) {
-          f['amount'] = _.toNumber((_.toNumber(dt.data['price']) * _.toNumber(dt.data['number'])).toFixed(2));
-        }
-      });
-      that.selectedGrid.load(that.selectedGoods);
-      that.storeIn.amount = _.sumBy(that.selectedGoods, function (o) { return o['amount']; });
-    }, 50, dt);
+    if (!event.newData['goodscode'] || !event.newData['batchno']) {
+      this.toastOptions.title = "提示";
+      this.toastOptions.msg = "产品编码和批次不能为空。";
+      this.toastyService.error(this.toastOptions);
+      event.confirm.reject();
+    } else {
+      const dt = { that: this, data: event.newData };
+      event.confirm.resolve();
+      _.delay(function (dt) {
+        const that = dt.that;
+        _.each(that.selectedGoods, f => {
+          if (f['name'] == event.data.name) {
+            f['amount'] = _.toNumber((_.toNumber(dt.data['price']) * _.toNumber(dt.data['number'])).toFixed(2));
+            f['price'] = dt.data['price'];
+            f['number'] = dt.data['number'];
+            f['goodssite'] = dt.data['goodssite'];
+            f['batchno'] = dt.data['batchno'];
+            f['remark'] = dt.data['remark'];
+            f['goodscode'] = dt.data['goodscode'];
+          }
+        });
+        that.selectedGrid.load(that.selectedGoods);
+        that.storeIn.amount = _.sumBy(that.selectedGoods, function (o) { return o['amount']; });
+      }, 50, dt);
+    }
   }
 
   onUserRowSelect(event) {
@@ -386,6 +404,13 @@ export class StoreinNewComponent implements OnInit {
       this.toastyService.warning(this.toastOptions);
       return;
     }
+    var checkGrid = _.filter(this.selectedGoods, f => { return !f['goodscode'] || !f['batchno'] });
+    if (checkGrid.length > 0) {
+      this.toastOptions.title = "提示";
+      this.toastOptions.msg = "产品编码和批次不能为空。";
+      this.toastyService.error(this.toastOptions);
+      return;
+    }
     if (this.selectedGoods.length == 0) {
       this.toastOptions.msg = "请选择产品。";
       this.toastyService.warning(this.toastOptions);
@@ -420,6 +445,6 @@ export class StoreinNewComponent implements OnInit {
         that.toastyService.error(that.toastOptions);
         that.isSaved = false;
       }
-      )
+    )
   }
 }
