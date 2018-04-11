@@ -13,6 +13,7 @@ import { AppState } from '../../app.service';
 import { HttpService } from '../../providers/httpClient';
 import { Common } from '../../providers/common';
 import { MultiselectDropdownModule } from 'angular-2-dropdown-multiselect';
+import { FileUploadModule } from 'ng2-file-upload';
 
 import { TreeModule } from 'angular-tree-component';
 import { LoadingModule } from 'ngx-loading';
@@ -32,11 +33,13 @@ import { SupplierComponent } from './supplier/Supplier.component';
 import { StoreinNewComponent } from './storein/storeinnew/storeinnew.component';
 import { StoreoutNewComponent } from './storeout/storeoutnew/storeoutnew.component';
 import { GoodsNewComponent } from './goods/goodsnew/goodsnew.component';
+import { CustomEditorComponent } from './goods/custom-editor.component';
 import { SysModule } from './../sys/sys.module';
 import { ToastyModule } from 'ng2-toasty';
 @NgModule({
   imports: [
     CommonModule,
+    FileUploadModule,
     ReactiveFormsModule,
     FormsModule,
     NgaModule,
@@ -64,9 +67,10 @@ import { ToastyModule } from 'ng2-toasty';
     StoreoutNewComponent,
     StoreinPrintComponent,
     StoreoutPrintComponent,
+    CustomEditorComponent,
     GoodsNewComponent
   ],
-  entryComponents: [StoreinPrintComponent, StoreoutPrintComponent],
+  entryComponents: [StoreinPrintComponent, StoreoutPrintComponent,CustomEditorComponent],
   providers: [GlobalState, Config, HttpService, AppState, Common]
 })
 export class StoreModule { }

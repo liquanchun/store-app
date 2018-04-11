@@ -11,7 +11,9 @@ export class GoodsService {
   getGoodss() {
     return this._httpService.getModelList(this.modelName);
   }
-
+  getGoodsById(id) {
+    return this._httpService.getModelList(this.modelName + "/" + id);
+  }
   create(model: any) {
     delete model.id;
     return this._httpService.create(this.modelName, model);
@@ -20,7 +22,7 @@ export class GoodsService {
   update(modelId: number, model: any) {
     return this._httpService.update(this.modelName, modelId, model);
   }
-
+  
   delete(id: any) {
     return this._httpService.delete(this.modelName, id);
   }

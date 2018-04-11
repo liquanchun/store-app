@@ -9,6 +9,9 @@ import { FieldConfig } from '../../../../theme/components/dynamic-form/models/fi
 import { DynamicFormComponent }
   from '../../../../theme/components/dynamic-form/containers/dynamic-form/dynamic-form.component';
 import { Common } from '../../../../providers/common';
+import { FileUploader } from "ng2-file-upload";
+import { Config } from '../../../../providers/config';
+
 import * as $ from 'jquery';
 import * as _ from 'lodash';
 
@@ -25,14 +28,14 @@ import { ReturnStatement } from '@angular/compiler/src/output/output_ast';
 @Component({
   selector: 'app-goodsnew',
   templateUrl: './goodsnew.component.html',
+  styleUrls: ['./goodsnew.component.scss'],
   providers: [DicService, GoodsService, SupplierService, UserService, OrgService],
 })
 export class GoodsNewComponent implements OnInit {
-  @ViewChild(DynamicFormComponent) form: DynamicFormComponent;
 
   title = '新增产品入库';
   isSaved: boolean = false;
-  isEnable: boolean = true;
+  isEnable: boolean = false;
   private goodsid = 0;
   private isNewMenu: boolean = true;
   private toastOptions: ToastOptions = {
@@ -42,67 +45,21 @@ export class GoodsNewComponent implements OnInit {
     timeout: 2000,
     theme: "bootstrap",
   };
+  private goods: any = {
+    name: '',
+    typeId: '',
+    unit: '',
+    goodsCode: '',
+    goodsNo: '',
+    minAmount: '',
+    remark: '',
+    price: '',
+    imageName: ''
+  };
+  private typeList: any;
+  private fileName: string;
+  public uploader: FileUploader;
 
-  config: FieldConfig[] = [
-    {
-      type: 'input',
-      label: '产品名称',
-      name: 'name',
-      placeholder: '输入产品名称',
-      validation: [Validators.required],
-    },
-    {
-      type: 'select',
-      label: '产品类别',
-      name: 'typeId',
-      options: [],
-    },
-    {
-      type: 'input',
-      label: '产品型号',
-      name: 'unit',
-      placeholder: '输入产品型号',
-    },
-    {
-      type: 'input',
-      label: '产品代码',
-      name: 'goodsCode',
-      placeholder: '输入产品代码',
-    },
-    {
-      type: 'input',
-      label: '产品编码',
-      name: 'goodsNo',
-      placeholder: '输入产品编码',
-    },
-    {
-      type: 'input',
-      label: '最小库存',
-      name: 'minAmount',
-      placeholder: '输入最小库存',
-    },
-    {
-      type: 'input',
-      label: '产品说明',
-      name: 'remark',
-      placeholder: '输入产品说明',
-    },
-    {
-      type: 'input',
-      label: '参考价格',
-      name: 'price',
-      placeholder: '输入参考价格',
-    },
-    {
-      label: '保存',
-      name: 'submit',
-      type: 'button',
-      callback: function () {
-        console.log('back');
-      },
-    },
-  ];
-  
   constructor(
     private modalService: NgbModal,
     private goodsService: GoodsService,
@@ -112,43 +69,106 @@ export class GoodsNewComponent implements OnInit {
     private _dicService: DicService,
     private _router: Router,
     private route: ActivatedRoute,
+    public config: Config,
     private _state: GlobalState) {
     this.toastyConfig.position = 'top-center';
   }
+
   ngOnInit() {
-    this.goodsid = this.route.snapshot.params['id'];
-    this.isNewMenu = !(this.goodsid > 0);
-    this.onGetGoodsType();
-    this._state.subscribe('backup-click', (data) => {
-      this._router.navigate(['/pages/store/goods']);
+    this.uploader = new FileUploader({
+      url: this.config.server + "api/uploads"
     });
+
+    this.goodsid = this.route.snapshot.queryParams['id'];
+    this.isNewMenu = !(this.goodsid > 0);
+    if (this.goodsid > 0) {
+      this.title = "修改产品信息";
+      this.getGoodsById(this.goodsid);
+    }
+    this.onGetGoodsType();
   }
 
-  submit(value: { [name: string]: any }) {
+  getGoodsById(id) {
+    this.goodsService.getGoodsById(id).then(data => {
+      console.log(data);
+      this.goods = data;
+    });
+  }
+  onConfirm() {
     const that = this;
+    if (!this.goods.goodsCode || !this.goods.goodsNo || !this.goods.name || !this.goods.typeId) {
+      that.toastOptions.msg = "请填写完整。";
+      that.toastyService.warning(that.toastOptions);
+      return;
+    }
+    // if (this.fileName) {
+    //   this.uploadFile();
+    // }
+    this.isSaved = true;
     if (this.isNewMenu) {
-      this.goodsService.create(value).then(function (menu) {
+      this.goodsService.create(this.goods).then(function (menu) {
         that.toastOptions.msg = "保存成功。";
         that.toastyService.success(that.toastOptions);
-        that.form.setDisabled('submit', false);
+        that.isSaved = false;
       }, (err) => {
-
+        that.toastOptions.title = "保存失败。";
+        that.toastOptions.msg = err;
+        that.toastyService.error(that.toastOptions);
+        that.isSaved = false;
       });
     } else {
-      this.goodsService.update(value.id, value).then(function (menu) {
-        that.form.setDisabled('submit', false);
+      this.goodsService.update(this.goodsid, this.goods).then(function (menu) {
+        that.toastOptions.msg = "保存成功。";
+        that.toastyService.success(that.toastOptions);
+        that.isSaved = false;
       }, (err) => {
-
+        that.toastOptions.title = "保存失败。";
+        that.toastOptions.msg = err;
+        that.toastyService.error(that.toastOptions);
+        that.isSaved = false;
       });
     }
   }
 
   onGetGoodsType() {
     this._dicService.getDicByName('产品类别', (data) => {
-      let cfg = _.find(this.config, f => { return f['name'] == 'typeId'; });
-      if (cfg) {
-        cfg.options = data;
-      }
+      this.typeList = data;
     });
   }
+  selectedFileOnChanged(event: any) {
+    // 打印文件选择名称
+    this.fileName = event.target.value;
+  }
+
+  onBack() {
+    this._router.navigate(['/pages/store/goods']);
+  }
+
+  uploadFile(picId: HTMLImageElement, nguploader: HTMLInputElement) {
+    if (nguploader.value == "") {
+      this.toastOptions.title = "提示信息";
+      this.toastOptions.msg = "选择文件";
+      this.toastyService.warning(this.toastOptions);
+      return;
+    }
+    const that = this;
+    //上传跨域验证
+    this.uploader.queue[0].withCredentials = false;
+    //成功之后的回调函数
+    this.uploader.queue[0].onSuccess = function (response, status, headers) {
+      if (status == 200) {
+        // 上传文件后获取服务器返回的数据
+        //let tempRes = JSON.parse(response);
+        that.goods.imageName = response;
+        console.log(that.goods.imageName);
+        //picId.src = response.replace('"', '').replace('"', '');
+        //nguploader.value = "";
+        that.toastOptions.title = "提示信息";
+        that.toastOptions.msg = "上传成功。";
+        that.toastyService.success(that.toastOptions);
+      }
+    };
+    this.uploader.queue[0].upload(); // 开始上传
+  }
+
 }

@@ -10,6 +10,8 @@ import { GlobalState } from '../../../global.state';
 import { Common } from '../../../providers/common';
 import { DicService } from '../../sys/dic/dic.services';
 import { Router, ActivatedRoute, Params } from '@angular/router';
+import { Config } from '../../../providers/config';
+import { CustomEditorComponent } from './custom-editor.component';
 import * as $ from 'jquery';
 import * as _ from 'lodash';
 
@@ -82,7 +84,15 @@ export class GoodsComponent implements OnInit {
         title: '参考价格',
         type: 'number',
         filter: false,
-      }
+      },
+      imageName: {
+        title: '图片',
+        type: 'html',
+        editor: {
+          type: 'custom',
+          component: CustomEditorComponent,
+        },
+      },
     }
   };
 
@@ -156,6 +166,7 @@ export class GoodsComponent implements OnInit {
     private toastyConfig: ToastyConfig,
     private _dicService: DicService,
     private _router: Router,
+    public _config: Config,
     private _state: GlobalState) {
     this.toastyConfig.position = 'top-center';
   }
@@ -174,8 +185,13 @@ export class GoodsComponent implements OnInit {
   }
 
   getDataList(): void {
+    const that = this;
     this.loading = true;
     this.goodsService.getGoodss().then((data) => {
+      _.each(data,(d)=>{
+        const url = that._config.server + 'Files/' + d['imageName'];
+        d['imageName'] = `<a target="_blank" href=${ url }>${ d['imageName'] } </a>`;
+      });
       this.source.load(data);
       this.loading = false;
     }, (err) => {
@@ -208,6 +224,7 @@ export class GoodsComponent implements OnInit {
   }
 
   onEdit(event) {
+    this._router.navigate(['/pages/store/goodsnew'], { queryParams: { id: event.data.id } });
     // const that = this;
     // const modalRef = this.modalService.open(NgbdModalContent);
     // modalRef.componentInstance.title = '修改产品信息';

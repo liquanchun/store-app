@@ -3,11 +3,122 @@
     <ng2-toasty></ng2-toasty>
     <ba-card [title]="title" class="card-primary" baCardClass="with-scroll">
       <div class="row">
-        <div class="col-md-6">
-          <dynamic-form [config]="config" #form="dynamicForm" (back)="backTop($event)" (submit)="submit($event)">
-          </dynamic-form>
+        <div class="col-md-5 offset-md-1">
+          <div class="form-group row">
+            <label for="inputName" class="col-sm-2 col-form-label">产品名称</label>
+            <div class="col-sm-10">
+              <input [(ngModel)]="goods.name" type="text" class="form-control" id="name" placeholder="输入产品名称">
+            </div>
+          </div>
         </div>
       </div>
+
+      <div class="row">
+        <div class="col-md-5 offset-md-1">
+          <div class="form-group row">
+            <label for="inputName" class="col-sm-2 col-form-label">产品类别</label>
+            <div class="col-sm-10">
+              <select [(ngModel)]="goods.typeId">
+                <option value="">--请选择--</option>
+                <option [value]="option.id" *ngFor="let option of typeList">
+                  {{ option.name }}
+                </option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-5 offset-md-1">
+          <div class="form-group row">
+            <label for="inputName" class="col-sm-2 col-form-label">型号（规格）</label>
+            <div class="col-sm-10">
+              <input [(ngModel)]="goods.unit" type="text" class="form-control" id="unit" placeholder="输入型号（规格）">
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="row">
+        <div class="col-md-5 offset-md-1">
+          <div class="form-group row">
+            <label for="inputName" class="col-sm-2 col-form-label">产品代码</label>
+            <div class="col-sm-10">
+              <input [(ngModel)]="goods.goodsCode" type="text" class="form-control" id="goodsCode" placeholder="输入产品代码">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-5 offset-md-1">
+          <div class="form-group row">
+            <label for="inputName" class="col-sm-2 col-form-label">产品编码</label>
+            <div class="col-sm-10">
+              <input [(ngModel)]="goods.goodsNo" type="text" class="form-control" id="goodsNo" placeholder="输入产品编码">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-5 offset-md-1">
+          <div class="form-group row">
+            <label for="inputName" class="col-sm-2 col-form-label">最小库存</label>
+            <div class="col-sm-10">
+              <input [(ngModel)]="goods.minAmount" type="text" class="form-control" id="minAmount" placeholder="输入最小库存">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-5 offset-md-1">
+          <div class="form-group row">
+            <label for="inputName" class="col-sm-2 col-form-label">参考价格</label>
+            <div class="col-sm-10">
+              <input [(ngModel)]="goods.price" type="text" class="form-control" id="price" placeholder="输入参考价格">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-5 offset-md-1">
+          <div class="form-group row">
+            <label for="inputName" class="col-sm-2 col-form-label">备注</label>
+            <div class="col-sm-10">
+              <input [(ngModel)]="goods.remark" type="text" class="form-control" id="remark" placeholder="输入备注">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-5 offset-md-1">
+          <div class="form-group row">
+            <label for="inputName" class="col-sm-2 col-form-label">图片</label>
+            <div class="col-sm-10">
+              <input type="file" #nguploader ng2FileSelect [uploader]="uploader" (change)="selectedFileOnChanged($event)" />
+              <input type="button" (click)="uploadFile(picId,nguploader)" value="上传" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-5">
+          <div class="form-group row">
+            <div class="col-md-9 offset-sm-4 btn-group">
+              <button type="button" [disabled]="isEnable" (click)="onConfirm()" class="btn btn-info">{{ isSaved ? '正在保存...':'保存'}}</button>
+              <button type="button" (click)="onBack()" class="btn btn-warning">返回列表</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </ba-card>
   </div>
 </div>
