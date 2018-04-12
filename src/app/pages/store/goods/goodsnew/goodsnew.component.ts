@@ -11,7 +11,8 @@ import { DynamicFormComponent }
 import { Common } from '../../../../providers/common';
 import { FileUploader } from "ng2-file-upload";
 import { Config } from '../../../../providers/config';
-
+import { Observable } from 'rxjs/Rx';  
+import { Http, RequestOptions, Headers, Response } from '@angular/http';  
 import * as $ from 'jquery';
 import * as _ from 'lodash';
 
@@ -61,6 +62,7 @@ export class GoodsNewComponent implements OnInit {
   public uploader: FileUploader;
 
   constructor(
+    private http: Http,
     private modalService: NgbModal,
     private goodsService: GoodsService,
     private _common: Common,
@@ -73,10 +75,13 @@ export class GoodsNewComponent implements OnInit {
     private _state: GlobalState) {
     this.toastyConfig.position = 'top-center';
   }
-
+  //http://localhost:3000/upload  
+  //url: this.config.server + "api/uploads",
   ngOnInit() {
     this.uploader = new FileUploader({
-      url: this.config.server + "api/uploads"
+      url: "http://localhost:3000/upload ",
+      method: "POST",
+      itemAlias: "uploadedfile"
     });
 
     this.goodsid = this.route.snapshot.queryParams['id'];
@@ -138,19 +143,14 @@ export class GoodsNewComponent implements OnInit {
   selectedFileOnChanged(event: any) {
     // 打印文件选择名称
     this.fileName = event.target.value;
+    this.uploadFile();
   }
 
   onBack() {
     this._router.navigate(['/pages/store/goods']);
   }
 
-  uploadFile(picId: HTMLImageElement, nguploader: HTMLInputElement) {
-    if (nguploader.value == "") {
-      this.toastOptions.title = "提示信息";
-      this.toastOptions.msg = "选择文件";
-      this.toastyService.warning(this.toastOptions);
-      return;
-    }
+  uploadFile() {
     const that = this;
     //上传跨域验证
     this.uploader.queue[0].withCredentials = false;

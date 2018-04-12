@@ -85,14 +85,14 @@ export class GoodsComponent implements OnInit {
         type: 'number',
         filter: false,
       },
-      imageName: {
-        title: '图片',
-        type: 'html',
-        editor: {
-          type: 'custom',
-          component: CustomEditorComponent,
-        },
-      },
+      // imageName: {
+      //   title: '图片',
+      //   type: 'html',
+      //   editor: {
+      //     type: 'custom',
+      //     component: CustomEditorComponent,
+      //   },
+      // },
     }
   };
 
@@ -188,10 +188,10 @@ export class GoodsComponent implements OnInit {
     const that = this;
     this.loading = true;
     this.goodsService.getGoodss().then((data) => {
-      _.each(data,(d)=>{
-        const url = that._config.server + 'Files/' + d['imageName'];
-        d['imageName'] = `<a target="_blank" href=${ url }>${ d['imageName'] } </a>`;
-      });
+      // _.each(data,(d)=>{
+      //   const url = that._config.server + 'Files/' + d['imageName'];
+      //   d['imageName'] = `<a target="_blank" href=${ url }>${ d['imageName'] } </a>`;
+      // });
       this.source.load(data);
       this.loading = false;
     }, (err) => {
@@ -202,47 +202,47 @@ export class GoodsComponent implements OnInit {
   }
 
   onCreate(): void {
-    this._router.navigate(['/pages/store/goodsnew']);
-    // const that = this;
-    // const modalRef = this.modalService.open(NgbdModalContent);
-    // modalRef.componentInstance.title = '新增产品信息';
-    // modalRef.componentInstance.config = this.config;
-    // modalRef.componentInstance.saveFun = (result, closeBack) => {
-    //   that.goodsService.create(JSON.parse(result)).then((data) => {
-    //     closeBack();
-    //     that.toastOptions.msg = "新增成功。";
-    //     that.toastyService.success(that.toastOptions);
-    //     that.getDataList();
-    //   },
-    //     (err) => {
-    //       that.toastOptions.msg = err;
-    //       that
-    //         .toastyService.error(that.toastOptions);
-    //     }
-    //   )
-    // }
+    //this._router.navigate(['/pages/store/goodsnew']);
+    const that = this;
+    const modalRef = this.modalService.open(NgbdModalContent);
+    modalRef.componentInstance.title = '新增产品信息';
+    modalRef.componentInstance.config = this.config;
+    modalRef.componentInstance.saveFun = (result, closeBack) => {
+      that.goodsService.create(JSON.parse(result)).then((data) => {
+        closeBack();
+        that.toastOptions.msg = "新增成功。";
+        that.toastyService.success(that.toastOptions);
+        that.getDataList();
+      },
+        (err) => {
+          that.toastOptions.msg = err;
+          that
+            .toastyService.error(that.toastOptions);
+        }
+      )
+    }
   }
 
   onEdit(event) {
-    this._router.navigate(['/pages/store/goodsnew'], { queryParams: { id: event.data.id } });
-    // const that = this;
-    // const modalRef = this.modalService.open(NgbdModalContent);
-    // modalRef.componentInstance.title = '修改产品信息';
-    // modalRef.componentInstance.config = this.config;
-    // modalRef.componentInstance.formValue = event.data;
-    // modalRef.componentInstance.saveFun = (result, closeBack) => {
-    //   that.goodsService.update(event.data.id, JSON.parse(result)).then((data) => {
-    //     closeBack();
-    //     that.toastOptions.msg = "修改成功。";
-    //     that.toastyService.success(that.toastOptions);
-    //     that.getDataList();
-    //   },
-    //     (err) => {
-    //       that.toastOptions.msg = err;
-    //       that.toastyService.error(that.toastOptions);
-    //     }
-    //   )
-    // };
+    //this._router.navigate(['/pages/store/goodsnew'], { queryParams: { id: event.data.id } });
+    const that = this;
+    const modalRef = this.modalService.open(NgbdModalContent);
+    modalRef.componentInstance.title = '修改产品信息';
+    modalRef.componentInstance.config = this.config;
+    modalRef.componentInstance.formValue = event.data;
+    modalRef.componentInstance.saveFun = (result, closeBack) => {
+      that.goodsService.update(event.data.id, JSON.parse(result)).then((data) => {
+        closeBack();
+        that.toastOptions.msg = "修改成功。";
+        that.toastyService.success(that.toastOptions);
+        that.getDataList();
+      },
+        (err) => {
+          that.toastOptions.msg = err;
+          that.toastyService.error(that.toastOptions);
+        }
+      )
+    };
   }
 
   onDelete(event) {
