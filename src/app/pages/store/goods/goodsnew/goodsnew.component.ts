@@ -9,7 +9,7 @@ import { FieldConfig } from '../../../../theme/components/dynamic-form/models/fi
 import { DynamicFormComponent }
   from '../../../../theme/components/dynamic-form/containers/dynamic-form/dynamic-form.component';
 import { Common } from '../../../../providers/common';
-import { FileUploader } from "ng2-file-upload";
+//import { FileUploader } from "ng2-file-upload";
 import { Config } from '../../../../providers/config';
 import { Observable } from 'rxjs/Rx';  
 import { Http, RequestOptions, Headers, Response } from '@angular/http';  
@@ -59,7 +59,7 @@ export class GoodsNewComponent implements OnInit {
   };
   private typeList: any;
   private fileName: string;
-  public uploader: FileUploader;
+  //public uploader: FileUploader;
 
   constructor(
     private http: Http,
@@ -78,11 +78,11 @@ export class GoodsNewComponent implements OnInit {
   //http://localhost:3000/upload  
   //url: this.config.server + "api/uploads",
   ngOnInit() {
-    this.uploader = new FileUploader({
-      url: "http://localhost:3000/upload ",
-      method: "POST",
-      itemAlias: "uploadedfile"
-    });
+    // this.uploader = new FileUploader({
+    //   url: "http://localhost:3000/upload ",
+    //   method: "POST",
+    //   itemAlias: "uploadedfile"
+    // });
 
     this.goodsid = this.route.snapshot.queryParams['id'];
     this.isNewMenu = !(this.goodsid > 0);
@@ -151,24 +151,24 @@ export class GoodsNewComponent implements OnInit {
   }
 
   uploadFile() {
-    const that = this;
-    //上传跨域验证
-    this.uploader.queue[0].withCredentials = false;
-    //成功之后的回调函数
-    this.uploader.queue[0].onSuccess = function (response, status, headers) {
-      if (status == 200) {
-        // 上传文件后获取服务器返回的数据
-        //let tempRes = JSON.parse(response);
-        that.goods.imageName = response;
-        console.log(that.goods.imageName);
-        //picId.src = response.replace('"', '').replace('"', '');
-        //nguploader.value = "";
-        that.toastOptions.title = "提示信息";
-        that.toastOptions.msg = "上传成功。";
-        that.toastyService.success(that.toastOptions);
-      }
-    };
-    this.uploader.queue[0].upload(); // 开始上传
+    // const that = this;
+    // //上传跨域验证
+    // this.uploader.queue[0].withCredentials = false;
+    // //成功之后的回调函数
+    // this.uploader.queue[0].onSuccess = function (response, status, headers) {
+    //   if (status == 200) {
+    //     // 上传文件后获取服务器返回的数据
+    //     //let tempRes = JSON.parse(response);
+    //     that.goods.imageName = response;
+    //     console.log(that.goods.imageName);
+    //     //picId.src = response.replace('"', '').replace('"', '');
+    //     //nguploader.value = "";
+    //     that.toastOptions.title = "提示信息";
+    //     that.toastOptions.msg = "上传成功。";
+    //     that.toastyService.success(that.toastOptions);
+    //   }
+    // };
+    // this.uploader.queue[0].upload(); // 开始上传
   }
 
 }
