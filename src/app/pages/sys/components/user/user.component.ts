@@ -204,7 +204,7 @@ export class UserComponent implements OnInit, AfterViewInit {
       this.message.emit({ type: 'error', msg: err });
     });
     this._orgService.getAll().then((data) => {
-      this.orgList = _.filter(data, f => { return f.parentId > 0; });
+      this.orgList = data;
     });
   }
 
