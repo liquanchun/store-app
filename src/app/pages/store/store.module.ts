@@ -13,7 +13,6 @@ import { AppState } from '../../app.service';
 import { HttpService } from '../../providers/httpClient';
 import { Common } from '../../providers/common';
 import { MultiselectDropdownModule } from 'angular-2-dropdown-multiselect';
-import { FileUploadModule } from 'ng2-file-upload';
 
 import { TreeModule } from 'angular-tree-component';
 import { LoadingModule } from 'ngx-loading';
@@ -39,7 +38,6 @@ import { ToastyModule } from 'ng2-toasty';
 @NgModule({
   imports: [
     CommonModule,
-    FileUploadModule,
     ReactiveFormsModule,
     FormsModule,
     NgaModule,
