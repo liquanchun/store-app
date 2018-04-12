@@ -72,7 +72,7 @@ export class UserComponent implements OnInit, AfterViewInit {
         filter: false,
       },
       works: {
-        title: '工种',
+        title: '岗位',
         type: 'string',
         filter: false,
       },
@@ -130,15 +130,9 @@ export class UserComponent implements OnInit, AfterViewInit {
     },
     {
       type: 'input',
-      label: '工种',
+      label: '岗位',
       name: 'works',
-      placeholder: '输入工种',
-    },
-    {
-      type: 'input',
-      label: '头衔',
-      name: 'title',
-      placeholder: '输入头衔',
+      placeholder: '输入岗位',
     },
     {
       type: 'check',
