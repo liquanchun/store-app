@@ -17,7 +17,7 @@ export class MenuService {
   }
 
   getMenuList() {
-    return this._httpService.getModelList(this.modelName);
+    return this._httpService.getModelList(this.modelName + '/byuser');
   }
 
   delete(id: any) {

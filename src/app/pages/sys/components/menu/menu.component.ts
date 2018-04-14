@@ -222,7 +222,7 @@ export class MenuComponent implements OnInit, AfterViewInit {
       if (this.selectedMenu.data.data.roleIds) {
         this.form.setValue('Roles', this.selectedMenu.data.data.roleIds);
       }else{
-        this.form.setValue('Roles', '');
+        this.form.setValue('Roles', ',');
       }
       this.form.setValue('MenuOrder', this.selectedMenu.data.data.menuOrder);
       this.isNewMenu = false;

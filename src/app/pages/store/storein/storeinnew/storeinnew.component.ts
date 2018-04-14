@@ -113,7 +113,7 @@ export class StoreinNewComponent implements OnInit {
         filter: false
       },
       goodscode: {
-        title: '产品编码',
+        title: '产品代码',
         type: 'string',
         filter: false
       },
@@ -158,6 +158,11 @@ export class StoreinNewComponent implements OnInit {
       },
       name: {
         title: '产品名称',
+        type: 'string',
+        filter: false,
+      },
+      goodsCode: {
+        title: '产品代码',
         type: 'string',
         filter: false,
       },
@@ -263,6 +268,7 @@ export class StoreinNewComponent implements OnInit {
           {
             goodsTypeId: event.data.typeId,
             goodsId: event.data.id,
+            goodscode:event.data.goodsCode,
             price: event.data.price,
             name: event.data.name,
             unit: event.data.unit,

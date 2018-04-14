@@ -109,7 +109,7 @@ export class StoreoutNewComponent implements OnInit {
         editable: false
       },
       goodscode: {
-        title: '产品编码',
+        title: '产品代码',
         type: 'string',
         filter: false,
         editable: false
@@ -164,8 +164,8 @@ export class StoreoutNewComponent implements OnInit {
         type: 'string',
         filter: false,
       },
-      unit: {
-        title: '单位规格',
+      goodsCode: {
+        title: '产品代码',
         type: 'string',
         filter: false,
       },
@@ -234,8 +234,8 @@ export class StoreoutNewComponent implements OnInit {
   }
   getDataList(): void {
     this._goodsStoreService.getGoodsstores().then((data) => {
-      this.popGrid.load(data);
-      this.goodsStoreInfo = data;
+      this.goodsStoreInfo = _.filter(data, f => { return f['number'] > 0; });
+      this.popGrid.load(this.goodsStoreInfo);
     });
     this._goodsService.getGoodss().then((data) => {
       this.goodsInfo = data;
@@ -261,9 +261,10 @@ export class StoreoutNewComponent implements OnInit {
   //选择房间
   rowClicked(event): void {
     if (event.isSelected) {
-      const goodsname = event.data.goodsIdTxt;
-      const goodsObj = _.find(this.goodsInfo, f => { return f['name'] == goodsname; });
-      if (!_.some(this.selectedGoods, ['name', goodsname])) {
+      const goodscode = event.data.goodsCode;
+      const batchno = event.data.batchNo;
+      const goodsObj = _.find(this.goodsInfo, f => { return f['goodsCode'] == goodscode });
+      if (!_.some(this.selectedGoods, ['goodscode', goodscode])) {
         this.selectedGoods.push(
           {
             goodsTypeId: goodsObj['typeId'],
@@ -271,7 +272,8 @@ export class StoreoutNewComponent implements OnInit {
             price: goodsObj['price'],
             name: goodsObj['name'],
             unit: goodsObj['unit'],
-            goodscode:goodsObj['goodscode'],
+            goodsno:goodsObj['goodsNo'],
+            goodscode:goodsObj['goodsCode'],
             number: 1,
             batchno: event.data['batchNo'],
             amount: goodsObj['price'],
