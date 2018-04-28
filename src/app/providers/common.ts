@@ -48,7 +48,17 @@ export class Common {
         return `${date.year}-${_.padStart(date.month, 2, '0')}-${_.padStart(date.day, 2, '0')}${time}`
     }
 
-    getSplitDate(date:string){
+    getSplitDate(date: string) {
         return date.split(' ')[0];
+    }
+    //把数组转换为字符串
+    ArrToString(arr: any) {
+        const newArr = _.without(arr, 0);
+        return _.join(newArr, ',');
+    }
+    //把数组转换为字符串
+    ArrToString1(arr: any) {
+        const newArr = _.without(arr, 0);
+        return newArr.length > 0 ? newArr[0] : 0;
     }
 }

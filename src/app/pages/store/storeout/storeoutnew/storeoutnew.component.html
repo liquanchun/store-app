@@ -65,13 +65,13 @@
           <div class="form-group row">
             <label for="inputId" class="col-md-3 col-form-label">领料人</label>
             <div class="col-md-9">
-                <!-- <ss-multiselect-dropdown [settings]="mySettingsOper" [texts]="myTexts" [options]="myOptionsOper" [(ngModel)]="storeOut.operator"></ss-multiselect-dropdown> -->
-              <select [(ngModel)]="storeOut.operator">
+                <ss-multiselect-dropdown [settings]="mySettingsOper" [texts]="myTexts" [options]="myOptionsOper" [(ngModel)]="storeOut.operator"></ss-multiselect-dropdown>
+              <!-- <select [(ngModel)]="storeOut.operator">
                 <option value="">--请选择--</option>
                 <option [value]="option.id" *ngFor="let option of operatorList">
                   {{ option.name }}
                 </option>
-              </select>
+              </select> -->
             </div>
           </div>
         </div>

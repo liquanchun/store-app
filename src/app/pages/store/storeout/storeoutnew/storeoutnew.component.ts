@@ -382,7 +382,7 @@ export class StoreoutNewComponent implements OnInit {
       _.each(orguser, f => {
         that.operatorList.push({ id: f['id'], name: f['userName'] });
       })
-      //that.myOptionsOper = operatorList;
+      that.myOptionsOper = this.operatorList;
     }
   }
   //选择部门
@@ -408,6 +408,7 @@ export class StoreoutNewComponent implements OnInit {
     }
     this.isSaved = true;
     const that = this;
+    this.storeOut.operator =_.toNumber(this._common.ArrToString1(this.storeOut.operator));
     this.storeOut.outTime = this._common.getDateString(this.storeOut.outTimeNg);
     this.storeOut.orgid = _.toString(this.storeOut.orgidNg);
     console.log(this.storeOut);
