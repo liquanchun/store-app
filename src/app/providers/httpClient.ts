@@ -3,6 +3,7 @@ import { Headers, Http } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
 import { Config } from '../providers/config';
 import { GlobalState } from '../global.state';
+import * as _ from 'lodash';
 import { retry } from 'rxjs/operator/retry';
 @Injectable()
 export class HttpService {
@@ -29,6 +30,18 @@ export class HttpService {
         return this.http.get(this.newUrl(url), { headers: this.getHeaders() })
             .toPromise()
             .then(response => response.json())
+            .catch(this.handleError);
+    }
+
+    getModelListByPara(modelName: string, queryModel: any): Promise<any[]> {
+        const url = this.baseUrl + modelName;
+        return this.http.get(this.newUrl(url), { headers: this.getHeaders(), params: queryModel })
+            .toPromise()
+            .then(response => {
+                if (response && response.url.indexOf('TokenAuth') == -1) {
+                    return response.json();
+                }
+            })
             .catch(this.handleError);
     }
 

@@ -7,7 +7,10 @@ export class StoreoutService {
   private modelName = 'kcstoreout';  // URL to web api
   constructor(private _httpService: HttpService) {
   }
-
+  getStoreoutsByPara(queryModel:any) {
+    const model = this.modelName + '/report'
+    return this._httpService.getModelListByPara(model,queryModel);
+  }
   getStoreouts() {
     return this._httpService.getModelList(this.modelName);
   }

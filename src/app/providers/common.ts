@@ -53,12 +53,14 @@ export class Common {
     }
     //把数组转换为字符串
     ArrToString(arr: any) {
-        const newArr = _.without(arr, 0);
+        let newArr = _.without(arr, 0);
         return _.join(newArr, ',');
     }
     //把数组转换为字符串
     ArrToString1(arr: any) {
-        const newArr = _.without(arr, 0);
-        return newArr.length > 0 ? newArr[0] : 0;
+        let evens = _.remove(arr, function (n) {
+            return n == '';
+        });
+        return arr.length > 0 ? arr[0] : 0;
     }
 }

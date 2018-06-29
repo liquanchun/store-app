@@ -20,7 +20,10 @@ import { ComponentsModule } from '../components/components.module';
 
 import { routing } from './report.routing';
 import { ReportComponent } from './report.component';
-
+import { DepartmentOutComponent } from './departmentout/departmentout.component';
+import { PersonoutComponent } from './personout/personout.component';
+import { StorelistComponent } from './storelist/storelist.component';
+import { ToastyModule } from 'ng2-toasty';
 @NgModule({
   imports: [
     CommonModule,
@@ -35,9 +38,13 @@ import { ReportComponent } from './report.component';
     NgbModule,
     LoadingModule,
     Ng2SmartTableModule,
+    ToastyModule.forRoot()
   ],
   declarations: [
     ReportComponent,
+    DepartmentOutComponent,
+    PersonoutComponent,
+    StorelistComponent,
   ],
   providers: [GlobalState, Config, HttpService, AppState,Common]
 })
