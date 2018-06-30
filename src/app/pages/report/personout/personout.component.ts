@@ -6,7 +6,7 @@ import { IMultiSelectOption, IMultiSelectSettings, IMultiSelectTexts } from 'ang
 import { OrgService } from '../../sys/components/org/org.services';
 import { LocalDataSource } from 'ng2-smart-table';
 import { Router, ActivatedRoute, Params } from '@angular/router';
-import { StoreoutService } from '../../store/storeout/storeout.services';
+import { PersonOutService } from './personout.services';
 import { DicService } from '../../sys/dic/dic.services';
 import { GlobalState } from '../../../global.state';
 import { Common } from '../../../providers/common';
@@ -18,7 +18,7 @@ import * as _ from 'lodash';
   selector: 'app-personout',
   templateUrl: './personout.component.html',
   styleUrls: ['./personout.component.scss'],
-  providers: [StoreoutService, DicService, OrgService, UserService],
+  providers: [PersonOutService, DicService, OrgService, UserService],
 })
 export class PersonoutComponent implements OnInit {
 
@@ -143,7 +143,7 @@ export class PersonoutComponent implements OnInit {
   printOrderDetail = [];
 
   constructor(
-    private storeoutService: StoreoutService,
+    private storeoutService: PersonOutService,
     private _dicService: DicService,
     private _common: Common,
     private _router: Router,

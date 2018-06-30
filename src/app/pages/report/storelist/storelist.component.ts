@@ -2,7 +2,7 @@ import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
 import { ToastyService, ToastyConfig, ToastOptions, ToastData } from 'ng2-toasty';
 import { OrgService } from '../../sys/components/org/org.services';
 import { LocalDataSource } from 'ng2-smart-table';
-import { GoodsstoreService } from '../../store/goodsstore/goodsstore.services';
+import { StorelistService } from './storelist.services';
 import { DicService } from '../../sys/dic/dic.services';
 import { GlobalState } from '../../../global.state';
 import { Common } from '../../../providers/common';
@@ -12,7 +12,7 @@ import * as _ from 'lodash';
   selector: 'app-storelist',
   templateUrl: './storelist.component.html',
   styleUrls: ['./storelist.component.scss'],
-  providers: [GoodsstoreService, DicService, OrgService],
+  providers: [StorelistService, DicService, OrgService],
 })
 export class StorelistComponent implements OnInit {
 
@@ -86,7 +86,7 @@ export class StorelistComponent implements OnInit {
   printOrderDetail = [];
 
   constructor(
-    private goodsstoreService: GoodsstoreService,
+    private goodsstoreService: StorelistService,
     private _dicService: DicService,
     private _common: Common,
     private toastyService: ToastyService,

@@ -6,7 +6,7 @@ import { IMultiSelectOption, IMultiSelectSettings, IMultiSelectTexts } from 'ang
 import { OrgService } from '../../sys/components/org/org.services';
 import { LocalDataSource } from 'ng2-smart-table';
 import { Router, ActivatedRoute, Params } from '@angular/router';
-import { StoreoutService } from '../../store/storeout/storeout.services';
+import { DepartmentOutService } from './departmentout.services';
 import { DicService } from '../../sys/dic/dic.services';
 import { GlobalState } from '../../../global.state';
 import { Common } from '../../../providers/common';
@@ -18,7 +18,7 @@ import * as _ from 'lodash';
   selector: 'app-departmentout',
   templateUrl: './departmentout.component.html',
   styleUrls: ['./departmentout.component.scss'],
-  providers: [StoreoutService, DicService, OrgService, UserService],
+  providers: [DepartmentOutService, DicService, OrgService, UserService],
 })
 export class DepartmentOutComponent implements OnInit {
 
@@ -130,7 +130,7 @@ export class DepartmentOutComponent implements OnInit {
   printOrderDetail = [];
 
   constructor(
-    private storeoutService: StoreoutService,
+    private storeoutService: DepartmentOutService,
     private _dicService: DicService,
     private _common: Common,
     private _router: Router,
