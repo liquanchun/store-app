@@ -94,14 +94,7 @@ export class PersonoutComponent implements OnInit {
 
   //仓库
   stores: any = [];
-  //出库类型
-  inType: any = [];
-  //组织架构
-  orgName: any = '';
 
-  selectedSup = [];
-
-  myOptionsSup: IMultiSelectOption[];
   myOptions: IMultiSelectOption[];
   myOptionsOper: IMultiSelectOption[];
   mySettings: IMultiSelectSettings = {
@@ -210,27 +203,6 @@ export class PersonoutComponent implements OnInit {
       })
       that.myOptionsOper = operatorList;
     }
-  }
-
-  onStoresChange(store) {
-    if (store.target.value) {
-      this.source.load(_.filter(this.storeOutData, f => { return f['storeId'] == store.target.value }));
-    } else {
-      this.source.load(this.storeOutData);
-    }
-  }
-
-  open(event, content) {
-    const orderNo = event.data.orderNo;
-    const orderDetail = _.filter(this.storeOutDetailData, (f) => { return f['orderno'] == orderNo; });
-    this.selectedGrid.load(orderDetail);
-
-    this.modalService.open(content).result.then((result) => {
-    }, (reason) => {
-    });
-    _.delay(function (text) {
-      $(".modal-dialog").css("max-width", "645px");
-    }, 100, 'later');
   }
 
   getDataList(): void {

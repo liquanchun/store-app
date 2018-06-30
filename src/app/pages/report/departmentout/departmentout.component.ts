@@ -44,22 +44,17 @@ export class DepartmentOutComponent implements OnInit {
         filter: false,
       },
       name: {
-        title: '工具名称',
+        title: '物品名称',
         type: 'string',
         filter: false,
       },
       unit: {
-        title: '工具型号',
-        type: 'string',
-        filter: false,
-      },
-      dicName: {
-        title: '仓库',
+        title: '型号',
         type: 'string',
         filter: false,
       },
       number: {
-        title: '领用数量',
+        title: '数量',
         type: 'string',
         filter: false
       },
@@ -68,10 +63,15 @@ export class DepartmentOutComponent implements OnInit {
         type: 'string',
         filter: false
       },
-      amount: {
-        title: '领用金额',
+      dicName: {
+        title: '仓库',
         type: 'string',
-        filter: false
+        filter: false,
+      },
+      operators: {
+        title: '领用人',
+        type: 'string',
+        filter: false,
       },
       remark: {
         title: '备注',
@@ -91,19 +91,10 @@ export class DepartmentOutComponent implements OnInit {
   endDate = '';
   operator = '';
   selectedOrg = [];
-
   //仓库
   stores: any = [];
-  //出库类型
-  inType: any = [];
-  //组织架构
-  orgName: any = '';
 
-  selectedSup = [];
-
-  myOptionsSup: IMultiSelectOption[];
   myOptions: IMultiSelectOption[];
-  myOptionsOper: IMultiSelectOption[];
   mySettings: IMultiSelectSettings = {
     enableSearch: true,
     checkedStyle: 'fontawesome',
@@ -114,17 +105,6 @@ export class DepartmentOutComponent implements OnInit {
   };
   myTextsOrg: IMultiSelectTexts = {
     defaultTitle: '--选择部门--',
-    searchPlaceholder: '查询...'
-  }
-
-  mySettingsOper: IMultiSelectSettings = {
-    enableSearch: true,
-    checkedStyle: 'fontawesome',
-    buttonClasses: 'btn btn-default btn-block',
-    dynamicTitleMaxItems: 3,
-  };
-  myTexts: IMultiSelectTexts = {
-    defaultTitle: '--选择--',
     searchPlaceholder: '查询...'
   }
 
@@ -140,8 +120,8 @@ export class DepartmentOutComponent implements OnInit {
   };
 
   printOrder: any = {
-    title:'北京博瑞宝领用清单一览表',
-    operator: '',
+    title:'北京博瑞宝部门领用清单',
+    department: '',
     amount: 0,
     startDate:'',
     endDate:'',
@@ -167,7 +147,7 @@ export class DepartmentOutComponent implements OnInit {
   }
 
   queryData() {
-    if (!this.startDate || !this.endDate || !this.selectedOrg || !this.operator) {
+    if (!this.startDate || !this.endDate || !this.selectedOrg) {
       this.toastOptions.msg = '查询条件不能为空。';
       this.toastyService.warning(this.toastOptions);
       return;
@@ -175,12 +155,11 @@ export class DepartmentOutComponent implements OnInit {
     let queryModel = { 
        startDate:this._common.getDateString(this.startDate),
        endDate:this._common.getDateString(this.endDate), 
-       selectedOrg: _.toNumber(this._common.ArrToString1(this.selectedOrg)), 
-       operator: _.toNumber(this._common.ArrToString1(this.operator))
+       selectedOrg: _.toNumber(this._common.ArrToString1(this.selectedOrg))
     };
-    let user = _.find(this.users,f => { return f['id'] == queryModel.operator ;});
-    if(user){
-      this.printOrder.operator = user['userName'];
+    let org = _.find(this.myOptions,f => { return f['id'] == queryModel.selectedOrg ;});
+    if(org){
+      this.printOrder.department = org['name'];
     }
     this.printOrder.startDate = queryModel.startDate;
     this.printOrder.endDate = queryModel.endDate;
@@ -190,47 +169,20 @@ export class DepartmentOutComponent implements OnInit {
     this.storeoutService.getStoreoutsByPara(queryModel).then((data) => {
       this.loading = false;
       this.printOrderDetail = data;
+      _.each(this.printOrderDetail,(d)=>{
+        let user = _.find(this.users,f => { return f['id'] == d['operator'] ;});
+        if(user){
+          d['operators'] = user['userName'];
+        }
+      })
       this.printOrder.amount = _.sumBy(data, function(o) { return o.amount; });
 
-      this.source.load(data);
+      this.source.load(this.printOrderDetail);
     }, (err) => {
       this.loading = false;
       this.toastOptions.msg = err;
       this.toastyService.error(this.toastOptions);
     });
-  }
-
-  onSelectedOrg(event) {
-    if (event && event.length > 0) {
-      const that = this;
-      const orguser = _.filter(this.users, f => { return f['orgId'] == event[0]; });
-      let operatorList = [];
-      _.each(orguser, f => {
-        operatorList.push({ id: f['id'], name: f['userName'] });
-      })
-      that.myOptionsOper = operatorList;
-    }
-  }
-
-  onStoresChange(store) {
-    if (store.target.value) {
-      this.source.load(_.filter(this.storeOutData, f => { return f['storeId'] == store.target.value }));
-    } else {
-      this.source.load(this.storeOutData);
-    }
-  }
-
-  open(event, content) {
-    const orderNo = event.data.orderNo;
-    const orderDetail = _.filter(this.storeOutDetailData, (f) => { return f['orderno'] == orderNo; });
-    this.selectedGrid.load(orderDetail);
-
-    this.modalService.open(content).result.then((result) => {
-    }, (reason) => {
-    });
-    _.delay(function (text) {
-      $(".modal-dialog").css("max-width", "645px");
-    }, 100, 'later');
   }
 
   getDataList(): void {

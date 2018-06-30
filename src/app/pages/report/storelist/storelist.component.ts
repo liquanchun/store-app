@@ -1,24 +1,18 @@
 import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
-import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
-import { FormGroup, AbstractControl, FormBuilder, Validators } from '@angular/forms';
 import { ToastyService, ToastyConfig, ToastOptions, ToastData } from 'ng2-toasty';
-import { IMultiSelectOption, IMultiSelectSettings, IMultiSelectTexts } from 'angular-2-dropdown-multiselect';
 import { OrgService } from '../../sys/components/org/org.services';
 import { LocalDataSource } from 'ng2-smart-table';
-import { Router, ActivatedRoute, Params } from '@angular/router';
-import { StoreoutService } from '../../store/storeout/storeout.services';
+import { GoodsstoreService } from '../../store/goodsstore/goodsstore.services';
 import { DicService } from '../../sys/dic/dic.services';
 import { GlobalState } from '../../../global.state';
 import { Common } from '../../../providers/common';
-import { UserService } from '../../sys/components/user/user.services';
-import * as $ from 'jquery';
 import * as _ from 'lodash';
 
 @Component({
   selector: 'app-storelist',
   templateUrl: './storelist.component.html',
   styleUrls: ['./storelist.component.scss'],
-  providers: [StoreoutService, DicService, OrgService, UserService],
+  providers: [GoodsstoreService, DicService, OrgService],
 })
 export class StorelistComponent implements OnInit {
 
@@ -38,40 +32,25 @@ export class StorelistComponent implements OnInit {
         type: 'string',
         filter: false,
       },
-      outTime: {
-        title: '领用日期',
-        type: 'string',
-        filter: false,
-      },
-      name: {
-        title: '工具名称',
+      goodsIdTxt: {
+        title: '名称',
         type: 'string',
         filter: false,
       },
       unit: {
-        title: '工具型号',
-        type: 'string',
-        filter: false,
-      },
-      dicName: {
-        title: '仓库',
+        title: '型号',
         type: 'string',
         filter: false,
       },
       number: {
-        title: '领用数量',
+        title: '数量',
         type: 'string',
         filter: false
       },
-      price: {
-        title: '价格',
+      storeIdTxt: {
+        title: '仓库',
         type: 'string',
-        filter: false
-      },
-      amount: {
-        title: '领用金额',
-        type: 'string',
-        filter: false
+        filter: false,
       },
       remark: {
         title: '备注',
@@ -82,54 +61,13 @@ export class StorelistComponent implements OnInit {
   };
 
   source: LocalDataSource = new LocalDataSource();
-  selectedGrid: LocalDataSource = new LocalDataSource();
 
   storeOutData: any;
   storeOutDetailData: any;
   //查询条件
-  startDate = '';
-  endDate = '';
-  operator = '';
-  selectedOrg = [];
-
+  selectedStore = '';
   //仓库
   stores: any = [];
-  //出库类型
-  inType: any = [];
-  //组织架构
-  orgName: any = '';
-
-  selectedSup = [];
-
-  myOptionsSup: IMultiSelectOption[];
-  myOptions: IMultiSelectOption[];
-  myOptionsOper: IMultiSelectOption[];
-  mySettings: IMultiSelectSettings = {
-    enableSearch: true,
-    checkedStyle: 'fontawesome',
-    buttonClasses: 'btn btn-default btn-block',
-    dynamicTitleMaxItems: 3,
-    selectionLimit: 1,
-    autoUnselect: true,
-  };
-  myTextsOrg: IMultiSelectTexts = {
-    defaultTitle: '--选择部门--',
-    searchPlaceholder: '查询...'
-  }
-
-  mySettingsOper: IMultiSelectSettings = {
-    enableSearch: true,
-    checkedStyle: 'fontawesome',
-    buttonClasses: 'btn btn-default btn-block',
-    dynamicTitleMaxItems: 3,
-  };
-  myTexts: IMultiSelectTexts = {
-    defaultTitle: '--选择--',
-    searchPlaceholder: '查询...'
-  }
-
-  //用户
-  users: any = [];
 
   private toastOptions: ToastOptions = {
     title: "提示信息",
@@ -140,25 +78,19 @@ export class StorelistComponent implements OnInit {
   };
 
   printOrder: any = {
-    title:'北京博瑞宝领用清单一览表',
-    operator: '',
+    title:'北京博瑞宝库存清单',
     amount: 0,
-    startDate:'',
-    endDate:'',
-    printDate:''
+    sumnumber:0,
+    storeName:''
   };
   printOrderDetail = [];
 
   constructor(
-    private storeoutService: StoreoutService,
+    private goodsstoreService: GoodsstoreService,
     private _dicService: DicService,
     private _common: Common,
-    private _router: Router,
     private toastyService: ToastyService,
     private toastyConfig: ToastyConfig,
-    private _orgService: OrgService,
-    private _userService: UserService,
-    private modalService: NgbModal,
     private _state: GlobalState) {
     this.toastyConfig.position = 'top-center';
   }
@@ -167,32 +99,24 @@ export class StorelistComponent implements OnInit {
   }
 
   queryData() {
-    if (!this.startDate || !this.endDate || !this.selectedOrg || !this.operator) {
+    if (!this.selectedStore) {
       this.toastOptions.msg = '查询条件不能为空。';
       this.toastyService.warning(this.toastOptions);
       return;
     }
-    let queryModel = { 
-       startDate:this._common.getDateString(this.startDate),
-       endDate:this._common.getDateString(this.endDate), 
-       selectedOrg: _.toNumber(this._common.ArrToString1(this.selectedOrg)), 
-       operator: _.toNumber(this._common.ArrToString1(this.operator))
-    };
-    let user = _.find(this.users,f => { return f['id'] == queryModel.operator ;});
-    if(user){
-      this.printOrder.operator = user['userName'];
-    }
-    this.printOrder.startDate = queryModel.startDate;
-    this.printOrder.endDate = queryModel.endDate;
     this.printOrder.printDate = this._common.getTodayString();
-
     this.loading = true;
-    this.storeoutService.getStoreoutsByPara(queryModel).then((data) => {
+    this.goodsstoreService.getGoodsstoresById(this.selectedStore).then((data) => {
       this.loading = false;
       this.printOrderDetail = data;
       this.printOrder.amount = _.sumBy(data, function(o) { return o.amount; });
-
-      this.source.load(data);
+      this.printOrder.sumnumber = _.sumBy(data, function(o) { return o.number; });
+      let ind = 1;
+      _.each(this.printOrderDetail,(d)=>{
+          d.id = ind;
+          ind++;
+      });
+      this.source.load(this.printOrderDetail);
     }, (err) => {
       this.loading = false;
       this.toastOptions.msg = err;
@@ -200,55 +124,18 @@ export class StorelistComponent implements OnInit {
     });
   }
 
-  onSelectedOrg(event) {
-    if (event && event.length > 0) {
-      const that = this;
-      const orguser = _.filter(this.users, f => { return f['orgId'] == event[0]; });
-      let operatorList = [];
-      _.each(orguser, f => {
-        operatorList.push({ id: f['id'], name: f['userName'] });
-      })
-      that.myOptionsOper = operatorList;
-    }
-  }
-
   onStoresChange(store) {
     if (store.target.value) {
-      this.source.load(_.filter(this.storeOutData, f => { return f['storeId'] == store.target.value }));
-    } else {
-      this.source.load(this.storeOutData);
+      this.selectedStore = store.target.value;
+      let str = _.find(this.stores,f => { return f['id'] == this.selectedStore ;});
+      if(str){
+        this.printOrder.storeName = str['name'];
+      }
     }
-  }
-
-  open(event, content) {
-    const orderNo = event.data.orderNo;
-    const orderDetail = _.filter(this.storeOutDetailData, (f) => { return f['orderno'] == orderNo; });
-    this.selectedGrid.load(orderDetail);
-
-    this.modalService.open(content).result.then((result) => {
-    }, (reason) => {
-    });
-    _.delay(function (text) {
-      $(".modal-dialog").css("max-width", "645px");
-    }, 100, 'later');
   }
 
   getDataList(): void {
     this._dicService.getDicByName('仓库', (data) => { this.stores = data; });
-
-    this._orgService.getAll().then((data) => {
-      const that = this;
-      const optData = [];
-      _.each(data, f => {
-        optData.push({ id: f['id'], name: f['deptName'] });
-      });
-      this.myOptions = optData;
-    });
-
-    this._userService.getUsers().then((data) => {
-      this.users = data;
-    });
-
   }
 
   print() {
@@ -270,12 +157,12 @@ export class StorelistComponent implements OnInit {
           }
           
           .firstTable {
-            width: 1000px;
+            width: 680px;
             border-collapse: collapse;
           }
           
           .secondtable {
-            width: 1000px;
+            width: 680px;
             border-collapse: collapse;
           }
           
@@ -294,7 +181,7 @@ export class StorelistComponent implements OnInit {
           p{
             text-align: center;
             font-size:30px;
-            width: 1000px;
+            width: 680px;
           }
           </style>
         </head>

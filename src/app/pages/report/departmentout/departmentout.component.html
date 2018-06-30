@@ -23,11 +23,7 @@
           <div class="col-4">
             <div class="form-group row">
               <div class="input-group" class="col-md-4" style="height:32px;">
-                  <ss-multiselect-dropdown [settings]="mySettings" [texts]="myTextsOrg" [options]="myOptions" [(ngModel)]="selectedOrg" (ngModelChange)="onSelectedOrg($event)"></ss-multiselect-dropdown>
-              </div>
-              <label for="inputId" class="col-md-2 col-form-label">领料人</label>
-              <div class="col-md-5">
-                  <ss-multiselect-dropdown [settings]="mySettingsOper" [texts]="myTexts" [options]="myOptionsOper" [(ngModel)]="operator"></ss-multiselect-dropdown>
+                  <ss-multiselect-dropdown [settings]="mySettings" [texts]="myTextsOrg" [options]="myOptions" [(ngModel)]="selectedOrg"></ss-multiselect-dropdown>
               </div>
             </div>
           </div>
@@ -47,40 +43,27 @@
     </ba-card>
   </div>
 
-  <ng-template #popContent let-c="close" let-d="dismiss">
-    <div class="modal-header">
-      <h4 class="modal-title">订单产品信息</h4>
-      <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
-        <span aria-hidden="true">&times;</span>
-      </button>
-    </div>
-    <div class="modal-body">
-      <ng2-smart-table [settings]="settingsGoods" [source]="selectedGrid">
-      </ng2-smart-table>
-    </div>
-  </ng-template>
-
   <div style="display:none" id="printDiv">
-      <p>{{printOrder.title}}单</p>
+      <p>{{printOrder.title}}</p>
       <table class="firstTable">
         <tr>
-          <td colspan="3">领用人：<u>{{printOrder.operator}}</u></td>
+          <td colspan="3">部门：<u>{{printOrder.department}}</u></td>
           <td colspan="4">领用日期：<u>{{printOrder.startDate}}至{{printOrder.endDate}}</u></td>
           <td colspan="2">打印日期：<u>{{printOrder.printDate}}</u></td>
         </tr>
       </table>
       <table class="secondtable">
         <thead>
-          <tr><td>序号</td><td>领用日期</td><td>工具名称</td><td>工具型号</td><td>仓库</td><td>领用数量</td><td>价格</td><td>领用金额</td><td>备注</td></tr>
+          <tr><td>序号</td><td>领用日期</td><td>物品名称</td><td>型号</td><td>数量</td><td>价格</td><td>仓库</td><td>领用人</td><td>备注</td></tr>
         </thead>
         <tr *ngFor="let prod of printOrderDetail">
-          <td>{{prod.id}}</td><td>{{prod.outTime | date: "yyyy-MM-dd"}}</td><td>{{prod.name}}</td><td>{{prod.unit}}</td><td>{{prod.dicName}}</td><td>{{prod.number}}</td><td>{{prod.price}}</td><td>{{prod.amount}}</td><td>{{prod.remark}}</td>
+          <td>{{prod.id}}</td><td>{{prod.outTime | date: "yyyy-MM-dd"}}</td><td>{{prod.name}}</td><td>{{prod.unit}}</td><td>{{prod.number}}</td><td>{{prod.price}}</td><td>{{prod.dicName}}</td><td>{{prod.operators}}</td><td>{{prod.remark}}</td>
         </tr>
       </table>
       <table class="firstTable">
           <tr>
             <td colspan="6">合计金额：<u>{{printOrder.amount}}</u></td>
-            <td colspan="3">签字：<u>                </u></td>
+            <td colspan="3">主管签字：<u>                </u></td>
           </tr>
         </table>
 </div>

@@ -105,7 +105,6 @@ export class GoodsstoreComponent implements OnInit {
     private _dicService: DicService,
     private toastyService: ToastyService,
     private toastyConfig: ToastyConfig,
-    private _common: Common,
     private _state: GlobalState) {
   }
   ngOnInit() {

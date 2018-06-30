@@ -47,21 +47,8 @@
     </ba-card>
   </div>
 
-  <ng-template #popContent let-c="close" let-d="dismiss">
-    <div class="modal-header">
-      <h4 class="modal-title">订单产品信息</h4>
-      <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
-        <span aria-hidden="true">&times;</span>
-      </button>
-    </div>
-    <div class="modal-body">
-      <ng2-smart-table [settings]="settingsGoods" [source]="selectedGrid">
-      </ng2-smart-table>
-    </div>
-  </ng-template>
-
   <div style="display:none" id="printDiv">
-      <p>{{printOrder.title}}单</p>
+      <p>{{printOrder.title}}</p>
       <table class="firstTable">
         <tr>
           <td colspan="3">领用人：<u>{{printOrder.operator}}</u></td>

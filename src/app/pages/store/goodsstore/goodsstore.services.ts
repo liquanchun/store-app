@@ -11,7 +11,9 @@ export class GoodsstoreService {
   getGoodsstores() {
     return this._httpService.getModelList(this.modelName);
   }
-
+  getGoodsstoresById(storeId:any) {
+    return this._httpService.getModelList(this.modelName + '/' + storeId);
+  }
   create(model: any) {
     delete model.id;
     return this._httpService.create(this.modelName, model);
