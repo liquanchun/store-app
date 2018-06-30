@@ -3,7 +3,6 @@ import { Headers, Http } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
 import { Config } from '../providers/config';
 import { GlobalState } from '../global.state';
-import * as _ from 'lodash';
 import { retry } from 'rxjs/operator/retry';
 @Injectable()
 export class HttpService {

@@ -24,6 +24,8 @@ import { DepartmentOutComponent } from './departmentout/departmentout.component'
 import { PersonoutComponent } from './personout/personout.component';
 import { StorelistComponent } from './storelist/storelist.component';
 import { ToastyModule } from 'ng2-toasty';
+import { SysModule } from './../sys/sys.module';
+
 @NgModule({
   imports: [
     CommonModule,
@@ -37,6 +39,7 @@ import { ToastyModule } from 'ng2-toasty';
     ComponentsModule,
     NgbModule,
     LoadingModule,
+    SysModule,
     Ng2SmartTableModule,
     ToastyModule.forRoot()
   ],
