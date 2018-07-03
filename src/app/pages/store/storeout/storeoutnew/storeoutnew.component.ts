@@ -264,19 +264,19 @@ export class StoreoutNewComponent implements OnInit {
       const goodscode = event.data.goodsCode;
       const batchno = event.data.batchNo;
       const goodsObj = _.find(this.goodsInfo, f => { return f['goodsCode'] == goodscode });
-      if (!_.some(this.selectedGoods, ['goodscode', goodscode])) {
+      if (!_.some(this.selectedGoods, ['goodscode', goodscode,'batchno',batchno])) {
         this.selectedGoods.push(
           {
             goodsTypeId: goodsObj['typeId'],
             goodsId: goodsObj['id'],
-            price: goodsObj['price'],
+            price: event.data['price'],
             name: goodsObj['name'],
             unit: goodsObj['unit'],
             goodsno:goodsObj['goodsNo'],
             goodscode:goodsObj['goodsCode'],
             number: 1,
             batchno: event.data['batchNo'],
-            amount: goodsObj['price'],
+            amount: event.data['price'],
           });
       }
     } else {
