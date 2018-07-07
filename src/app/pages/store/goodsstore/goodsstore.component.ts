@@ -50,12 +50,12 @@ export class GoodsstoreComponent implements OnInit {
         title: '产品名称',
         type: 'string',
       },
-      goodsCode: {
-        title: '产品代码',
+      goodsBrand: {
+        title: '品牌',
         type: 'string',
       },
-      goodsNo: {
-        title: '产品编码',
+      unit: {
+        title: '型号',
         type: 'string',
       },
       number: {

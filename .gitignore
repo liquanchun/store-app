@@ -42,3 +42,9 @@ testem.log
 .DS_Store
 Thumbs.db
 *.lnk
+*.zip
+*.rar
+*.xlsx
+*.rar
+*.docx
+*.rar

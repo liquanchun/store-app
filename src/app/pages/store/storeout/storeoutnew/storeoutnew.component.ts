@@ -164,8 +164,18 @@ export class StoreoutNewComponent implements OnInit {
         type: 'string',
         filter: false,
       },
+      goodsBrand: {
+        title: '品牌',
+        type: 'string',
+        filter: false,
+      },
       goodsCode: {
-        title: '产品代码',
+        title: '产品编码',
+        type: 'string',
+        filter: false,
+      },
+      unit: {
+        title: '型号',
         type: 'string',
         filter: false,
       },
@@ -340,8 +350,8 @@ export class StoreoutNewComponent implements OnInit {
   }
   showPop(event): void {
     _.delay(function (text) {
-      $(".popover").css("max-width", "720px");
-      $(".popover").css("min-width", "600px");
+      $(".popover").css("max-width", "920px");
+      $(".popover").css("min-width", "700px");
     }, 100, 'later');
   }
 

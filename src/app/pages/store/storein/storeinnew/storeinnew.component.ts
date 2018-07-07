@@ -161,13 +161,18 @@ export class StoreinNewComponent implements OnInit {
         type: 'string',
         filter: false,
       },
-      goodsCode: {
-        title: '产品代码',
+      goodsBrand: {
+        title: '品牌',
+        type: 'string',
+        filter: false,
+      },
+      goodsNo: {
+        title: '产品编码',
         type: 'string',
         filter: false,
       },
       unit: {
-        title: '单位规格',
+        title: '型号',
         type: 'string',
         filter: false,
       }
@@ -263,7 +268,7 @@ export class StoreinNewComponent implements OnInit {
   //选择房间
   rowClicked(event): void {
     if (event.isSelected) {
-      if (!_.some(this.selectedGoods, ['name', event.data.name])) {
+      if (!_.some(this.selectedGoods, ['goodscode', event.data.goodsCode])) {
         this.selectedGoods.push(
           {
             goodsTypeId: event.data.typeId,
@@ -348,14 +353,14 @@ export class StoreinNewComponent implements OnInit {
   }
   showPop(event): void {
     _.delay(function (text) {
-      $(".popover").css("max-width", "520px");
-      $(".popover").css("min-width", "400px");
+      $(".popover").css("max-width", "820px");
+      $(".popover").css("min-width", "600px");
     }, 100, 'later');
   }
   showPopOrg(event): void {
     _.delay(function (text) {
-      $(".popover").css("max-width", "320px");
-      $(".popover").css("min-width", "200px");
+      $(".popover").css("max-width", "520px");
+      $(".popover").css("min-width", "400px");
     }, 100, 'later');
   }
   onSearch(query: string = '') {

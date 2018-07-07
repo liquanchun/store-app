@@ -138,8 +138,13 @@ export class StoreinComponent implements OnInit {
         type: 'string',
         filter: false
       },
-      goodscode: {
-        title: '编码',
+      goodsBrand: {
+        title: '品牌',
+        type: 'string',
+        filter: false,
+      },
+      unit: {
+        title: '型号',
         type: 'string',
         filter: false,
       },
@@ -346,7 +351,7 @@ export class StoreinComponent implements OnInit {
     }, (reason) => {
     });
     _.delay(function (text) {
-      $(".modal-dialog").css("max-width", "745px");
+      $(".modal-dialog").css("max-width", "945px");
     }, 100, 'later');
   }
 

@@ -55,6 +55,11 @@ export class GoodsComponent implements OnInit {
         type: 'string',
         filter: false,
       },
+      goodsBrand: {
+        title: '品牌',
+        type: 'string',
+        filter: false,
+      },
       unit: {
         title: '产品型号',
         type: 'string',
@@ -103,6 +108,12 @@ export class GoodsComponent implements OnInit {
       name: 'name',
       placeholder: '输入产品名称',
       validation: [Validators.required],
+    },
+    {
+      type: 'input',
+      label: '品牌',
+      name: 'goodsBrand',
+      placeholder: '输入产品品牌',
     },
     {
       type: 'select',
@@ -178,7 +189,7 @@ export class GoodsComponent implements OnInit {
   onSearch(query: string = '') {
     this.source.setFilter([
       { field: 'name', search: query },
-      { field: 'goodsCode', search: query },
+      { field: 'goodsBrand', search: query },
       { field: 'goodsNo', search: query },
       { field: 'unit', search: query },
     ], false);
