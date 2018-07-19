@@ -271,12 +271,13 @@ export class StoreoutNewComponent implements OnInit {
   //选择房间
   rowClicked(event): void {
     if (event.isSelected) {
-      const goodscode = event.data.goodsCode;
-      const batchno = event.data.batchNo;
-      const goodsObj = _.find(this.goodsInfo, f => { return f['goodsCode'] == goodscode });
-      if (!_.some(this.selectedGoods, ['goodscode', goodscode,'batchno',batchno])) {
+      const goodsid = event.data.goodsId;
+      const kcid = event.data.id;
+      const goodsObj = _.find(this.goodsInfo, f => { return f['id'] == goodsid });
+      if (!_.some(this.selectedGoods, ['storeid', kcid])) {
         this.selectedGoods.push(
           {
+            kcid: kcid,
             goodsTypeId: goodsObj['typeId'],
             goodsId: goodsObj['id'],
             price: event.data['price'],
@@ -323,7 +324,7 @@ export class StoreoutNewComponent implements OnInit {
   }
   onEditConfirm(event): void {
     const dt = { that: this, data: event.newData };
-    const store = _.find(this.goodsStoreInfo,f => { return f['goodsIdTxt'] == event.data.name});
+    const store = _.find(this.goodsStoreInfo,f => { return f['id'] == event.data.kcid});
     if(store['number'] < _.toNumber(event.newData.number)){
       this.toastOptions.msg = "出库数量不能大于库存数量。";
       this.toastyService.warning(this.toastOptions);
@@ -357,8 +358,9 @@ export class StoreoutNewComponent implements OnInit {
 
   onSearch(query: string = '') {
     this.popGrid.setFilter([
-      { field: 'name', search: query },
-      { field: 'id', search: query },
+      { field: 'goodsIdTxt', search: query },
+      { field: 'goodsTypeIdTxt', search: query },
+      { field: 'unit', search: query },
     ], false);
   }
   //选择产品类型

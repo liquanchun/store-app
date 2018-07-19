@@ -22,10 +22,7 @@ export class Config {
 	tutorialVersion = '';
 	constructor() {
 		if (this.isProduct) {
-
 			this.server = 'http://localhost:5000/';
-			// this.server = 'http://58.248.27.170:8082/';
-
 			this.pageSize = 20;
 
 			this.loadingText = '加载中,请稍候...';
@@ -41,7 +38,6 @@ export class Config {
 			this.tutorialVersion = "0.0.1";
 		} else {
 			this.server = 'http://localhost:5000/';
-			// this.server = 'http://127.0.0.1:3018/';
 			this.pageSize = 20;
 			this.loadingText = '加载中,请稍候...';
 			// 30秒
