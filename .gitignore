@@ -9,6 +9,10 @@
 # dependencies
 /node_modules
 
+# dist
+/dist
+/dist.bak
+
 # IDEs and editors
 /.idea
 .project
@@ -48,3 +52,4 @@ Thumbs.db
 *.rar
 *.docx
 *.rar
+src/app/providers/config.ts
