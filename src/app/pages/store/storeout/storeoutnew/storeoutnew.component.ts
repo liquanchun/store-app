@@ -125,13 +125,14 @@ export class StoreoutNewComponent implements OnInit {
         type: 'number',
         filter: false
       },
-      remark: {
-        title: '备注',
-        type: 'number',
-        filter: false
-      },
       amount: {
         title: '金额',
+        type: 'number',
+        filter: false,
+        editable: false
+      },
+      storenumber: {
+        title: '最大出库数',
         type: 'number',
         filter: false,
         editable: false
@@ -288,6 +289,7 @@ export class StoreoutNewComponent implements OnInit {
             number: 1,
             batchno: event.data['batchNo'],
             amount: event.data['price'],
+            storenumber:event.data['number']
           });
       }
     } else {
