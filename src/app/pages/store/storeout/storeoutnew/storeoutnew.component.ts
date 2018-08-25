@@ -4,7 +4,6 @@ import { FormGroup, AbstractControl, FormBuilder, Validators } from '@angular/fo
 import { IMultiSelectOption, IMultiSelectSettings, IMultiSelectTexts } from 'angular-2-dropdown-multiselect';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { LocalDataSource } from 'ng2-smart-table';
-import { ToastyService, ToastyConfig, ToastOptions, ToastData } from 'ng2-toasty';
 import { Common } from '../../../../providers/common';
 import * as $ from 'jquery';
 import * as _ from 'lodash';
@@ -209,14 +208,6 @@ export class StoreoutNewComponent implements OnInit {
     searchPlaceholder: '查询...'
   }
 
-  private toastOptions: ToastOptions = {
-    title: "提示信息",
-    msg: "The message",
-    showClose: true,
-    timeout: 2000,
-    theme: "bootstrap",
-  };
-
   constructor(
     private _common: Common,
     private _state: GlobalState,
@@ -226,12 +217,8 @@ export class StoreoutNewComponent implements OnInit {
     private _userService: UserService,
     private _dicService: DicService,
     private _orgService: OrgService,
-    private toastyService: ToastyService,
-    private toastyConfig: ToastyConfig,
     private _router: Router,
     private route: ActivatedRoute) {
-
-    this.toastyConfig.position = 'top-center';
   }
   ngOnInit() {
     this.getDataList();
@@ -328,8 +315,7 @@ export class StoreoutNewComponent implements OnInit {
     const dt = { that: this, data: event.newData };
     const store = _.find(this.goodsStoreInfo,f => { return f['id'] == event.data.kcid});
     if(store['number'] < _.toNumber(event.newData.number)){
-      this.toastOptions.msg = "出库数量不能大于库存数量。";
-      this.toastyService.warning(this.toastOptions);
+      this._state.notifyDataChanged("messagebox", { type: 'warning', msg: '出库数量不能大于库存数量。', time: new Date().getTime() });
       event.confirm.reject();
       return;
     }
@@ -411,13 +397,11 @@ export class StoreoutNewComponent implements OnInit {
     if (!this.storeOut.typeId || !this.storeOut.outTimeNg || !this.storeOut.orderNo
       || !this.storeOut.storeId
       || !this.storeOut.orgidNg || !this.storeOut.operator) {
-      this.toastOptions.msg = "请填写完整。";
-      this.toastyService.warning(this.toastOptions);
+      this._state.notifyDataChanged("messagebox", { type: 'warning', msg: '请填写完整。', time: new Date().getTime() });
       return;
     }
     if (this.selectedGoods.length == 0) {
-      this.toastOptions.msg = "请选择产品。";
-      this.toastyService.warning(this.toastOptions);
+      this._state.notifyDataChanged("messagebox", { type: 'warning', msg: '请选择产品。', time: new Date().getTime() });
       return;
     }
     this.isSaved = true;
@@ -434,8 +418,7 @@ export class StoreoutNewComponent implements OnInit {
       }
     ).then(
       function (v) {
-        that.toastOptions.msg = "保存成功。";
-        that.toastyService.success(that.toastOptions);
+        this._state.notifyDataChanged("messagebox", { type: 'success', msg: '保存成功。', time: new Date().getTime() });
         that.isSaved = false;
         that.storeOut.amount = 0;
         that.selectedGoods = [];
@@ -444,9 +427,7 @@ export class StoreoutNewComponent implements OnInit {
         that.getOrderNo();
       },
       (err) => {
-        that.toastOptions.title = "保存失败";
-        that.toastOptions.msg = err;
-        that.toastyService.error(that.toastOptions);
+        this._state.notifyDataChanged("messagebox", { type: 'error', msg: err, time: new Date().getTime() });
         that.isSaved = false;
       }
       )

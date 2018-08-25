@@ -12,6 +12,16 @@ export class HttpService {
         this.baseUrl = this.config.server + this.baseUrl;
     }
 
+    getDataServer2(uri:string){
+        const url = this.config.server2 + "api/" + uri;
+        return this.http.get(this.newUrl(url), { headers: this.getHeaders() })
+            .toPromise()
+            .then(response => {
+                return response.json();
+            })
+            .catch(this.handleError);
+    }
+
     getModelList(modelName: string): Promise<any[]> {
         const url = this.baseUrl + modelName;
         return this.http.get(this.newUrl(url), { headers: this.getHeaders() })
@@ -53,8 +63,26 @@ export class HttpService {
             .catch(this.handleError);
     }
 
+    delete2(uri: string, id: any): Promise<void> {
+        const url = this.config.server2 + "api/" + uri + "/" + id;
+        const that = this;
+        return this.http.delete(this.newUrl(url), { headers: this.getHeaders() })
+            .toPromise()
+            .then(() => null)
+            .catch(this.handleError);
+    }
+
     create(modelName: string, model: any): Promise<any> {
         const url = this.baseUrl + modelName;
+        return this.http
+            .post(this.newUrl(url), JSON.stringify(model), { headers: this.getHeaders() })
+            .toPromise()
+            .then(res => res.json())
+            .catch(this.handleError);
+    }
+
+    create2(uri: string, model: any): Promise<any> {
+        const url = this.config.server2 + "api/" + uri;
         return this.http
             .post(this.newUrl(url), JSON.stringify(model), { headers: this.getHeaders() })
             .toPromise()

@@ -21,9 +21,6 @@ import { ComponentsModule } from '../components/components.module';
 
 import { routing } from './market.routing';
 import { MarketComponent } from './market.component';
-import { BookComponent } from './book/book.component';
-import { MemberComponent } from './member/member.component';
-import { CustomerComponent } from './customer/customer.component';
 
 @NgModule({
   imports: [
@@ -43,9 +40,6 @@ import { CustomerComponent } from './customer/customer.component';
   ],
   declarations: [
     MarketComponent,
-    BookComponent,
-    MemberComponent,
-    CustomerComponent,
   ],
   providers: [GlobalState, Config, HttpService, AppState,Common]
 })

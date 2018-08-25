@@ -1,7 +1,6 @@
 import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { FormGroup, AbstractControl, FormBuilder, Validators } from '@angular/forms';
-import { ToastyService, ToastyConfig, ToastOptions, ToastData } from 'ng2-toasty';
 import { IMultiSelectOption, IMultiSelectSettings, IMultiSelectTexts } from 'angular-2-dropdown-multiselect';
 import { OrgService } from '../../sys/components/org/org.services';
 import { LocalDataSource } from 'ng2-smart-table';
@@ -212,13 +211,7 @@ export class StoreinComponent implements OnInit {
     defaultTitle: '--选择供应商--',
     searchPlaceholder: '查询...'
   }
-  private toastOptions: ToastOptions = {
-    title: "提示信息",
-    msg: "The message",
-    showClose: true,
-    timeout: 2000,
-    theme: "bootstrap",
-  };
+
   printOrder: any = {
     orderNo: '',
     typeIdTxt: '',
@@ -236,13 +229,10 @@ export class StoreinComponent implements OnInit {
     private _dicService: DicService,
     private _common: Common,
     private _router: Router,
-    private toastyService: ToastyService,
-    private toastyConfig: ToastyConfig,
     private _supplierService: SupplierService,
     private _orgService: OrgService,
     private modalService: NgbModal,
     private _state: GlobalState) {
-    this.toastyConfig.position = 'top-center';
   }
   ngOnInit() {
     this._state.subscribe('print.storein', (data) => {
@@ -279,17 +269,14 @@ export class StoreinComponent implements OnInit {
   onDelete(event) {
     if (window.confirm('你确定要作废吗?')) {
       if (event.data.status == '作废') {
-        this.toastOptions.msg = "该入库单已经作废，不能操作。";
-        this.toastyService.warning(this.toastOptions);
+        this._state.notifyDataChanged("messagebox", { type: 'warning', msg: '该入库单已经作废，不能操作。', time: new Date().getTime() });
         return;
       }
       this.storeinService.cancel(event.data.id).then((data) => {
-        this.toastOptions.msg = "作废成功。";
-        this.toastyService.success(this.toastOptions);
+        this._state.notifyDataChanged("messagebox", { type: 'success', msg: '作废成功。', time: new Date().getTime() });
         this.getDataList();
       }, (err) => {
-        this.toastOptions.msg = err;
-        this.toastyService.error(this.toastOptions);
+        this._state.notifyDataChanged("messagebox", { type: 'error', msg: err, time: new Date().getTime() });
       });
     }
   }
@@ -389,8 +376,7 @@ export class StoreinComponent implements OnInit {
       }
     }, (err) => {
       this.loading = false;
-      this.toastOptions.msg = err;
-      this.toastyService.error(this.toastOptions);
+      this._state.notifyDataChanged("messagebox", { type: 'error', msg: err, time: new Date().getTime() });
     });
   }
 

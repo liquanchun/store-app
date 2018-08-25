@@ -1,7 +1,6 @@
 import { Component, ViewChild, ElementRef, OnInit, AfterViewInit } from '@angular/core';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { FormGroup, AbstractControl, FormBuilder, Validators } from '@angular/forms';
-import { ToastyService, ToastyConfig, ToastOptions, ToastData } from 'ng2-toasty';
 import { NgbdModalContent } from '../../../../modal-content.component'
 import { FieldConfig } from '../../../../theme/components/dynamic-form/models/field-config.interface';
 import * as _ from 'lodash';
@@ -30,21 +29,10 @@ export class RoleComponent implements OnInit, AfterViewInit {
     }
   ];
 
-  private toastOptions: ToastOptions = {
-    title: "提示信息",
-    msg: "The message",
-    showClose: true,
-    timeout: 2000,
-    theme: "bootstrap",
-  };
-
   constructor(
     private modalService: NgbModal,
     private _state: GlobalState,
-    private toastyService: ToastyService,
-    private toastyConfig: ToastyConfig,
     private roleService: RoleService) {
-      this.toastyConfig.position = 'top-center';
   }
 
   ngOnInit() {
@@ -71,13 +59,11 @@ export class RoleComponent implements OnInit, AfterViewInit {
       const roleobj = JSON.parse(result);
       this.roleService.create(roleobj.roleName).then((data) => {
           closeBack();
-          this.toastOptions.msg = "新增成功。";
-          this.toastyService.success(this.toastOptions);
+          this._state.notifyDataChanged("messagebox", { type: 'success', msg: '新增成功。', time: new Date().getTime() });
           this.getRoles();
         },
         (err) => {
-          this.toastOptions.msg = err;
-          this.toastyService.error(this.toastOptions);
+          this._state.notifyDataChanged("messagebox", { type: 'error', msg: err, time: new Date().getTime() });
         }
       )
     };
@@ -88,12 +74,10 @@ export class RoleComponent implements OnInit, AfterViewInit {
 
     if (window.confirm('你确定要删除吗?')) {
       this.roleService.delete(this.selectedRole.id).then((data) => {
-        this.toastOptions.msg = "删除成功。";
-        this.toastyService.success(this.toastOptions);
+        this._state.notifyDataChanged("messagebox", { type: 'success', msg: '删除成功。', time: new Date().getTime() });
         this.getRoles();
       }, (err) => {
-        this.toastOptions.msg = err;
-        this.toastyService.error(this.toastOptions);
+        this._state.notifyDataChanged("messagebox", { type: 'error', msg: err, time: new Date().getTime() });
       });
     }
   }

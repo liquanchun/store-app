@@ -4,7 +4,6 @@ import { FormGroup, AbstractControl, FormBuilder, Validators } from '@angular/fo
 import { IMultiSelectOption, IMultiSelectSettings, IMultiSelectTexts } from 'angular-2-dropdown-multiselect';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { LocalDataSource } from 'ng2-smart-table';
-import { ToastyService, ToastyConfig, ToastOptions, ToastData } from 'ng2-toasty';
 import { FieldConfig } from '../../../../theme/components/dynamic-form/models/field-config.interface';
 import { DynamicFormComponent }
   from '../../../../theme/components/dynamic-form/containers/dynamic-form/dynamic-form.component';
@@ -39,13 +38,7 @@ export class GoodsNewComponent implements OnInit {
   isEnable: boolean = false;
   private goodsid = 0;
   private isNewMenu: boolean = true;
-  private toastOptions: ToastOptions = {
-    title: "提示信息",
-    msg: "The message",
-    showClose: true,
-    timeout: 2000,
-    theme: "bootstrap",
-  };
+
   private goods: any = {
     name: '',
     typeId: '',
@@ -66,14 +59,11 @@ export class GoodsNewComponent implements OnInit {
     private modalService: NgbModal,
     private goodsService: GoodsService,
     private _common: Common,
-    private toastyService: ToastyService,
-    private toastyConfig: ToastyConfig,
     private _dicService: DicService,
     private _router: Router,
     private route: ActivatedRoute,
     public config: Config,
     private _state: GlobalState) {
-    this.toastyConfig.position = 'top-center';
   }
   //http://localhost:3000/upload  
   //url: this.config.server + "api/uploads",
@@ -102,34 +92,24 @@ export class GoodsNewComponent implements OnInit {
   onConfirm() {
     const that = this;
     if (!this.goods.goodsCode || !this.goods.goodsNo || !this.goods.name || !this.goods.typeId) {
-      that.toastOptions.msg = "请填写完整。";
-      that.toastyService.warning(that.toastOptions);
+      this._state.notifyDataChanged("messagebox", { type: 'warning', msg: '请填写完整。', time: new Date().getTime() });
       return;
     }
-    // if (this.fileName) {
-    //   this.uploadFile();
-    // }
     this.isSaved = true;
     if (this.isNewMenu) {
       this.goodsService.create(this.goods).then(function (menu) {
-        that.toastOptions.msg = "保存成功。";
-        that.toastyService.success(that.toastOptions);
+        this._state.notifyDataChanged("messagebox", { type: 'success', msg: '保存成功。', time: new Date().getTime() });
         that.isSaved = false;
       }, (err) => {
-        that.toastOptions.title = "保存失败。";
-        that.toastOptions.msg = err;
-        that.toastyService.error(that.toastOptions);
+        this._state.notifyDataChanged("messagebox", { type: 'error', msg: err, time: new Date().getTime() });
         that.isSaved = false;
       });
     } else {
       this.goodsService.update(this.goodsid, this.goods).then(function (menu) {
-        that.toastOptions.msg = "保存成功。";
-        that.toastyService.success(that.toastOptions);
+        this._state.notifyDataChanged("messagebox", { type: 'success', msg: '保存成功。', time: new Date().getTime() });
         that.isSaved = false;
       }, (err) => {
-        that.toastOptions.title = "保存失败。";
-        that.toastOptions.msg = err;
-        that.toastyService.error(that.toastOptions);
+        this._state.notifyDataChanged("messagebox", { type: 'error', msg: err, time: new Date().getTime() });
         that.isSaved = false;
       });
     }

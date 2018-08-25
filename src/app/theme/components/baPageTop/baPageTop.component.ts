@@ -2,11 +2,11 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { NgbdModalContent } from '../../../modal-content.component';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { ToastyService, ToastyConfig, ToastOptions, ToastData } from 'ng2-toasty';
 import { GlobalState } from '../../../global.state';
 import { FormGroup, AbstractControl, FormBuilder, Validators } from '@angular/forms';
 import { FieldConfig } from '../../../theme/components/dynamic-form/models/field-config.interface';
 import { UserService } from '../../../pages/sys/components/user/user.services';
-import { ToastyService, ToastyConfig, ToastOptions, ToastData } from 'ng2-toasty';
 import { Md5 } from 'ts-md5/dist/md5';
 import * as _ from 'lodash';
 @Component({
@@ -61,9 +61,6 @@ export class BaPageTop {
     private toastyService: ToastyService,
     private toastyConfig: ToastyConfig,
     private _state: GlobalState) {
-
-    this.toastyConfig.position = 'top-center';
-
     this._state.subscribe('menu.isCollapsed', (isCollapsed) => {
       this.isMenuCollapsed = isCollapsed;
     });

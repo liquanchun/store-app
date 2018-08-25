@@ -1,7 +1,6 @@
 import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { FormGroup, AbstractControl, FormBuilder, Validators } from '@angular/forms';
-import { ToastyService, ToastyConfig, ToastOptions, ToastData } from 'ng2-toasty';
 import { LocalDataSource } from 'ng2-smart-table';
 
 import { DicService } from '../../sys/dic/dic.services';
@@ -86,14 +85,6 @@ export class GoodsstoreComponent implements OnInit {
     }
   };
 
-  private toastOptions: ToastOptions = {
-    title: "提示信息",
-    msg: "The message",
-    showClose: true,
-    timeout: 2000,
-    theme: "bootstrap",
-  };
-
   source: LocalDataSource = new LocalDataSource();
   //仓库
   stores: any = [];
@@ -103,8 +94,6 @@ export class GoodsstoreComponent implements OnInit {
   constructor(
     private goodsstoreService: GoodsstoreService,
     private _dicService: DicService,
-    private toastyService: ToastyService,
-    private toastyConfig: ToastyConfig,
     private _state: GlobalState) {
   }
   ngOnInit() {
@@ -145,8 +134,7 @@ export class GoodsstoreComponent implements OnInit {
       this.loading = false;
     }, (err) => {
       this.loading = false;
-      this.toastOptions.msg = err;
-      this.toastyService.error(this.toastOptions);
+      this._state.notifyDataChanged("messagebox", { type: 'error', msg: err, time: new Date().getTime() });
     });
   }
 }

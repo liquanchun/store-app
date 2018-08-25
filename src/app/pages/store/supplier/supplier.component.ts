@@ -4,7 +4,6 @@ import { FormGroup, AbstractControl, FormBuilder, Validators } from '@angular/fo
 import { LocalDataSource } from 'ng2-smart-table';
 import { FieldConfig } from '../../../theme/components/dynamic-form/models/field-config.interface';
 import { NgbdModalContent } from '../../../modal-content.component'
-import { ToastyService, ToastyConfig, ToastOptions, ToastData } from 'ng2-toasty';
 
 import { SupplierService } from './supplier.services';
 import { GlobalState } from '../../../global.state';
@@ -95,7 +94,7 @@ export class SupplierComponent implements OnInit {
       },
     }
   };
-
+  source: LocalDataSource = new LocalDataSource();
   config: FieldConfig[] = [
     {
       type: 'input',
@@ -154,23 +153,11 @@ export class SupplierComponent implements OnInit {
     }
   ];
 
-  source: LocalDataSource = new LocalDataSource();
-  private toastOptions: ToastOptions = {
-    title: "提示信息",
-    msg: "The message",
-    showClose: true,
-    timeout: 2000,
-    theme: "bootstrap",
-  };
-
   constructor(
     private modalService: NgbModal,
     private supplierService: SupplierService,
     private _common: Common,
-    private toastyService: ToastyService,
-    private toastyConfig: ToastyConfig,
     private _state: GlobalState) {
-      this.toastyConfig.position = 'top-center';
   }
   ngOnInit() {
     this.getDataList();
@@ -192,8 +179,7 @@ export class SupplierComponent implements OnInit {
       this.loading = false;
     }, (err) => {
       this.loading = false;
-      this.toastOptions.msg = err;
-      this.toastyService.error(this.toastOptions);
+      this._state.notifyDataChanged("messagebox", { type: 'error', msg: err, time: new Date().getTime() });
     });
   }
 
@@ -205,14 +191,11 @@ export class SupplierComponent implements OnInit {
     modalRef.componentInstance.saveFun = (result, closeBack) => {
       that.supplierService.create(JSON.parse(result)).then((data) => {
         closeBack();
-        that.toastOptions.msg = "新增成功。";
-        that.toastyService.success(that.toastOptions);
+        this._state.notifyDataChanged("messagebox", { type: 'success', msg: '新增成功。', time: new Date().getTime() });
         that.getDataList();
       },
         (err) => {
-          that.toastOptions.msg = err;
-          that
-            .toastyService.error(that.toastOptions);
+          this._state.notifyDataChanged("messagebox", { type: 'error', msg: err, time: new Date().getTime() });
         }
       )
     }
@@ -227,13 +210,11 @@ export class SupplierComponent implements OnInit {
     modalRef.componentInstance.saveFun = (result, closeBack) => {
       that.supplierService.update(event.data.id, JSON.parse(result)).then((data) => {
         closeBack();
-        that.toastOptions.msg = "修改成功。";
-        that.toastyService.success(that.toastOptions);
+        this._state.notifyDataChanged("messagebox", { type: 'success', msg: '修改成功。', time: new Date().getTime() });
         that.getDataList();
       },
         (err) => {
-          that.toastOptions.msg = err;
-          that.toastyService.error(that.toastOptions);
+          this._state.notifyDataChanged("messagebox", { type: 'error', msg: err, time: new Date().getTime() });
         }
       )
     };
@@ -242,12 +223,10 @@ export class SupplierComponent implements OnInit {
   onDelete(event){
     if (window.confirm('你确定要删除吗?')) {
       this.supplierService.delete(event.data.id).then((data) => {
-        this.toastOptions.msg = "删除成功。";
-        this.toastyService.success(this.toastOptions);
+        this._state.notifyDataChanged("messagebox", { type: 'success', msg: '删除成功。', time: new Date().getTime() });
         this.getDataList();
       }, (err) => {
-        this.toastOptions.msg = err;
-        this.toastyService.error(this.toastOptions);
+        this._state.notifyDataChanged("messagebox", { type: 'error', msg: err, time: new Date().getTime() });
       });
     }
   }

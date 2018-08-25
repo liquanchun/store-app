@@ -1,5 +1,4 @@
 import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
-import { ToastyService, ToastyConfig, ToastOptions, ToastData } from 'ng2-toasty';
 import { OrgService } from '../../sys/components/org/org.services';
 import { LocalDataSource } from 'ng2-smart-table';
 import { StorelistService } from './storelist.services';
@@ -69,14 +68,6 @@ export class StorelistComponent implements OnInit {
   //仓库
   stores: any = [];
 
-  private toastOptions: ToastOptions = {
-    title: "提示信息",
-    msg: "The message",
-    showClose: true,
-    timeout: 2000,
-    theme: "bootstrap",
-  };
-
   printOrder: any = {
     title:'北京博瑞宝库存清单',
     amount: 0,
@@ -89,10 +80,7 @@ export class StorelistComponent implements OnInit {
     private goodsstoreService: StorelistService,
     private _dicService: DicService,
     private _common: Common,
-    private toastyService: ToastyService,
-    private toastyConfig: ToastyConfig,
     private _state: GlobalState) {
-    this.toastyConfig.position = 'top-center';
   }
   ngOnInit() {
     this.getDataList();
@@ -100,8 +88,7 @@ export class StorelistComponent implements OnInit {
 
   queryData() {
     if (!this.selectedStore) {
-      this.toastOptions.msg = '查询条件不能为空。';
-      this.toastyService.warning(this.toastOptions);
+      this._state.notifyDataChanged("messagebox", { type: 'warning', msg: '查询条件不能为空。', time: new Date().getTime() });
       return;
     }
     this.printOrder.printDate = this._common.getTodayString();
@@ -119,8 +106,7 @@ export class StorelistComponent implements OnInit {
       this.source.load(this.printOrderDetail);
     }, (err) => {
       this.loading = false;
-      this.toastOptions.msg = err;
-      this.toastyService.error(this.toastOptions);
+      this._state.notifyDataChanged("messagebox", { type: 'error', msg: err, time: new Date().getTime() });
     });
   }
 

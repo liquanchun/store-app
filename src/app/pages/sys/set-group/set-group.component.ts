@@ -3,7 +3,6 @@ import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { FormGroup, AbstractControl, FormBuilder, Validators } from '@angular/forms';
 import { LocalDataSource } from 'ng2-smart-table';
 import { NgbdModalContent } from '../../../modal-content.component'
-import { ToastyService, ToastyConfig, ToastOptions, ToastData } from 'ng2-toasty';
 
 import { SetGroupService } from './set-group.services';
 import { GlobalState } from '../../../global.state';
@@ -166,22 +165,12 @@ export class SetGroupComponent implements OnInit {
     }
   ];
   source: LocalDataSource = new LocalDataSource();
-  private toastOptions: ToastOptions = {
-    title: "提示信息",
-    msg: "The message",
-    showClose: true,
-    timeout: 2000,
-    theme: "bootstrap",
-  };
 
   constructor(
     private modalService: NgbModal,
     private setGroupService: SetGroupService,
-    private toastyService: ToastyService,
-    private toastyConfig: ToastyConfig,
     private _common: Common,
     private _state: GlobalState) {
-    this.toastyConfig.position = 'top-center';
   }
   ngOnInit() {
     this.getDataList();
@@ -201,8 +190,7 @@ export class SetGroupComponent implements OnInit {
       this.loading = false;
     }, (err) => {
       this.loading = false;
-      this.toastOptions.msg = err;
-      this.toastyService.error(this.toastOptions);
+      this._state.notifyDataChanged("messagebox", { type: 'error', msg: err, time: new Date().getTime() });
     });
   }
 
@@ -217,13 +205,11 @@ export class SetGroupComponent implements OnInit {
       grp.contractDate2 = this._common.getDateString(grp.contractDate2);
       that.setGroupService.create(grp).then((data) => {
         closeBack();
-        that.toastOptions.msg = "新增成功。";
-        that.toastyService.success(that.toastOptions);
         that.getDataList();
+        this._state.notifyDataChanged("messagebox", { type: 'success', msg: '新增成功。', time: new Date().getTime() });
       },
         (err) => {
-          that.toastOptions.msg = err;
-          that.toastyService.error(that.toastOptions);
+          this._state.notifyDataChanged("messagebox", { type: 'error', msg: err, time: new Date().getTime() });
         }
       )
     };
@@ -244,13 +230,11 @@ export class SetGroupComponent implements OnInit {
       grp.contractDate2 = this._common.getDateString(grp.contractDate2);
       that.setGroupService.update(event.data.id, grp).then((data) => {
         closeBack();
-        that.toastOptions.msg = "修改成功。";
-        that.toastyService.success(that.toastOptions);
         that.getDataList();
+        this._state.notifyDataChanged("messagebox", { type: 'success', msg: '修改成功。', time: new Date().getTime() });
       },
         (err) => {
-          that.toastOptions.msg = err;
-          that.toastyService.error(that.toastOptions);
+          this._state.notifyDataChanged("messagebox", { type: 'error', msg: err, time: new Date().getTime() });
         }
       )
     };
@@ -259,12 +243,10 @@ export class SetGroupComponent implements OnInit {
   onDelete(event) {
     if (window.confirm('你确定要删除吗?')) {
       this.setGroupService.delete(event.data.id).then((data) => {
-        this.toastOptions.msg = "删除成功。";
-        this.toastyService.success(this.toastOptions);
         this.getDataList();
+        this._state.notifyDataChanged("messagebox", { type: 'success', msg: '删除成功。', time: new Date().getTime() });
       }, (err) => {
-        this.toastOptions.msg = err;
-        this.toastyService.error(this.toastOptions);
+        this._state.notifyDataChanged("messagebox", { type: 'error', msg: err, time: new Date().getTime() });
       });
     }
   }

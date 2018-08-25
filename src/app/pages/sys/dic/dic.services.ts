@@ -15,6 +15,24 @@ export class DicService {
       fnCallBack(that.createTree(dics, 0));
     });
   }
+
+  async getDicListAsync(name) {
+    return new Promise((resolve, reject) => {
+      let dicList = [];
+      this._httpService.getModelList(this.modelName).then(function (data) {
+        const parentData = _.find(data, (f) => { return f['dicName'] == name; });
+        if (parentData) {
+          const filteData = _.filter(data, (f) => { return f['parentId'] == parentData['id']; });
+          _.each(filteData, function (d) {
+            dicList.push({ id: d.id, name: d.dicName, color: d.remark });
+          });
+        }
+      });
+      resolve(dicList);
+    })
+
+  }
+
   getDicByName(name, fnCallBack) {
     let dicList = [];
     this._httpService.getModelList(this.modelName).then(function (data) {
@@ -22,7 +40,7 @@ export class DicService {
       if (parentData) {
         const filteData = _.filter(data, (f) => { return f['parentId'] == parentData['id']; });
         _.each(filteData, function (d) {
-          dicList.push({ id: d.id, name: d.dicName,color:d.remark});
+          dicList.push({ id: d.id, name: d.dicName, color: d.remark });
         });
         fnCallBack(dicList);
       }

@@ -117,6 +117,13 @@ export class MenuComponent implements OnInit, AfterViewInit {
       validation: [Validators.required],
     },
     {
+      type: 'input',
+      label: '地址',
+      name: 'FormName',
+      placeholder: '输入菜单地址',
+      validation: [Validators.required],
+    },
+    {
       type: 'check',
       label: '角色',
       name: 'Roles',
@@ -219,6 +226,7 @@ export class MenuComponent implements OnInit, AfterViewInit {
       this.form.setValue('MenuName', this.selectedMenu.data.data.menuName);
       this.form.setValue('MenuAddr', this.selectedMenu.data.data.menuAddr);
       this.form.setValue('Icon', this.selectedMenu.data.data.icon);
+      this.form.setValue('FormName', this.selectedMenu.data.data.formName);
       if (this.selectedMenu.data.data.roleIds) {
         this.form.setValue('Roles', this.selectedMenu.data.data.roleIds);
       }else{
@@ -236,6 +244,7 @@ export class MenuComponent implements OnInit, AfterViewInit {
     this.form.setValue('MenuAddr', '');
     this.form.setValue('Icon', '');
     this.form.setValue('MenuOrder', '');
+    this.form.setValue('FormName', '');
     this.isNewMenu = true;
   }
   // 删除选择的角色

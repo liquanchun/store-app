@@ -6,6 +6,8 @@ export class Config {
 	isProduct = false;
 	// 服务器地址
 	server = '';
+	// 服务器地址
+	server2 = '';
 	// 列表每页数量
 	pageSize = 0;
 	// 加载显示提示
@@ -23,6 +25,7 @@ export class Config {
 	constructor() {
 		if (this.isProduct) {
 			this.server = 'http://localhost:5000/';
+			this.server2 = 'http://localhost:3000/';
 			this.pageSize = 20;
 
 			this.loadingText = '加载中,请稍候...';
@@ -38,6 +41,7 @@ export class Config {
 			this.tutorialVersion = "0.0.1";
 		} else {
 			this.server = 'http://localhost:5000/';
+			this.server2 = 'http://localhost:3000/';
 			this.pageSize = 20;
 			this.loadingText = '加载中,请稍候...';
 			// 30秒
