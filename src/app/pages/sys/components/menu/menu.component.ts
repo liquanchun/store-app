@@ -181,23 +181,25 @@ export class MenuComponent implements OnInit, AfterViewInit {
       Icon: value.Icon,
       MenuOrder: value.MenuOrder,
       ParentId: 0,
-      RoleIds:value.Roles
+      RoleIds: value.Roles
     };
     if (this.isNewMenu) {
       saveMenu.ParentId = this.selectedMenu && this.selectedMenu.data ? this.selectedMenu.data.id : 0;
       this.menuService.create(saveMenu).then(function (menu) {
         that.getNodes();
         that.form.setDisabled('submit', false);
+        this._state.notifyDataChanged("messagebox", { type: 'success', msg: '新增成功。', time: new Date().getTime() });
       }, (err) => {
-
+        this._state.notifyDataChanged("messagebox", { type: 'error', msg: err, time: new Date().getTime() });
       });
     } else {
       saveMenu.ParentId = this.selectedMenu && this.selectedMenu.data ? this.selectedMenu.data.parentId : 0;
       this.menuService.update(this.selectedMenu.data.id, saveMenu).then(function (menu) {
         that.getNodes();
         that.form.setDisabled('submit', false);
+        this._state.notifyDataChanged("messagebox", { type: 'success', msg: '修改成功。', time: new Date().getTime() });
       }, (err) => {
-
+        this._state.notifyDataChanged("messagebox", { type: 'error', msg: err, time: new Date().getTime() });
       });
     }
   }
@@ -229,7 +231,7 @@ export class MenuComponent implements OnInit, AfterViewInit {
       this.form.setValue('FormName', this.selectedMenu.data.data.formName);
       if (this.selectedMenu.data.data.roleIds) {
         this.form.setValue('Roles', this.selectedMenu.data.data.roleIds);
-      }else{
+      } else {
         this.form.setValue('Roles', ',');
       }
       this.form.setValue('MenuOrder', this.selectedMenu.data.data.menuOrder);
@@ -252,17 +254,18 @@ export class MenuComponent implements OnInit, AfterViewInit {
     const focusNode = tree.treeModel.getFocusedNode();
     if (focusNode) {
       if (focusNode.data.children.length > 0) {
-        alert('选择的节点有子节点，不能删除。');
+        this._state.notifyDataChanged("messagebox", { type: 'warning', msg: '选择的节点有子节点，不能删除。', time: new Date().getTime() });
       } else {
         if (window.confirm('你确定要删除吗?')) {
           this.menuService.delete(focusNode.data.id).then(() => {
             this.getNodes();
             this.selectedMenu = null;
+            this._state.notifyDataChanged("messagebox", { type: 'success', msg: '删除成功。', time: new Date().getTime() });
           });
         }
       }
     } else {
-      alert('请选择你要删除的子节点。');
+      this._state.notifyDataChanged("messagebox", { type: 'warning', msg: '请选择你要删除的子节点。', time: new Date().getTime() });
     }
   }
 

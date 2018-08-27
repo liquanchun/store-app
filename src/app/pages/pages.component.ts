@@ -69,7 +69,7 @@ export class Pages implements OnInit {
                 selected: false,
                 expanded: false,
                 order: m['menuOrder'],
-                url:m['formName']
+                form: m['formName']
               }
             },
             children: childrenItem,
@@ -87,7 +87,7 @@ export class Pages implements OnInit {
               selected: false,
               expanded: mi['id'] == 10005,
               order: mi['MenuOrder'],
-              url:mi['formName']
+              form: mi['formName']
             }
           },
           children: secondItem
@@ -111,7 +111,7 @@ export class Pages implements OnInit {
             selected: false,
             expanded: false,
             order: m['menuOrder'],
-            url:m['formName']
+            form: m['formName']
           }
         }
       };

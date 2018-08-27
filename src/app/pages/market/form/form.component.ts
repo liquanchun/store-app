@@ -6,7 +6,7 @@ import { FieldConfig } from '../../../theme/components/dynamic-form/models/field
 import { NgbdModalContent } from '../../../modal-content.component'
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { FormService } from './form.services';
-import { DicService } from '../dic/dic.services';
+import { DicService } from '../../sys/dic/dic.services';
 import { GlobalState } from '../../../global.state';
 import { Common } from '../../../providers/common';
 
@@ -76,10 +76,7 @@ export class FormComponent implements OnInit {
       }
     })
   }
-  ngOnDestroy() {
-    // prevent memory leak when component destroyed
-    //this.subscription.unsubscribe();
-  }
+
   start() {
     this.settings.columns = {};
     const that = this;

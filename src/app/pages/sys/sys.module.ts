@@ -40,6 +40,7 @@ import { MultiselectDropdownModule } from 'angular-2-dropdown-multiselect';
 import { TreeModule } from 'angular-tree-component';
 import { LoadingModule } from 'ngx-loading';
 import { ComponentsModule } from '../components/components.module';
+import { AuthGuard } from '../../providers/guard.service';
 import { ToastyModule } from 'ng2-toasty';
 @NgModule({
   imports: [
@@ -77,7 +78,7 @@ import { ToastyModule } from 'ng2-toasty';
     FormComponent,
   ],
   exports: [OrgComponent],
-  providers: [GlobalState, Config, HttpService, AppState, Common]
+  providers: [GlobalState, Config, HttpService, AppState, Common, AuthGuard]
 })
 export class SysModule { }
 

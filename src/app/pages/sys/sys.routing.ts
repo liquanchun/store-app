@@ -10,13 +10,14 @@ import { SetAgentComponent } from './set-agent/set-agent.component';
 import { UserInfoComponent } from './userinfo/userinfo.component';
 import { FieldRoleComponent } from './field-role/field-role.component';
 import { FormComponent } from './form/form.component';
+import { AuthGuard } from '../../providers/guard.service';
 // noinspection TypeScriptValidateTypes
 const routes: Routes = [
   {
     path: '',
     component: SysComponent,
     children: [
-      { path: 'form', component: FormComponent },
+      { path: 'form/:id', component: FormComponent,canActivate:[AuthGuard]},
       { path: 'field-role', component: FieldRoleComponent },
       { path: 'user-role', component: UserRoleComponent },
       { path: 'role-menu', component: RoleMenuComponent },

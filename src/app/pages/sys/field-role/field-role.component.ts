@@ -192,12 +192,13 @@ export class FieldRoleComponent implements OnInit, AfterViewInit {
     modalRef.componentInstance.config = this.config;
     modalRef.componentInstance.formValue = formEdit;
     modalRef.componentInstance.saveFun = (result, closeBack) => {
+      closeBack();
       let saveData = JSON.parse(result);
       saveData['FieldIds'] =_.toString(_.map(this.selectRows,'Id'));
-      console.log(saveData);
-      that.filedService.create('fieldrole', JSON.parse(result)).then((data) => {
-        closeBack();
+      that.filedService.create('fieldrole', saveData).then((data) => {
         this._state.notifyDataChanged("messagebox", { type: 'success', msg: '修改成功。', time: new Date().getTime() });
+        this.getDataList();
+        this.selectRows = [];
       },
         (err) => {
           this._state.notifyDataChanged("messagebox", { type: 'error', msg: err, time: new Date().getTime() });
