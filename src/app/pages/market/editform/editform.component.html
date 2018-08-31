@@ -1,0 +1,6 @@
+
+<dynamic-form [config]="config" #form="dynamicForm" (submit)="submit($event)">
+</dynamic-form>
+<button type="button" [disabled]="canUpdate" (click)="update(form.value)" class="btn btn-info btn-sm">
+        <i class="fa fa-pencil" aria-hidden="true"></i>修改{{title}}
+</button>

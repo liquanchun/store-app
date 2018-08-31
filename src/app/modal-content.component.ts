@@ -31,16 +31,16 @@ export class NgbdModalContent implements OnInit {
   @Input() title;
   @Input() config;
   @Input() formValue: any;
-  @Input() saveFun:any;
+  @Input() saveFun: any;
   constructor(public activeModal: NgbActiveModal) {
 
   }
   ngOnInit() {
 
   }
-  onSave(formValue){
+  onSave(formValue) {
     const that = this;
-    this.saveFun(formValue,function(){
+    this.saveFun(formValue, function () {
       that.activeModal.close('no');
     });
   }
@@ -50,9 +50,9 @@ export class NgbdModalContent implements OnInit {
       const sf = that;
       _.each(that.config, (e) => {
         if (sf.formValue && sf.formValue[e.name]) {
-          if(_.isArray(sf.formValue[e.name])){
+          if (_.isArray(sf.formValue[e.name]) || _.isObject(sf.formValue[e.name])) {
             sf.form.setValue(e.name, sf.formValue[e.name]);
-          }else{
+          } else {
             sf.form.setValue(e.name, sf.formValue[e.name].toString());
           }
         }

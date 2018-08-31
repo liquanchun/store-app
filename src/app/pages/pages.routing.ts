@@ -27,6 +27,7 @@ export const routes: Routes = [
       { path: 'sys', loadChildren: './sys/sys.module#SysModule' },
       { path: 'store', loadChildren: './store/store.module#StoreModule' },
       { path: 'market', loadChildren: './market/market.module#MarketModule' },
+      { path: 'basedata', loadChildren: './basedata/basedata.module#BaseDataModule' },
       { path: 'report', loadChildren: './report/report.module#ReportModule' },
     ]
   }

@@ -18,7 +18,7 @@ export class BaMenuItem implements OnInit {
   }
 
   ngOnInit() {
-      console.log(this.menuItem);
+      //console.log(this.menuItem);
   }
   public onHoverItem($event): void {
     this.itemHover.emit($event);

@@ -1,17 +1,13 @@
 import { Routes, RouterModule } from '@angular/router';
 import { FormComponent } from './form/form.component';
 import { AuthGuard } from '../../providers/guard.service';
-import { MarketComponent } from './market.component';
-import { CarstoreComponent } from './carstore/carstore.component';
-import { CarstoreNewComponent } from './carstorenew/carstorenew.component';
+import { BaseDataComponent } from './basedata.component';
 const routes: Routes = [
   {
     path: '',
-    component: MarketComponent,
+    component: BaseDataComponent,
     children: [
       { path: 'form/:id', component: FormComponent,canActivate:[AuthGuard]},
-      { path: 'carstore', component: CarstoreComponent},
-      { path: 'carstorenew/:id', component: CarstoreNewComponent}
     ]
   }
 ];

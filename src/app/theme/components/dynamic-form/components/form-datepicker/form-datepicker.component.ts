@@ -12,11 +12,11 @@ import {NgbTimeStruct} from '@ng-bootstrap/ng-bootstrap';
     <div 
       class="dynamic-field form-input row" 
       [formGroup]="group">
-      <label for="config.name" class="col-md-3 col-form-label">{{ config.label }}</label>
+      <label for="config.name" class="text-right col-md-3 col-form-label">{{ config.label }}</label>
       <div class="form-group col-md-8">
         <div class="input-group">
           <input class="form-control" placeholder="yyyy-mm-dd"
-                [formControlName]="config.name" ngbDatepicker #d="ngbDatepicker">
+                [formControlName]="config.name" [(ngModel)]="selectVal" ngbDatepicker #d="ngbDatepicker">
           <div class="input-group-addon" (click)="d.toggle()" >
             <i class="fa fa-calendar" aria-hidden="true"></i>
           </div>

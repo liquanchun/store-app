@@ -1,8 +1,7 @@
-<ng2-toasty></ng2-toasty>
 <div class="row">
   <div class="col-md-12">
     <ba-card [title]="title" class="card-primary" baCardClass="with-scroll">
-      <div>
+      <div style="margin-bottom: 5px;">
         <div class="row">
           <div class="col-3">
             <search-input (searchClick)="onSearch($event)"></search-input>
@@ -16,8 +15,20 @@
           </div>
         </div>
         <ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '4px' }"></ngx-loading>
-        <ng2-smart-table [settings]="newSettings" [source]="source" (edit)="onEdit($event)" (delete)="onDelete($event)"></ng2-smart-table>
+        <ng2-smart-table [settings]="newSettings" [source]="source" (rowSelect)="onSelected($event)" (edit)="onEdit($event)" (delete)="onDelete($event)"></ng2-smart-table>
       </div>
+
+      <ngb-tabset>
+        <ngb-tab *ngFor="let view of subViewName" [title]="view.Title">
+          <ng-template ngbTabContent>
+            <div class="row">
+              <div class="col-md-6">
+                <app-edit-form [formView]="view" [mainTableID]="mainTableID"></app-edit-form>
+              </div>
+            </div>
+          </ng-template>
+        </ngb-tab>
+      </ngb-tabset>
     </ba-card>
   </div>
 </div>

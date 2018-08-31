@@ -119,9 +119,9 @@ export class FieldRoleComponent implements OnInit, AfterViewInit {
     this.loading = true;
     const that = this;
     //获取table定义
-    this.formService.getFormsField().then((data) => {
+    this.formService.getFormsFieldByName(that.tableView['ViewName']).then((data) => {
       if (data.Data) {
-        const viewList = _.orderBy(_.filter(data.Data, function (o) { return o['ViewName'] == that.tableView['ViewName']; }), 'OrderInd', 'asc');
+        const viewList = _.orderBy(data.Data, 'OrderInd', 'asc');
         _.each(viewList, d => {
           this.settings.columns[d['FieldName']] = {
             title: d['Title'],

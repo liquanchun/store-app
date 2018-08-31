@@ -14,7 +14,7 @@ import { IMultiSelectOption, IMultiSelectTexts, IMultiSelectSettings } from 'ang
     <div 
       class="dynamic-field form-select row"
       [formGroup]="group">
-      <label  for="config.name" class="col-md-3 col-form-label">{{ config.label }}</label>
+      <label  for="config.name" class="text-right col-md-3 col-form-label">{{ config.label }}</label>
       <div class="col-md-8">
       <ss-multiselect-dropdown [formControlName]="config.name" [options]="myOptions" [texts]="myTexts" [settings]="mySettings">
       </ss-multiselect-dropdown>

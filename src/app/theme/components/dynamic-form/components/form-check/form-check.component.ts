@@ -11,7 +11,7 @@ import * as _ from 'lodash';
   styleUrls: ['form-check.component.scss'],
   template: ` 
     <div class="dynamic-field form-group row" [formGroup]="group" >
-      <div class="col-md-3"><label>{{config.label}}</label></div>
+      <div class="text-right col-md-3"><label>{{config.label}}</label></div>
       <div [ngClass]="{'col-md-9':config.validation === undefined,'col-md-8':config.validation !== undefined}">
         <div *ngFor="let option of config.options" class="form-check form-check-inline">
           <label class="form-check-label">

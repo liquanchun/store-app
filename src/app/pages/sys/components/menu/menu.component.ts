@@ -120,8 +120,7 @@ export class MenuComponent implements OnInit, AfterViewInit {
       type: 'input',
       label: '地址',
       name: 'FormName',
-      placeholder: '输入菜单地址',
-      validation: [Validators.required],
+      placeholder: '输入菜单地址'
     },
     {
       type: 'check',
@@ -178,6 +177,7 @@ export class MenuComponent implements OnInit, AfterViewInit {
     const saveMenu = {
       MenuName: value.MenuName,
       MenuAddr: value.MenuAddr,
+      FormName: value.FormName,
       Icon: value.Icon,
       MenuOrder: value.MenuOrder,
       ParentId: 0,
@@ -188,18 +188,18 @@ export class MenuComponent implements OnInit, AfterViewInit {
       this.menuService.create(saveMenu).then(function (menu) {
         that.getNodes();
         that.form.setDisabled('submit', false);
-        this._state.notifyDataChanged("messagebox", { type: 'success', msg: '新增成功。', time: new Date().getTime() });
+        that._state.notifyDataChanged("messagebox", { type: 'success', msg: '新增成功。', time: new Date().getTime() });
       }, (err) => {
-        this._state.notifyDataChanged("messagebox", { type: 'error', msg: err, time: new Date().getTime() });
+        that._state.notifyDataChanged("messagebox", { type: 'error', msg: err, time: new Date().getTime() });
       });
     } else {
       saveMenu.ParentId = this.selectedMenu && this.selectedMenu.data ? this.selectedMenu.data.parentId : 0;
       this.menuService.update(this.selectedMenu.data.id, saveMenu).then(function (menu) {
         that.getNodes();
         that.form.setDisabled('submit', false);
-        this._state.notifyDataChanged("messagebox", { type: 'success', msg: '修改成功。', time: new Date().getTime() });
+        that._state.notifyDataChanged("messagebox", { type: 'success', msg: '修改成功。', time: new Date().getTime() });
       }, (err) => {
-        this._state.notifyDataChanged("messagebox", { type: 'error', msg: err, time: new Date().getTime() });
+        that._state.notifyDataChanged("messagebox", { type: 'error', msg: err, time: new Date().getTime() });
       });
     }
   }
@@ -211,7 +211,6 @@ export class MenuComponent implements OnInit, AfterViewInit {
   getNodes() {
     const that = this;
     this.menuService.getMenus(function (menus) {
-      console.log(menus);
       that.nodes = menus;
     });
   }
@@ -237,7 +236,7 @@ export class MenuComponent implements OnInit, AfterViewInit {
       this.form.setValue('MenuOrder', this.selectedMenu.data.data.menuOrder);
       this.isNewMenu = false;
     }
-    console.log(event.node);
+    //console.log(event.node);
   }
 
   onNewMenu(tree) {

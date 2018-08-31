@@ -4,6 +4,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 import { DynamicFieldDirective } from './components/dynamic-field/dynamic-field.directive';
 import { DynamicFormComponent } from './containers/dynamic-form/dynamic-form.component';
+import { DynamicForm2Component } from './containers/dynamic-form2/dynamic-form2.component';
 import { FormButtonComponent } from './components/form-button/form-button.component';
 import { FormInputComponent } from './components/form-input/form-input.component';
 import { FormSelectComponent } from './components/form-select/form-select.component';
@@ -27,6 +28,7 @@ import { GlobalState } from '../../../global.state';
   declarations: [
     DynamicFieldDirective,
     DynamicFormComponent,
+    DynamicForm2Component,
     FormButtonComponent,
     FormInputComponent,
     FormSelectComponent,
@@ -37,7 +39,8 @@ import { GlobalState } from '../../../global.state';
     FormTextareaComponent
   ],
   exports: [
-    DynamicFormComponent
+    DynamicFormComponent,
+    DynamicForm2Component
   ],
   entryComponents: [
     FormButtonComponent,

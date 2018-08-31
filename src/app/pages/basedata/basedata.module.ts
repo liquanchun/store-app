@@ -19,12 +19,9 @@ import { TreeModule } from 'angular-tree-component';
 import { LoadingModule } from 'ngx-loading';
 import { ComponentsModule } from '../components/components.module';
 import { AuthGuard } from '../../providers/guard.service';
-import { routing } from './market.routing';
-import { MarketComponent } from './market.component';
-import { CarstoreComponent } from './carstore/carstore.component';
+import { routing } from './basedata.routing';
+import { BaseDataComponent } from './basedata.component';
 import { FormComponent } from './form/form.component';
-import { EditFormComponent } from './editform/editform.component';
-import { CarstoreNewComponent } from './carstorenew/carstorenew.component';
 
 @NgModule({
   imports: [
@@ -43,12 +40,9 @@ import { CarstoreNewComponent } from './carstorenew/carstorenew.component';
     ToastyModule.forRoot()
   ],
   declarations: [
-    MarketComponent,
+    BaseDataComponent,
     FormComponent,
-    CarstoreComponent,
-    EditFormComponent,
-    CarstoreNewComponent
   ],
   providers: [GlobalState, Config, HttpService, AppState, AuthGuard, Common]
 })
-export class MarketModule { }
+export class BaseDataModule { }

@@ -3,7 +3,7 @@ import { HttpService } from '../../../providers/httpClient';
 import * as _ from 'lodash';
 
 @Injectable()
-export class FormService {
+export class EditFormService {
   private modelName = 'data';  // URL to web api
   constructor(private _httpService: HttpService) {
   }

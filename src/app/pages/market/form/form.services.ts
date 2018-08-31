@@ -16,6 +16,10 @@ export class FormService {
     return this._httpService.getDataServer2('fields');
   }
 
+  getFormsFieldByName(viewname: string) {
+    return this._httpService.getDataServer2('fields/' + viewname);
+  }
+
   delete(viewname: string, id: any) {
     return this._httpService.delete2('delete/' + viewname, id);
   }

@@ -1,14 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { GlobalState } from '../../global.state';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { ToastyService, ToastyConfig, ToastOptions, ToastData } from 'ng2-toasty';
 import * as _ from 'lodash';
-
 @Component({
-  selector: 'sys',
-  templateUrl: './sys.html',
+  selector: 'basedata',
+  template: `<ng2-toasty></ng2-toasty><router-outlet></router-outlet>`,
 })
-export class SysComponent implements OnInit {
+export class BaseDataComponent implements OnInit {
   private toastOptions: ToastOptions = {
     title: "提示信息",
     msg: "The message",
@@ -17,8 +16,7 @@ export class SysComponent implements OnInit {
     theme: "bootstrap",
   };
   time: string;
-  constructor(
-    private _state: GlobalState,
+  constructor(private _state: GlobalState,
     private toastyService: ToastyService,
     private toastyConfig: ToastyConfig,
   ) {
@@ -28,6 +26,7 @@ export class SysComponent implements OnInit {
       console.log(options);
       console.log('this.time');
       console.log(this.time);
+
       if (this.time != options.time) {
         this.time = options.time;
         this.toastOptions.msg = options.msg;
