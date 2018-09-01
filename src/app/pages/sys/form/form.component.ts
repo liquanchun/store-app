@@ -10,7 +10,7 @@ import { FormService } from './form.services';
 import { DicService } from '../../sys/dic/dic.services';
 import { GlobalState } from '../../../global.state';
 import { Common } from '../../../providers/common';
-
+import async from 'async';
 import * as $ from 'jquery';
 import * as _ from 'lodash';
 
@@ -50,19 +50,23 @@ export class FormComponent implements OnInit {
     hideSubHeader: true,
     columns: {}
   };
-
+  //更新表单配置
   configUpdate: FieldConfig[] = [];
+  //新增表单配置
   configAdd: FieldConfig[] = [];
-
+  configAddArr: FieldConfig[] = [];
+  configUpdateArr: FieldConfig[] = [];
   //表格视图定义
   tableView: {};
   //表单视图定义
   formView: {};
   //表单修改时数据
   updateData: {};
+  //表格数据源
   source: LocalDataSource = new LocalDataSource();
-
+  //表单名称
   formname: string;
+  //是否可以新增
   canAdd: boolean;
 
   constructor(
@@ -89,6 +93,8 @@ export class FormComponent implements OnInit {
   }
 
   start() {
+    this.configAddArr = [];
+    this.configUpdateArr = [];
     this.settings.columns = {};
     const that = this;
     if (this.formname) {
@@ -160,40 +166,130 @@ export class FormComponent implements OnInit {
   }
 
   getFormField(): void {
+    const that = this;
     this.formService.getFormsFieldByName(this.formView['ViewName']).then((data) => {
       if (data.Data) {
         const formFieldList = _.orderBy(data.Data, 'OrderInd', 'asc');
-        this.setFormField(formFieldList);
-      }
-      this.loading = false;
-    });
-  }
-  //设置表单字段
-  setFormField(formFieldList) {
-    this.configAdd = [];
-    this.configUpdate = [];
-    _.each(formFieldList, d => {
 
-      let cfgAdd: FieldConfig;
-      let cfgUpdate: FieldConfig;
-
-      if (d['DataSource'] == "list" && d['DicName'] && d['DicName'].includes(',') == 0) {
-        //从词典中获取
-        this._dicService.getDicByName(d['DicName'], list => {
-          let cigAdd = _.find(this.configAdd, f => { return f['name'] == d['FieldName'] });
-          if (cigAdd) {
-            cigAdd['options'] = list;
+        async.eachSeries(formFieldList, function (field, callback) {
+          const config = that.setFormField(field);
+          if (config['add']) {
+            that.configAddArr.push(config['add']);
           }
-          let cigUpdate = _.find(this.configUpdate, f => { return f['name'] == d['FieldName'] });
-          if (cigUpdate) {
-            cigUpdate['options'] = list;
+          if (config['add']) {
+            that.configUpdateArr.push(config['add']);
+          }
+          // that.setDicByName(field).then(() => {
+          //   callback();
+          // });
+          that.setSelectValue(field).then(() => {
+            callback();
+          });
+        }, function (err) {
+          if (err) {
+            console.log('err');
+          } else {
+            that.configAdd = that.configAddArr;
+            that.configUpdate = that.configUpdateArr;
           }
         });
       }
+    });
+  }
 
-      if (_.startsWith(d['DataSource'], 'table')) {
+  //设置表单字段
+  setFormField(d) {
+    let cfgAdd: FieldConfig;
+    let cfgUpdate: FieldConfig;
+    const placehd = d['DataSource'] == "list" || _.startsWith(d['DataSource'], 'table') ? '--请选择--' : '输入' + d['Title'];
+
+    if (d['CanAdd']) {
+      cfgAdd = {
+        type: d['FormType'],
+        label: d['Title'],
+        name: d['FieldName'],
+        placeholder: placehd,
+      };
+    }
+    if (d['CanUpdate']) {
+      cfgUpdate = {
+        type: d['FormType'],
+        label: d['Title'],
+        name: d['FieldName'],
+        placeholder: placehd,
+      };
+    } else {
+      cfgUpdate = {
+        type: d['FormType'],
+        label: d['Title'],
+        name: d['FieldName'],
+        placeholder: placehd,
+        disabled: true
+      };
+    }
+    if (d['IsRequest']) {
+      if (cfgAdd) {
+        cfgAdd.validation = [Validators.required];
+      }
+      if (cfgUpdate) {
+        cfgUpdate.validation = [Validators.required];
+      }
+    }
+    if (d['Default'] && cfgAdd) {
+      cfgAdd.value = d['Default'];
+    }
+
+    if (cfgAdd && cfgAdd.type == 'select') {
+      cfgAdd.options = [];
+    }
+    if (cfgUpdate && cfgUpdate.type == 'select') {
+      cfgUpdate.options = [];
+    }
+
+    if (d['DataSource'] == "list" && d['DicName'] && d['DicName'].includes(',') > 0) {
+      //如果有列出选项列表
+      const dicList = [];
+      _.each(d['DicName'].split(','), d => {
+        dicList.push({ id: d, text: d });
+      });
+      if (cfgAdd) {
+        cfgAdd['options'] = dicList;
+      }
+      if (cfgUpdate) {
+        cfgUpdate['options'] = dicList;
+      }
+    }
+
+    return { add: cfgAdd, update: cfgUpdate };
+  }
+
+  //设置词典下拉列表
+  setDicByName(d) {
+    return new Promise((resolve, reject) => {
+      if (d['DataSource'] == "list" && d['DicName'] && d['DicName'].includes(',') == 0) {
+        //从词典中获取
+        this._dicService.getDicByName(d['DicName'], list => {
+          let cigAdd = _.find(this.configAddArr, f => { return f['name'] == d['FieldName'] });
+          if (cigAdd) {
+            cigAdd['options'] = list;
+          }
+          let cigUpdate = _.find(this.configUpdateArr, f => { return f['name'] == d['FieldName'] });
+          if (cigUpdate) {
+            cigUpdate['options'] = list;
+          }
+          resolve();
+        });
+      } else {
+        resolve();
+      }
+    });
+  }
+  //设置下拉类别数据
+  setSelectValue(field) {
+    return new Promise((resolve, reject) => {
+      if (_.startsWith(field['DataSource'], 'table')) {
         //从数据表中获取,DataSource设置的格式：table_tableName_Id_Name
-        const dataS = d['DataSource'].split('-');
+        const dataS = field['DataSource'].split('-');
         if (dataS.length >= 4) {
           this.formService.getForms(dataS[1]).then((d) => {
             const data = d.Data;
@@ -210,86 +306,37 @@ export class FormComponent implements OnInit {
                 display = display + '|' + dt[dataS[6]];
               }
 
-              list.push({ id: dt[dataS[2]], name: display });
+              list.push({ id: dt[dataS[2]], text: display });
             });
 
-            let cigAdd = _.find(this.configAdd, f => { return f['name'] == d['FieldName'] });
+            let cigAdd = _.find(this.configAddArr, f => { return f['name'] == field['FieldName'] });
             if (cigAdd) {
               cigAdd['options'] = list;
             }
-            let cigUpdate = _.find(this.configUpdate, f => { return f['name'] == d['FieldName'] });
+            let cigUpdate = _.find(this.configUpdateArr, f => { return f['name'] == field['FieldName'] });
             if (cigUpdate) {
               cigUpdate['options'] = list;
             }
+            resolve();
           }, (err) => {
-            let cigAdd = _.find(this.configAdd, f => { return f['name'] == d['FieldName'] });
+            let cigAdd = _.find(this.configAddArr, f => { return f['name'] == field['FieldName'] });
             if (cigAdd) {
               cigAdd['options'] = [];
             }
-            let cigUpdate = _.find(this.configUpdate, f => { return f['name'] == d['FieldName'] });
+            let cigUpdate = _.find(this.configUpdateArr, f => { return f['name'] == field['FieldName'] });
             if (cigUpdate) {
               cigUpdate['options'] = [];
             }
           });
+        } else {
+          resolve();
         }
-      }
-
-      const placehd = d['DataSource'] == "list" || _.startsWith(d['DataSource'], 'table') ? '--请选择--' : '输入' + d['Title'];
-
-      if (d['CanAdd']) {
-        cfgAdd = {
-          type: d['FormType'],
-          label: d['Title'],
-          name: d['FieldName'],
-          placeholder: placehd,
-        };
-      }
-      if (d['CanUpdate']) {
-        cfgUpdate = {
-          type: d['FormType'],
-          label: d['Title'],
-          name: d['FieldName'],
-          placeholder: placehd,
-        };
       } else {
-        cfgUpdate = {
-          type: d['FormType'],
-          label: d['Title'],
-          name: d['FieldName'],
-          placeholder: placehd,
-          disabled: true
-        };
-      }
-      if (d['IsRequest']) {
-        if (cfgAdd) {
-          cfgAdd.validation = [Validators.required];
-        }
-        if (cfgUpdate) {
-          cfgUpdate.validation = [Validators.required];
-        }
-      }
-      if (d['Default'] && cfgAdd) {
-        cfgAdd.value = d['Default'];
-      }
-
-      if (d['DataSource'] == "list" && d['DicName'] && d['DicName'].includes(',') > 0) {
-        //如果有列出选项列表
-        const dicList = [];
-        _.each(d['DicName'].split(','), d => {
-          dicList.push({ id: d, name: d });
-        });
-        cfgAdd['options'] = dicList;
-        cfgUpdate['options'] = dicList;
-      }
-
-      if (cfgAdd) {
-        this.configAdd.push(cfgAdd);
-      }
-      if (cfgUpdate) {
-        this.configUpdate.push(cfgUpdate);
+        resolve();
       }
     });
   }
+
 
   //获取数据
   getDataList() {

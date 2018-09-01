@@ -10,6 +10,7 @@ import { DicService } from '../../sys/dic/dic.services';
 import { GlobalState } from '../../../global.state';
 import { EditFormComponent } from '../editform/editform.component';
 import { Common } from '../../../providers/common';
+import async from 'async';
 import { DynamicForm2Component }
   from '../../../theme/components/dynamic-form/containers/dynamic-form2/dynamic-form2.component';
 import * as $ from 'jquery';
@@ -24,14 +25,12 @@ import * as _ from 'lodash';
 export class CarstoreNewComponent implements OnInit {
   @ViewChild(DynamicForm2Component) form: DynamicForm2Component;
 
+  exampleData: any;
   loading = false;
   title = '表单定义';
-
   config: FieldConfig[] = [];
-
-  configUpdate: FieldConfig[] = [];
-  configAdd: FieldConfig[] = [];
-
+  configAddArr: FieldConfig[] = [];
+  configUpdateArr: FieldConfig[] = [];
   //表单视图定义
   formView: {};
   //表单修改时数据
@@ -63,7 +62,7 @@ export class CarstoreNewComponent implements OnInit {
     const that = this;
     if (this.formname) {
       this.getViewName(this.formname).then(function () {
-        that.getTableField();
+        that.getFormField();
       });
     }
 
@@ -90,15 +89,39 @@ export class CarstoreNewComponent implements OnInit {
     })
   }
 
-  getTableField(): void {
+  getFormField(): void {
     this.loading = true;
     const that = this;
     //获取table定义
-    this.formService.getFormsFieldByName(that.formView['ViewName']).then((data) => {
+    this.formService.getFormsFieldByName(that.tablename).then((data) => {
       if (data.Data) {
         const formFieldList = _.orderBy(data.Data, 'OrderInd', 'asc');
-        this.setFormField(formFieldList);
-        this.getDataList();
+
+        async.eachSeries(formFieldList, function (field, callback) {
+          const cfg = that.setFormField(field);
+          if (cfg['add']) {
+            that.configAddArr.push(cfg['add']);
+          }
+          if (cfg['add']) {
+            that.configUpdateArr.push(cfg['add']);
+          }
+          //that.setDicByName(field);
+          that.setSelectValue(field).then(() => {
+            callback();
+          });
+        }, function (err) {
+          if (err) {
+            console.log('err');
+          } else {
+            if (that.mainTableID > 0) {
+              that.config = that.configUpdateArr;
+            } else {
+              that.config = that.configAddArr;
+            }
+            console.log(that.config);
+            that.getDataList();
+          }
+        });
       }
       this.loading = false;
     }, (err) => {
@@ -108,31 +131,89 @@ export class CarstoreNewComponent implements OnInit {
   }
 
   //设置表单字段
-  setFormField(formFieldList) {
-    this.configAdd = [];
-    this.configUpdate = [];
-    _.each(formFieldList, d => {
+  setFormField(d) {
+    let cfgAdd: FieldConfig;
+    let cfgUpdate: FieldConfig;
+    const placehd = d['DataSource'] == "list" || _.startsWith(d['DataSource'], 'table') ? '--请选择--' : '输入' + d['Title'];
 
-      let cfgAdd: FieldConfig;
-      let cfgUpdate: FieldConfig;
+    if (d['CanAdd']) {
+      cfgAdd = {
+        type: d['FormType'],
+        label: d['Title'],
+        name: d['FieldName'],
+        placeholder: placehd,
+      };
+    }
+    if (d['CanUpdate']) {
+      cfgUpdate = {
+        type: d['FormType'],
+        label: d['Title'],
+        name: d['FieldName'],
+        placeholder: placehd,
+      };
+    } else {
+      cfgUpdate = {
+        type: d['FormType'],
+        label: d['Title'],
+        name: d['FieldName'],
+        placeholder: placehd,
+        disabled: true
+      };
+    }
+    if (d['IsRequest']) {
+      if (cfgAdd) {
+        cfgAdd.validation = [Validators.required];
+      }
+      if (cfgUpdate) {
+        cfgUpdate.validation = [Validators.required];
+      }
+    }
 
+    if (d['Default'] && cfgAdd) {
+      cfgAdd.value = d['Default'];
+    }
+
+    if (d['DataSource'] == "list" && d['DicName'] && d['DicName'].includes(',') > 0) {
+      //如果有列出选项列表
+      const dicList = [];
+      _.each(d['DicName'].split(','), d => {
+        dicList.push({ id: d, text: d });
+      });
+      cfgAdd['options'] = dicList;
+      cfgUpdate['options'] = dicList;
+    }
+
+    return { add: cfgAdd, update: cfgUpdate };
+  }
+
+  //设置词典下拉列表
+  setDicByName(d) {
+    return new Promise((resolve, reject) => {
       if (d['DataSource'] == "list" && d['DicName'] && d['DicName'].includes(',') == 0) {
         //从词典中获取
         this._dicService.getDicByName(d['DicName'], list => {
-          let cigAdd = _.find(this.configAdd, f => { return f['name'] == d['FieldName'] });
+          let cigAdd = _.find(this.configAddArr, f => { return f['name'] == d['FieldName'] });
           if (cigAdd) {
             cigAdd['options'] = list;
           }
-          let cigUpdate = _.find(this.configUpdate, f => { return f['name'] == d['FieldName'] });
+
+          let cigUpdate = _.find(this.configUpdateArr, f => { return f['name'] == d['FieldName'] });
           if (cigUpdate) {
             cigUpdate['options'] = list;
           }
+          resolve();
         });
+      } else {
+        resolve();
       }
-
-      if (_.startsWith(d['DataSource'], 'table')) {
+    });
+  }
+  //设置下拉类别数据
+  setSelectValue(field) {
+    return new Promise((resolve, reject) => {
+      if (_.startsWith(field['DataSource'], 'table')) {
         //从数据表中获取,DataSource设置的格式：table_tableName_Id_Name
-        const dataS = d['DataSource'].split('-');
+        const dataS = field['DataSource'].split('-');
         if (dataS.length >= 4) {
           this.formService.getForms(dataS[1]).then((d) => {
             const data = d.Data;
@@ -149,89 +230,34 @@ export class CarstoreNewComponent implements OnInit {
                 display = display + '|' + dt[dataS[6]];
               }
 
-              list.push({ id: dt[dataS[2]], name: display });
+              list.push({ id: dt[dataS[2]], text: display });
             });
 
-            let cigAdd = _.find(this.configAdd, f => { return f['name'] == d['FieldName'] });
+            let cigAdd = _.find(this.config, f => { return f['name'] == field['FieldName'] });
             if (cigAdd) {
               cigAdd['options'] = list;
             }
-            let cigUpdate = _.find(this.configUpdate, f => { return f['name'] == d['FieldName'] });
+            let cigUpdate = _.find(this.configUpdateArr, f => { return f['name'] == field['FieldName'] });
             if (cigUpdate) {
               cigUpdate['options'] = list;
             }
+            resolve();
           }, (err) => {
-            let cigAdd = _.find(this.configAdd, f => { return f['name'] == d['FieldName'] });
+            let cigAdd = _.find(this.config, f => { return f['name'] == field['FieldName'] });
             if (cigAdd) {
               cigAdd['options'] = [];
             }
-            let cigUpdate = _.find(this.configUpdate, f => { return f['name'] == d['FieldName'] });
+            let cigUpdate = _.find(this.configUpdateArr, f => { return f['name'] == field['FieldName'] });
             if (cigUpdate) {
               cigUpdate['options'] = [];
             }
           });
+        } else {
+          resolve();
         }
-      }
-
-      const placehd = d['DataSource'] == "list" || _.startsWith(d['DataSource'], 'table') ? '--请选择--' : '输入' + d['Title'];
-
-      if (d['CanAdd']) {
-        cfgAdd = {
-          type: d['FormType'],
-          label: d['Title'],
-          name: d['FieldName'],
-          placeholder: placehd,
-        };
-      }
-      if (d['CanUpdate']) {
-        cfgUpdate = {
-          type: d['FormType'],
-          label: d['Title'],
-          name: d['FieldName'],
-          placeholder: placehd,
-        };
       } else {
-        cfgUpdate = {
-          type: d['FormType'],
-          label: d['Title'],
-          name: d['FieldName'],
-          placeholder: placehd,
-          disabled: true
-        };
+        resolve();
       }
-      if (d['IsRequest']) {
-        if (cfgAdd) {
-          cfgAdd.validation = [Validators.required];
-        }
-        if (cfgUpdate) {
-          cfgUpdate.validation = [Validators.required];
-        }
-      }
-      if (d['Default'] && cfgAdd) {
-        cfgAdd.value = d['Default'];
-      }
-
-      if (d['DataSource'] == "list" && d['DicName'] && d['DicName'].includes(',') > 0) {
-        //如果有列出选项列表
-        const dicList = [];
-        _.each(d['DicName'].split(','), d => {
-          dicList.push({ id: d, name: d });
-        });
-        cfgAdd.options = dicList;
-        cfgUpdate.options = dicList;
-      }
-      if (_.startsWith(d['DataSource'], 'table')) {
-        cfgAdd.options = [];
-        cfgUpdate.options = [];
-      }
-      if (cfgAdd && _.toLower(d['FieldName']) != 'id') {
-        this.configAdd.push(cfgAdd);
-      }
-      if (cfgUpdate && _.toLower(d['FieldName']) != 'id') {
-        this.configUpdate.push(cfgUpdate);
-      }
-
-      this.config = this.configUpdate;
     });
   }
   //获取数据
@@ -248,7 +274,7 @@ export class CarstoreNewComponent implements OnInit {
   }
   //获取数据
   getDataList() {
-    if (this.tablename && this.mainTableID) {
+    if (this.tablename && this.mainTableID > 0) {
       this.formService.getForms(`${this.tablename}/${this.mainTableID}`).then((data) => {
         if (data && data.Data)
           _.each(this.config, f => {

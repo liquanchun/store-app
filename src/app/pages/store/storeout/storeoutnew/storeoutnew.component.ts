@@ -186,7 +186,7 @@ export class StoreoutNewComponent implements OnInit {
       }
     }
   };
-
+  myOptionsStore: IMultiSelectOption[];
   myOptions: IMultiSelectOption[];
   myOptionsOper: IMultiSelectOption[];
   mySettings: IMultiSelectSettings = {
@@ -251,8 +251,16 @@ export class StoreoutNewComponent implements OnInit {
       this.myOptions = optData;
     });
 
-    this._dicService.getDicByName('仓库', (data) => { this.stores = data; });
-    this._dicService.getDicByName('出库类型', (data) => { this.outType = data; });
+    this._dicService.getDicByName('仓库', (data) => {
+      const optData = [];
+      _.each(data, f => {
+        optData.push({ id: f['id'], name: f['text'] });
+      });
+      this.myOptionsStore = optData;
+    });
+    this._dicService.getDicByName('出库类型', (data) => {
+      this.outType = data;
+    });
     this._dicService.getDicByName('产品类别', (data) => { this.goodsType = data; });
   }
 
@@ -271,12 +279,12 @@ export class StoreoutNewComponent implements OnInit {
             price: event.data['price'],
             name: goodsObj['name'],
             unit: goodsObj['unit'],
-            goodsno:goodsObj['goodsNo'],
-            goodscode:goodsObj['goodsCode'],
+            goodsno: goodsObj['goodsNo'],
+            goodscode: goodsObj['goodsCode'],
             number: 1,
             batchno: event.data['batchNo'],
             amount: event.data['price'],
-            storenumber:event.data['number']
+            storenumber: event.data['number']
           });
       }
     } else {
@@ -313,8 +321,8 @@ export class StoreoutNewComponent implements OnInit {
   }
   onEditConfirm(event): void {
     const dt = { that: this, data: event.newData };
-    const store = _.find(this.goodsStoreInfo,f => { return f['id'] == event.data.kcid});
-    if(store['number'] < _.toNumber(event.newData.number)){
+    const store = _.find(this.goodsStoreInfo, f => { return f['id'] == event.data.kcid });
+    if (store['number'] < _.toNumber(event.newData.number)) {
       this._state.notifyDataChanged("messagebox", { type: 'warning', msg: '出库数量不能大于库存数量。', time: new Date().getTime() });
       event.confirm.reject();
       return;
@@ -389,6 +397,13 @@ export class StoreoutNewComponent implements OnInit {
   onChangeOrg(event) {
     this.onSelectedOrg(event[0]);
   }
+  //选择部门
+  onChangeStore(event) {
+    if (event[0]) {
+      this.checkedStoreId = event[0];
+      this.popGrid.load(_.filter(this.goodsStoreInfo, f => { return f['storeId'] == event[0]; }));
+    }
+  }
   onBack() {
     this._router.navigate(['/pages/store/storeout']);
   }
@@ -406,9 +421,10 @@ export class StoreoutNewComponent implements OnInit {
     }
     this.isSaved = true;
     const that = this;
-    this.storeOut.operator =_.toNumber(this._common.ArrToString1(this.storeOut.operator));
+    this.storeOut.operator = _.toNumber(this._common.ArrToString1(this.storeOut.operator));
     this.storeOut.outTime = this._common.getDateString(this.storeOut.outTimeNg);
     this.storeOut.orgid = _.toString(this.storeOut.orgidNg);
+    this.storeOut.storeId = _.toString(this.storeOut.storeId);
     console.log(this.storeOut);
     console.log(this.selectedGoods);
     this._storeoutNewService.create(
@@ -418,7 +434,7 @@ export class StoreoutNewComponent implements OnInit {
       }
     ).then(
       function (v) {
-        this._state.notifyDataChanged("messagebox", { type: 'success', msg: '保存成功。', time: new Date().getTime() });
+        that._state.notifyDataChanged("messagebox", { type: 'success', msg: '保存成功。', time: new Date().getTime() });
         that.isSaved = false;
         that.storeOut.amount = 0;
         that.selectedGoods = [];
@@ -427,9 +443,9 @@ export class StoreoutNewComponent implements OnInit {
         that.getOrderNo();
       },
       (err) => {
-        this._state.notifyDataChanged("messagebox", { type: 'error', msg: err, time: new Date().getTime() });
+        that._state.notifyDataChanged("messagebox", { type: 'error', msg: err, time: new Date().getTime() });
         that.isSaved = false;
       }
-      )
+    )
   }
 }

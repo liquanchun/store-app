@@ -164,7 +164,7 @@ export class UserComponent implements OnInit, AfterViewInit {
     const that = this;
     this._state.subscribe('role.dataChanged', (roles) => {
       _.each(roles, r => {
-        that.roles.push({ id: r.id, name: r.roleName });
+        that.roles.push({ id: r.id, text: r.roleName });
       })
     });
     this._state.subscribe('role.selectedChanged', (role) => {

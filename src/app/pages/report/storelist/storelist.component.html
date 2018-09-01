@@ -8,7 +8,7 @@
                 <select (change)="onStoresChange($event)">
                     <option value="">--仓库--</option>
                     <option [value]="option.id" *ngFor="let option of stores">
-                      {{ option.name }}
+                      {{ option.text }}
                     </option>
                 </select>
             </div>

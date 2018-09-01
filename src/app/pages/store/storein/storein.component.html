@@ -21,7 +21,7 @@
             <select (change)="onInTypeChange($event)">
               <option value="">--入库类型--</option>
               <option [value]="option.id" *ngFor="let option of inType">
-                {{ option.name }}
+                {{ option.text }}
               </option>
             </select>
           </div>
@@ -29,7 +29,7 @@
             <select (change)="onStoresChange($event)">
               <option value="">--仓库--</option>
               <option [value]="option.id" *ngFor="let option of stores">
-                {{ option.name }}
+                {{ option.text }}
               </option>
             </select>
           </div>
@@ -38,7 +38,7 @@
             <!-- <select (change)="onSupplierChange($event)">
               <option value="">--供应商--</option>
               <option [value]="option.id" *ngFor="let option of suppliers">
-                {{ option.name }}
+                {{ option.text }}
               </option>
             </select> -->
             <ss-multiselect-dropdown [settings]="mySettings" [texts]="myTexts" [options]="myOptionsSup" [(ngModel)]="selectedSup" (ngModelChange)="onChange($event)"></ss-multiselect-dropdown>

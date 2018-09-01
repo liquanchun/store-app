@@ -4,6 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { RouterModule } from '@angular/router';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { Select2Module } from 'ng2-select2';
 import { TranslateService } from '@ngx-translate/core';
 /*
  * Platform and Environment providers/directives/pipes
@@ -58,6 +59,7 @@ export type StoreType = {
     PagesModule,
     routing,
     DynamicFormModule,
+    Select2Module,
   ],
   entryComponents: [NgbdModalContent],
   providers: [ // expose our Services and Providers into Angular's dependency injection

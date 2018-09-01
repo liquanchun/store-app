@@ -9,21 +9,22 @@
             <div style="margin-top:4px;" class="col-md-9">
               <div *ngFor="let ct of outType" class="form-check form-check-inline">
                 <label class="form-check-label">
-                  <input [(ngModel)]="storeOut.typeId" class="form-check-input" type="radio" name="inTypeRadioOptions" [value]="ct.id"> {{ct.name}}
+                  <input [(ngModel)]="storeOut.typeId" class="form-check-input" type="radio" name="inTypeRadioOptions" [value]="ct.id"> {{ct.text}}
                 </label>
               </div>
             </div>
           </div>
         </div>
-        <div class="col-md-7">
+        <div class="col-md-4">
           <div class="form-group row">
-            <label for="inputId" class="col-md-2 col-form-label">仓库</label>
+            <label for="inputId" class="col-md-3 col-form-label">仓库</label>
             <div style="margin-top:4px;" class="col-md-9">
-              <div *ngFor="let ct of stores" class="form-check form-check-inline">
+                <ss-multiselect-dropdown [settings]="mySettings" [texts]="myTexts" [options]="myOptionsStore" (ngModelChange)="onChangeStore($event)" [(ngModel)]="storeOut.storeId"></ss-multiselect-dropdown>
+              <!-- <div *ngFor="let ct of stores" class="form-check form-check-inline">
                 <label class="form-check-label">
                   <input [(ngModel)]="storeOut.storeId" (click)="onStoreClick($event)" class="form-check-input" type="radio" name="storeCodeRadioOptions" [value]="ct.id"> {{ct.name}}
                 </label>
-              </div>
+              </div> -->
             </div>
           </div>
         </div>
@@ -68,7 +69,7 @@
               <!-- <select [(ngModel)]="storeOut.operator">
                 <option value="">--请选择--</option>
                 <option [value]="option.id" *ngFor="let option of operatorList">
-                  {{ option.name }}
+                  {{ option.text }}
                 </option>
               </select> -->
             </div>
@@ -137,7 +138,7 @@
             <select (change)="onChange($event)">
               <option value="">--请选择--</option>
               <option [value]="option.id" *ngFor="let option of goodsType">
-                {{ option.name }}
+                {{ option.text }}
               </option>
             </select>
           </div>

@@ -15,7 +15,7 @@
             <select (change)="onInTypeChange($event)">
               <option value="">--出库类型--</option>
               <option [value]="option.id" *ngFor="let option of inType">
-                {{ option.name }}
+                {{ option.text }}
               </option>
             </select>
           </div>
@@ -23,7 +23,7 @@
             <select (change)="onStoresChange($event)">
               <option value="">--仓库--</option>
               <option [value]="option.id" *ngFor="let option of stores">
-                {{ option.name }}
+                {{ option.text }}
               </option>
             </select>
           </div>

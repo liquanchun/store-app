@@ -15,7 +15,7 @@ import * as _ from 'lodash';
       <div [ngClass]="{'col-md-9':config.validation === undefined,'col-md-8':config.validation !== undefined}">
         <div *ngFor="let option of config.options" class="form-check form-check-inline">
           <label class="form-check-label">
-            <input [name]="config.name"  [formControlName]="config.name" class="form-check-input" (click)="onCheck(option.id,$event)" [type]="config.check" [id]="option.id" [value]="option.id"> {{ option.name }}
+            <input [name]="config.name"  [formControlName]="config.name" class="form-check-input" (click)="onCheck(option.id,$event)" [type]="config.check" [id]="option.id" [value]="option.id"> {{ option.text }}
           </label>
         </div>
         <input type="hidden" [value]="selectVal" (input)="selectVal=$event.target.value" >

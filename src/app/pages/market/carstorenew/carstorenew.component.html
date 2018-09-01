@@ -7,29 +7,25 @@
             <div class="col-md-3" *ngFor="let field of config;">
 
               <div class="form-group row">
-                <label for="config.name" class="text-right col-md-3 col-form-label">{{ field.label }}</label>
+                <label for="field.name" class="text-right col-md-3 col-form-label">{{ field.label }}</label>
                 <div *ngIf="field.type == 'input'" class="col-md-8">
                   <input type="text" class="form-control" [name]="field.name" [(ngModel)]="field.value">
                 </div>
 
                 <div *ngIf="field.type == 'datepicker'" class="form-group col-md-8">
                   <div class="input-group">
-                    <input [(ngModel)]="field.value" class="form-control" placeholder="yyyy-mm-dd" [name]="field.name" ngbDatepicker #d="ngbDatepicker">
+                    <input [(ngModel)]="field.value" class="form-control" placeholder="yyyy-mm-dd" [name]="field.name"
+                      ngbDatepicker #d="ngbDatepicker">
                     <div class="input-group-addon" (click)="d.toggle()">
                       <i class="fa fa-calendar" aria-hidden="true"></i>
                     </div>
-                    <input *ngIf="field.time" (change)="onChange($event)" type="time" style="border:1px solid rgba(0, 0, 0, 0.1)" [value]="field.time"
-                    />
+                    <input *ngIf="field.time" (change)="onChange($event)" type="time" style="border:1px solid rgba(0, 0, 0, 0.1)"
+                      [value]="field.time" />
                   </div>
                 </div>
 
                 <div *ngIf="field.type == 'select'" class="col-md-8">
-                  <select [(ngModel)]="field.value" [name]="field.name">
-                    <option value="">{{ config.placeholder }}</option>
-                    <option [value]="option.id" *ngFor="let option of name.options">
-                      {{ option.name }}
-                    </option>
-                  </select>
+                  <select2 [value]="field.value ? field.value :'' " [data]="field.options"></select2>
                 </div>
 
                 <span style='color:red' class="col-md-1" *ngIf="field.validation">*</span>

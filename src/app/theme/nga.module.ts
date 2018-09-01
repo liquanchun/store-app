@@ -5,6 +5,7 @@ import { RouterModule } from '@angular/router';
 import { NgUploaderModule } from 'ngx-uploader';
 import { AppTranslationModule } from '../app.translation.module';
 import { MultiselectDropdownModule } from 'angular-2-dropdown-multiselect';
+import { Select2Module } from 'ng2-select2';
 import { ToastyModule } from 'ng2-toasty';
 import {
   BaThemeConfig
@@ -30,7 +31,6 @@ import {
   BaPictureUploader,
   BaSidebar,
   BaFileUploader,
-
 } from './components';
 
 import { BaCardBlur } from './components/baCard/baCardBlur.directive';
@@ -116,6 +116,7 @@ const NGA_VALIDATORS = [
     AppTranslationModule,
     NgUploaderModule,
     MultiselectDropdownModule,
+    Select2Module,
     ToastyModule.forRoot()
   ],
   exports: [

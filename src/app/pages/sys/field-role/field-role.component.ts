@@ -92,7 +92,7 @@ export class FieldRoleComponent implements OnInit, AfterViewInit {
     const that = this;
     this._roleService.getRoles().then(data => {
       _.each(data, r => {
-        that.roles.push({ id: r.id, name: r.roleName });
+        that.roles.push({ id: r.id, text: r.roleName });
       })
     })
     this.getViewName("formRoleTable").then(function () {

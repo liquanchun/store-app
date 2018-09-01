@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
-
+import { Select2Module } from 'ng2-select2';
 import { NgaModule } from '../../theme/nga.module';
 import { DynamicFormModule } from '../../theme/components/dynamic-form/dynamic-form.module';
 
@@ -39,6 +39,7 @@ import { CarstoreNewComponent } from './carstorenew/carstorenew.component';
     ComponentsModule,
     NgbModule,
     LoadingModule,
+    Select2Module,
     Ng2SmartTableModule,
     ToastyModule.forRoot()
   ],

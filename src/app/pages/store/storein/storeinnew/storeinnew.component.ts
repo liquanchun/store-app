@@ -177,7 +177,7 @@ export class StoreinNewComponent implements OnInit {
       }
     }
   };
-
+  myOptionsStore: IMultiSelectOption[];
   myOptions: IMultiSelectOption[];
   myOptionsOper: IMultiSelectOption[];
   myOptionsSup: IMultiSelectOption[];
@@ -247,7 +247,13 @@ export class StoreinNewComponent implements OnInit {
       this.myOptions = optData;
     });
 
-    this._dicService.getDicByName('仓库', (data) => { this.stores = data; });
+    this._dicService.getDicByName('仓库', (data) => {
+      const optData = [];
+      _.each(data, f => {
+        optData.push({ id: f['id'], name: f['text'] });
+      });
+      this.myOptionsStore = optData;
+    });
     this._dicService.getDicByName('入库类型', (data) => { this.inType = data; });
     this._dicService.getDicByName('产品类别', (data) => { this.goodsType = data; });
   }
@@ -260,7 +266,7 @@ export class StoreinNewComponent implements OnInit {
           {
             goodsTypeId: event.data.typeId,
             goodsId: event.data.id,
-            goodscode:event.data.goodsCode,
+            goodscode: event.data.goodsCode,
             price: event.data.price,
             name: event.data.name,
             unit: event.data.unit,
@@ -379,7 +385,7 @@ export class StoreinNewComponent implements OnInit {
       const orguser = _.filter(this.users, f => { return f['orgId'] == orgId; });
       this.operatorList = [];
       _.each(orguser, f => {
-        that.operatorList.push({ id: f['id'], name: f['userName'] });
+        that.operatorList.push({ id: f['id'], text: f['userName'] });
       })
       //that.myOptionsOper = operatorList;
     }
@@ -413,6 +419,7 @@ export class StoreinNewComponent implements OnInit {
     this.storeIn.inTime = this._common.getDateString(this.storeIn.inTimeNg);
     this.storeIn.orgid = _.toString(this.storeIn.orgidNg);
     this.storeIn.supplierId = _.toString(this.storeIn.supplierIdNg);
+    this.storeIn.storeId = _.toString(this.storeIn.storeId);
     console.log(this.storeIn);
     console.log(this.selectedGoods);
     this._storeinNewService.create(
@@ -422,7 +429,7 @@ export class StoreinNewComponent implements OnInit {
       }
     ).then(
       function (v) {
-        this._state.notifyDataChanged("messagebox", { type: 'success', msg: '保存成功。', time: new Date().getTime() });
+        that._state.notifyDataChanged("messagebox", { type: 'success', msg: '保存成功。', time: new Date().getTime() });
         that.isSaved = false;
         that.storeIn.amount = 0;
         that.selectedGoods = [];
@@ -431,7 +438,7 @@ export class StoreinNewComponent implements OnInit {
         that.getOrderNo();
       },
       (err) => {
-        this._state.notifyDataChanged("messagebox", { type: 'error', msg: err, time: new Date().getTime() });
+        that._state.notifyDataChanged("messagebox", { type: 'error', msg: err, time: new Date().getTime() });
         that.isSaved = false;
       }
     )

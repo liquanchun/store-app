@@ -29,7 +29,7 @@
               <select [(ngModel)]="goods.typeId">
                 <option value="">--请选择--</option>
                 <option [value]="option.id" *ngFor="let option of typeList">
-                  {{ option.name }}
+                  {{ option.text }}
                 </option>
               </select>
             </div>

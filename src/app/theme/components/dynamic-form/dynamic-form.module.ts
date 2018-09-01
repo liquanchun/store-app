@@ -14,6 +14,7 @@ import { FormDatepickerComponent } from './components/form-datepicker/form-datep
 import { FormMultiSelectComponent } from './components/form-multiselect/form-multiselect.component';
 import { FormTextareaComponent } from './components/form-textarea/form-textarea.component';
 
+import { Select2Module } from 'ng2-select2';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { MultiselectDropdownModule } from 'angular-2-dropdown-multiselect';
 import { GlobalState } from '../../../global.state';
@@ -24,6 +25,7 @@ import { GlobalState } from '../../../global.state';
     ReactiveFormsModule,
     NgbModule,
     MultiselectDropdownModule,
+    Select2Module,
   ],
   declarations: [
     DynamicFieldDirective,
