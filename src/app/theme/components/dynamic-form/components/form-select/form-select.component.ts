@@ -36,6 +36,8 @@ export class FormSelectComponent implements Field, AfterViewInit, OnInit {
   ngOnInit() {
     this.options = {
       closeOnSelect: false,
+      minimumResultsForSearch: Infinity,
+      placeholder: '--请选择--',
     }
   }
   ngAfterViewInit() {

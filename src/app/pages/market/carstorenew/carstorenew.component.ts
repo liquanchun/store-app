@@ -25,9 +25,8 @@ import * as _ from 'lodash';
 export class CarstoreNewComponent implements OnInit {
   @ViewChild(DynamicForm2Component) form: DynamicForm2Component;
 
-  exampleData: any;
   loading = false;
-  title = '表单定义';
+  title = '车辆入库';
   config: FieldConfig[] = [];
   configAddArr: FieldConfig[] = [];
   configUpdateArr: FieldConfig[] = [];
@@ -35,6 +34,8 @@ export class CarstoreNewComponent implements OnInit {
   formView: {};
   //表单修改时数据
   updateData: {};
+  //下拉列表值
+  selectData: {};
   source: LocalDataSource = new LocalDataSource();
 
   tablename: string;
@@ -56,9 +57,7 @@ export class CarstoreNewComponent implements OnInit {
   ngOnInit() {
     this.formname = 'carincome';
     this.mainTableID = _.toInteger(this.route.snapshot.paramMap.get('id'));
-    if (this.mainTableID > 0) {
-      this.canUpdate = false;
-    }
+    this.canUpdate = this.mainTableID > 0;
     const that = this;
     if (this.formname) {
       this.getViewName(this.formname).then(function () {
@@ -66,9 +65,8 @@ export class CarstoreNewComponent implements OnInit {
       });
     }
 
-    this.getFormSetSub().then(function (data) {
-      that.subViewName = data;
-    });
+    this.selectData = {};
+    this.updateData = {};
   }
 
   //根据视图名称获取表格和表单定义
@@ -80,6 +78,17 @@ export class CarstoreNewComponent implements OnInit {
           that.formView = _.find(data.Data, function (o) { return o['ViewType'] == 'form' && o['FormName'] == formname; });
           if (that.formView) {
             that.tablename = that.formView['ViewName'];
+
+            that.getFormSetSub().then(function (data) {
+              let vn = [];
+              _.each(data, f => {
+                if (f['FormName'] == that.formView['ViewName']) {
+                  vn.push(f);
+                }
+              });
+              that.subViewName = vn;
+            });
+
           }
         }
         resolve();
@@ -142,6 +151,7 @@ export class CarstoreNewComponent implements OnInit {
         label: d['Title'],
         name: d['FieldName'],
         placeholder: placehd,
+        config: { placeholder: placehd }
       };
     }
     if (d['CanUpdate']) {
@@ -150,6 +160,7 @@ export class CarstoreNewComponent implements OnInit {
         label: d['Title'],
         name: d['FieldName'],
         placeholder: placehd,
+        config: { placeholder: placehd },
       };
     } else {
       cfgUpdate = {
@@ -157,6 +168,7 @@ export class CarstoreNewComponent implements OnInit {
         label: d['Title'],
         name: d['FieldName'],
         placeholder: placehd,
+        config: { placeholder: placehd },
         disabled: true
       };
     }
@@ -170,7 +182,13 @@ export class CarstoreNewComponent implements OnInit {
     }
 
     if (d['Default'] && cfgAdd) {
-      cfgAdd.value = d['Default'];
+      if (_.toLower(d['Default']) == "user") {
+        cfgAdd.value = sessionStorage.getItem('userId');
+      } else if (_.toLower(d['Default']) == "date") {
+        cfgAdd.value = this._common.getTodayObj();
+      } else {
+        cfgAdd.value = d['Default'];
+      }
     }
 
     if (d['DataSource'] == "list" && d['DicName'] && d['DicName'].includes(',') > 0) {
@@ -181,6 +199,8 @@ export class CarstoreNewComponent implements OnInit {
       });
       cfgAdd['options'] = dicList;
       cfgUpdate['options'] = dicList;
+      cfgAdd.config.minimumResultsForSearch = Infinity;
+      cfgUpdate.config.minimumResultsForSearch = Infinity;
     }
 
     return { add: cfgAdd, update: cfgUpdate };
@@ -279,10 +299,13 @@ export class CarstoreNewComponent implements OnInit {
         if (data && data.Data)
           _.each(this.config, f => {
             let fieldValue = data.Data[0][f.name];
-            if (f.type === 'datepicker' && _.isString(fieldValue)) {
-              fieldValue = this._common.getDateObject(fieldValue);
+            if (fieldValue) {
+              if (f.type === 'datepicker' && _.isString(fieldValue)) {
+                fieldValue = this._common.getDateObject(fieldValue);
+              }
+              f.value = fieldValue;
+              this.updateData[f.name] = fieldValue;
             }
-            this.form.setValue(f.name, fieldValue);
           });
       }, (err) => {
       });
@@ -296,17 +319,35 @@ export class CarstoreNewComponent implements OnInit {
       if (f.type === 'datepicker' && value[f.name]) {
         value[f.name] = this._common.getDateString(value[f.name]);
       }
+      //如果表单值未找到
+      if (!value[f.name]) {
+        if (this.selectData[f.name]) {
+          //下拉列表中
+          value[f.name] = this.selectData[f.name];
+        } else if (this.updateData[f.name]) {
+          //修改时列表中
+          value[f.name] = this.updateData[f.name];
+        }
+      }
     });
 
     console.log(value);
     this.formService.create(this.tablename, value).then(function (data) {
       if (_.isArray(data) && data.length == 1) {
         that.mainTableID = _.toInteger(data[0]);
-        that.canUpdate = false;
+        that.canUpdate = true;
       }
       that._state.notifyDataChanged("messagebox", { type: 'success', msg: '保存成功。', time: new Date().getTime() });
     }, (err) => {
       that._state.notifyDataChanged("messagebox", { type: 'error', msg: err, time: new Date().getTime() });
     });
+  }
+
+  changed(e: any) {
+    if (_.isArray(e.data) && e.data.length > 0) {
+      const element = e.data[0].element;
+      const field = $(element).parent().parent().prev().val();
+      this.selectData[field] = e.value;
+    }
   }
 }

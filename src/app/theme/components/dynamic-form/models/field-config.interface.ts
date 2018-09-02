@@ -11,6 +11,7 @@ export interface FieldConfig {
   value?: any,
   check?: string,
   callback?: any,
-  time?:string,
-  password?:boolean
+  time?: string,
+  password?: boolean,
+  config?: Select2Options,
 }

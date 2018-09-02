@@ -22,6 +22,7 @@ export class SearchInputComponent {
     searchClick = new EventEmitter();
 
     searchValue = '';
+
     constructor(private _state: GlobalState) {
         this._state.subscribe("newurl", (d) => {
             this.searchValue = '';

@@ -3,7 +3,8 @@
     <div class="col-md-3" *ngFor="let field of config;">
 
       <div class="form-group row">
-        <label for="field.name" class="text-right col-md-3 col-form-label">{{ field.label }}</label>
+        <label for="field.name" class="text-right col-md-3 col-form-label">{{
+          field.label }}</label>
         <div *ngIf="field.type == 'input'" class="col-md-8">
           <input type="text" class="form-control" [name]="field.name" [(ngModel)]="field.value">
         </div>
@@ -27,7 +28,13 @@
           </select2>
         </div>
 
-        <span style='color:red' class="col-md-1" *ngIf="field.validation">*</span>
+        <div *ngIf="field.type == 'button'" class="col-md-8">
+          <button class="btn btn-success" (click)="onClear()" type="button"><i class="fa fa-search" aria-hidden="true"></i>
+            清空</button>
+          <button class="btn btn-success" (click)="onSearch(form.value)" type="button"><i class="fa fa-search"
+              aria-hidden="true"></i> 查询</button>
+        </div>
+
       </div>
 
     </div>

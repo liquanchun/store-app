@@ -25,7 +25,10 @@
                 </div>
 
                 <div *ngIf="field.type == 'select'" class="col-md-8">
-                  <select2 [value]="field.value ? field.value :'' " [data]="field.options"></select2>
+                  <input type="hidden" [value]="field.name">
+                  <select2 (valueChanged)="changed($event)" [options]="field.config" [value]="field.value ? field.value :'' "
+                    [data]="field.options">
+                  </select2>
                 </div>
 
                 <span style='color:red' class="col-md-1" *ngIf="field.validation">*</span>
@@ -45,7 +48,7 @@
         <ngb-tab *ngFor="let view of subViewName" [title]="view.Title">
           <ng-template ngbTabContent>
             <div class="row">
-              <div class="col-md-6">
+              <div class="col-md-12">
                 <app-edit-form [formView]="view" [canUpdate]="canUpdate" [mainTableID]="mainTableID"></app-edit-form>
               </div>
             </div>

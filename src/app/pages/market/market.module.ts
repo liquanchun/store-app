@@ -24,6 +24,8 @@ import { MarketComponent } from './market.component';
 import { CarstoreComponent } from './carstore/carstore.component';
 import { FormComponent } from './form/form.component';
 import { EditFormComponent } from './editform/editform.component';
+import { ShowFormComponent } from './showform/showform.component';
+import { SearchFormComponent } from './searchform/searchform.component';
 import { CarstoreNewComponent } from './carstorenew/carstorenew.component';
 
 @NgModule({
@@ -48,7 +50,9 @@ import { CarstoreNewComponent } from './carstorenew/carstorenew.component';
     FormComponent,
     CarstoreComponent,
     EditFormComponent,
-    CarstoreNewComponent
+    CarstoreNewComponent,
+    ShowFormComponent,
+    SearchFormComponent,
   ],
   providers: [GlobalState, Config, HttpService, AppState, AuthGuard, Common]
 })

@@ -236,7 +236,13 @@ export class FormComponent implements OnInit {
       }
     }
     if (d['Default'] && cfgAdd) {
-      cfgAdd.value = d['Default'];
+      if (_.toLower(d['Default']) == "user") {
+        cfgAdd.value = sessionStorage.getItem('userId');
+      } else if (_.toLower(d['Default']) == "date") {
+        cfgAdd.value = this._common.getTodayObj();
+      } else {
+        cfgAdd.value = d['Default'];
+      }
     }
 
     if (cfgAdd && cfgAdd.type == 'select') {

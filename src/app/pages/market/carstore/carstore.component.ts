@@ -48,17 +48,17 @@ export class CarstoreComponent implements OnInit {
 
   //表格视图定义
   tableView: {};
-  //表单视图定义
-  formView: {};
   //表单修改时数据
   updateData: {};
   source: LocalDataSource = new LocalDataSource();
 
   formname: string;
   canAdd: boolean;
-
+  canUpdate: boolean;
   //子表视图
   subViewName: any = [];
+  //查询视图
+  searchview: any;
   //子表查询条件
   mainTableID: number = 0;
   constructor(
@@ -71,12 +71,11 @@ export class CarstoreComponent implements OnInit {
   }
   ngOnInit() {
     this.formname = 'carincome';
+    this.canUpdate = false;
     this.start();
-
+    this.mainTableID = 0;
     const that = this;
-    this.getFormSetSub().then(function (data) {
-      that.subViewName = data;
-    });
+
   }
 
   start() {
@@ -95,7 +94,7 @@ export class CarstoreComponent implements OnInit {
       that.formService.getForms('form_set').then((data) => {
         if (data.Data) {
           that.tableView = _.find(data.Data, function (o) { return o['ViewType'] == 'table' && o['FormName'] == formname; });
-          that.formView = _.find(data.Data, function (o) { return o['ViewType'] == 'form' && o['FormName'] == formname; });
+          that.searchview = _.find(data.Data, function (o) { return o['ViewType'] == 'search' && o['FormName'] == formname; });
           if (that.tableView) {
             that.title = that.tableView['Title'];
             that.canAdd = that.tableView['CanAdd'] == 1;
@@ -113,6 +112,16 @@ export class CarstoreComponent implements OnInit {
                 that.settings['actions']['delete'] = false;
               };
             }
+
+            that.getFormSetSub().then(function (data) {
+              let vn = [];
+              _.each(data, f => {
+                if (f['FormName'] == that.tableView['ViewName']) {
+                  vn.push(f);
+                }
+              });
+              that.subViewName = vn;
+            });
           }
         }
         resolve();
@@ -179,51 +188,16 @@ export class CarstoreComponent implements OnInit {
       this.source.setFilter(filterArr, false);
     }
   }
+  onSearchAll(query: string) {
+    console.log(query);
+  }
   onCreate(): void {
-    this.router.navigate(['/pages/market/carstorenew',0]);
-    // const that = this;
-    // const modalRef = this.modalService.open(NgbdModalContent);
-    // modalRef.componentInstance.title = '新增' + this.title;
-    // modalRef.componentInstance.config = this.configAdd;
-    // modalRef.componentInstance.saveFun = (result, closeBack) => {
-    //   that.formService.create(that.formView['ViewName'], JSON.parse(result)).then((data) => {
-    //     closeBack();
-    //     this._state.notifyDataChanged("messagebox", { type: 'success', msg: '新增成功。', time: new Date().getTime() });
-    //     that.getDataList();
-    //   },
-    //     (err) => {
-    //       this._state.notifyDataChanged("messagebox", { type: 'error', msg: err, time: new Date().getTime() });
-    //     }
-    //   )
-    // }
+    this.router.navigate(['/pages/market/carstorenew', 0]);
   }
 
   onEdit(event) {
-    this.router.navigate(['/pages/market/carstorenew'],event.data.Id);
-    // this.updateData = event.data;
-    // const that = this;
-    // const modalRef = this.modalService.open(NgbdModalContent);
-    // modalRef.componentInstance.title = '修改' + this.title;
-    // modalRef.componentInstance.config = this.configUpdate;
-    // modalRef.componentInstance.formValue = event.data;
-    // modalRef.componentInstance.saveFun = (result, closeBack) => {
-    //   let formViewData = JSON.parse(result);
-    //   const cfgupdate = _.filter(that.configUpdate, function (o) { return o['disabled'] == true; });
-    //   _.each(cfgupdate, d => {
-    //     if (that.updateData[d.name]) {
-    //       formViewData[d.name] = that.updateData[d.name];
-    //     }
-    //   });
-    //   that.formService.update(that.formView['ViewName'], formViewData).then((data) => {
-    //     closeBack();
-    //     this._state.notifyDataChanged("messagebox", { type: 'success', msg: '修改成功。', time: new Date().getTime() });
-    //     that.getDataList();
-    //   },
-    //     (err) => {
-    //       this._state.notifyDataChanged("messagebox", { type: 'error', msg: err, time: new Date().getTime() });
-    //     }
-    //   )
-    // };
+    const id = event.data.Id;
+    this.router.navigate(['/pages/market/carstorenew', id]);
   }
 
   onDelete(event) {
