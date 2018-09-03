@@ -45,14 +45,41 @@ export class ShowFormComponent implements OnInit {
       this.title = this.formView['Title'];
       this.formService.getFormsFieldByName(this.formname).then((data) => {
         if (data.Data) {
-          this.formFieldList = _.orderBy(data.Data, 'OrderInd', 'asc');
-
-          this.getDataList();
+          const fieldList = _.orderBy(data.Data, 'OrderInd', 'asc');
+          this.getFormRoles(fieldList);
         }
       }, (err) => {
         this._state.notifyDataChanged("messagebox", { type: 'error', msg: err, time: new Date().getTime() });
       });
     }
+  }
+
+  //获取表单字段权限控制
+  getFormRoles(fieldList) {
+    this.formService.getForms('vw_form_role/ViewName/' + this.formname).then((data) => {
+      if (data.Data) {
+        let newFileList = [];
+        _.each(fieldList, f => {
+          if (this.checkRole(data.Data, f['FieldName'])) {
+            newFileList.push(f);
+          }
+        });
+        this.formFieldList = newFileList;
+        this.getDataList();
+      }
+    });
+  }
+  //检查用户角色是否拥有字段权限
+  checkRole(roleData: any, fieldName: string) {
+    const roleIds = sessionStorage.getItem('roleIds');
+    const roleField = _.find(roleData, f => { return f['FieldName'] == fieldName; });
+    //如果没有设置，或者设置了可读
+    return !roleField['RoleIds']
+      || roleField
+      && roleField['RoleIds']
+      && roleField['CanRead']
+      && roleField['CanRead'] == 1
+      && roleField['RoleIds'].includes(roleIds);
   }
 
   //获取数据

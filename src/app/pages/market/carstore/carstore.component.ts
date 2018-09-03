@@ -83,7 +83,7 @@ export class CarstoreComponent implements OnInit {
     const that = this;
     if (this.formname) {
       this.getViewName(this.formname).then(function () {
-        that.getTableField();
+        that.getFormRoles();
       });
     }
   }
@@ -131,7 +131,27 @@ export class CarstoreComponent implements OnInit {
     })
   }
 
-  getTableField(): void {
+  //获取表单字段权限控制
+  getFormRoles() {
+    this.formService.getForms('vw_form_role/ViewName/' + this.tableView['ViewName']).then((data) => {
+      if (data.Data) {
+        this.getTableField(data.Data);
+      }
+    });
+  }
+  //检查用户角色是否拥有字段权限
+  checkRole(roleData: any, fieldName: string) {
+    const roleIds = sessionStorage.getItem('roleIds');
+    const roleField = _.find(roleData, f => { return f['FieldName'] == fieldName; });
+    //如果没有设置，或者设置了可读
+    return !roleField['RoleIds']
+      || roleField
+      && roleField['RoleIds']
+      && roleField['CanRead']
+      && roleField['CanRead'] == 1
+      && roleField['RoleIds'].includes(roleIds);
+  }
+  getTableField(roleData: any): void {
     this.loading = true;
     const that = this;
     //获取table定义
@@ -139,11 +159,13 @@ export class CarstoreComponent implements OnInit {
       if (data.Data) {
         const viewList = _.orderBy(data.Data, 'OrderInd', 'asc');
         _.each(viewList, d => {
-          this.settings.columns[d['FieldName']] = {
-            title: d['Title'],
-            type: d['DataType'],
-            filter: false,
-          };
+          if (this.checkRole(roleData, d['FieldName'])) {
+            this.settings.columns[d['FieldName']] = {
+              title: d['Title'],
+              type: d['DataType'],
+              filter: false,
+            };
+          }
         });
 
         this.newSettings = Object.assign({}, this.settings);
@@ -188,8 +210,17 @@ export class CarstoreComponent implements OnInit {
       this.source.setFilter(filterArr, false);
     }
   }
-  onSearchAll(query: string) {
-    console.log(query);
+  //高级查询
+  onSearchAll(query: any) {
+    if (_.isObject(query) && _.keys(query).length > 0) {
+      console.log('查询条件：' + JSON.stringify(query));
+      this.formService.getFormsByPost(this.tableView['ViewName'], query).then((data) => {
+        this.source.load(data.Data);
+        this.loading = false;
+      }, (err) => {
+        this.loading = false;
+      });
+    }
   }
   onCreate(): void {
     this.router.navigate(['/pages/market/carstorenew', 0]);

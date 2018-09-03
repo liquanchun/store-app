@@ -61,7 +61,7 @@ export class CarstoreNewComponent implements OnInit {
     const that = this;
     if (this.formname) {
       this.getViewName(this.formname).then(function () {
-        that.getFormField();
+        that.getFormRoles();
       });
     }
 
@@ -98,7 +98,28 @@ export class CarstoreNewComponent implements OnInit {
     })
   }
 
-  getFormField(): void {
+  //获取表单字段权限控制
+  getFormRoles() {
+    this.formService.getForms('vw_form_role/ViewName/' + this.formView['ViewName']).then((data) => {
+      if (data.Data) {
+        this.getFormField(data.Data);
+      }
+    });
+  }
+  //检查用户角色是否拥有字段权限
+  checkRole(roleData: any, fieldName: string, canString: string) {
+    const roleIds = sessionStorage.getItem('roleIds');
+    const roleField = _.find(roleData, f => { return f['FieldName'] == fieldName; });
+    //如果没有设置，或者设置了可读
+    return !roleField['RoleIds']
+      || roleField
+      && roleField['RoleIds']
+      && roleField[canString]
+      && roleField[canString] == '1'
+      && roleField['RoleIds'].includes(roleIds);
+  }
+
+  getFormField(roleData: any): void {
     this.loading = true;
     const that = this;
     //获取table定义
@@ -107,17 +128,21 @@ export class CarstoreNewComponent implements OnInit {
         const formFieldList = _.orderBy(data.Data, 'OrderInd', 'asc');
 
         async.eachSeries(formFieldList, function (field, callback) {
-          const cfg = that.setFormField(field);
-          if (cfg['add']) {
-            that.configAddArr.push(cfg['add']);
+
+          if (that.checkRole(roleData, field['FieldName'], 'CanRead')) {
+            const cfg = that.setFormField(field);
+            if (cfg['add'] && that.checkRole(roleData, field['FieldName'], 'CanUpdate')) {
+              that.configAddArr.push(cfg['add']);
+            }
+            if (cfg['add'] && that.checkRole(roleData, field['FieldName'], 'CanUpdate')) {
+              that.configUpdateArr.push(cfg['add']);
+            }
+            //that.setDicByName(field);
+            that.setSelectValue(field).then(() => {
+              callback();
+            });
           }
-          if (cfg['add']) {
-            that.configUpdateArr.push(cfg['add']);
-          }
-          //that.setDicByName(field);
-          that.setSelectValue(field).then(() => {
-            callback();
-          });
+
         }, function (err) {
           if (err) {
             console.log('err');

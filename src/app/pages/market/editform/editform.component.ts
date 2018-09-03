@@ -73,7 +73,7 @@ export class EditFormComponent implements OnInit {
     if (this.formView) {
       this.formname = this.formView['ViewName'];
       this.keyName = this.formView['MainTableId'];
-      this.getTableField();
+      this.getFormRoles();
     }
     this.configAddArr = [];
     this.configUpdateArr = [];
@@ -82,7 +82,28 @@ export class EditFormComponent implements OnInit {
     this.selectData = {};
   }
 
-  getTableField(): void {
+  //获取表单字段权限控制
+  getFormRoles() {
+    this.formService.getForms('vw_form_role/ViewName/' + this.formView['ViewName']).then((data) => {
+      if (data.Data) {
+        this.getTableField(data.Data);
+      }
+    });
+  }
+  //检查用户角色是否拥有字段权限
+  checkRole(roleData: any, fieldName: string, canString: string) {
+    const roleIds = sessionStorage.getItem('roleIds');
+    const roleField = _.find(roleData, f => { return f['FieldName'] == fieldName; });
+    //如果没有设置，或者设置了可读
+    return !roleField['RoleIds']
+      || roleField
+      && roleField['RoleIds']
+      && roleField[canString]
+      && roleField[canString] == 1
+      && roleField['RoleIds'].includes(roleIds);
+  }
+
+  getTableField(roleData: any): void {
     this.loading = true;
     const that = this;
     //获取table定义
@@ -90,19 +111,22 @@ export class EditFormComponent implements OnInit {
       if (data.Data) {
         const formFieldList = _.orderBy(data.Data, 'OrderInd', 'asc');
         async.eachSeries(formFieldList, function (field, callback) {
-          const config = that.setFormField(field);
-          if (config['add']) {
-            that.configAddArr.push(config['add']);
+
+          if (that.checkRole(roleData, field['FieldName'], 'CanRead')) {
+            const config = that.setFormField(field);
+            if (config['add'] && that.checkRole(roleData, field['FieldName'], 'CanUpdate')) {
+              that.configAddArr.push(config['add']);
+            }
+            if (config['update'] && that.checkRole(roleData, field['FieldName'], 'CanUpdate')) {
+              that.configUpdateArr.push(config['update']);
+            }
+            // that.setDicByName(field).then(() => {
+            //   callback();
+            // });
+            that.setSelectValue(field).then(() => {
+              callback();
+            });
           }
-          if (config['update']) {
-            that.configUpdateArr.push(config['update']);
-          }
-          // that.setDicByName(field).then(() => {
-          //   callback();
-          // });
-          that.setSelectValue(field).then(() => {
-            callback();
-          });
         }, function (err) {
           if (err) {
             console.log('err');

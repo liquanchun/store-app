@@ -31,8 +31,11 @@
         </div>
 
         <ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '4px' }"></ngx-loading>
-        <ng2-smart-table [settings]="newSettings" [source]="source" (rowSelect)="onSelected($event)" (edit)="onEdit($event)"
-          (delete)="onDelete($event)"></ng2-smart-table>
+        <div style="overflow-x:auto;width: 100%;white-space: nowrap;">
+          <ng2-smart-table [settings]="newSettings" [source]="source" (rowSelect)="onSelected($event)" (edit)="onEdit($event)"
+            (delete)="onDelete($event)">
+          </ng2-smart-table>
+        </div>
       </div>
 
       <ngb-tabset>

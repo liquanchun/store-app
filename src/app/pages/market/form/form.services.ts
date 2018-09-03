@@ -12,6 +12,10 @@ export class FormService {
     return this._httpService.getDataServer2(this.modelName + '/' + viewname);
   }
 
+  getFormsByPost(viewname: string, paradata: any) {
+    return this._httpService.create2('datalist/' + viewname, paradata);
+  }
+
   getFormsField() {
     return this._httpService.getDataServer2('fields');
   }

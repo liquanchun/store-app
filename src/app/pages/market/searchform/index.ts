@@ -1,1 +1,1 @@
-export * from './editform.component';
+export * from './searchform.component';

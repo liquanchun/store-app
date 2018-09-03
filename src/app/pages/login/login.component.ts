@@ -79,6 +79,8 @@ export class Login {
           sessionStorage.setItem('pwd', pd);
           sessionStorage.setItem('userName', data['userName']);
           sessionStorage.setItem('userId', this.loginUserId.value);
+          sessionStorage.setItem('roleIds', data['roleIds']);
+
           this.toastOptions.msg = "登录成功。";
           this.toastyService.success(this.toastOptions);
           this._router.navigate(['/pages/dashboard']);
