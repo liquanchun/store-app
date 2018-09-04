@@ -10,15 +10,7 @@
         </div>
 
         <div *ngIf="field.type == 'datepicker'" class="form-group col-md-8">
-          <div class="input-group">
-            <input [(ngModel)]="field.value" class="form-control" placeholder="yyyy-mm-dd" [name]="field.name"
-              ngbDatepicker #d="ngbDatepicker">
-            <div class="input-group-addon" (click)="d.toggle()">
-              <i class="fa fa-calendar" aria-hidden="true"></i>
-            </div>
-            <input *ngIf="field.time" (change)="onChange($event)" type="time" style="border:1px solid rgba(0, 0, 0, 0.1)"
-              [value]="field.time" />
-          </div>
+          <input style="padding: 0.3rem 0.4rem !important" type="date" class="form-control" [name]="field.name" [(ngModel)]="field.value">
         </div>
 
         <div *ngIf="field.type == 'select'" class="col-md-8">

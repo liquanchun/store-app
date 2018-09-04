@@ -217,7 +217,7 @@ export class SearchFormComponent implements OnInit {
   onSearch(value: { [name: string]: any }) {
     const that = this;
     _.each(this.config, f => {
-      if (f.type === 'datepicker' && value[f.name]) {
+      if (f.type === 'datepicker' && value[f.name] && _.isObject(value[f.name])) {
         value[f.name] = this._common.getDateString(value[f.name]);
       }
       //如果表单值未找到

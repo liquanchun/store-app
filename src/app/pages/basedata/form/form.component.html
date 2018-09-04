@@ -16,7 +16,7 @@
           </div>
         </div>
         <ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '4px' }"></ngx-loading>
-        <ng2-smart-table [settings]="newSettings" [source]="source" (edit)="onEdit($event)" (delete)="onDelete($event)"></ng2-smart-table>
+        <ng2-smart-table  (rowSelect)="onSelected($event)" [settings]="newSettings" [source]="source" (edit)="onEdit($event)" (delete)="onDelete($event)"></ng2-smart-table>
       </div>
     </ba-card>
   </div>

@@ -68,7 +68,8 @@ export class FormComponent implements OnInit {
   formname: string;
   //是否可以新增
   canAdd: boolean;
-
+  //记录Id
+  recordId: number;
   constructor(
     private modalService: NgbModal,
     private formService: FormService,
@@ -347,8 +348,12 @@ export class FormComponent implements OnInit {
   //获取数据
   getDataList() {
     this.formService.getForms(this.tableView['ViewName']).then((data) => {
-      this.source.load(data.Data);
-      this.onSearch('');
+      if (this.tableView['OrderByField']) {
+        const ordy = this.tableView['OrderByField'].split(',');
+        this.source.load(_.orderBy(data.Data, ordy, ['asc']));
+      } else {
+        this.source.load(data.Data);
+      }
       this.loading = false;
     }, (err) => {
       this.loading = false;
@@ -427,7 +432,7 @@ export class FormComponent implements OnInit {
           }
         }
       });
-
+      formViewData['Id'] = this.recordId;
       console.log(formViewData);
       that.formService.update(that.formView['ViewName'], formViewData).then((data) => {
         closeBack();
@@ -454,6 +459,10 @@ export class FormComponent implements OnInit {
         this.toastyService.error(this.toastOptions)
       });
     }
+  }
+
+  onSelected(event) {
+    this.recordId = event.data.Id;
   }
 
 }
