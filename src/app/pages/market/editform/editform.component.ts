@@ -55,6 +55,7 @@ export class EditFormComponent implements OnInit {
   @Input()
   set mainTableID(id: number) {
     this._mainId = id;
+    this.canUpdate = id > 0;
     this.getDataList();
   }
 
