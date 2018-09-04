@@ -51,6 +51,7 @@ export class CarstoreNewComponent implements OnInit {
     private formService: FormService,
     private _dicService: DicService,
     private route: ActivatedRoute,
+    private router: Router,
     private _common: Common,
     private _state: GlobalState) {
   }
@@ -374,5 +375,14 @@ export class CarstoreNewComponent implements OnInit {
       const field = $(element).parent().parent().prev().val();
       this.selectData[field] = e.value;
     }
+  }
+  onNew() {
+    _.each(this.config, f => {
+      f.value = '';
+    });
+    this.mainTableID = 0;
+  }
+  onBack() {
+    this.router.navigate(['/pages/market/carstore']);
   }
 }

@@ -40,7 +40,11 @@
 
         <div class="btn-group" role="group" aria-label="Basic example">
           <button (click)="onUpdate(form.value)" type="button" class="btn btn-info btn-sm">
-            <i class="fa fa-save" aria-hidden="true"></i> 保存{{title}}</button>
+            <i class="fa fa-save" aria-hidden="true"></i> 保存</button>
+          <button (click)="onNew()" type="button" class="btn btn-info btn-sm">
+                <i class="fa fa-save" aria-hidden="true"></i> 新增</button>
+          <button (click)="onBack()" type="button" class="btn btn-info btn-sm">
+                    <i class="fa fa-save" aria-hidden="true"></i> 返回</button>
         </div>
       </div>
 
