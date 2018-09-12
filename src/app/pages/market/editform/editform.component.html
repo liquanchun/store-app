@@ -21,10 +21,12 @@
         </div>
 
         <div *ngIf="field.type == 'select'" class="col-md-8">
-          <input type="hidden" [value]="field.name">
-          <select2 (valueChanged)="changed($event)" [options]="field.config" [value]="field.value ? field.value :'' "
-            [data]="field.options">
-          </select2>
+          <select [name]="field.name">
+            <option selected style="display:none" value="">{{ field.placeholder }}</option>
+            <option [value]="option.id" *ngFor="let option of field.options">
+              {{ option.text }}
+            </option>
+          </select>
         </div>
 
         <span style='color:red' class="col-md-1" *ngIf="field.validation">*</span>
