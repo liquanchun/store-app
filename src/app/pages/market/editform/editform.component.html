@@ -3,8 +3,8 @@
     <div [class]="field.width" *ngFor="let field of config;">
 
       <div class="form-group row">
-        <label for="field.name" class="text-right col-md-3 col-form-label">{{ field.label }}</label>
-        <div *ngIf="field.type == 'input'" class="col-md-8">
+        <label for="field.name" class="text-right col-form-label">{{ field.label }}</label>
+        <div *ngIf="field.type == 'input'" [class]="field.width2">
           <input type="text" class="form-control" [name]="field.name" [(ngModel)]="field.value">
         </div>
 
