@@ -176,6 +176,7 @@ export class CarstoreNewComponent implements OnInit {
         type: d['FormType'],
         label: d['Title'],
         name: d['FieldName'],
+        width: d['Width'],
         placeholder: placehd,
         config: { placeholder: placehd }
       };
@@ -185,6 +186,7 @@ export class CarstoreNewComponent implements OnInit {
         type: d['FormType'],
         label: d['Title'],
         name: d['FieldName'],
+        width: d['Width'],
         placeholder: placehd,
         config: { placeholder: placehd },
       };
@@ -193,6 +195,7 @@ export class CarstoreNewComponent implements OnInit {
         type: d['FormType'],
         label: d['Title'],
         name: d['FieldName'],
+        width: d['Width'],
         placeholder: placehd,
         config: { placeholder: placehd },
         disabled: true

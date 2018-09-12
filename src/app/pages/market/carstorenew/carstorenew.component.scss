@@ -22,8 +22,8 @@
   }
 
   .form-group label {
-    padding-left: 8px;
-    padding-right: 8px;
+    padding-left: 2px;
+    padding-right: 3px;
     color: rgba(33, 74, 81, 0.85);
   }
   select {
@@ -40,7 +40,7 @@
     border: 1px solid rgba(0, 0, 0, 0.1);
     width: 100%;
     outline: none;
-    background: linear-gradient(45deg, transparent 50%, rgba(0, 0, 0, 0.7) 50%) no-repeat calc(100% - 20px) calc(1em + 4px), linear-gradient(135deg, rgba(0, 0, 0, 0.7) 50%, transparent 50%) no-repeat calc(100% - 15px) calc(1em + 4px);
+    // background: linear-gradient(45deg, transparent 50%, rgba(0, 0, 0, 0.7) 50%) no-repeat calc(100% - 20px) calc(1em + 4px), linear-gradient(135deg, rgba(0, 0, 0, 0.7) 50%, transparent 50%) no-repeat calc(100% - 15px) calc(1em + 4px);
     background-size: 5px 5px, 5px 5px;
 
     &:focus {

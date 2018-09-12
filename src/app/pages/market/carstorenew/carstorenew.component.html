@@ -4,7 +4,7 @@
       <div style="margin-bottom: 5px;">
         <form #form="ngForm">
           <div class="row">
-            <div class="col-md-3" *ngFor="let field of config;">
+            <div [class]="field.width" *ngFor="let field of config;">
 
               <div class="form-group row">
                 <label for="field.name" class="text-right col-md-3 col-form-label">{{ field.label }}</label>
@@ -24,11 +24,20 @@
                   </div>
                 </div>
 
-                <div *ngIf="field.type == 'select'" class="col-md-8">
+                <!-- <div *ngIf="field.type == 'select'" class="col-md-8">
                   <input type="hidden" [value]="field.name">
                   <select2 (valueChanged)="changed($event)" [options]="field.config" [value]="field.value ? field.value :'' "
                     [data]="field.options">
                   </select2>
+                </div> -->
+
+                <div *ngIf="field.type == 'select'" class="col-md-8">
+                  <select [formControlName]="field.name">
+                    <option selected style="display:none" value="">{{ field.placeholder }}</option>
+                    <option [value]="option.id" *ngFor="let option of field.options">
+                      {{ option.text }}
+                    </option>
+                  </select>
                 </div>
 
                 <span style='color:red' class="col-md-1" *ngIf="field.validation">*</span>

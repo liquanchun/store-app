@@ -14,4 +14,5 @@ export interface FieldConfig {
   time?: string,
   password?: boolean,
   config?: Select2Options,
+  width?:string,
 }
