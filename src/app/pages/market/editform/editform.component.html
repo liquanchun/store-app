@@ -21,7 +21,7 @@
         </div>
 
         <div *ngIf="field.type == 'select'" class="col-md-8">
-          <select [name]="field.name">
+          <select  [(ngModel)]="field.value"  (change)="onChange($event)" [name]="field.name">
             <option selected style="display:none" value="">{{ field.placeholder }}</option>
             <option [value]="option.id" *ngFor="let option of field.options">
               {{ option.text }}

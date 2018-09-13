@@ -1,9 +1,9 @@
 <div class="row">
-  <div class="col-md-3" *ngFor="let field of formFieldList;">
+  <div [class]="field.Width" *ngFor="let field of formFieldList;">
 
     <div class="form-group row">
-      <label for="field.FieldName" class="text-right col-md-3 col-form-label">{{ field.Title }}</label>
-      <div class="col-md-8">
+      <label for="field.FieldName" class="text-right col-form-label">{{ field.Title }}</label>
+      <div [class]="field.Width2">
         <input type="text" readonly class="form-control" [name]="field.FieldName" [value]="field.Default">
       </div>
     </div>

@@ -147,7 +147,7 @@ export class MenuComponent implements OnInit, AfterViewInit {
     this.roleService.getRoles().then(function (roles) {
       const rl = [];
       _.each(roles, function (item) {
-        rl.push({ id: item.id, name: item.roleName });
+        rl.push({ id: item.id, text: item.roleName });
       });
       _.each(that.config, function (item, index) {
         if (item.name === 'Roles') {

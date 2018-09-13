@@ -74,6 +74,7 @@ export class EditFormComponent implements OnInit {
     if (this.formView) {
       this.formname = this.formView['ViewName'];
       this.keyName = this.formView['MainTableId'];
+      this.title = this.formView['Title'];
       this.getFormRoles();
     }
     this.configAddArr = [];
@@ -353,11 +354,7 @@ export class EditFormComponent implements OnInit {
     });
   }
 
-  changed(e: any) {
-    if (_.isArray(e.data) && e.data.length > 0) {
-      const element = e.data[0].element;
-      const field = $(element).parent().parent().prev().val();
-      this.selectData[field] = e.value;
-    }
+  onChange(e) {
+    this.selectData[e.target.name] = e.target.value;
   }
 }

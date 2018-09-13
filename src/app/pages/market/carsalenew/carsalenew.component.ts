@@ -17,16 +17,16 @@ import * as $ from 'jquery';
 import * as _ from 'lodash';
 
 @Component({
-  selector: 'app-carstorenew',
-  templateUrl: './carstorenew.component.html',
-  styleUrls: ['./carstorenew.component.scss'],
+  selector: 'app-carsalenew',
+  templateUrl: './carsalenew.component.html',
+  styleUrls: ['./carsalenew.component.scss'],
   providers: [FormService, DicService],
 })
-export class CarstoreNewComponent implements OnInit {
+export class CarsaleNewComponent implements OnInit {
   @ViewChild(DynamicForm2Component) form: DynamicForm2Component;
 
   loading = false;
-  title = '车辆入库';
+  title = '车辆销售';
   config: FieldConfig[] = [];
   configAddArr: FieldConfig[] = [];
   configUpdateArr: FieldConfig[] = [];
@@ -56,7 +56,7 @@ export class CarstoreNewComponent implements OnInit {
     private _state: GlobalState) {
   }
   ngOnInit() {
-    this.formname = 'carincome';
+    this.formname = 'carsale';
     this.mainTableID = _.toInteger(this.route.snapshot.paramMap.get('id'));
     this.canUpdate = this.mainTableID > 0;
     const that = this;
@@ -385,6 +385,6 @@ export class CarstoreNewComponent implements OnInit {
     this.mainTableID = 0;
   }
   onBack() {
-    this.router.navigate(['/pages/market/carstore']);
+    this.router.navigate(['/pages/market/carsale']);
   }
 }
