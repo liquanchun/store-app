@@ -28,6 +28,7 @@ export class CarstoreComponent implements OnInit {
   newSettings = {};
   settings = {
     pager: {
+      display: true,
       perPage: 20
     },
     mode: 'external',
@@ -61,6 +62,8 @@ export class CarstoreComponent implements OnInit {
   searchview: any;
   //子表查询条件
   mainTableID: number = 0;
+
+  totalRecord: number = 0;
   constructor(
     private modalService: NgbModal,
     private formService: FormService,
@@ -194,6 +197,9 @@ export class CarstoreComponent implements OnInit {
   getDataList() {
     this.formService.getForms(this.tableView['ViewName']).then((data) => {
       this.source.load(data.Data);
+      this.totalRecord = data.Data.length;
+      //this.source.setPaging(2,10);
+      //this.source.setPage(5);
       this.loading = false;
     }, (err) => {
       this.loading = false;

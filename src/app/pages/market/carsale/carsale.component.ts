@@ -61,6 +61,7 @@ export class CarsaleComponent implements OnInit {
   searchview: any;
   //子表查询条件
   mainTableID: number = 0;
+  totalRecord: number = 0;
   constructor(
     private modalService: NgbModal,
     private formService: FormService,
@@ -194,6 +195,7 @@ export class CarsaleComponent implements OnInit {
   getDataList() {
     this.formService.getForms(this.tableView['ViewName']).then((data) => {
       this.source.load(data.Data);
+      this.totalRecord = data.Data.length;
       this.loading = false;
     }, (err) => {
       this.loading = false;

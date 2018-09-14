@@ -35,6 +35,7 @@
           <ng2-smart-table [settings]="newSettings" [source]="source" (rowSelect)="onSelected($event)" (edit)="onEdit($event)"
             (delete)="onDelete($event)">
           </ng2-smart-table>
+          <div class="total">总记录：{{totalRecord}}</div>
         </div>
       </div>
 

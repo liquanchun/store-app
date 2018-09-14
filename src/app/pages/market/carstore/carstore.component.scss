@@ -6,6 +6,10 @@
 }
 
 :host /deep/ {
+  .total{
+    margin-top: -15px;
+    color: blue;
+  }
   ng2-smart-table {
     th,
     td {
