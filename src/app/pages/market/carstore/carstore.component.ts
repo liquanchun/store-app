@@ -218,9 +218,11 @@ export class CarstoreComponent implements OnInit {
   //高级查询
   onSearchAll(query: any) {
     if (_.isObject(query) && _.keys(query).length > 0) {
+      this.loading = true;
       console.log('查询条件：' + JSON.stringify(query));
       this.formService.getFormsByPost(this.tableView['ViewName'], query).then((data) => {
         this.source.load(data.Data);
+        this.totalRecord = data.Data.length;
         this.loading = false;
       }, (err) => {
         this.loading = false;

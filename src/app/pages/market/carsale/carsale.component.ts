@@ -215,8 +215,10 @@ export class CarsaleComponent implements OnInit {
   onSearchAll(query: any) {
     if (_.isObject(query) && _.keys(query).length > 0) {
       console.log('查询条件：' + JSON.stringify(query));
+      this.loading = true;
       this.formService.getFormsByPost(this.tableView['ViewName'], query).then((data) => {
         this.source.load(data.Data);
+        this.totalRecord = data.Data.length;
         this.loading = false;
       }, (err) => {
         this.loading = false;
