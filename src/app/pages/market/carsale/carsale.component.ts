@@ -209,6 +209,7 @@ export class CarsaleComponent implements OnInit {
         filterArr.push({ field: d, search: query });
       });
       this.source.setFilter(filterArr, false);
+      this.totalRecord = this.source.count();
     }
   }
   //高级查询
