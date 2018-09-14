@@ -28,6 +28,7 @@ export class EditFormComponent implements OnInit {
   loading = false;
   title = '表单定义';
 
+  groupConfig: any = [];
   config: FieldConfig[] = [];
   //编辑配置
   configUpdate: FieldConfig[] = [];
@@ -60,6 +61,7 @@ export class EditFormComponent implements OnInit {
   }
 
   formname: string;
+  tablename:string;
 
   constructor(
     private modalService: NgbModal,
@@ -73,6 +75,7 @@ export class EditFormComponent implements OnInit {
   ngOnInit() {
     if (this.formView) {
       this.formname = this.formView['ViewName'];
+      this.tablename = this.formView['TableName'];
       this.keyName = this.formView['MainTableId'];
       this.title = this.formView['Title'];
       this.getFormRoles();
@@ -138,6 +141,26 @@ export class EditFormComponent implements OnInit {
             } else {
               that.config = that.configAddArr;
             }
+
+            //分组处理
+            const grp = _.filter(that.config, f => { return _.isString(f.group) && f.group.length > 1; });
+            const gps = [];
+            _.each(grp, g => {
+              if (!gps.includes(g.group)) {
+                gps.push(g.group);
+              }
+            })
+            gps.forEach(g => {
+              that.groupConfig.push({
+                group: g,
+                config: _.filter(grp, f => { return f.group == g; })
+              })
+            });
+
+            _.each(that.groupConfig, f => {
+              console.log(f);
+            });
+
             that.getDataList();
           }
         });
@@ -162,6 +185,7 @@ export class EditFormComponent implements OnInit {
         name: d['FieldName'],
         width: d['Width'],
         width2: d['Width2'],
+        group: d['Group'],
         placeholder: placehd,
         config: { placeholder: placehd }
       };
@@ -173,6 +197,7 @@ export class EditFormComponent implements OnInit {
         name: d['FieldName'],
         width: d['Width'],
         width2: d['Width2'],
+        group: d['Group'],
         placeholder: placehd,
         config: { placeholder: placehd }
       };
@@ -181,7 +206,9 @@ export class EditFormComponent implements OnInit {
         type: d['FormType'],
         label: d['Title'],
         name: d['FieldName'],
+        width: d['Width'],
         width2: d['Width2'],
+        group: d['Group'],
         placeholder: placehd,
         config: { placeholder: placehd },
         disabled: true
@@ -321,6 +348,19 @@ export class EditFormComponent implements OnInit {
               this.updateData[f.name] = fieldValue;
             }
           });
+
+          // _.each(this.groupConfig, f => {
+          //   f.config.forEach(e => {
+          //     let fieldValue = data.Data[0][f.name];
+          //     if (fieldValue) {
+          //       if (e.type === 'datepicker' && _.isString(fieldValue)) {
+          //         fieldValue = this._common.getDateObject(fieldValue);
+          //       }
+          //       e.value = fieldValue;
+          //     }
+          //   });
+          // });
+
         }
       }, (err) => {
       });
@@ -347,7 +387,7 @@ export class EditFormComponent implements OnInit {
       }
     });
     console.log(value);
-    this.formService.create(this.formname, value).then(function (menu) {
+    this.formService.create(this.tablename, value).then(function (menu) {
       that._state.notifyDataChanged("messagebox", { type: 'success', msg: '保存成功。', time: new Date().getTime() });
     }, (err) => {
       that._state.notifyDataChanged("messagebox", { type: 'error', msg: err, time: new Date().getTime() });

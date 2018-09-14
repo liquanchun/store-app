@@ -78,7 +78,7 @@ export class CarstoreNewComponent implements OnInit {
         if (data.Data) {
           that.formView = _.find(data.Data, function (o) { return o['ViewType'] == 'form' && o['FormName'] == formname; });
           if (that.formView) {
-            that.tablename = that.formView['ViewName'];
+            that.tablename = that.formView['TableName'];
 
             that.getFormSetSub().then(function (data) {
               let vn = [];
