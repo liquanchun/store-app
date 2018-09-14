@@ -194,7 +194,6 @@ export class CarstoreComponent implements OnInit {
   getDataList() {
     this.formService.getForms(this.tableView['ViewName']).then((data) => {
       this.source.load(data.Data);
-      this.onSearch('');
       this.loading = false;
     }, (err) => {
       this.loading = false;

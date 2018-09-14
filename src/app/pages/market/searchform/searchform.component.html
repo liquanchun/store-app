@@ -1,26 +1,26 @@
 <form #form="ngForm">
   <div class="row">
-    <div class="col-md-3" *ngFor="let field of config;">
+    <div class="col-md-2" *ngFor="let field of config;">
 
       <div class="form-group row">
-        <label for="field.name" class="text-right col-md-3 col-form-label">{{
+        <label *ngIf="field.type != 'button'" for="field.name" class="text-right col-md-3 col-form-label">{{
           field.label }}</label>
-        <div *ngIf="field.type == 'input'" class="col-md-8">
+        <div *ngIf="field.type == 'input'" class="col-md-9">
           <input type="text" class="form-control" [name]="field.name" [(ngModel)]="field.value">
         </div>
 
-        <div *ngIf="field.type == 'datepicker'" class="form-group col-md-8">
-          <input style="padding: 0.3rem 0.4rem !important" type="date" class="form-control" [name]="field.name" [(ngModel)]="field.value">
+        <div *ngIf="field.type == 'datepicker'" class="form-group col-md-9">
+          <input style="padding: 0.3rem 0.2rem !important" type="date" class="form-control" [name]="field.name" [(ngModel)]="field.value">
         </div>
 
-        <div *ngIf="field.type == 'select'" class="col-md-8">
+        <div *ngIf="field.type == 'select'" class="col-md-9">
           <input type="hidden" [value]="field.name">
           <select2 (valueChanged)="changed($event)" [options]="field.config" [value]="field.value ? field.value :'' "
             [data]="field.options">
           </select2>
         </div>
 
-        <div *ngIf="field.type == 'button'" class="col-md-8">
+        <div *ngIf="field.type == 'button'" class="col-md-12">
           <button class="btn btn-success" (click)="onClear()" type="button"><i class="fa fa-search" aria-hidden="true"></i>
             清空</button>
           <button class="btn btn-success" (click)="onSearch(form.value)" type="button"><i class="fa fa-search"
