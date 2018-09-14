@@ -359,6 +359,8 @@ export class CarstoreNewComponent implements OnInit {
         } else if (this.updateData[f.name]) {
           //修改时列表中
           value[f.name] = this.updateData[f.name];
+        }else{
+          delete value[f.name];
         }
       }
     });

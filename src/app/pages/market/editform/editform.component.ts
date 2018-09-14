@@ -61,7 +61,7 @@ export class EditFormComponent implements OnInit {
   }
 
   formname: string;
-  tablename:string;
+  tablename: string;
 
   constructor(
     private modalService: NgbModal,
@@ -383,6 +383,8 @@ export class EditFormComponent implements OnInit {
         } else if (this.updateData[f.name]) {
           //修改时列表中
           value[f.name] = this.updateData[f.name];
+        } else {
+          delete value[f.name];
         }
       }
     });
