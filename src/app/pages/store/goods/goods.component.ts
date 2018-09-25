@@ -10,7 +10,6 @@ import { Common } from '../../../providers/common';
 import { DicService } from '../../sys/dic/dic.services';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Config } from '../../../providers/config';
-import { CustomEditorComponent } from './custom-editor.component';
 import * as $ from 'jquery';
 import * as _ from 'lodash';
 
@@ -89,14 +88,6 @@ export class GoodsComponent implements OnInit {
         type: 'number',
         filter: false,
       },
-      // imageName: {
-      //   title: '图片',
-      //   type: 'html',
-      //   editor: {
-      //     type: 'custom',
-      //     component: CustomEditorComponent,
-      //   },
-      // },
     }
   };
 

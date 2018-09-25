@@ -12,8 +12,6 @@ import { TreeView } from './components/treeView/treeView.component';
 import { CardRenderComponent } from './cardRender/cardRender.component';
 import { HouseTypeRenderComponent } from './houseTypeRender/houseType.component';
 import { DateTimeComponent } from './dateTimeRender/dateTimeRender.component';
-import { DatepickerViewComponent } from './datepickerView/datepickerView.component';
-import { MultiselectViewComponent } from './multiselectView/multiselectView.component';
 import { DateQueryComponent } from './datequery/datequery.component';
 import { SearchInputComponent } from './searchinput/searchinput.component';
 @NgModule({
@@ -26,23 +24,18 @@ import { SearchInputComponent } from './searchinput/searchinput.component';
     MultiselectDropdownModule,
     routing
   ],
-  entryComponents: [DatepickerViewComponent, MultiselectViewComponent],
   declarations: [
     Components,
     TreeView,
     CardRenderComponent,
     HouseTypeRenderComponent,
     DateTimeComponent,
-    DatepickerViewComponent,
-    MultiselectViewComponent,
     DateQueryComponent,
     SearchInputComponent
   ],
   exports: [CardRenderComponent,
     HouseTypeRenderComponent,
     DateTimeComponent,
-    MultiselectViewComponent,
-    DatepickerViewComponent,
     DateQueryComponent,
     SearchInputComponent
   ]

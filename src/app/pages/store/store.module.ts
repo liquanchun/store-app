@@ -32,7 +32,6 @@ import { SupplierComponent } from './supplier/Supplier.component';
 import { StoreinNewComponent } from './storein/storeinnew/storeinnew.component';
 import { StoreoutNewComponent } from './storeout/storeoutnew/storeoutnew.component';
 import { GoodsNewComponent } from './goods/goodsnew/goodsnew.component';
-import { CustomEditorComponent } from './goods/custom-editor.component';
 import { SysModule } from './../sys/sys.module';
 import { ToastyModule } from 'ng2-toasty';
 @NgModule({
@@ -65,10 +64,9 @@ import { ToastyModule } from 'ng2-toasty';
     StoreoutNewComponent,
     StoreinPrintComponent,
     StoreoutPrintComponent,
-    CustomEditorComponent,
     GoodsNewComponent
   ],
-  entryComponents: [StoreinPrintComponent, StoreoutPrintComponent,CustomEditorComponent],
+  entryComponents: [StoreinPrintComponent, StoreoutPrintComponent],
   providers: [GlobalState, Config, HttpService, AppState, Common]
 })
 export class StoreModule { }

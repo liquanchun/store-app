@@ -6,8 +6,6 @@ import { NgbdModalContent } from '../../../modal-content.component'
 import { SetAgentService } from './set-agent.services';
 import { GlobalState } from '../../../global.state';
 import { Common } from '../../../providers/common';
-import { DateTimeComponent } from '../../components/dateTimeRender/dateTimeRender.component';
-import { DatepickerViewComponent } from '../../components/datepickerView/datepickerView.component';
 import { FieldConfig } from '../../../theme/components/dynamic-form/models/field-config.interface';
 
 import * as $ from 'jquery';
