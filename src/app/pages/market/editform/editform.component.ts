@@ -45,7 +45,7 @@ export class EditFormComponent implements OnInit {
   selectData: {};
   //当前视图可否编辑
   @Input() canUpdate: boolean = false;
-
+  @Input() canSave: boolean = false;
   //主键名称
   keyName: string;
   //父级组件
@@ -59,6 +59,11 @@ export class EditFormComponent implements OnInit {
     this.canUpdate = id > 0;
     this.recordId = 0;
     this.getDataList();
+  }
+
+  @Input()
+  set saveTo(id: number) {
+    
   }
 
   formname: string;

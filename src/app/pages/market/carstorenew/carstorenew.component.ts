@@ -24,7 +24,7 @@ import * as _ from 'lodash';
 })
 export class CarstoreNewComponent implements OnInit {
   @ViewChild(DynamicForm2Component) form: DynamicForm2Component;
-
+  @ViewChild(EditFormComponent) editComponent: EditFormComponent;
   loading = false;
   title = '车辆入库';
   config: FieldConfig[] = [];
@@ -40,10 +40,10 @@ export class CarstoreNewComponent implements OnInit {
 
   tablename: string;
   formname: string;
-  canUpdate: boolean = true;
+  canUpdate: boolean = false;
 
   //子表视图
-  subViewName: any = [];
+  subViewName: any;
   //子表查询条件
   mainTableID: number = 0;
   constructor(
@@ -58,7 +58,7 @@ export class CarstoreNewComponent implements OnInit {
   ngOnInit() {
     this.formname = 'carincome';
     this.mainTableID = _.toInteger(this.route.snapshot.paramMap.get('id'));
-    this.canUpdate = this.mainTableID > 0;
+    //this.canUpdate = this.mainTableID > 0;
     const that = this;
     if (this.formname) {
       this.getViewName(this.formname).then(function () {
@@ -80,15 +80,15 @@ export class CarstoreNewComponent implements OnInit {
           if (that.formView) {
             that.tablename = that.formView['TableName'];
 
-            that.getFormSetSub().then(function (data) {
-              let vn = [];
-              _.each(data, f => {
-                if (f['FormName'] == that.formView['ViewName']) {
-                  vn.push(f);
-                }
-              });
-              that.subViewName = vn;
-            });
+            // that.getFormSetSub().then(function (data) {
+            //   let vn = [];
+            //   _.each(data, f => {
+            //     if (f['FormName'] == that.formView['ViewName']) {
+            //       vn.push(f);
+            //       that.subViewName = f;
+            //     }
+            //   });
+            // });
 
           }
         }
@@ -369,7 +369,7 @@ export class CarstoreNewComponent implements OnInit {
     this.formService.create(this.tablename, value).then(function (data) {
       if (_.isArray(data) && data.length == 1) {
         that.mainTableID = _.toInteger(data[0]);
-        that.canUpdate = true;
+        //that.canUpdate = true;
       }
       that._state.notifyDataChanged("messagebox", { type: 'success', msg: '保存成功。', time: new Date().getTime() });
     }, (err) => {
