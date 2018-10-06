@@ -206,6 +206,9 @@ export class CarSaleNewComponent implements OnInit {
         err => {}
       );
     } else {
+      this._dicService.getDicByName("销售顾问", data => {
+        this.saleman = data;
+      });
       this.getCarsale(id);
     }
   }
@@ -278,10 +281,6 @@ export class CarSaleNewComponent implements OnInit {
       },
       err => {}
     );
-
-    this._dicService.getDicByName("销售顾问", data => {
-      this.saleman = data;
-    });
   }
 
   //选择房间
