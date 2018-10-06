@@ -19,6 +19,13 @@ export class Common {
         let year = d.getFullYear();
         return `${year}-${_.padStart(month, 2, '0')}-${_.padStart(day, 2, '0')}`
     }
+    getTodayString2() {
+        let d = new Date()
+        let day = _.toString(d.getDate());
+        let month = _.toString(d.getMonth() + 1);
+        let year = d.getFullYear();
+        return `${year}${_.padStart(month, 2, '0')}${_.padStart(day, 2, '0')}`
+    }
     // 获取日期格式的年份
     getDateYear(date: string): number {
         return Number.parseInt(date.split('-')[0]);

@@ -1,0 +1,388 @@
+<div class="row">
+  <div class="col-md-12">
+    <ba-card [title]="title" class="card-primary" baCardClass="with-scroll">
+
+      <div class="row">
+        <div class="col-md-3">
+          <div class="form-group row">
+            <label for="inputremark" class="col-md-3 col-form-label">单号</label>
+            <div class="col-md-9">
+              <input [(ngModel)]="carsale.OrderId" type="text"  class="form-control" placeholder="">
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-3">
+          <div class="form-group row">
+            <label for="inputId" class="col-md-3 col-form-label">日期</label>
+            <div class="input-group col-md-9">
+              <input class="form-control" placeholder="yyyy-mm-dd" [(ngModel)]="carsale.OrderDateObj" ngbDatepicker #d="ngbDatepicker">
+              <div class="input-group-addon" (click)="d.toggle()">
+                <i class="fa fa-calendar" aria-hidden="true"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-3">
+          <div class="form-group row">
+            <label for="inputId" class="col-md-3 col-form-label">销售顾问</label>
+            <div class="col-md-9">
+              <select [(ngModel)]="carsale.SaleMan">
+                <option value="">--请选择--</option>
+                <option [value]="option.text" *ngFor="let option of saleman">
+                  {{ option.text }}
+                </option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-3">
+          <div class="form-group row">
+            <label for="inputremark" class="col-md-3 col-form-label">DMS号</label>
+            <div class="col-md-9">
+              <input [(ngModel)]="carsale.DMSNo" type="text"  class="form-control" placeholder="">
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="row">
+        <div class="col-md-12">
+          <fieldset class="form-group">
+            <div class="row">
+              <legend class="col-form-legend col-md-1">客户信息</legend>
+
+              <div class="col-md-11">
+                <div class="btn-group" role="group" aria-label="Basic example">
+                  <button placement="right" (shown)="showPopCustomer()" #pcust="ngbPopover" [ngbPopover]="popContentCustomer"
+                    popoverTitle="客户信息列表" type="button" class="btn btn-success btn-sm" container="body">
+                    <i class="fa fa-refresh" aria-hidden="true"></i> 选择客户</button>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-3">
+                    <div class="form-group row">
+                      <label for="inputremark" class="col-md-3 col-form-label">客户</label>
+                      <div class="col-md-9">
+                        <input [(ngModel)]="customer.Name" type="text" readonly  class="form-control" placeholder="">
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-md-3">
+                    <div class="form-group row">
+                      <label for="inputId" class="col-md-3 col-form-label">居住地址</label>
+                      <div class="col-md-9">
+                        <input [(ngModel)]="customer.Address" type="text"  readonly class="form-control" placeholder="">
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-md-3">
+                    <div class="form-group row">
+                      <label for="inputId" class="col-md-3 col-form-label">客户电话</label>
+                      <div class="col-md-9">
+                        <input [(ngModel)]="customer.Phone" type="text" readonly class="form-control" placeholder="">
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-md-3">
+                    <div class="form-group row">
+                      <label for="inputremark" class="col-md-3 col-form-label">联系人</label>
+                      <div class="col-md-9">
+                        <input [(ngModel)]="customer.LinkMan" type="text" readonly class="form-control" placeholder="">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </fieldset>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-12">
+          <fieldset class="form-group">
+            <div class="row">
+              <legend class="col-form-legend col-md-1">车辆信息</legend>
+
+              <div class="col-md-11">
+                <div class="btn-group" role="group" aria-label="Basic example">
+                  <button placement="right" (shown)="showPopCarInfo()" #pcar="ngbPopover" [ngbPopover]="popContentCar"
+                    popoverTitle="产品信息列表" type="button" class="btn btn-success btn-sm" container="body">
+                    <i class="fa fa-refresh" aria-hidden="true"></i> 选择车辆</button>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-3">
+                    <div class="form-group row">
+                      <label for="inputremark" class="col-md-3 col-form-label">车型名称</label>
+                      <div class="col-md-9">
+                        <input [(ngModel)]="carinfo.CarType" type="text" readonly class="form-control" placeholder="">
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-md-3">
+                    <div class="form-group row">
+                      <label for="inputId" class="col-md-3 col-form-label">车架号</label>
+                      <div class="col-md-9">
+                        <input [(ngModel)]="carinfo.Vinno" type="text" readonly class="form-control" placeholder="">
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-md-3">
+                    <div class="form-group row">
+                      <label for="inputId" class="col-md-3 col-form-label">车辆状态</label>
+                      <div class="col-md-9">
+                        <input [(ngModel)]="carinfo.Status" type="text" readonly class="form-control" placeholder="">
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-md-3">
+                    <div class="form-group row">
+                      <label for="inputremark" class="col-md-3 col-form-label">颜色</label>
+                      <div class="col-md-9">
+                        <input [(ngModel)]="carinfo.CarColor" type="text" readonly  class="form-control" placeholder="">
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-md-3">
+                    <div class="form-group row">
+                      <label for="inputremark" class="col-md-3 col-form-label">内饰</label>
+                      <div class="col-md-9">
+                        <input [(ngModel)]="carinfo.CarTrim" type="text" readonly  class="form-control" placeholder="">
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6">
+                    <div class="form-group row">
+                      <label for="inputremark" class="col-md-3 col-form-label">个性化配置</label>
+                      <div class="col-md-9">
+                        <input [(ngModel)]="carsale.SelfConfig" type="text"  class="form-control" placeholder="">
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </fieldset>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-3">
+          <div class="form-group row">
+            <label for="inputremark" class="col-md-3 col-form-label">指导价</label>
+            <div class="col-md-9">
+              <input [(ngModel)]="carsale.GuidePrice" type="text"  class="form-control" placeholder="">
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-3">
+          <div class="form-group row">
+            <label for="inputremark" class="col-md-3 col-form-label">销售价</label>
+            <div class="col-md-9">
+              <input [(ngModel)]="carsale.SalePrice" type="text"  class="form-control" placeholder="">
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-3">
+          <div class="form-group row">
+            <label for="inputremark" class="col-md-3 col-form-label">优惠点位</label>
+            <div class="col-md-9">
+              <input [(ngModel)]="carsale.Discount" type="text"  class="form-control" placeholder="">
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-3">
+          <div class="form-group row">
+            <label for="inputremark" class="col-md-3 col-form-label">订单金额</label>
+            <div class="col-md-9">
+              <input [(ngModel)]="carsale.Deposit" type="text"  class="form-control" placeholder="">
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="row">
+        <div class="col-md-4">
+          <div class="form-group row">
+            <label for="inputremark" class="col-md-9 col-form-label">1.现车付款：签单后合同余款付款时效天数</label>
+            <div class="col-md-3">
+              <input [(ngModel)]="carsale.Days1" type="text"  class="form-control" placeholder="">
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-3">
+          <div class="form-group row">
+            <label for="inputremark" class="col-md-9 col-form-label">增值预估费合计</label>
+            <div class="col-md-3">
+              <input [(ngModel)]="carsale.PredictFee" type="text"  class="form-control" placeholder="">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-4">
+          <div class="form-group row">
+            <label for="inputremark" class="col-md-9 col-form-label">2.预定车辆付款：到货通知后合同余款付款时效天数</label>
+            <div class="col-md-3">
+              <input [(ngModel)]="carsale.Days2" type="text"  class="form-control" placeholder="">
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-3">
+          <div class="form-group row">
+            <label for="inputremark" class="col-md-9 col-form-label">整单费用合计预</label>
+            <div class="col-md-3">
+              <input [(ngModel)]="carsale.WholeFee" type="text"  class="form-control" placeholder="">
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="row">
+        <div class="col-md-4">
+          <div class="form-group row">
+            <label for="inputremark" class="col-md-4 col-form-label">3.分期签约融资机构</label>
+            <div class="col-md-8">
+              <input [(ngModel)]="carsale.FinaceCompany" type="text"  class="form-control" placeholder="">
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-2">
+          <div class="form-group row">
+            <label for="inputremark" class="col-md-5 col-form-label">首付金额</label>
+            <div class="col-md-7">
+              <input [(ngModel)]="carsale.FirstFee" type="text"  class="form-control" placeholder="">
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-2">
+          <div class="form-group row">
+            <label for="inputremark" class="col-md-8 col-form-label">分期期数</label>
+            <div class="col-md-4">
+              <input [(ngModel)]="carsale.Stages" type="text"  class="form-control" placeholder="">
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="form-group row">
+            <label for="inputremark" class="col-md-9 col-form-label">首付款交款时效天数</label>
+            <div class="col-md-3">
+              <input [(ngModel)]="carsale.Days3" type="text"  class="form-control" placeholder="">
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="row">
+        <div class="col-md-3">
+          <div class="form-group row">
+            <label for="inputremark" class="col-md-5 col-form-label">预计交车日期</label>
+            <div class="input-group col-md-7">
+              <input class="form-control" placeholder="yyyy-mm-dd" [(ngModel)]="carsale.PreCarDateObj" ngbDatepicker #d1="ngbDatepicker">
+              <div class="input-group-addon" (click)="d1.toggle()">
+                <i class="fa fa-calendar" aria-hidden="true"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-3">
+          <div class="form-group row">
+            <label for="inputremark" class="col-md-3 col-form-label">接车方式</label>
+            <div class="col-md-9">
+              <input [(ngModel)]="carsale.PickCarType" type="text"  class="form-control" placeholder="">
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-3">
+          <div class="form-group row">
+            <label for="inputremark" class="col-md-3 col-form-label">接车人</label>
+            <div class="col-md-9">
+              <input [(ngModel)]="carsale.PickCarMan" type="text"  class="form-control" placeholder="">
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-3">
+          <div class="form-group row">
+            <label for="inputremark" class="col-md-3 col-form-label">接车电话</label>
+            <div class="col-md-9">
+              <input [(ngModel)]="carsale.PickCarMobile" type="text"  class="form-control" placeholder="">
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="row">
+        <div class="col-md-3">
+          <div class="form-group row">
+            <label for="inputremark" class="col-md-3 col-form-label">备注</label>
+            <div class="col-md-9">
+              <input [(ngModel)]="carsale.Remark" type="text"  class="form-control" placeholder="">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-4">
+          <div class="form-group row">
+            <div class="col-md-9 offset-md-3 btn-group">
+              <button type="button" (click)="onConfirm()" class="btn btn-info">{{ isSaved ?
+                '正在保存...':'确认保存'}}</button>
+              <button type="button" (click)="onBack()" class="btn btn-warning">返回列表</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <ng-template #popContentCustomer>
+        <a href="javascrpit:void(0)" class="close" (click)='pcust.close()' aria-hidden="true">&times;</a>
+        <search-input (searchClick)="onSearchCus($event)"></search-input>
+        <ng2-smart-table [settings]="settingsCus" [source]="popCusInfoGrid" (userRowSelect)="rowCusClicked($event)">
+        </ng2-smart-table>
+      </ng-template>
+
+      <ng-template #popContentCar>
+        <a href="javascrpit:void(0)" class="close" (click)='pcar.close()' aria-hidden="true">&times;</a>
+        <search-input (searchClick)="onSearchCar($event)"></search-input>
+        <ng2-smart-table [settings]="settingsCar" [source]="popCarInfoGrid" (userRowSelect)="rowCarClicked($event)">
+        </ng2-smart-table>
+      </ng-template>
+
+      <!-- <ng-template #popContentOrg>
+        <app-sys-org [editable]="false" (selected)="onSelectedOrg($event)"></app-sys-org>
+      </ng-template> -->
+
+    </ba-card>
+  </div>
+</div>

@@ -5,6 +5,7 @@ import { MarketComponent } from './market.component';
 import { CarstoreComponent } from './carstore/carstore.component';
 import { CarstoreNewComponent } from './carstorenew/carstorenew.component';
 import { CarsaleComponent } from './carsale/carsale.component';
+import { CarSaleNewComponent } from './carsalenew/carsalenew.component';
 const routes: Routes = [
   {
     path: '',
@@ -14,6 +15,7 @@ const routes: Routes = [
       { path: 'carstore', component: CarstoreComponent},
       { path: 'carstorenew/:id', component: CarstoreNewComponent},
       { path: 'carsale', component: CarsaleComponent},
+      { path: 'carsalenew/:id', component: CarSaleNewComponent},
     ]
   }
 ];

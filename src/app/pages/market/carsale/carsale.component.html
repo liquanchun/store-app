@@ -16,7 +16,11 @@
           <div class="col-8">
             <div class="btn-group pull-right margin8" role="group" aria-label="Basic example">
               <button (click)="getDataList()" type="button" class="btn btn-info btn-sm">
-                    <i class="fa fa-refresh" aria-hidden="true"></i> 刷新</button>
+                <i class="fa fa-refresh" aria-hidden="true"></i> 刷新</button>
+            </div>
+            <div class="btn-group pull-right margin8" role="group" aria-label="Basic example">
+              <button (click)="onCreate()" type="button" class="btn btn-info btn-sm">
+                <i class="fa fa-pencil" aria-hidden="true"></i> 新增</button>
             </div>
           </div>
         </div>
@@ -35,7 +39,7 @@
           <ng2-smart-table [settings]="newSettings" [source]="source" (rowSelect)="onSelected($event)" (edit)="onEdit($event)"
             (delete)="onDelete($event)">
           </ng2-smart-table>
-          <div style="color: blue;"  [class.total]="totalRecord > 10">总记录：{{totalRecord}}</div>
+          <div style="color: blue;" [class.total]="totalRecord > 10">总记录：{{totalRecord}}</div>
         </div>
       </div>
 
@@ -44,7 +48,7 @@
           <ng-template ngbTabContent>
             <div class="row">
               <div class="col-md-12">
-                <app-edit-form [formView]="view" [mainTableID]="mainTableID"></app-edit-form>
+                <app-show-form [formView]="view" [mainTableID]="mainTableID"></app-show-form>
               </div>
             </div>
           </ng-template>

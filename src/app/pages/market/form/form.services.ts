@@ -8,6 +8,10 @@ export class FormService {
   constructor(private _httpService: HttpService) {
   }
 
+  getDataCount(tablename: string) {
+    return this._httpService.getDataServer2(this.modelName + 'count/' + tablename);
+  }
+
   getForms(viewname: string) {
     return this._httpService.getDataServer2(this.modelName + '/' + viewname);
   }
