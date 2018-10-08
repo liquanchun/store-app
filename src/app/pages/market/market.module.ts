@@ -29,6 +29,7 @@ import { SearchFormComponent } from './searchform/searchform.component';
 import { CarstoreNewComponent } from './carstorenew/carstorenew.component';
 import { CarsaleComponent } from './carsale/carsale.component';
 import { CarSaleNewComponent } from './carsalenew/carsalenew.component';
+import { CarSaleBookComponent } from './carsalebook/carsalebook.component';
 
 @NgModule({
   imports: [
@@ -57,6 +58,7 @@ import { CarSaleNewComponent } from './carsalenew/carsalenew.component';
     SearchFormComponent,
     CarsaleComponent,
     CarSaleNewComponent,
+    CarSaleBookComponent
   ],
   providers: [GlobalState, Config, HttpService, AppState, AuthGuard, Common]
 })

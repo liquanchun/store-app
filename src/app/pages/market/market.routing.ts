@@ -6,6 +6,7 @@ import { CarstoreComponent } from './carstore/carstore.component';
 import { CarstoreNewComponent } from './carstorenew/carstorenew.component';
 import { CarsaleComponent } from './carsale/carsale.component';
 import { CarSaleNewComponent } from './carsalenew/carsalenew.component';
+import { CarSaleBookComponent } from './carsalebook/carsalebook.component';
 const routes: Routes = [
   {
     path: '',
@@ -15,6 +16,7 @@ const routes: Routes = [
       { path: 'carstore', component: CarstoreComponent},
       { path: 'carstorenew/:id', component: CarstoreNewComponent},
       { path: 'carsale', component: CarsaleComponent},
+      { path: 'carsalebook', component: CarSaleBookComponent},
       { path: 'carsalenew/:id', component: CarSaleNewComponent},
     ]
   }

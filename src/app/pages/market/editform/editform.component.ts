@@ -340,6 +340,10 @@ export class EditFormComponent implements OnInit {
 
   //获取数据
   getDataList() {
+    _.each(this.config, f => {
+      f.value = '';
+    });
+
     if (this.formname && this.keyName && this._mainId > 0) {
       this.formService.getForms(`${this.formname}/${this.keyName}/${this._mainId}`).then((data) => {
         if (data && data.Data && data.Data.length > 0) {
@@ -354,19 +358,6 @@ export class EditFormComponent implements OnInit {
               this.updateData[f.name] = fieldValue;
             }
           });
-
-          // _.each(this.groupConfig, f => {
-          //   f.config.forEach(e => {
-          //     let fieldValue = data.Data[0][f.name];
-          //     if (fieldValue) {
-          //       if (e.type === 'datepicker' && _.isString(fieldValue)) {
-          //         fieldValue = this._common.getDateObject(fieldValue);
-          //       }
-          //       e.value = fieldValue;
-          //     }
-          //   });
-          // });
-
         }
       }, (err) => {
       });
