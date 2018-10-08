@@ -30,7 +30,7 @@ import { CarstoreNewComponent } from './carstorenew/carstorenew.component';
 import { CarsaleComponent } from './carsale/carsale.component';
 import { CarSaleNewComponent } from './carsalenew/carsalenew.component';
 import { CarSaleBookComponent } from './carsalebook/carsalebook.component';
-
+import { TableFormComponent } from './tableform/tableform.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -58,7 +58,8 @@ import { CarSaleBookComponent } from './carsalebook/carsalebook.component';
     SearchFormComponent,
     CarsaleComponent,
     CarSaleNewComponent,
-    CarSaleBookComponent
+    CarSaleBookComponent,
+    TableFormComponent
   ],
   providers: [GlobalState, Config, HttpService, AppState, AuthGuard, Common]
 })

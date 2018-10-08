@@ -1,1 +1,1 @@
-export * from './carsalenew.component';
+export * from './tableform.component';

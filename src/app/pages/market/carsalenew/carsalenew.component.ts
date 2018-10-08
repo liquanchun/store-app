@@ -26,7 +26,7 @@ import { LocalDataSource } from "ng2-smart-table";
 import { Common } from "../../../providers/common";
 import * as $ from "jquery";
 import * as _ from "lodash";
-import async from 'async';
+import async from "async";
 
 import { DicService } from "../../sys/dic/dic.services";
 import { FormService } from "../form/form.services";
@@ -34,7 +34,7 @@ import { GlobalState } from "../../../global.state";
 
 @Component({
   selector: "app-carsalenew",
-  templateUrl: "./carsalenew.component.html",
+  templateUrl: "./carsalenew2.component.html",
   styleUrls: ["./carsalenew.component.scss"],
   providers: [DicService, FormService]
 })
@@ -86,7 +86,19 @@ export class CarSaleNewComponent implements OnInit {
     CarColor: "",
     CarTrim: ""
   };
-
+  serviceItem = [
+    { itemName: "精品装饰", service: "全车贴膜", price: "0" },
+    { itemName: "新车保险预估", service: "全险", price: "0" },
+    { itemName: "购置税预估", service: "", price: "0" },
+    { itemName: "综合服务费", service: "", price: "0" },
+    { itemName: "金融分期服务费", service: "", price: "0" },
+    { itemName: "安心服务器预估", service: "", price: "0" },
+    { itemName: "贴心服务器预估", service: "", price: "0" },
+    { itemName: "玻璃保险预估", service: "", price: "0" },
+  ];
+  giveItem = [
+    { itemName: "其他", service: "会员卡", price: "0" },
+  ];
   //销售顾问
   saleman: any;
 
@@ -190,7 +202,7 @@ export class CarSaleNewComponent implements OnInit {
     const id = _.toInteger(this.route.snapshot.paramMap.get("id"));
     if (id == 0) {
       this.getDataList();
-
+      this.carsale.OrderDate = this._common.getTodayStringChinese();
       this.carsale.OrderDateObj = this._common.getTodayObj();
       //获取默认订单号
       this.formService.getDataCount("car_booking").then(
@@ -215,55 +227,58 @@ export class CarSaleNewComponent implements OnInit {
 
   getCarsale(id: number) {
     const that = this;
-    async.series({
-      one: function(callback){
-        that.formService.getForms("vw_car_income").then(
-          data => {
-            that.carinfoDataList = data.Data;
-            that.popCarInfoGrid = data.Data;
-            callback(null, 1);
-          },
-          err => {}
-        )
+    async.series(
+      {
+        one: function(callback) {
+          that.formService.getForms("vw_car_income").then(
+            data => {
+              that.carinfoDataList = data.Data;
+              that.popCarInfoGrid = data.Data;
+              callback(null, 1);
+            },
+            err => {}
+          );
+        },
+        two: function(callback) {
+          that.formService.getForms("car_customer").then(
+            data => {
+              that.custinfoDataList = data.Data;
+              that.popCusInfoGrid = data.Data;
+              callback(null, 2);
+            },
+            err => {}
+          );
+        },
+        three: function(callback) {
+          that.formService.getForms(`car_booking/${id}`).then(
+            data => {
+              if (data && data.Data) {
+                that.carsale = data.Data[0];
+                that.carsale.OrderDateObj = that._common.getDateObject(
+                  that.carsale.OrderDate
+                );
+                that.carsale.PreCarDateObj = that._common.getDateObject(
+                  that.carsale.PreCarDate
+                );
+
+                that.customer = _.find(that.custinfoDataList, f => {
+                  return f["Id"] == that.carsale.CustomerId;
+                });
+
+                that.carinfo = _.find(that.carinfoDataList, f => {
+                  return f["Id"] == that.carsale.CarIncomeId;
+                });
+                callback(null, 3);
+              }
+            },
+            err => {}
+          );
+        }
       },
-      two: function(callback){
-        that.formService.getForms("car_customer").then(
-          data => {
-            that.custinfoDataList = data.Data;
-            that.popCusInfoGrid = data.Data;
-            callback(null, 2);
-          },
-          err => {}
-        );
-      },
-      three: function(callback){
-        that.formService.getForms(`car_booking/${id}`).then(
-          data => {
-            if (data && data.Data) {
-              that.carsale = data.Data[0];
-              that.carsale.OrderDateObj = that._common.getDateObject(
-                that.carsale.OrderDate
-              );
-              that.carsale.PreCarDateObj = that._common.getDateObject(
-                that.carsale.PreCarDate
-              );
-    
-              that.customer = _.find(that.custinfoDataList, f => {
-                return f["Id"] == that.carsale.CustomerId;
-              });
-    
-              that.carinfo = _.find(that.carinfoDataList, f => {
-                return f["Id"] == that.carsale.CarIncomeId;
-              });
-              callback(null, 3);
-            }
-          },
-          err => {}
-        );
+      function(err, results) {
+        console.log(results);
       }
-    },function(err, results) {
-      console.log(results);
-    });
+    );
   }
 
   getDataList(): void {

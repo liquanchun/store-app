@@ -19,6 +19,13 @@ export class Common {
         let year = d.getFullYear();
         return `${year}-${_.padStart(month, 2, '0')}-${_.padStart(day, 2, '0')}`
     }
+    getTodayStringChinese() {
+        let d = new Date()
+        let day = _.toString(d.getDate());
+        let month = _.toString(d.getMonth() + 1);
+        let year = d.getFullYear();
+        return `${year}年${_.padStart(month, 2, '0')}月${_.padStart(day, 2, '0')}日`
+    }
     getTodayString2() {
         let d = new Date()
         let day = _.toString(d.getDate());

@@ -33,12 +33,12 @@ import { FormService } from "../form/form.services";
 import { GlobalState } from "../../../global.state";
 
 @Component({
-  selector: "app-carsalenew",
-  templateUrl: "./carsalenew.component.html",
-  styleUrls: ["./carsalenew.component.scss"],
+  selector: "app-tableform",
+  templateUrl: "./tableform.component.html",
+  styleUrls: ["./tableform.component.scss"],
   providers: [DicService, FormService]
 })
-export class CarSaleNewComponent implements OnInit {
+export class TableFormComponent implements OnInit {
   @Input()
   showEditButton: boolean = true;
   title = "新增销售预定单";
