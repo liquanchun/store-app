@@ -10,6 +10,44 @@
     margin-top: -15px;
     color: blue;
   }
+  .bill {
+    input{
+      border-left: none;
+      border-right: none;
+      border-top: none;
+      border-radius: 0;
+      border-bottom-color: black;
+      background-color:transparent;
+    }
+    .title {
+      font-size: 170%;
+      line-height: 1.3;
+    }
+  
+    .tablerow .col-md-6 {
+      border-top: 1px solid dimgray;
+      border-right: 1px solid dimgray;
+    }
+  
+    .tablehead {
+      border-top: 1px solid dimgray;
+      border-right: 1px solid dimgray;
+    }
+  
+    .tablerow .lastrow {
+      border-bottom: 1px solid dimgray;
+    }
+    table tr .longtext{
+      text-align: left;
+    }
+    table td{
+      text-align: right;
+    }
+    table th{
+      text-align: center;
+    }
+  }
+
   ng2-smart-table {
     th,
     td {

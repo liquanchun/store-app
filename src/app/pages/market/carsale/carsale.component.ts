@@ -14,6 +14,7 @@ import { FormService } from "../form/form.services";
 import { DicService } from "../../sys/dic/dic.services";
 import { GlobalState } from "../../../global.state";
 import { EditFormComponent } from "../editform/editform.component";
+import { PrintButtonComponent } from "./printbutton.component";
 import { Common } from "../../../providers/common";
 
 import * as $ from "jquery";
@@ -44,7 +45,18 @@ export class CarsaleComponent implements OnInit {
       confirmDelete: true
     },
     hideSubHeader: true,
-    columns: {}
+    columns: {
+      button: {
+        title: "打印",
+        type: "custom",
+        renderComponent: PrintButtonComponent,
+        onComponentInitFunction(instance) {
+          instance.save.subscribe(row => {
+            alert(`${row.orderNo} saved!`);
+          });
+        }
+      }
+    }
   };
 
   configUpdate: FieldConfig[] = [];
@@ -66,6 +78,12 @@ export class CarsaleComponent implements OnInit {
   //子表查询条件
   mainTableID: number = 0;
   totalRecord: number = 0;
+
+  carsaleData: any;
+  printOrder:any;
+  serviceItem:any;
+  giveItem:any;
+
   constructor(
     private modalService: NgbModal,
     private formService: FormService,
@@ -80,16 +98,78 @@ export class CarsaleComponent implements OnInit {
     this.start();
     this.mainTableID = 0;
     const that = this;
+
+    this._state.subscribe("print.carsale.detail", data => {
+      this.router.navigate(["/pages/market/carsalenew", this.mainTableID], {
+        queryParams: { n: 1 }
+      });
+    });
+
+    this._state.subscribe("print.carsale", data => {
+      this.printOrder = _.find(this.carsaleData, f => {
+        return f["id"] == this.mainTableID;
+      });
+      if (this.printOrder) {
+        this.getItem();
+        _.delay(
+          function(that) {
+            that.print();
+          },
+          500,
+          this
+        );
+      }
+    });
   }
 
   start() {
-    this.settings.columns = {};
+    //this.settings.columns = {};
     const that = this;
     if (this.formname) {
       this.getViewName(this.formname).then(function() {
         that.getFormRoles();
       });
     }
+  }
+
+  getItem(){
+    const that = this;
+    this.formService.getForms("car_booking_item").then(
+      data => {
+        if (data.Data.length > 0) {
+          const zzitem = [],
+            zsitem = [];
+          _.each(data.Data, f => {
+            if (
+              f["OrderId"] == that.printOrder.OrderId &&
+              f["ItemType"] == "增值服务"
+            ) {
+              zzitem.push({
+                itemName: f["ItemName"],
+                itemType: f["ItemType"],
+                price: f["Price"],
+                service: f["Service"]
+              });
+            }
+            if (
+              f["OrderId"] == that.printOrder.OrderId &&
+              f["ItemType"] == "赠送服务"
+            ) {
+              zsitem.push({
+                itemName: f["ItemName"],
+                itemType: f["ItemType"],
+                price: f["Price"],
+                service: f["Service"]
+              });
+            }
+          });
+
+          that.serviceItem = zzitem;
+          that.giveItem = zsitem;
+        }
+      },
+      err => {}
+    );
   }
   //根据视图名称获取表格和表单定义
   getViewName(formname: string) {
@@ -227,7 +307,8 @@ export class CarsaleComponent implements OnInit {
   getDataList() {
     this.formService.getForms(this.tableView["ViewName"]).then(
       data => {
-        this.source.load(data.Data);
+        this.carsaleData = data.Data;
+        this.source.load(this.carsaleData);
         this.totalRecord = data.Data.length;
         this.loading = false;
       },
@@ -297,5 +378,61 @@ export class CarsaleComponent implements OnInit {
 
   onSelected(event) {
     this.mainTableID = event.data.Id;
+  }
+
+  print() {
+    let printContents, popupWin;
+    printContents = document.getElementById("printDiv").innerHTML;
+    popupWin = window.open(
+      "",
+      "_blank",
+      "top=0,left=0,height=978px,width=1080px"
+    );
+    popupWin.document.open();
+    popupWin.document.write(`
+      <html>
+        <head>
+          <title style="font-size: 30px;"></title>
+          <style>
+          title{
+            
+          }
+          .firstTable td {
+            border: none;
+            padding: 8px;
+          }
+          
+          .firstTable {
+            width: 680px;
+            border-collapse: collapse;
+          }
+          
+          .secondtable {
+            width: 680px;
+            border-collapse: collapse;
+          }
+          
+          .secondtable td {
+            padding: 8px;
+            border: 1px solid black;
+          }
+          
+          .secondtable thead {
+            font-weight: bold;
+          }
+          
+          .secondtable .footer {
+            font-weight: bold;
+          }
+          p{
+            text-align: center;
+            font-size:30px;
+            width: 680px;
+          }
+          </style>
+        </head>
+        <body onload="window.print();window.close()">${printContents}</body>
+      </html>`);
+    popupWin.document.close();
   }
 }

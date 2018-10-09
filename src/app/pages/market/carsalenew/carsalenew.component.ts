@@ -3,7 +3,8 @@ import {
   ViewChild,
   OnInit,
   AfterViewInit,
-  Input
+  Input,
+  SimpleChanges
 } from "@angular/core";
 import {
   NgbModal,
@@ -71,33 +72,68 @@ export class CarSaleNewComponent implements OnInit {
     PickCarType: "",
     PickCarMan: "",
     PickCarMobile: "",
-    Remark: ""
+    Remark: "",
+    Count: 1,
+    TakeCarSite: "北京博瑞宝汽车销售服务公司",
+    TakePhone: "010-87839999"
   };
   customer: any = {
     Name: "",
     Address: "",
     Phone: "",
-    LinkMan: ""
+    LinkMan: "",
+    IDCard: "",
+    LicenseType: "",
+    IdAddress: "",
+    CustType: "",
+    PostNumber: ""
   };
   carinfo: any = {
     CarType: "",
     Vinno: "",
     Status: "",
     CarColor: "",
-    CarTrim: ""
+    CarTrim: "",
+    GuidePrice: 0,
+    WholePrice: 0
   };
   serviceItem = [
-    { itemName: "精品装饰", service: "全车贴膜", price: "0" },
-    { itemName: "新车保险预估", service: "全险", price: "0" },
-    { itemName: "购置税预估", service: "", price: "0" },
-    { itemName: "综合服务费", service: "", price: "0" },
-    { itemName: "金融分期服务费", service: "", price: "0" },
-    { itemName: "安心服务器预估", service: "", price: "0" },
-    { itemName: "贴心服务器预估", service: "", price: "0" },
-    { itemName: "玻璃保险预估", service: "", price: "0" },
+    {
+      itemType: "增值服务",
+      itemName: "精品装饰",
+      service: "全车贴膜",
+      price: 0
+    },
+    {
+      itemType: "增值服务",
+      itemName: "新车保险预估",
+      service: "全险",
+      price: 0
+    },
+    { itemType: "增值服务", itemName: "购置税预估", service: "", price: 0 },
+    { itemType: "增值服务", itemName: "综合服务费", service: "", price: 0 },
+    {
+      itemType: "增值服务",
+      itemName: "金融分期服务费",
+      service: "",
+      price: 0
+    },
+    {
+      itemType: "增值服务",
+      itemName: "安心服务器预估",
+      service: "",
+      price: 0
+    },
+    {
+      itemType: "增值服务",
+      itemName: "贴心服务器预估",
+      service: "",
+      price: 0
+    },
+    { itemType: "增值服务", itemName: "玻璃保险预估", service: "", price: 0 }
   ];
   giveItem = [
-    { itemName: "其他", service: "会员卡", price: "0" },
+    { itemType: "赠送服务", itemName: "其他", service: "会员卡", price: 0 }
   ];
   //销售顾问
   saleman: any;
@@ -200,6 +236,10 @@ export class CarSaleNewComponent implements OnInit {
   ) {}
   ngOnInit() {
     const id = _.toInteger(this.route.snapshot.paramMap.get("id"));
+    const n = this.route.snapshot.queryParams["n"];
+    if (n) {
+      this.isEnable = false;
+    }
     if (id == 0) {
       this.getDataList();
       this.carsale.OrderDate = this._common.getTodayStringChinese();
@@ -273,6 +313,45 @@ export class CarSaleNewComponent implements OnInit {
             },
             err => {}
           );
+        },
+        four: function(callback) {
+          that.formService.getForms("car_booking_item").then(
+            data => {
+              if (data.Data.length > 0) {
+                const zzitem = [],
+                  zsitem = [];
+                _.each(data.Data, f => {
+                  if (
+                    f["OrderId"] == that.carsale.OrderId &&
+                    f["ItemType"] == "增值服务"
+                  ) {
+                    zzitem.push({
+                      itemName: f["ItemName"],
+                      itemType: f["ItemType"],
+                      price: f["Price"],
+                      service: f["Service"]
+                    });
+                  }
+                  if (
+                    f["OrderId"] == that.carsale.OrderId &&
+                    f["ItemType"] == "赠送服务"
+                  ) {
+                    zsitem.push({
+                      itemName: f["ItemName"],
+                      itemType: f["ItemType"],
+                      price: f["Price"],
+                      service: f["Service"]
+                    });
+                  }
+                });
+
+                that.serviceItem = zzitem;
+                that.giveItem = zsitem;
+              }
+              callback(null, 2);
+            },
+            err => {}
+          );
         }
       },
       function(err, results) {
@@ -308,6 +387,11 @@ export class CarSaleNewComponent implements OnInit {
       this.customer.LinkMan = "";
       this.customer.Name = "";
       this.customer.Phone = "";
+      this.customer.IDCard = "";
+      this.customer.LicenseType = "";
+      this.customer.IdAddress = "";
+      this.customer.CustType = "";
+      this.customer.PostNumber = "";
       this.carsale.CustomerId = 0;
     }
   }
@@ -374,7 +458,19 @@ export class CarSaleNewComponent implements OnInit {
     //   event.returnValue = false;
     // }
   }
-
+  newItem() {
+    this.giveItem.push({
+      itemType: "赠送服务",
+      itemName: "",
+      service: "",
+      price: 0
+    });
+  }
+  priceChange(event) {
+    this.carsale.PredictFee = _.sumBy(this.serviceItem, f => {
+      return f["price"];
+    });
+  }
   onBack() {
     this._router.navigate(["/pages/market/carsale"]);
   }
@@ -391,12 +487,16 @@ export class CarSaleNewComponent implements OnInit {
       );
     }
     const newcarsale = _.clone(this.carsale);
+    this.carsale.GuidePrice = this.carinfo.GuidePrice;
+    this.carsale.SalePrice = this.carinfo.WholePrice;
     delete newcarsale.PreCarDateObj;
     delete newcarsale.OrderDateObj;
+
     console.log(newcarsale);
     const that = this;
     this.formService.create("car_booking", newcarsale).then(
       function(data) {
+        that.saveItem();
         that._state.notifyDataChanged("messagebox", {
           type: "success",
           msg: "保存成功。",
@@ -411,5 +511,23 @@ export class CarSaleNewComponent implements OnInit {
         });
       }
     );
+  }
+
+  saveItem() {
+    const that = this;
+    const items = _.concat(
+      _.filter(this.serviceItem, f => {
+        return f.price > 0;
+      }),
+      _.filter(this.giveItem, f => {
+        return f.itemName.length > 1 && f.service.length > 1;
+      })
+    );
+    console.log(items);
+    this.formService
+      .create("car_booking_item", items)
+      .then(function(data) {}, err => {
+        console.log(err);
+      });
   }
 }

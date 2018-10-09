@@ -9,7 +9,7 @@
       <div class="form-group row">
         <label for="inputremark" class="col-md-3 col-form-label">订单号</label>
         <div class="col-md-9">
-          <input [(ngModel)]="carsale.OrderId" type="text" class="form-control">
+          <input [class.inputline]="!isEnable" [(ngModel)]="carsale.OrderId" type="text" class="form-control">
         </div>
       </div>
     </div>
@@ -17,7 +17,7 @@
       <div class="form-group row">
         <label for="inputremark" class="col-md-3 col-form-label">DMS号</label>
         <div class="col-md-9">
-          <input [(ngModel)]="carsale.DMSNo" type="text" class="form-control">
+          <input [class.inputline]="!isEnable" [(ngModel)]="carsale.DMSNo" type="text" class="form-control">
         </div>
       </div>
     </div>
@@ -25,7 +25,7 @@
       <div class="form-group row">
         <label for="inputremark" class="col-md-3 col-form-label">日期</label>
         <div class="col-md-9">
-          <input [(ngModel)]="carsale.OrderDate" type="text" class="form-control">
+          <input [class.inputline]="!isEnable" [(ngModel)]="carsale.OrderDate" type="text" class="form-control">
         </div>
       </div>
     </div>
@@ -36,32 +36,41 @@
     <table class="table table-bordered table-sm">
       <tbody>
         <tr>
-          <td>客户名称</td>
-          <td><input [(ngModel)]="carsale.OrderId" type="text" class="form-control"></td>
+          <td>
+            <button placement="right" (shown)="showPopCustomer()" #pcust="ngbPopover" [ngbPopover]="popContentCustomer"
+              popoverTitle="客户信息列表" type="button" class="btn btn-success btn-sm" container="body">
+              <i class="fa fa-refresh" aria-hidden="true"></i> 选择客户</button>
+            客户名称</td>
+          <td><input [class.inputline]="!isEnable" [(ngModel)]="customer.Name" type="text" readonly class="form-control"></td>
           <td>客户电话</td>
-          <td><input [(ngModel)]="carsale.DMSNo" type="text" class="form-control"></td>
+          <td><input [class.inputline]="!isEnable" [(ngModel)]="customer.Phone" type="text" readonly class="form-control"></td>
         </tr>
         <tr>
           <td>身份证/代码证</td>
-          <td><input [(ngModel)]="carsale.OrderId" type="text" class="form-control"></td>
+          <td><input [class.inputline]="!isEnable" [(ngModel)]="customer.IdCard" type="text" readonly class="form-control"></td>
           <td>牌照属性</td>
-          <td><input [(ngModel)]="carsale.DMSNo" type="text" class="form-control"></td>
+          <td><input [class.inputline]="!isEnable" [(ngModel)]="customer.LicenseType" type="text" readonly class="form-control"></td>
         </tr>
         <tr>
           <td>证件地址</td>
-          <td><input [(ngModel)]="carsale.OrderId" type="text" class="form-control"></td>
+          <td><input [class.inputline]="!isEnable" [(ngModel)]="customer.IdAddress" type="text" readonly class="form-control"></td>
           <td>客户性质</td>
-          <td><input [(ngModel)]="carsale.DMSNo" type="text" class="form-control"></td>
+          <td><input [class.inputline]="!isEnable" [(ngModel)]="customer.CustType" type="text" readonly class="form-control"></td>
         </tr>
         <tr>
           <td>居住地址</td>
-          <td><input [(ngModel)]="carsale.OrderId" type="text" class="form-control"></td>
+          <td><input [class.inputline]="!isEnable" [(ngModel)]="customer.Address" type="text" readonly class="form-control"></td>
           <td>邮编</td>
-          <td><input [(ngModel)]="carsale.DMSNo" type="text" class="form-control"></td>
+          <td><input [class.inputline]="!isEnable" [(ngModel)]="customer.PostNumber" type="text" readonly class="form-control"></td>
         </tr>
       </tbody>
     </table>
     <div style="padding:8px;">一、订购车型、数量及价款</div>
+    <div>
+      <button placement="right" (shown)="showPopCarInfo()" #pcar="ngbPopover" [ngbPopover]="popContentCar" popoverTitle="产品信息列表"
+        type="button" class="btn btn-success btn-sm" container="body">
+        <i class="fa fa-refresh" aria-hidden="true"></i> 选择车辆</button>
+    </div>
     <table class="table table-bordered table-sm">
       <thead>
         <tr>
@@ -76,28 +85,28 @@
       </thead>
       <tbody>
         <tr>
-          <td><input [(ngModel)]="carsale.DMSNo" type="text" class="form-control"></td>
-          <td><input [(ngModel)]="carsale.DMSNo" type="text" class="form-control"></td>
-          <td><input [(ngModel)]="carsale.DMSNo" type="text" class="form-control"></td>
-          <td><input [(ngModel)]="carsale.DMSNo" type="text" class="form-control"></td>
-          <td><input [(ngModel)]="carsale.DMSNo" type="text" class="form-control"></td>
-          <td rowspan="3"><input [(ngModel)]="carsale.DMSNo" type="text" class="form-control"></td>
-          <td rowspan="3"><input [(ngModel)]="carsale.DMSNo" type="text" class="form-control"></td>
+          <td><input [class.inputline]="!isEnable" [(ngModel)]="carinfo.CarType" type="text" readonly class="form-control"></td>
+          <td><input [class.inputline]="!isEnable" [(ngModel)]="carinfo.CarColor" type="text" readonly class="form-control"></td>
+          <td><input [class.inputline]="!isEnable" [(ngModel)]="carinfo.CarTrim" type="text" readonly class="form-control"></td>
+          <td><input [class.inputline]="!isEnable" [(ngModel)]="carinfo.GuidePrice" type="text" readonly class="form-control"></td>
+          <td><input [class.inputline]="!isEnable" [(ngModel)]="carinfo.WholePrice" type="text" readonly class="form-control"></td>
+          <td rowspan="3"><input [class.inputline]="!isEnable" [(ngModel)]="carsale.Count" type="text" class="form-control"></td>
+          <td rowspan="3"><input [class.inputline]="!isEnable" [(ngModel)]="carsale.Deposit" type="text" class="form-control"></td>
         </tr>
         <tr>
           <td>车架号码</td>
-          <td colspan="2"><input [(ngModel)]="carsale.OrderId" type="text" class="form-control"></td>
+          <td colspan="2"><input [class.inputline]="!isEnable" [(ngModel)]="carinfo.Vinno" type="text" readonly class="form-control"></td>
           <td>车辆状态</td>
-          <td><input [(ngModel)]="carsale.DMSNo" type="text" class="form-control"></td>
+          <td><input [class.inputline]="!isEnable" [(ngModel)]="carinfo.Status" type="text" readonly class="form-control"></td>
         </tr>
         <tr>
           <td>个性配置</td>
-          <td colspan="2"><input [(ngModel)]="carsale.OrderId" type="text" class="form-control"></td>
+          <td colspan="2"><input [class.inputline]="!isEnable" [(ngModel)]="carsale.SelfConfig" type="text" class="form-control"></td>
           <td>优惠点位或金额</td>
-          <td><input [(ngModel)]="carsale.DMSNo" type="text" class="form-control"></td>
+          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.Discount" type="text" class="form-control"></td>
         </tr>
         <tr>
-          <td>订单金额（大写）</td>
+          <td>订金金额（大写）</td>
           <td colspan="6"></td>
         </tr>
       </tbody>
@@ -117,28 +126,34 @@
         <tr *ngFor="let item of serviceItem">
           <td>{{item.itemName}}</td>
           <td>{{item.service}}</td>
-          <td><input [(ngModel)]="item.price" type="text" class="form-control"></td>
+          <td><input [class.inputline]="!isEnable" [(ngModel)]="item.price" type="text" (Change)="priceChange($event)"
+              class="form-control"></td>
         </tr>
         <tr>
           <td>增值预估费用合计金额（小写）</td>
-          <td colspan="6"></td>
+          <td></td>
+          <td>{{carsale.PredictFee}}</td>
         </tr>
       </tbody>
     </table>
 
     <div style="padding:8px;font-weight: bold">赠送商品或服务产品</div>
-
+    <button type="button" class="btn btn-success btn-sm" (click)="newItem()">
+      <i class="fa fa-refresh" aria-hidden="true"></i> 添加项目</button>
     <table class="table table-bordered table-sm">
       <thead>
         <tr>
           <th>项目</th>
           <th>商品或服务产品</th>
+          <th></th>
+          <th></th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let item of giveItem">
-          <td>{{item.itemName}}</td>
-          <td><input [(ngModel)]="item.service" type="text" class="form-control"></td>
+          <td><input [class.inputline]="!isEnable" [(ngModel)]="item.itemName" type="text" class="form-control"></td>
+          <td><input [class.inputline]="!isEnable" [(ngModel)]="item.service" type="text" class="form-control"></td>
+          <td colspan="2"></td>
         </tr>
       </tbody>
     </table>
@@ -148,46 +163,130 @@
       <tbody>
         <tr>
           <td>交付日期</td>
-          <td><input [(ngModel)]="carsale.OrderId" type="text" class="form-control"></td>
+          <td>
+            <div class="input-group">
+              <input [class.inputline]="!isEnable" class="form-control" placeholder="yyyy-mm-dd" [(ngModel)]="carsale.PreCarDateObj"
+                ngbDatepicker #d1="ngbDatepicker">
+              <div class="input-group-addon" (click)="d1.toggle()">
+                <i class="fa fa-calendar" aria-hidden="true"></i>
+              </div>
+            </div>
+          </td>
           <td>交车地点</td>
-          <td><input [(ngModel)]="carsale.DMSNo" type="text" class="form-control"></td>
+          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.TakeCarSite" type="text" class="form-control"></td>
           <td>联系电话</td>
-          <td><input [(ngModel)]="carsale.DMSNo" type="text" class="form-control"></td>
+          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.TakePhone" type="text" class="form-control"></td>
         </tr>
         <tr>
           <td>提车方式:</td>
-          <td><input [(ngModel)]="carsale.OrderId" type="text" class="form-control"></td>
-          <td>客户授权</td>
-          <td><input [(ngModel)]="carsale.DMSNo" type="text" class="form-control"></td>
-          <td>接车人</td>
-          <td><input [(ngModel)]="carsale.DMSNo" type="text" class="form-control"></td>
+          <td>
+            <div class="form-check">
+              <input [class.inputline]="!isEnable" type="radio" [checked]="carsale.PickCarType=='客户自提'" [(ngModel)]="carsale.PickCarType"
+                name="inlineRadioOptions" id="inlineRadio1" value="客户自提" class="form-check-input">
+              <label class="form-check-label" for="inlineRadio1">客户自提</label>
+            </div>
+          </td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
         </tr>
+        <tr>
+          <td></td>
+          <td>
+            <div class="form-check">
+              <input [class.inputline]="!isEnable" type="radio" [checked]="carsale.PickCarType=='客户授权'" [(ngModel)]="carsale.PickCarType"
+                name="inlineRadioOptions" id="inlineRadio2" value="客户授权" class="form-check-input">
+              <label class="form-check-label" for="inlineRadio2">客户授权</label>
+            </div>
+          </td>
+          <td>接车人</td>
+          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.PickCarMan" type="text" class="form-control"></td>
+          <td>接车电话</td>
+          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.PickCarMobile" type="text" class="form-control"></td>
+        </tr>
+
         <tr>
           <td>付款方式:</td>
           <td colspan="5"></td>
         </tr>
         <tr>
-          <td>1、现车付款</td>
-        </tr>
-        <tr>
-          <td>2、现车付款</td>
-        </tr>
-        <tr>
-          <td>3、分期付款</td>
-        </tr>
-        <tr>
-          <td>融资机构：</td>
           <td></td>
+          <td class="longtext">
+            <div class="form-check">
+              <input [class.inputline]="!isEnable" type="radio" [checked]="carsale.PayType=='现车付款'" [(ngModel)]="carsale.PayType"
+                name="inlineRadioOptions" id="inlineRadio3" value="现车付款" class="form-check-input">
+              <label class="form-check-labe3" for="inlineRadio2"> 1、现车付款：客户在签订本订单后</label>
+            </div>
+          </td>
+          <td class="longtext"><input [class.inputline]="!isEnable" [(ngModel)]="carsale.Days1" type="text" class="form-control"></td>
+          <td>日内支付合同内余款。预收余款： 元，款到释放车。</td>
+          <td colspan="2"></td>
+        </tr>
         <tr>
+          <td></td>
+          <td class="longtext">
+            <div class="form-check">
+              <input [class.inputline]="!isEnable" type="radio" [checked]="carsale.PayType=='订单车辆付款'" [(ngModel)]="carsale.PayType"
+                name="inlineRadioOptions" id="inlineRadio4" value="订单车辆付款" class="form-check-input">
+              <label class="form-check-labe3" for="inlineRadio4"> 2、订单车辆付款：客户在接到到货通知后</label>
+            </div>
+          </td>
+          <td class="longtext"><input [class.inputline]="!isEnable" [(ngModel)]="carsale.Days2" type="text" class="form-control"></td>
+          <td>日内支付合同内余款。预收余款： 元，款到释放车。</td>
+          <td colspan="2"></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td colspan="5" class="longtext">
+            <div class="form-check">
+              <input [class.inputline]="!isEnable" type="radio" [checked]="carsale.PayType=='分期付款'" [(ngModel)]="carsale.PayType"
+                name="inlineRadioOptions" id="inlineRadio5" value="分期付款" class="form-check-input">
+              <label class="form-check-labe3" for="inlineRadio5"> 3、分期付款</label>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="longtext">融资机构：</td>
+          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.FinaceCompany" type="text" class="form-control"></td>
           <td>首付：</td>
-          <td></td>
+          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.FirstFee" type="text" class="form-control"></td>
+          <td>分期</td>
+          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.Stages" type="text" class="form-control"></td>
         </tr>
         <tr>
-          <td>首付交款时间</td>
+          <td></td>
+          <td class="longtext">首付交款时间：</td>
+          <td>金融机构批准放贷</td>
+          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.Days3" type="text" class="form-control"></td>
+          <td>个工作日内，余款到账释放车辆。</td>
+          <td></td>
         </tr>
       </tbody>
     </table>
 
-
   </div>
+
+  <div class="row">
+    <div class="col-md-9 btn-group">
+      <button *ngIf="isEnable" type="button" (click)="onConfirm()" class="btn btn-info">{{ isSaved ?
+        '正在保存...':'确认保存'}}</button>
+      <button type="button" (click)="onBack()" class="btn btn-warning">返回列表</button>
+    </div>
+  </div>
+
+  <ng-template #popContentCustomer>
+    <a href="javascrpit:void(0)" class="close" (click)='pcust.close()' aria-hidden="true">&times;</a>
+    <search-input (searchClick)="onSearchCus($event)"></search-input>
+    <ng2-smart-table [settings]="settingsCus" [source]="popCusInfoGrid" (userRowSelect)="rowCusClicked($event)">
+    </ng2-smart-table>
+  </ng-template>
+
+  <ng-template #popContentCar>
+    <a href="javascrpit:void(0)" class="close" (click)='pcar.close()' aria-hidden="true">&times;</a>
+    <search-input (searchClick)="onSearchCar($event)"></search-input>
+    <ng2-smart-table [settings]="settingsCar" [source]="popCarInfoGrid" (userRowSelect)="rowCarClicked($event)">
+    </ng2-smart-table>
+  </ng-template>
+
 </div>
