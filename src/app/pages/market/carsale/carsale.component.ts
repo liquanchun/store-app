@@ -80,10 +80,12 @@ export class CarsaleComponent implements OnInit {
   totalRecord: number = 0;
 
   carsaleData: any;
-  printOrder:any;
-  serviceItem:any;
-  giveItem:any;
-
+  printOrder: any = {};
+  serviceItem: any;
+  serviceItem1: any;
+  serviceItem2: any;
+  giveItem: any;
+  htmlTd: any;
   constructor(
     private modalService: NgbModal,
     private formService: FormService,
@@ -107,8 +109,9 @@ export class CarsaleComponent implements OnInit {
 
     this._state.subscribe("print.carsale", data => {
       this.printOrder = _.find(this.carsaleData, f => {
-        return f["id"] == this.mainTableID;
+        return f["Id"] == this.mainTableID;
       });
+      console.log(this.printOrder);
       if (this.printOrder) {
         this.getItem();
         _.delay(
@@ -132,7 +135,7 @@ export class CarsaleComponent implements OnInit {
     }
   }
 
-  getItem(){
+  getItem() {
     const that = this;
     this.formService.getForms("car_booking_item").then(
       data => {
@@ -165,6 +168,35 @@ export class CarsaleComponent implements OnInit {
           });
 
           that.serviceItem = zzitem;
+          that.serviceItem1 = _.filter(zzitem, f => {
+            return f["service"] && f["service"].length > 1;
+          });
+          that.serviceItem2 = _.filter(zzitem, f => {
+            return !f["service"] || f["service"].length == 0;
+          });
+          if (that.serviceItem2.length % 2 != 0) {
+            that.serviceItem2.push({
+              itemName: "",
+              itemType: "增值服务",
+              price: 0,
+              service: ""
+            });
+          }
+          that.htmlTd = [];
+
+          let index;
+          for (index in that.serviceItem2) {
+            let i = index * 2;
+            if (i < that.serviceItem2.length) {
+              that.htmlTd.push({
+                itemName1: that.serviceItem2[i].itemName,
+                price1: that.serviceItem2[i].price,
+                itemName2: that.serviceItem2[i + 1].itemName,
+                price2: that.serviceItem2[i + 1].price
+              });
+            }
+          }
+          console.log(that.htmlTd);
           that.giveItem = zsitem;
         }
       },
@@ -378,6 +410,14 @@ export class CarsaleComponent implements OnInit {
 
   onSelected(event) {
     this.mainTableID = event.data.Id;
+
+    this.printOrder = _.find(this.carsaleData, f => {
+      return f["Id"] == this.mainTableID;
+    });
+    console.log(this.printOrder);
+    if (this.printOrder) {
+      this.getItem();
+    }
   }
 
   print() {
@@ -386,48 +426,29 @@ export class CarsaleComponent implements OnInit {
     popupWin = window.open(
       "",
       "_blank",
-      "top=0,left=0,height=978px,width=1080px"
+      "top=0,left=0,height=1098px,width=1080px"
     );
     popupWin.document.open();
     popupWin.document.write(`
       <html>
         <head>
-          <title style="font-size: 30px;"></title>
+          <title style="font-size: 10px;"></title>
           <style>
-          title{
-            
-          }
-          .firstTable td {
-            border: none;
-            padding: 8px;
-          }
-          
-          .firstTable {
-            width: 680px;
+          table{
+            width: 740px;
             border-collapse: collapse;
+            font-size: 12px;
+            border:1px solid black;
           }
-          
-          .secondtable {
-            width: 680px;
-            border-collapse: collapse;
+          th,td{
+            border:1px solid black;
           }
-          
-          .secondtable td {
-            padding: 8px;
-            border: 1px solid black;
+          .noboder td{
+            border-left:none;
+            border-right:none;
           }
-          
-          .secondtable thead {
-            font-weight: bold;
-          }
-          
-          .secondtable .footer {
-            font-weight: bold;
-          }
-          p{
-            text-align: center;
-            font-size:30px;
-            width: 680px;
+          .noboderall td{
+            border:none;
           }
           </style>
         </head>

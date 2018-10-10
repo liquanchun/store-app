@@ -90,8 +90,8 @@
           <td><input [class.inputline]="!isEnable" [(ngModel)]="carinfo.CarTrim" type="text" readonly class="form-control"></td>
           <td><input [class.inputline]="!isEnable" [(ngModel)]="carinfo.GuidePrice" type="text" readonly class="form-control"></td>
           <td><input [class.inputline]="!isEnable" [(ngModel)]="carinfo.WholePrice" type="text" readonly class="form-control"></td>
-          <td rowspan="3"><input [class.inputline]="!isEnable" [(ngModel)]="carsale.Count" type="text" class="form-control"></td>
-          <td rowspan="3"><input [class.inputline]="!isEnable" [(ngModel)]="carsale.Deposit" type="text" class="form-control"></td>
+          <td rowspan="3"><input [class.inputline]="!isEnable" [(ngModel)]="carsale.Count" type="number" class="form-control"></td>
+          <td rowspan="3"><input [class.inputline]="!isEnable" [(ngModel)]="carsale.Deposit" type="number" class="form-control"></td>
         </tr>
         <tr>
           <td>车架号码</td>
@@ -103,7 +103,7 @@
           <td>个性配置</td>
           <td colspan="2"><input [class.inputline]="!isEnable" [(ngModel)]="carsale.SelfConfig" type="text" class="form-control"></td>
           <td>优惠点位或金额</td>
-          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.Discount" type="text" class="form-control"></td>
+          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.Discount" type="number" class="form-control"></td>
         </tr>
         <tr>
           <td>订金金额（大写）</td>
@@ -126,7 +126,7 @@
         <tr *ngFor="let item of serviceItem">
           <td>{{item.itemName}}</td>
           <td>{{item.service}}</td>
-          <td><input [class.inputline]="!isEnable" [(ngModel)]="item.price" type="text" (Change)="priceChange($event)"
+          <td><input [class.inputline]="!isEnable" [(ngModel)]="item.price" type="number" (change)="priceChange($event)"
               class="form-control"></td>
         </tr>
         <tr>
@@ -182,7 +182,7 @@
           <td>
             <div class="form-check">
               <input [class.inputline]="!isEnable" type="radio" [checked]="carsale.PickCarType=='客户自提'" [(ngModel)]="carsale.PickCarType"
-                name="inlineRadioOptions" id="inlineRadio1" value="客户自提" class="form-check-input">
+                name="PickCarType" id="inlineRadio1" value="客户自提" class="form-check-input">
               <label class="form-check-label" for="inlineRadio1">客户自提</label>
             </div>
           </td>
@@ -196,7 +196,7 @@
           <td>
             <div class="form-check">
               <input [class.inputline]="!isEnable" type="radio" [checked]="carsale.PickCarType=='客户授权'" [(ngModel)]="carsale.PickCarType"
-                name="inlineRadioOptions" id="inlineRadio2" value="客户授权" class="form-check-input">
+                name="PickCarType" id="inlineRadio2" value="客户授权" class="form-check-input">
               <label class="form-check-label" for="inlineRadio2">客户授权</label>
             </div>
           </td>
@@ -215,11 +215,11 @@
           <td class="longtext">
             <div class="form-check">
               <input [class.inputline]="!isEnable" type="radio" [checked]="carsale.PayType=='现车付款'" [(ngModel)]="carsale.PayType"
-                name="inlineRadioOptions" id="inlineRadio3" value="现车付款" class="form-check-input">
+                name="PayType" id="inlineRadio3" value="现车付款" class="form-check-input">
               <label class="form-check-labe3" for="inlineRadio2"> 1、现车付款：客户在签订本订单后</label>
             </div>
           </td>
-          <td class="longtext"><input [class.inputline]="!isEnable" [(ngModel)]="carsale.Days1" type="text" class="form-control"></td>
+          <td class="longtext"><input [class.inputline]="!isEnable" [(ngModel)]="carsale.Days1" type="number" class="form-control"></td>
           <td>日内支付合同内余款。预收余款： 元，款到释放车。</td>
           <td colspan="2"></td>
         </tr>
@@ -228,11 +228,11 @@
           <td class="longtext">
             <div class="form-check">
               <input [class.inputline]="!isEnable" type="radio" [checked]="carsale.PayType=='订单车辆付款'" [(ngModel)]="carsale.PayType"
-                name="inlineRadioOptions" id="inlineRadio4" value="订单车辆付款" class="form-check-input">
+                name="PayType" id="inlineRadio4" value="订单车辆付款" class="form-check-input">
               <label class="form-check-labe3" for="inlineRadio4"> 2、订单车辆付款：客户在接到到货通知后</label>
             </div>
           </td>
-          <td class="longtext"><input [class.inputline]="!isEnable" [(ngModel)]="carsale.Days2" type="text" class="form-control"></td>
+          <td class="longtext"><input [class.inputline]="!isEnable" [(ngModel)]="carsale.Days2" type="number" class="form-control"></td>
           <td>日内支付合同内余款。预收余款： 元，款到释放车。</td>
           <td colspan="2"></td>
         </tr>
@@ -241,7 +241,7 @@
           <td colspan="5" class="longtext">
             <div class="form-check">
               <input [class.inputline]="!isEnable" type="radio" [checked]="carsale.PayType=='分期付款'" [(ngModel)]="carsale.PayType"
-                name="inlineRadioOptions" id="inlineRadio5" value="分期付款" class="form-check-input">
+                name="PayType" id="inlineRadio5" value="分期付款" class="form-check-input">
               <label class="form-check-labe3" for="inlineRadio5"> 3、分期付款</label>
             </div>
           </td>
@@ -250,21 +250,31 @@
           <td class="longtext">融资机构：</td>
           <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.FinaceCompany" type="text" class="form-control"></td>
           <td>首付：</td>
-          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.FirstFee" type="text" class="form-control"></td>
+          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.FirstFee" type="number" class="form-control"></td>
           <td>分期</td>
-          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.Stages" type="text" class="form-control"></td>
+          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.Stages" type="number" class="form-control"></td>
         </tr>
         <tr>
           <td></td>
           <td class="longtext">首付交款时间：</td>
           <td>金融机构批准放贷</td>
-          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.Days3" type="text" class="form-control"></td>
+          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.Days3" type="number" class="form-control"></td>
           <td>个工作日内，余款到账释放车辆。</td>
           <td></td>
         </tr>
       </tbody>
     </table>
+  </div>
 
+  <div class="row">
+    <div class="col-md-6 text-left">
+      <div class="form-group row">
+        <label for="inputremark" class="col-md-3 col-form-label">备注</label>
+        <div class="col-md-9">
+          <input [class.inputline]="!isEnable" [(ngModel)]="carsale.Remark" type="text" class="form-control">
+        </div>
+      </div>
+    </div>
   </div>
 
   <div class="row">

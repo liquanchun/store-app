@@ -75,7 +75,8 @@ export class CarSaleNewComponent implements OnInit {
     Remark: "",
     Count: 1,
     TakeCarSite: "北京博瑞宝汽车销售服务公司",
-    TakePhone: "010-87839999"
+    TakePhone: "010-87839999",
+    Creator:''
   };
   customer: any = {
     Name: "",
@@ -242,6 +243,7 @@ export class CarSaleNewComponent implements OnInit {
     }
     if (id == 0) {
       this.getDataList();
+      this.carsale.Creator = sessionStorage.getItem('userName');
       this.carsale.OrderDate = this._common.getTodayStringChinese();
       this.carsale.OrderDateObj = this._common.getTodayObj();
       //获取默认订单号
@@ -502,6 +504,7 @@ export class CarSaleNewComponent implements OnInit {
           msg: "保存成功。",
           time: new Date().getTime()
         });
+        that.isEnable = false;
       },
       err => {
         that._state.notifyDataChanged("messagebox", {
@@ -524,10 +527,13 @@ export class CarSaleNewComponent implements OnInit {
       })
     );
     console.log(items);
-    this.formService
-      .create("car_booking_item", items)
-      .then(function(data) {}, err => {
-        console.log(err);
-      });
+    _.each(items, f => {
+      f["OrderId"] = this.carsale.OrderId;
+      this.formService
+        .create("car_booking_item", f)
+        .then(function(data) {}, err => {
+          console.log(err);
+        });
+    });
   }
 }
