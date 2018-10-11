@@ -1,5 +1,11 @@
 import { Component, OnInit, AfterViewInit, ViewChild } from "@angular/core";
 import { NgbModal, ModalDismissReasons } from "@ng-bootstrap/ng-bootstrap";
+import {
+  FormGroup,
+  AbstractControl,
+  FormBuilder,
+  Validators
+} from "@angular/forms";
 import { LocalDataSource } from "ng2-smart-table";
 import { FieldConfig } from "../../../theme/components/dynamic-form/models/field-config.interface";
 import { NgbdModalContent } from "../../../modal-content.component";
@@ -7,22 +13,21 @@ import { Router, ActivatedRoute, ParamMap } from "@angular/router";
 import { FormService } from "../form/form.services";
 import { DicService } from "../../sys/dic/dic.services";
 import { GlobalState } from "../../../global.state";
-import { EditFormComponent } from "../editform/editform.component";
-import { PrintButtonComponent } from "./printbutton.component";
+import { PrintCashComponent } from "./printcash.component";
 import { Common } from "../../../providers/common";
 
 import * as $ from "jquery";
 import * as _ from "lodash";
 
 @Component({
-  selector: "app-carsale",
-  templateUrl: "./carsale.component.html",
-  styleUrls: ["./carsale.component.scss"],
+  selector: "app-carsalecash",
+  templateUrl: "./carsalecash.component.html",
+  styleUrls: ["./carsalecash.component.scss"],
   providers: [FormService, DicService]
 })
-export class CarsaleComponent implements OnInit {
+export class CarSaleCashComponent implements OnInit {
   loading = false;
-  title = "车辆销售";
+  title = "销售交款明细";
   query: string = "";
   newSettings = {};
   settings = {
@@ -43,7 +48,7 @@ export class CarsaleComponent implements OnInit {
       button: {
         title: "打印",
         type: "custom",
-        renderComponent: PrintButtonComponent,
+        renderComponent: PrintCashComponent,
         onComponentInitFunction(instance) {
           instance.save.subscribe(row => {
             alert(`${row.orderNo} saved!`);
@@ -81,35 +86,26 @@ export class CarsaleComponent implements OnInit {
   giveItem: any;
   htmlTd: any;
 
-  chineseMoney:string;
+  chineseMoney: string;
   constructor(
     private modalService: NgbModal,
     private formService: FormService,
     private _dicService: DicService,
     private route: ActivatedRoute,
     private router: Router,
-    private _common:Common,
+    private _common: Common,
     private _state: GlobalState
   ) {}
   ngOnInit() {
-    this.formname = "carsale";
+    this.formname = "carsalecash";
     this.canUpdate = false;
     this.start();
     this.mainTableID = 0;
     const that = this;
 
     this._state.subscribe("print.carsale.detail", data => {
-      this.router.navigate(["/pages/market/carsalenew", this.mainTableID], {
-        queryParams: { n: 1 }
-      });
-    });
-
-    this._state.subscribe("print.carsale.check", data => {
-      this.printOrder = _.find(this.carsaleData, f => {
-        return f["Id"] == this.mainTableID;
-      });
       this.router.navigate(["/pages/market/carsalecashnew", this.mainTableID], {
-        queryParams: { n: this.printOrder.OrderId }
+        queryParams: { n: 1 }
       });
     });
 
@@ -119,11 +115,11 @@ export class CarsaleComponent implements OnInit {
       });
       console.log(this.printOrder);
       if (this.printOrder) {
-        if(this.printOrder.Deposit){
-          this.chineseMoney = this._common.changeNumMoneyToChinese(this.printOrder.Deposit);
+        if (this.printOrder.Deposit) {
+          this.chineseMoney = this._common.changeNumMoneyToChinese(
+            this.printOrder.Deposit
+          );
         }
-
-        this.getItem();
         _.delay(
           function(that) {
             that.print();
@@ -145,74 +141,6 @@ export class CarsaleComponent implements OnInit {
     }
   }
 
-  getItem() {
-    const that = this;
-    this.formService.getForms("car_booking_item").then(
-      data => {
-        if (data.Data.length > 0) {
-          const zzitem = [],
-            zsitem = [];
-          _.each(data.Data, f => {
-            if (
-              f["OrderId"] == that.printOrder.OrderId &&
-              f["ItemType"] == "增值服务"
-            ) {
-              zzitem.push({
-                itemName: f["ItemName"],
-                itemType: f["ItemType"],
-                price: f["Price"],
-                service: f["Service"]
-              });
-            }
-            if (
-              f["OrderId"] == that.printOrder.OrderId &&
-              f["ItemType"] == "赠送服务"
-            ) {
-              zsitem.push({
-                itemName: f["ItemName"],
-                itemType: f["ItemType"],
-                price: f["Price"],
-                service: f["Service"]
-              });
-            }
-          });
-
-          that.serviceItem = zzitem;
-          that.serviceItem1 = _.filter(zzitem, f => {
-            return f["service"] && f["service"].length > 1;
-          });
-          that.serviceItem2 = _.filter(zzitem, f => {
-            return !f["service"] || f["service"].length == 0;
-          });
-          if (that.serviceItem2.length % 2 != 0) {
-            that.serviceItem2.push({
-              itemName: "",
-              itemType: "增值服务",
-              price: 0,
-              service: ""
-            });
-          }
-          that.htmlTd = [];
-
-          let index;
-          for (index in that.serviceItem2) {
-            let i = index * 2;
-            if (i < that.serviceItem2.length) {
-              that.htmlTd.push({
-                itemName1: that.serviceItem2[i].itemName,
-                price1: that.serviceItem2[i].price,
-                itemName2: that.serviceItem2[i + 1].itemName,
-                price2: that.serviceItem2[i + 1].price
-              });
-            }
-          }
-          console.log(that.htmlTd);
-          that.giveItem = zsitem;
-        }
-      },
-      err => {}
-    );
-  }
   //根据视图名称获取表格和表单定义
   getViewName(formname: string) {
     const that = this;
@@ -387,13 +315,15 @@ export class CarsaleComponent implements OnInit {
       );
     }
   }
-  onCreate(): void {
-    this.router.navigate(["/pages/market/carsalenew", 0]);
-  }
 
   onEdit(event) {
     const id = event.data.Id;
-    this.router.navigate(["/pages/market/carsalenew", id]);
+    this.router.navigate(
+      ["/pages/market/carsalecashnew", event.data.BookingId],
+      {
+        queryParams: { n: this.printOrder.OrderId, id: event.data.Id }
+      }
+    );
   }
 
   onDelete(event) {
@@ -426,12 +356,11 @@ export class CarsaleComponent implements OnInit {
     });
     console.log(this.printOrder);
     if (this.printOrder) {
-
-      if(this.printOrder.Deposit){
-        this.chineseMoney = this._common.changeNumMoneyToChinese(this.printOrder.Deposit);
+      if (this.printOrder.Deposit) {
+        this.chineseMoney = this._common.changeNumMoneyToChinese(
+          this.printOrder.Deposit
+        );
       }
-
-      this.getItem();
     }
   }
 
@@ -464,9 +393,6 @@ export class CarsaleComponent implements OnInit {
           }
           .noboderall td{
             border:none;
-          }
-          .textleft{
-            text-align:left;
           }
           </style>
         </head>

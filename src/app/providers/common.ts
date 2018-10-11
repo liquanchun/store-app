@@ -77,4 +77,78 @@ export class Common {
         });
         return arr.length > 0 ? arr[0] : 0;
     }
+   
+ changeNumMoneyToChinese(money){
+  var cnNums = new Array("零", "壹", "贰", "叁", "肆", "伍", "陆", "柒", "捌", "玖"); 
+  var cnIntRadice = new Array("", "拾", "佰", "仟"); 
+  var cnIntUnits = new Array("", "万", "亿", "兆");
+  var cnDecUnits = new Array("角", "分", "毫", "厘");
+  var cnInteger = "整"; 
+  var cnIntLast = "元";
+  var maxNum = 999999999999999.9999;
+  var IntegerNum; 
+  var DecimalNum; 
+  var ChineseStr = ""; 
+  var parts; 
+  if (money == ""){
+    return "";
+  }
+  money = parseFloat(money);
+  if (money >= maxNum) {
+    alert('超出最大处理数字');
+    return "";
+  }
+  if (money == 0) {
+    ChineseStr = cnNums[0] + cnIntLast + cnInteger;
+    return ChineseStr;
+  }
+  money = money.toString(); 
+  if (money.indexOf(".") == -1) {
+    IntegerNum = money;
+    DecimalNum = '';
+  } else {
+    parts = money.split(".");
+    IntegerNum = parts[0];
+    DecimalNum = parts[1].substr(0, 4);
+  }
+  if (parseInt(IntegerNum, 10) > 0) { 
+    var zeroCount = 0;
+    var IntLen = IntegerNum.length;
+    for (var index = 0; index < IntLen; index++) {
+      var n = IntegerNum.substr(index, 1);
+      var p = IntLen - index - 1;
+      var q = p / 4;
+      var m = p % 4;
+      if (n == "0") {
+        zeroCount++;
+      } else {
+        if (zeroCount > 0) {
+          ChineseStr += cnNums[0];
+        }
+        //归零
+        zeroCount = 0; 
+        ChineseStr += cnNums[parseInt(n)] + cnIntRadice[m];
+      }
+      if (m == 0 && zeroCount < 4) {
+        ChineseStr += cnIntUnits[q];
+      }
+    }
+    ChineseStr += cnIntLast;
+  }
+  if (DecimalNum != '') { 
+    var decLen = DecimalNum.length;
+    for (var index = 0; index < decLen; index++) {
+      var n = DecimalNum.substr(index, 1);
+      if (n != '0') {
+        ChineseStr += cnNums[Number(n)] + cnDecUnits[index];
+      }
+    }
+  }
+  if (ChineseStr == '') {
+    ChineseStr += cnNums[0] + cnIntLast + cnInteger;
+  } else if (DecimalNum == '') {
+    ChineseStr += cnInteger;
+  }
+  return ChineseStr;
+ }
 }

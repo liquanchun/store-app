@@ -32,6 +32,9 @@ import { CarSaleNewComponent } from './carsalenew/carsalenew.component';
 import { CarSaleBookComponent } from './carsalebook/carsalebook.component';
 import { TableFormComponent } from './tableform/tableform.component';
 import { PrintButtonComponent } from './carsale/printbutton.component';
+import { CarSaleCashComponent } from './carsalecash/carsalecash.component';
+import { CarSaleCashNewComponent } from './carsalecashnew/carsalecashnew.component';
+import { PrintCashComponent } from './carsalecash/printcash.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -61,9 +64,12 @@ import { PrintButtonComponent } from './carsale/printbutton.component';
     CarSaleNewComponent,
     CarSaleBookComponent,
     TableFormComponent,
-    PrintButtonComponent
+    PrintButtonComponent,
+    CarSaleCashComponent,
+    CarSaleCashNewComponent,
+    PrintCashComponent
   ],
-  entryComponents: [PrintButtonComponent],
+  entryComponents: [PrintButtonComponent,PrintCashComponent],
   providers: [GlobalState, Config, HttpService, AppState, AuthGuard, Common]
 })
 export class MarketModule { }

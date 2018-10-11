@@ -4,17 +4,16 @@ import { GlobalState } from '../../../global.state';
 
 import * as _ from 'lodash';
 @Component({
-  selector: 'print-button-view',
+  selector: 'print-cash-view',
   template: `
 	    <div class="btn-group" role="group" aria-label="Basic example">
         <button type="button" style="line-height: 15px;" class="btn btn-success btn-sm tablebutton" (click)="onDetail()">详情</button>
         <button type="button" style="line-height: 15px;" class="btn btn-success btn-sm tablebutton" (click)="onClick()">打印</button>
-        <button type="button" style="line-height: 15px;" class="btn btn-success btn-sm tablebutton" (click)="onCheck()">转结算单</button>
       </div>
     `,
 })
 
-export class PrintButtonComponent implements ViewCell, OnInit {
+export class PrintCashComponent implements ViewCell, OnInit {
   renderValue: string;
 
   @Input() value: string | number;
@@ -32,18 +31,13 @@ export class PrintButtonComponent implements ViewCell, OnInit {
     this.save.emit(this.rowData);
 
     const getTimestamp = new Date().getTime();
-    this._state.notifyDataChanged('print.carsale.detail', { id: this.value, time: getTimestamp });
+    this._state.notifyDataChanged('print.carsalecash.detail', { id: this.value, time: getTimestamp });
   }
-  onCheck() {
-    this.save.emit(this.rowData);
 
-    const getTimestamp = new Date().getTime();
-    this._state.notifyDataChanged('print.carsale.check', { id: this.value, time: getTimestamp });
-  }
   onClick() {
     this.save.emit(this.rowData);
 
     const getTimestamp = new Date().getTime();
-    this._state.notifyDataChanged('print.carsale', { id: this.value, time: getTimestamp });
+    this._state.notifyDataChanged('print.carsalecash', { id: this.value, time: getTimestamp });
   }
 }
