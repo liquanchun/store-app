@@ -31,10 +31,7 @@ export class CarSaleBookComponent implements OnInit {
   query: string = "";
   newSettings = {};
   settings = {
-    actions:{
-      edit:false,
-      delete:false
-    },
+    actions:false,
     pager: {
       perPage: 20
     },
