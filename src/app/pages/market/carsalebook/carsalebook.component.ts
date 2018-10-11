@@ -31,18 +31,14 @@ export class CarSaleBookComponent implements OnInit {
   query: string = "";
   newSettings = {};
   settings = {
+    actions:{
+      edit:false,
+      delete:false
+    },
     pager: {
       perPage: 20
     },
     mode: "external",
-    edit: {
-      editButtonContent: '<i class="ion-edit"></i>',
-      confirmSave: true
-    },
-    delete: {
-      deleteButtonContent: '<i class="ion-trash-a"></i>',
-      confirmDelete: true
-    },
     hideSubHeader: true,
     columns: {}
   };
@@ -107,23 +103,6 @@ export class CarSaleBookComponent implements OnInit {
             if (that.tableView) {
               that.title = that.tableView["Title"];
               that.canAdd = that.tableView["CanAdd"] == 1;
-
-              if (
-                !that.tableView["CanUpdate"] &&
-                !that.tableView["CanDelete"]
-              ) {
-                that.settings["actions"] = false;
-              } else {
-                that.settings["actions"] = {
-                  columnTitle: "操作"
-                };
-                if (!that.tableView["CanUpdate"]) {
-                  that.settings["actions"]["edit"] = false;
-                }
-                if (!that.tableView["CanDelete"]) {
-                  that.settings["actions"]["delete"] = false;
-                }
-              }
 
               that.getFormSetSub().then(function(data) {
                 let vn = [];
