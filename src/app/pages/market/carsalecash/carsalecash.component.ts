@@ -18,7 +18,7 @@ import { Common } from "../../../providers/common";
 
 import * as $ from "jquery";
 import * as _ from "lodash";
-
+import async from "async";
 @Component({
   selector: "app-carsalecash",
   templateUrl: "./carsalecash.component.html",
@@ -46,7 +46,7 @@ export class CarSaleCashComponent implements OnInit {
     hideSubHeader: true,
     columns: {
       button: {
-        title: "打印",
+        title: "操作",
         type: "custom",
         renderComponent: PrintCashComponent,
         onComponentInitFunction(instance) {
@@ -79,13 +79,63 @@ export class CarSaleCashComponent implements OnInit {
   totalRecord: number = 0;
 
   carsaleData: any;
-  printOrder: any = {};
-  serviceItem: any;
-  serviceItem1: any;
-  serviceItem2: any;
-  giveItem: any;
-  htmlTd: any;
-
+  carbooking: any;
+  carsale: any = {
+    Id: 0,
+    OrderId: "",
+    InvoiceDate: "",
+    BuyType: "",
+    BuyLicense: "",
+    CustAttr: "",
+    PayType: "",
+    InsureCompany: "",
+    Discount: 0,
+    NewCarFee: 0,
+    FirstFee: 0,
+    InsureFee: 0,
+    BuyTaxFee: 0,
+    FinanceSerFee: 0,
+    DecorateFee: 0,
+    TakeAllFee: 0,
+    TakeCareFee: 0,
+    IntimateFee: 0,
+    GlassSerFee: 0,
+    CardCashFee: 0,
+    OtherFee: 0,
+    ShouldAllFee: 0,
+    InvoiceFee: 0,
+    Deposit: 0,
+    OldChangeFee: 0,
+    LastFee: 0,
+    OtherFee2: 0,
+    RealAllFee: 0,
+    Remark: "",
+    Creator: "",
+    BaoxianFee: 0,
+    ZhuangxFee: 0,
+    Commission: 0,
+    MaintainFee: 0,
+    GasFee: 0,
+    OtherFee3: 0
+  };
+  customer: any = {
+    Name: "",
+    LinkMan: "",
+    IdCard: "",
+    Address: "",
+    Phone: "",
+    InvoiceCode: "",
+    InvoiceName: ""
+  };
+  carinfo: any = {
+    CarType: "",
+    Vinno: "",
+    Status: "",
+    CarColor: "",
+    CarTrim: "",
+    GuidePrice: 0,
+    WholePrice: 0
+  };
   chineseMoney: string;
   constructor(
     private modalService: NgbModal,
@@ -103,23 +153,30 @@ export class CarSaleCashComponent implements OnInit {
     this.mainTableID = 0;
     const that = this;
 
-    this._state.subscribe("print.carsale.detail", data => {
-      this.router.navigate(["/pages/market/carsalecashnew", this.mainTableID], {
-        queryParams: { n: 1 }
+    this._state.subscribe("print.carsalecash.detail", data => {
+      this.carsale = _.find(this.carsaleData, f => {
+        return f["Id"] == data.id;
       });
+      this.router.navigate(
+        ["/pages/market/carsalecashnew", this.carsale.BookingId],
+        {
+          queryParams: { n: 1, id: data.id }
+        }
+      );
     });
 
-    this._state.subscribe("print.carsale", data => {
-      this.printOrder = _.find(this.carsaleData, f => {
-        return f["Id"] == this.mainTableID;
+    this._state.subscribe("print.carsalecash", data => {
+      this.carsale = _.find(this.carsaleData, f => {
+        return f["Id"] == data.id;
       });
-      console.log(this.printOrder);
-      if (this.printOrder) {
-        if (this.printOrder.Deposit) {
+      console.log(this.carsale);
+      if (this.carsale) {
+        if (this.carsale.RealAllFee) {
           this.chineseMoney = this._common.changeNumMoneyToChinese(
-            this.printOrder.Deposit
+            this.carsale.RealAllFee
           );
         }
+        this.getCarsale(this.carsale.BookingId);
         _.delay(
           function(that) {
             that.print();
@@ -129,6 +186,50 @@ export class CarSaleCashComponent implements OnInit {
         );
       }
     });
+  }
+
+  getCarsale(bookid: number) {
+    const that = this;
+    async.series(
+      {
+        one: function(callback) {
+          that.formService.getForms(`car_booking/${bookid}`).then(
+            data => {
+              if (data && data.Data) {
+                that.carbooking = data.Data[0];
+              }
+              callback(null, 1);
+            },
+            err => {}
+          );
+        },
+        two: function(callback) {
+          that.formService
+            .getForms(`vw_car_income/${that.carbooking.CarIncomeId}`)
+            .then(
+              data => {
+                that.carinfo = data.Data[0];
+                callback(null, 2);
+              },
+              err => {}
+            );
+        },
+        three: function(callback) {
+          that.formService
+            .getForms(`car_customer/${that.carbooking.CustomerId}`)
+            .then(
+              data => {
+                that.customer = data.Data[0];
+                callback(null, 3);
+              },
+              err => {}
+            );
+        }
+      },
+      function(err, results) {
+        console.log(results);
+      }
+    );
   }
 
   start() {
@@ -174,16 +275,6 @@ export class CarSaleCashComponent implements OnInit {
                   that.settings["actions"]["delete"] = false;
                 }
               }
-
-              that.getFormSetSub().then(function(data) {
-                let vn = [];
-                _.each(data, f => {
-                  if (f["FormName"] == that.tableView["ViewName"]) {
-                    vn.push(f);
-                  }
-                });
-                that.subViewName = vn;
-              });
             }
           }
           resolve();
@@ -260,24 +351,15 @@ export class CarSaleCashComponent implements OnInit {
   }
 
   //获取数据
-  getFormSetSub() {
-    const that = this;
-    return new Promise((resolve, reject) => {
-      that.formService.getForms("form_set_sub").then(
-        data => {
-          if (data.Data) {
-            resolve(data.Data);
-          }
-        },
-        err => {}
-      );
-    });
-  }
-  //获取数据
   getDataList() {
+    this.loading = true;
     this.formService.getForms(this.tableView["ViewName"]).then(
       data => {
         this.carsaleData = data.Data;
+        _.each(this.carsaleData, f => {
+          f["button"] = f["Id"];
+        });
+
         this.source.load(this.carsaleData);
         this.totalRecord = data.Data.length;
         this.loading = false;
@@ -305,7 +387,12 @@ export class CarSaleCashComponent implements OnInit {
       this.loading = true;
       this.formService.getFormsByPost(this.tableView["ViewName"], query).then(
         data => {
-          this.source.load(data.Data);
+          this.carsaleData = data.Data;
+          _.each(this.carsaleData, f => {
+            f["button"] = f["Id"];
+          });
+  
+          this.source.load(this.carsaleData);
           this.totalRecord = data.Data.length;
           this.loading = false;
         },
@@ -321,7 +408,7 @@ export class CarSaleCashComponent implements OnInit {
     this.router.navigate(
       ["/pages/market/carsalecashnew", event.data.BookingId],
       {
-        queryParams: { n: this.printOrder.OrderId, id: event.data.Id }
+        queryParams: { n: this.carsale.OrderId, id: event.data.Id }
       }
     );
   }
@@ -351,16 +438,17 @@ export class CarSaleCashComponent implements OnInit {
   onSelected(event) {
     this.mainTableID = event.data.Id;
 
-    this.printOrder = _.find(this.carsaleData, f => {
+    this.carsale = _.find(this.carsaleData, f => {
       return f["Id"] == this.mainTableID;
     });
-    console.log(this.printOrder);
-    if (this.printOrder) {
-      if (this.printOrder.Deposit) {
+    console.log(this.carsale);
+    if (this.carsale) {
+      if (this.carsale.RealAllFee) {
         this.chineseMoney = this._common.changeNumMoneyToChinese(
-          this.printOrder.Deposit
+          this.carsale.RealAllFee
         );
       }
+      this.getCarsale(this.carsale.BookingId);
     }
   }
 
@@ -376,16 +464,23 @@ export class CarSaleCashComponent implements OnInit {
     popupWin.document.write(`
       <html>
         <head>
-          <title style="font-size: 10px;"></title>
+          <title style="font-size: 12px;"></title>
           <style>
           table{
             width: 740px;
             border-collapse: collapse;
-            font-size: 12px;
+            font-size: 14px;
             border:1px solid black;
+          }
+          p{
+            font-size: 14px;
           }
           th,td{
             border:1px solid black;
+            padding:3px;
+          }
+          .valueText{
+            text-align:center;
           }
           .noboder td{
             border-left:none;

@@ -28,6 +28,7 @@ export class CarSaleCashNewComponent implements OnInit {
   title = "新增销售交款明细单";
   isSaved: boolean = false;
   isEnable: boolean = true;
+  loading= false;
   carsale: any = {
     Id: 0,
     OrderId: "",
@@ -58,7 +59,13 @@ export class CarSaleCashNewComponent implements OnInit {
     OtherFee2: 0,
     RealAllFee: 0,
     Remark: "",
-    Creator: ""
+    Creator: "",
+    BaoxianFee: 0,
+    ZhuangxFee: 0,
+    Commission: 0,
+    MaintainFee: 0,
+    GasFee: 0,
+    OtherFee3: 0
   };
   customer: any = {
     Name: "",
@@ -94,25 +101,47 @@ export class CarSaleCashNewComponent implements OnInit {
     private route: ActivatedRoute
   ) {}
   ngOnInit() {
-    const id = _.toInteger(this.route.snapshot.paramMap.get("id"));
+    const bookid = _.toInteger(this.route.snapshot.paramMap.get("id"));
     this.carsale.OrderId = this.route.snapshot.queryParams["n"];
     if (this.route.snapshot.queryParams["id"]) {
       //修改
       this.carsale.Id = this.route.snapshot.queryParams["id"];
-      this.getCarsale(id);
+      this.getCarsale(bookid);
+      if (this.carsale.OrderId == 1) {
+        //查看详情
+        this.isEnable = false;
+      }
     } else {
       this.carsale.Creator = sessionStorage.getItem("userName");
       this.carsale.InvoiceDate = this._common.getTodayString();
-      this.getCarsale(id);
+      this.getCarsale(bookid);
     }
   }
 
-  getCarsale(id: number) {
+  getCarsale(bookid: number) {
     const that = this;
     async.series(
       {
+        zero: function(callback) {
+          that.formService
+            .getForms(`car_booking_item/OrderId/${that.carsale.OrderId}`)
+            .then(
+              data => {
+                if (data && data.Data) {
+                  const bookitem = data.Data;
+                  _.each(bookitem, f => {
+                    if (f["FieldName"]) {
+                      that.carsale[f["FieldName"]] = f["Price"];
+                    }
+                  });
+                }
+                callback(null, 0);
+              },
+              err => {}
+            );
+        },
         one: function(callback) {
-          that.formService.getForms(`car_booking/${id}`).then(
+          that.formService.getForms(`car_booking/${bookid}`).then(
             data => {
               if (data && data.Data) {
                 const carbook = data.Data[0];
@@ -120,9 +149,12 @@ export class CarSaleCashNewComponent implements OnInit {
                 that.carIncomeId = carbook.CarIncomeId;
                 that.carsale.Deposit = carbook.Deposit;
                 that.carsale.NewCarFee = carbook.SalePrice;
+                that.carsale.Discount = carbook.Discount;
+                that.carsale.FirstFee = carbook.FirstFee;
+
                 that.priceChange();
-                callback(null, 1);
               }
+              callback(null, 1);
             },
             err => {}
           );
@@ -147,7 +179,7 @@ export class CarSaleCashNewComponent implements OnInit {
         },
         four: function(callback) {
           if (that.carsale.Id > 0) {
-            that.formService.getForms(`car_sale_cash/${id}`).then(
+            that.formService.getForms(`car_sale_cash/${that.carsale.Id}`).then(
               data => {
                 if (data && data.Data) {
                   that.carsale = data.Data[0];
@@ -161,7 +193,6 @@ export class CarSaleCashNewComponent implements OnInit {
         }
       },
       function(err, results) {
-        console.log(results);
       }
     );
   }
@@ -195,6 +226,7 @@ export class CarSaleCashNewComponent implements OnInit {
   //确认入住
   onConfirm(): void {
     const that = this;
+    this.carsale.Creator = sessionStorage.getItem("userName");
     this.formService.create("car_sale_cash", this.carsale).then(
       function(data) {
         that._state.notifyDataChanged("messagebox", {
@@ -212,5 +244,12 @@ export class CarSaleCashNewComponent implements OnInit {
         });
       }
     );
+  }
+
+  //修改状态
+  saveStatus() {
+    const that = this;
+    const carinfo = { Id: this.carIncomeId, Status: "已开票" };
+    this.formService.create("car_income", carinfo).then(data => {}, err => {});
   }
 }

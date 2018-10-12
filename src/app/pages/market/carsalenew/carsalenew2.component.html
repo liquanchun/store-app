@@ -1,11 +1,12 @@
 <div class="bill">
+  <ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '4px' }"></ngx-loading>
   <div class="row">
     <div class="col-md-12 text-center title">
       BMW新车销售订购单
     </div>
   </div>
   <div class="row">
-    <div class="col-md-4 text-left">
+    <div class="col-md-3 text-left">
       <div class="form-group row">
         <label for="inputremark" class="col-md-3 col-form-label">订单号</label>
         <div class="col-md-9">
@@ -13,19 +14,32 @@
         </div>
       </div>
     </div>
-    <div class="col-md-4 text-left">
+    <div class="col-md-3 text-left">
       <div class="form-group row">
-        <label for="inputremark" class="col-md-3 col-form-label">DMS号</label>
+        <label for="inputremark" class="col-md-3 col-form-label"><span class="reqmark">*</span> DMS号</label>
         <div class="col-md-9">
           <input [class.inputline]="!isEnable" [(ngModel)]="carsale.DMSNo" type="text" class="form-control">
         </div>
       </div>
     </div>
-    <div class="col-md-4 text-left">
+    <div class="col-md-3 text-left">
       <div class="form-group row">
         <label for="inputremark" class="col-md-3 col-form-label">日期</label>
         <div class="col-md-9">
           <input [class.inputline]="!isEnable" [(ngModel)]="carsale.OrderDate" type="text" class="form-control">
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3 text-left">
+      <div class="form-group row">
+        <label for="inputremark" class="col-md-3 col-form-label"><span class="reqmark">*</span>销售顾问</label>
+        <div class="col-md-9">
+          <select [(ngModel)]="carsale.SaleMan">
+            <option value="">--请选择--</option>
+            <option [value]="option.text" *ngFor="let option of saleman">
+              {{ option.text }}
+            </option>
+          </select>
         </div>
       </div>
     </div>
@@ -80,16 +94,16 @@
           <th>指导价格（元）</th>
           <th>销售价格（元）</th>
           <th>数量（台）</th>
-          <th>订金金额（元）</th>
+          <th><span class="reqmark">*</span>订金金额（元）</th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td><input [class.inputline]="!isEnable" [(ngModel)]="carinfo.CarType" type="text" readonly class="form-control"></td>
-          <td><input [class.inputline]="!isEnable" [(ngModel)]="carinfo.CarColor" type="text" readonly class="form-control"></td>
-          <td><input [class.inputline]="!isEnable" [(ngModel)]="carinfo.CarTrim" type="text" readonly class="form-control"></td>
-          <td><input [class.inputline]="!isEnable" [(ngModel)]="carinfo.GuidePrice" type="text" readonly class="form-control"></td>
-          <td><input [class.inputline]="!isEnable" [(ngModel)]="carinfo.WholePrice" type="text" readonly class="form-control"></td>
+          <td>{{carinfo.CarType  | numberSeparator}}</td>
+          <td>{{carinfo.CarColor | numberSeparator}}</td>
+          <td>{{carinfo.CarTrim | numberSeparator}}</td>
+          <td>{{carinfo.GuidePrice | numberSeparator}}</td>
+          <td>{{carinfo.WholePrice | numberSeparator}}</td>
           <td rowspan="3"><input [class.inputline]="!isEnable" [(ngModel)]="carsale.Count" type="number" class="form-control"></td>
           <td rowspan="3"><input [class.inputline]="!isEnable" [(ngModel)]="carsale.Deposit" type="number" class="form-control"></td>
         </tr>
@@ -100,9 +114,9 @@
           <td><input [class.inputline]="!isEnable" [(ngModel)]="carinfo.Status" type="text" readonly class="form-control"></td>
         </tr>
         <tr>
-          <td>个性配置</td>
+          <td><span class="reqmark">*</span>个性配置</td>
           <td colspan="2"><input [class.inputline]="!isEnable" [(ngModel)]="carsale.SelfConfig" type="text" class="form-control"></td>
-          <td>优惠点位或金额</td>
+          <td><span class="reqmark">*</span>优惠点位或金额</td>
           <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.Discount" type="number" class="form-control"></td>
         </tr>
         <tr>
@@ -132,7 +146,7 @@
         <tr>
           <td>增值预估费用合计金额（小写）</td>
           <td></td>
-          <td>{{carsale.PredictFee}}</td>
+          <td>{{carsale.PredictFee | numberSeparator}}</td>
         </tr>
       </tbody>
     </table>
@@ -145,15 +159,12 @@
         <tr>
           <th>项目</th>
           <th>商品或服务产品</th>
-          <th></th>
-          <th></th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let item of giveItem">
           <td><input [class.inputline]="!isEnable" [(ngModel)]="item.itemName" type="text" class="form-control"></td>
           <td><input [class.inputline]="!isEnable" [(ngModel)]="item.service" type="text" class="form-control"></td>
-          <td colspan="2"></td>
         </tr>
       </tbody>
     </table>
@@ -162,7 +173,7 @@
     <table class="table table-sm">
       <tbody>
         <tr>
-          <td>交付日期</td>
+          <td><span class="reqmark">*</span>交付日期</td>
           <td>
             <div class="input-group">
               <input [class.inputline]="!isEnable" class="form-control" placeholder="yyyy-mm-dd" [(ngModel)]="carsale.PreCarDateObj"
@@ -178,7 +189,7 @@
           <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.TakePhone" type="text" class="form-control"></td>
         </tr>
         <tr>
-          <td>提车方式:</td>
+          <td><span class="reqmark">*</span>提车方式:</td>
           <td>
             <div class="form-check">
               <input [class.inputline]="!isEnable" type="radio" [checked]="carsale.PickCarType=='客户自提'" [(ngModel)]="carsale.PickCarType"
@@ -207,7 +218,7 @@
         </tr>
 
         <tr>
-          <td>付款方式:</td>
+          <td><span class="reqmark">*</span>付款方式:</td>
           <td colspan="5"></td>
         </tr>
         <tr>
@@ -216,7 +227,7 @@
             <div class="form-check">
               <input [class.inputline]="!isEnable" type="radio" [checked]="carsale.PayType=='现车付款'" [(ngModel)]="carsale.PayType"
                 name="PayType" id="inlineRadio3" value="现车付款" class="form-check-input">
-              <label class="form-check-labe3" for="inlineRadio2"> 1、现车付款：客户在签订本订单后</label>
+              <label class="form-check-labe3" for="inlineRadio3"> 1、现车付款：客户在签订本订单后</label>
             </div>
           </td>
           <td class="longtext"><input [class.inputline]="!isEnable" [(ngModel)]="carsale.Days1" type="number" class="form-control"></td>

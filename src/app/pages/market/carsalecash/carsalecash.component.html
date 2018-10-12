@@ -54,205 +54,213 @@
   </div>
 </div>
 
-
-<div style="display:none" id="printDiv">
+<div style="display:none;" id="printDiv">
   <div>
     <table style="border:none" class="table noboderall table-sm">
       <tbody>
         <tr>
-          <td style="font-size:9;text-align: left;padding-bottom: 8px;">BMW授权经销商</td>
-          <td style="border:none;text-align:center;font-weight:bold;font-size:15px;">BMW新车销售订购单 </td>
-          <td style="font-size:9;text-align: right;padding-bottom: 8px;">北京博瑞宝</td>
-        </tr>
-        <tr>
-          <td>订单号：{{printOrder.OrderId}}</td>
-          <td>DMS号：{{printOrder.DMSNo}}</td>
-          <td>日期：{{printOrder.OrderDate}}</td>
+          <td style="font-size:9px;text-align: left;">BMW授权经销商</td>
+          <td style="font-size:18px;text-align: center;font-weight: bold">销售价款明细单</td>
+          <td style="font-size:9px;text-align: right;">北京博瑞宝</td>
         </tr>
       </tbody>
     </table>
+    <p style="text-align:left">开票日期：{{carsale.InvoiceDate}}</p>
+
     <table class="table table-bordered table-sm">
       <tbody>
         <tr>
-          <td>客户名称</td>
-          <td>{{printOrder.Name}}</td>
-          <td>客户电话</td>
-          <td>{{printOrder.Phone}}</td>
+          <td rowspan="3">客户信息</td>
+          <td>开票名称</td>
+          <td class="valueText">{{customer.InvoiceName}}</td>
+          <td>交款人姓名</td>
+          <td class="valueText">{{customer.LinkMan}}</td>
         </tr>
         <tr>
-          <td>身份证/代码证</td>
-          <td>{{printOrder.IdCard}}</td>
-          <td>牌照属性</td>
-          <td>{{printOrder.LicenseType}}</td>
+          <td>身份证号/组织机构</td>
+          <td class="valueText">{{customer.InvoiceCode}}</td>
+          <td>DMS联系电话</td>
+          <td class="valueText">{{customer.Phone}}</td>
         </tr>
         <tr>
-          <td>证件地址</td>
-          <td>{{printOrder.IdAddress}}</td>
-          <td>客户性质</td>
-          <td>{{printOrder.CustType}}</td>
-        </tr>
-      </tbody>
-    </table>
-    <div style="padding:8px;">一、订购车型、数量及价款</div>
-    <div>
-    </div>
-    <table class="table table-bordered table-sm">
-      <thead>
-        <tr>
-          <th>车型名称</th>
-          <th>车身颜色</th>
-          <th>内饰颜色</th>
-          <th>指导价格（元）</th>
-          <th>销售价格（元）</th>
-          <th>数量</th>
-          <th>订金（元）</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>{{printOrder.CarType}}</td>
-          <td>{{printOrder.CarColor}}</td>
-          <td>{{printOrder.CarTrim}}</td>
-          <td>{{printOrder.GuidePrice | numberSeparator}}</td>
-          <td>{{printOrder.SalePrice | numberSeparator}}</td>
-          <td rowspan="3">{{printOrder.Count}}</td>
-          <td rowspan="3" style="font-size:13px;font-weight:bold;">{{printOrder.Deposit | numberSeparator}}</td>
-        </tr>
-        <tr>
-          <td>车架号码</td>
-          <td colspan="2">{{printOrder.Vinno}}</td>
-          <td>车辆状态</td>
-          <td>{{printOrder.Status}}</td>
-        </tr>
-        <tr>
-          <td>个性配置</td>
-          <td colspan="2">{{printOrder.SelfConfig}}</td>
-          <td>优惠点位或金额</td>
-          <td>{{printOrder.Discount}}</td>
-        </tr>
-        <tr>
-          <td>订金金额（大写）</td>
-          <td class="textleft" colspan="4">{{chineseMoney}}</td>
-        </tr>
-      </tbody>
-    </table>
-
-    <div style="padding:8px;font-weight: bold">购买上述车辆客户自愿接受以下增值消费服务项目</div>
-
-    <table class="table table-bordered table-sm">
-      <thead>
-        <tr>
-          <th>项目</th>
-          <th>商品或服务产品</th>
-          <th>价格（元）</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let item of serviceItem1">
-          <td>{{item.itemName}}</td>
-          <td>{{item.service}}</td>
-          <td>{{item.price | numberSeparator}}</td>
-        </tr>
-      </tbody>
-    </table>
-
-    <table class="table table-bordered table-sm">
-      <tbody>
-        <tr *ngFor="let item of htmlTd">
-          <td>{{item.itemName1}}</td>
-          <td>{{item.price1 | numberSeparator}}</td>
-          <td>{{item.itemName2}}</td>
-          <td>{{item.price2 | numberSeparator}}</td>
-        </tr>
-        <tr>
-          <td colspan="2">增值预估费用合计金额（小写）</td>
-          <td colspan="2">{{printOrder.PredictFee | numberSeparator}}</td>
-        </tr>
-      </tbody>
-    </table>
-
-
-    <div style="padding:8px;font-weight: bold">赠送商品或服务产品</div>
-    <table class="table table-bordered table-sm">
-      <thead>
-        <tr>
-          <th>项目</th>
-          <th>商品或服务产品</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let item of giveItem">
-          <td>{{item.itemName}}</td>
-          <td>{{item.service}}</td>
-        </tr>
-      </tbody>
-    </table>
-    <div style="padding:8px;">二、交付日期、地点、履行方式、付款方式</div>
-
-    <table class="table noboder table-sm">
-      <tbody>
-        <tr>
-          <td colspan="2">交付日期：{{printOrder.PreCarDate}}</td>
-          <td colspan="2">交车地点：{{printOrder.TakeCarSite}}</td>
-          <td colspan="2">联系电话：{{printOrder.TakePhone}}</td>
-        </tr>
-        <tr *ngIf="printOrder.PickCarType=='客户自提'">
-          <td colspan="6">提车方式：客户自提</td>
-        </tr>
-        <tr *ngIf="printOrder.PickCarType=='客户授权'">
-          <td colspan="2">提车方式：客户授权</td>
-          <td colspan="2">接车人：{{printOrder.PickCarMan}}</td>
-          <td colspan="2">接车电话：{{printOrder.PickCarMobile}}</td>
+          <td>地址信息</td>
+          <td class="valueText" colspan="3">{{customer.Address}}</td>
         </tr>
 
         <tr>
-          <td>付款方式：{{printOrder.PayType}}</td>
-          <td colspan="5"></td>
+          <td rowspan="2">车型信息</td>
+          <td>车型</td>
+          <td class="valueText">{{carinfo.CarType}}</td>
+          <td>厂家指导价</td>
+          <td class="valueText">{{carinfo.GuidePrice | numberSeparator}}</td>
         </tr>
-        <tr *ngIf="printOrder.PayType=='现车付款'">
-          <td colspan="6" class="longtext">客户在签订本订单后 {{printOrder.Days1}} 日内支付合同内余款。预收余款： 元，款到释放车。 </td>
+        <tr>
+          <td>17位车架号</td>
+          <td class="valueText">{{carinfo.Vinno}}</td>
+          <td>外观颜色/内饰</td>
+          <td class="valueText">{{carinfo.CarColor}}/{{carinfo.CarTrim}}</td>
         </tr>
-        <tr *ngIf="printOrder.PayType=='订单车辆付款'">
-          <td colspan="6" class="longtext">客户在接到到货通知后 {{printOrder.Days2}} 日内支付合同内余款。预收余款： 元，款到释放车。</td>
+
+        <tr>
+          <td rowspan="3">购买信息</td>
+          <td>购买性质</td>
+          <td class="valueText">{{carsale.BuyType}}</td>
+          <td>购买资质</td>
+          <td class="valueText">{{carsale.BuyLicense}}</td>
         </tr>
-        <tr *ngIf="printOrder.PayType=='分期付款'">
-          <td colspan="2">融资机构：{{printOrder.FinaceCompany}}</td>
-          <td colspan="2">首付：{{printOrder.FirstFee | numberSeparator}}</td>
-          <td colspan="2">分期: {{printOrder.Stages}}</td>
+        <tr>
+          <td>客户属性</td>
+          <td class="valueText">{{carsale.CustAttr}}</td>
+          <td>付款方式</td>
+          <td class="valueText">{{carsale.PayType}}</td>
         </tr>
-        <tr *ngIf="printOrder.PayType=='分期付款'">
-          <td colspan="6" class="longtext">首付交款时间：金融机构批准放贷 {{printOrder.Days3}} 个工作日内，余款到账释放车辆。</td>
+        <tr>
+          <td>保险公司</td>
+          <td class="valueText">{{carsale.InsureCompany}}</td>
+          <td><strong>优惠金额/点位</strong></td>
+          <td class="valueText">{{carsale.Discount}}</td>
+        </tr>
+
+        <tr>
+          <td style="height:20px;line-height:20px" rowspan="12">付款信息单位：（元）</td>
+          <td>新车款金额</td>
+          <td class="valueText">{{carsale.NewCarFee | numberSeparator}}</td>
+          <td>分期首付款金额</td>
+          <td class="valueText">{{carsale.FirstFee | numberSeparator}}</td>
+        </tr>
+        <tr>
+          <td>保险费金额</td>
+          <td class="valueText">{{carsale.InsureFee | numberSeparator}}</td>
+          <td>购置税金额</td>
+          <td class="valueText">{{carsale.BuyTaxFee | numberSeparator}}</td>
+        </tr>
+        <tr>
+          <td>金融服务费金额</td>
+          <td class="valueText">{{carsale.FinanceSerFee | numberSeparator}}</td>
+          <td>装饰费金额</td>
+          <td class="valueText">{{carsale.DecorateFee | numberSeparator}}</td>
+        </tr>
+
+        <tr>
+          <td>交车综合服务金额</td>
+          <td class="valueText">{{carsale.TakeAllFee | numberSeparator}}</td>
+          <td>安心服务费金额</td>
+          <td class="valueText">{{carsale.TakeCareFee | numberSeparator}}</td>
+        </tr>
+
+        <tr>
+          <td>贴心服务费金额</td>
+          <td class="valueText">{{carsale.IntimateFee | numberSeparator}}</td>
+          <td>玻璃保障服务费金额</td>
+          <td class="valueText">{{carsale.GlassSerFee | numberSeparator}}</td>
+        </tr>
+        <tr>
+          <td>刷卡费金额</td>
+          <td class="valueText">{{carsale.CardCashFee | numberSeparator}}</td>
+          <td>其他金额</td>
+          <td class="valueText">{{carsale.OtherFee | numberSeparator}}</td>
+        </tr>
+        <tr>
+          <td>备注说明</td>
+          <td class="valueText" colspan="3">{{carsale.Remark}}</td>
+        </tr>
+        <tr>
+          <td><strong>应收金额总计</strong></td>
+          <td class="valueText">{{carsale.ShouldAllFee | numberSeparator}}</td>
+          <td><strong>开票金额</strong></td>
+          <td class="valueText">{{carsale.InvoiceFee | numberSeparator}}</td>
+        </tr>
+
+        <tr>
+          <td>减：已付订金金额</td>
+          <td class="valueText">{{carsale.Deposit | numberSeparator}}</td>
+          <td>旧车置换金额</td>
+          <td class="valueText">{{carsale.OldChangeFee | numberSeparator}}</td>
+        </tr>
+
+        <tr>
+          <td>金融分期尾款金额</td>
+          <td class="valueText">{{carsale.LastFee | numberSeparator}}</td>
+          <td>其他金额</td>
+          <td class="valueText">{{carsale.OtherFee2 | numberSeparator}}</td>
+        </tr>
+
+        <tr>
+          <td><strong>实收金额总计</strong></td>
+          <td class="valueText" colspan="3">{{carsale.RealAllFee | numberSeparator}}</td>
+        </tr>
+        <tr>
+          <td><strong>大写金额</strong></td>
+          <td class="valueText" colspan="3">{{chineseMoney}}</td>
         </tr>
       </tbody>
     </table>
 
-    <p style="font-size:8px;">
-      注：以下条款请客户务必仔细阅读，并签字认可 <br>
-      1.实际交车时间按供方所订车辆到车时间为准。供方确认具体交货日期后，将立即以电话、短信、邮件等形式通知买方，买方接到通知后须于五个工作日内提车。 <br>
-      2.车辆未交付或交付时，若遇国家政策或生产厂方价格调整，则本定单车辆销售价做相应调整。 <br>
-      3.供方承诺提供的车辆享有厂家质量保证，所有质量问题按厂方质保条款处理。需方对所购车汽车的外观颜色，规格，质量有异议的应在验车当场提出异议，否则视为供方交付的汽车均符合本协议的要求。<br>
-      4.如买方以旧车置换方式购车，所置换之旧车手续须符合厂房及车管所的相关标准要求，否则此定单视为无效。 <br>
-      5.每份定单限订一辆BMW系列轿车。 <br>
-      6.本订购单全部消费项目属于乙方自愿消费，无强制消费项目。 <br>
-      7.本店将按照本订购单约定项目为乙方提供增值项目。 <br>
-      8.本定单内容如有涂改、手写添加，则本定单视为无效。 <br>
-      9.本定单加盖供方业务章、财务章和客户盖章、签字后有效，不另开收据。 <br>
-      10.本定单一式四联：财务（第一联）、销售计划（第二联）、销售顾问（第三联）、客户（第四联） <br>
-      友情提示：******客户交纳的钱款必须直接付至公司财务部，并保留好相关凭证！！！非经本公司盖章及签署，本订购单不生效！！！******<br>
-      9.买方须向供方交付不少于销售价格5%的定金，并在车辆具备交付条件5日内提车。如买方因故违约无法购车，扣除全部定金作为违约金。 <br>
-      10.本人在此同意已向宝马公司提供的个人信息可由宝马公司及宝马授权经销商共享,并可由宝马公司及宝马授权经销商用于其商业活动,包括但不限于与本人联系。宝马公司系指宝马集团之企业,包括但不限于宝马(中国)汽车贸易有限公司和华晨宝马汽车有限公司。宝马公司保证所有您的个人信息都将按照隐私保护的法律法规进行处理。<br>
-      <br>
-      <span style="display:inline-block;margin-right:150px;"><strong> 销售顾问确认已将此客户信息录入DMS系统</strong> </span> <strong>本人已认真阅读并同意上述内容及条款
-      </strong> <br>
-      <span style="display:inline-block;margin-right:100px;">销售顾问签名：</span><span style="display:inline-block;margin-right:100px;">客户签名：</span><span
-        style="display:inline-block;margin-right:100px;">销售经理签名：</span>财务签名：<br>
-      <span style="display:inline-block;margin-right:100px;">（销售部盖章）</span><span style="display:inline-block;margin-right:260px;">（客户盖章）</span>（财务盖章）<br>
-      <br>
-      北京博瑞宝汽车销售服务有限公司<br>
-      开户行：工商银行马家堡支行 地址：丰台区西罗园南里44号 87277496 <span style="display:inline-block;margin-left:160px;"><strong> 第四联 客户</strong></span>
-      <br>
-      账号：0200049709004604634 税号：91110106802237288W<br>
+    <p style="margin-bottom:5px;">
+      <span style="display:inline-block;margin-right:200px;">客户签名：</span><span style="display:inline-block;margin-right:200px;">销售顾问：</span><span
+        style="display:inline-block;">销售审核：</span><br><br>
+      <span style="display:inline-block;margin-right:200px;">财务审核：</span><span style="display:inline-block;margin-right:200px;">销售经理：</span><span
+        style="display:inline-block;">总经理：</span><br><br>
+      <span style="font-size:9px;">注: 1、我店承担消费第一笔刷卡费用，其余部分由客户负担刷卡手续费, 每笔50元。2、以上车价外增值服务消费为客户自愿，无强制消费。</span> <br>
+      <span style="display:inline-block;margin-right:150px;font-size:8px;"><strong> 销售顾问确认已将此客户信息录入DMS系统</strong>
+      </span>
     </p>
+    <p>
+      ------------------------------------------------------------------------------------------------------------------------
+    </p>
+    <p style="text-align:center;font-size: 18px;font-weight: bold">销售出库单</p>
+    <p style="text-align:right;margin-top:-10px;">日期：{{carsale.InvoiceDate}}</p>
+
+    <table class="table table-bordered table-sm">
+      <tbody>
+        <tr>
+          <td>车型</td>
+          <td>颜色</td>
+          <td>配置</td>
+          <td>车架号</td>
+          <td>数量（辆）</td>
+          <td>销售金额</td>
+        </tr>
+        <tr>
+          <td class="valueText">{{carinfo.CarType}}</td>
+          <td class="valueText">{{carinfo.CarColor}}</td>
+          <td class="valueText">{{carinfo.CarConfig}}</td>
+          <td class="valueText">{{carinfo.Vinno}}</td>
+          <td class="valueText">壹</td>
+          <td class="valueText">{{carinfo.WholePrice}}</td>
+        </tr>
+        <tr>
+          <td colspan="2">备注</td>
+          <td class="valueText" colspan="4">{{carsale.Remark2}}</td>
+        </tr>
+      </tbody>
+    </table>
+
+
+    <table class="table table-bordered table-sm">
+      <tbody>
+        <tr>
+          <td rowspan="3"><strong>赠送批准明细</strong></td>
+          <td>装饰费</td>
+          <td class="valueText">{{carsale.ZhuangxFee}}</td>
+          <td>汽油费</td>
+          <td class="valueText">{{carsale.GasFee}}</td>
+        </tr>
+        <tr>
+          <td>保险费</td>
+          <td class="valueText">{{carsale.BaoxianFee}}</td>
+          <td>维修费</td>
+          <td class="valueText">{{carsale.MaintainFee}}</td>
+        </tr>
+        <tr>
+          <td>佣金费</td>
+          <td class="valueText">{{carsale.Commission}}</td>
+          <td>其他</td>
+          <td class="valueText">{{carsale.OtherFee3}}</td>
+        </tr>
+      </tbody>
+    </table>
+    <p style="text-align:right"><strong> 第四联 客户</strong></p>
 
   </div>
 </div>

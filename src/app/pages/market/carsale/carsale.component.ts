@@ -13,6 +13,7 @@ import { Common } from "../../../providers/common";
 
 import * as $ from "jquery";
 import * as _ from "lodash";
+import { ClassGetter } from "@angular/compiler/src/output/output_ast";
 
 @Component({
   selector: "app-carsale",
@@ -41,12 +42,12 @@ export class CarsaleComponent implements OnInit {
     hideSubHeader: true,
     columns: {
       button: {
-        title: "打印",
+        title: "操作",
         type: "custom",
         renderComponent: PrintButtonComponent,
-        onComponentInitFunction(instance) {
-          instance.save.subscribe(row => {
-            alert(`${row.orderNo} saved!`);
+        onComponentInitFunction: (instance: any) => {
+          instance.click.subscribe(row => {
+            console.log(row);
           });
         }
       }
@@ -81,14 +82,14 @@ export class CarsaleComponent implements OnInit {
   giveItem: any;
   htmlTd: any;
 
-  chineseMoney:string;
+  chineseMoney: string;
   constructor(
     private modalService: NgbModal,
     private formService: FormService,
     private _dicService: DicService,
     private route: ActivatedRoute,
     private router: Router,
-    private _common:Common,
+    private _common: Common,
     private _state: GlobalState
   ) {}
   ngOnInit() {
@@ -106,21 +107,22 @@ export class CarsaleComponent implements OnInit {
 
     this._state.subscribe("print.carsale.check", data => {
       this.printOrder = _.find(this.carsaleData, f => {
-        return f["Id"] == this.mainTableID;
+        return f["Id"] == data.id;
       });
-      this.router.navigate(["/pages/market/carsalecashnew", this.mainTableID], {
+      this.router.navigate(["/pages/market/carsalecashnew", data.id], {
         queryParams: { n: this.printOrder.OrderId }
       });
     });
 
     this._state.subscribe("print.carsale", data => {
       this.printOrder = _.find(this.carsaleData, f => {
-        return f["Id"] == this.mainTableID;
+        return f["Id"] == data.id;
       });
-      console.log(this.printOrder);
       if (this.printOrder) {
-        if(this.printOrder.Deposit){
-          this.chineseMoney = this._common.changeNumMoneyToChinese(this.printOrder.Deposit);
+        if (this.printOrder.Deposit) {
+          this.chineseMoney = this._common.changeNumMoneyToChinese(
+            this.printOrder.Deposit
+          );
         }
 
         this.getItem();
@@ -206,7 +208,6 @@ export class CarsaleComponent implements OnInit {
               });
             }
           }
-          console.log(that.htmlTd);
           that.giveItem = zsitem;
         }
       },
@@ -347,9 +348,13 @@ export class CarsaleComponent implements OnInit {
   }
   //获取数据
   getDataList() {
+    this.loading = true;
     this.formService.getForms(this.tableView["ViewName"]).then(
       data => {
         this.carsaleData = data.Data;
+        _.each(this.carsaleData, f => {
+          f["button"] = f;
+        });
         this.source.load(this.carsaleData);
         this.totalRecord = data.Data.length;
         this.loading = false;
@@ -377,7 +382,11 @@ export class CarsaleComponent implements OnInit {
       this.loading = true;
       this.formService.getFormsByPost(this.tableView["ViewName"], query).then(
         data => {
-          this.source.load(data.Data);
+          this.carsaleData = data.Data;
+          _.each(this.carsaleData, f => {
+            f["button"] = f;
+          });
+          this.source.load(this.carsaleData);
           this.totalRecord = data.Data.length;
           this.loading = false;
         },
@@ -390,7 +399,9 @@ export class CarsaleComponent implements OnInit {
   onCreate(): void {
     this.router.navigate(["/pages/market/carsalenew", 0]);
   }
-
+  onSave(event){
+    console.log(event);
+  }
   onEdit(event) {
     const id = event.data.Id;
     this.router.navigate(["/pages/market/carsalenew", id]);
@@ -424,13 +435,12 @@ export class CarsaleComponent implements OnInit {
     this.printOrder = _.find(this.carsaleData, f => {
       return f["Id"] == this.mainTableID;
     });
-    console.log(this.printOrder);
     if (this.printOrder) {
-
-      if(this.printOrder.Deposit){
-        this.chineseMoney = this._common.changeNumMoneyToChinese(this.printOrder.Deposit);
+      if (this.printOrder.Deposit) {
+        this.chineseMoney = this._common.changeNumMoneyToChinese(
+          this.printOrder.Deposit
+        );
       }
-
       this.getItem();
     }
   }

@@ -11,7 +11,9 @@ export class FormService {
   getDataCount(tablename: string) {
     return this._httpService.getDataServer2(this.modelName + 'count/' + tablename);
   }
-
+  getMaxId(tablename: string) {
+    return this._httpService.getDataServer2('maxid/' + tablename);
+  }
   getForms(viewname: string) {
     return this._httpService.getDataServer2(this.modelName + '/' + viewname);
   }

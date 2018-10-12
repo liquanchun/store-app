@@ -36,7 +36,7 @@
 
         <ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '4px' }"></ngx-loading>
         <div style="overflow-x:auto;width: 100%;white-space: nowrap;">
-          <ng2-smart-table [settings]="newSettings" [source]="source" (rowSelect)="onSelected($event)" (edit)="onEdit($event)"
+          <ng2-smart-table [settings]="newSettings" [source]="source" (rowSelect)="onSelected($event)" (save)="onSave($event)" (edit)="onEdit($event)"
             (delete)="onDelete($event)">
           </ng2-smart-table>
           <div style="color: blue;" [class.total]="totalRecord > 10">总记录：{{totalRecord}}</div>

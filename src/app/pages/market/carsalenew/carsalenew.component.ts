@@ -76,7 +76,7 @@ export class CarSaleNewComponent implements OnInit {
     Count: 1,
     TakeCarSite: "北京博瑞宝汽车销售服务公司",
     TakePhone: "010-87839999",
-    Creator:''
+    Creator: ""
   };
   customer: any = {
     Name: "",
@@ -102,20 +102,35 @@ export class CarSaleNewComponent implements OnInit {
     {
       itemType: "增值服务",
       itemName: "精品装饰",
+      fieldName: "DecorateFee",
       service: "全车贴膜",
       price: 0
     },
     {
       itemType: "增值服务",
       itemName: "新车保险预估",
+      fieldName: "InsureFee",
       service: "全险",
       price: 0
     },
-    { itemType: "增值服务", itemName: "购置税预估", service: "", price: 0 },
-    { itemType: "增值服务", itemName: "综合服务费", service: "", price: 0 },
+    {
+      itemType: "增值服务",
+      itemName: "购置税预估",
+      fieldName: "BuyTaxFee",
+      service: "",
+      price: 0
+    },
+    {
+      itemType: "增值服务",
+      itemName: "综合服务费",
+      fieldName: "TakeAllFee",
+      service: "",
+      price: 0
+    },
     {
       itemType: "增值服务",
       itemName: "金融分期服务费",
+      fieldName: "FinanceSerFee",
       service: "",
       price: 0
     },
@@ -123,15 +138,23 @@ export class CarSaleNewComponent implements OnInit {
       itemType: "增值服务",
       itemName: "安心服务器预估",
       service: "",
+      fieldName: "TakeCareFee",
       price: 0
     },
     {
       itemType: "增值服务",
       itemName: "贴心服务器预估",
+      fieldName: "IntimateFee",
       service: "",
       price: 0
     },
-    { itemType: "增值服务", itemName: "玻璃保险预估", service: "", price: 0 }
+    {
+      itemType: "增值服务",
+      itemName: "玻璃保险预估",
+      fieldName: "GlassSerFee",
+      service: "",
+      price: 0
+    }
   ];
   giveItem = [
     { itemType: "赠送服务", itemName: "其他", service: "会员卡", price: 0 }
@@ -241,13 +264,16 @@ export class CarSaleNewComponent implements OnInit {
     if (n) {
       this.isEnable = false;
     }
+    this._dicService.getDicByName("销售顾问", data => {
+      this.saleman = data;
+    });
     if (id == 0) {
       this.getDataList();
-      this.carsale.Creator = sessionStorage.getItem('userName');
+      this.carsale.Creator = sessionStorage.getItem("userName");
       this.carsale.OrderDate = this._common.getTodayStringChinese();
       this.carsale.OrderDateObj = this._common.getTodayObj();
       //获取默认订单号
-      this.formService.getDataCount("car_booking").then(
+      this.formService.getMaxId("car_booking").then(
         data => {
           if (data) {
             const cnt = _.toInteger(data.Data) + 1;
@@ -260,9 +286,6 @@ export class CarSaleNewComponent implements OnInit {
         err => {}
       );
     } else {
-      this._dicService.getDicByName("销售顾问", data => {
-        this.saleman = data;
-      });
       this.getCarsale(id);
     }
   }
@@ -271,11 +294,19 @@ export class CarSaleNewComponent implements OnInit {
     const that = this;
     async.series(
       {
+        zero: function(callback) {
+          that.formService.getForms("vw_select_car").then(
+            data => {
+              that.popCarInfoGrid = data.Data;
+              callback(null, 0);
+            },
+            err => {}
+          );
+        },
         one: function(callback) {
           that.formService.getForms("vw_car_income").then(
             data => {
               that.carinfoDataList = data.Data;
-              that.popCarInfoGrid = data.Data;
               callback(null, 1);
             },
             err => {}
@@ -328,6 +359,8 @@ export class CarSaleNewComponent implements OnInit {
                     f["ItemType"] == "增值服务"
                   ) {
                     zzitem.push({
+                      Id: f["Id"],
+                      FieldName: f["FieldName"],
                       itemName: f["ItemName"],
                       itemType: f["ItemType"],
                       price: f["Price"],
@@ -339,6 +372,8 @@ export class CarSaleNewComponent implements OnInit {
                     f["ItemType"] == "赠送服务"
                   ) {
                     zsitem.push({
+                      Id: f["Id"],
+                      FieldName: f["FieldName"],
                       itemName: f["ItemName"],
                       itemType: f["ItemType"],
                       price: f["Price"],
@@ -366,6 +401,11 @@ export class CarSaleNewComponent implements OnInit {
     this.formService.getForms("vw_car_income").then(
       data => {
         this.carinfoDataList = data.Data;
+      },
+      err => {}
+    );
+    this.formService.getForms("vw_select_car").then(
+      data => {
         this.popCarInfoGrid = data.Data;
       },
       err => {}
@@ -483,22 +523,35 @@ export class CarSaleNewComponent implements OnInit {
         this.carsale.OrderDateObj
       );
     }
-    if (_.isObject(this.carsale.PreCarDateObj)) {
+    if (
+      _.isObject(this.carsale.PreCarDateObj) &&
+      this.carsale.PreCarDateObj.year
+    ) {
       this.carsale.PreCarDate = this._common.getDateString(
         this.carsale.PreCarDateObj
       );
+    } else {
+      this._state.notifyDataChanged("messagebox", {
+        type: "warning",
+        msg: "交车日期不能为空。",
+        time: new Date().getTime()
+      });
+      return;
     }
-    const newcarsale = _.clone(this.carsale);
+    this.carsale.Creator = sessionStorage.getItem("userName");
     this.carsale.GuidePrice = this.carinfo.GuidePrice;
     this.carsale.SalePrice = this.carinfo.WholePrice;
+    const newcarsale = _.clone(this.carsale);
+
     delete newcarsale.PreCarDateObj;
     delete newcarsale.OrderDateObj;
 
     console.log(newcarsale);
     const that = this;
     this.formService.create("car_booking", newcarsale).then(
-      function(data) {
+      data => {
         that.saveItem();
+        that.saveStatus();
         that._state.notifyDataChanged("messagebox", {
           type: "success",
           msg: "保存成功。",
@@ -515,19 +568,24 @@ export class CarSaleNewComponent implements OnInit {
       }
     );
   }
+  //修改状态
+  saveStatus() {
+    const that = this;
+    const carinfo = { Id: this.carinfo.Id, Status: "订单" };
+    this.formService.create("car_income", carinfo).then(data => {}, err => {});
+  }
 
   saveItem() {
     const that = this;
-    const items = _.concat(
-      _.filter(this.serviceItem, f => {
-        return f.price > 0;
-      }),
-      _.filter(this.giveItem, f => {
-        return f.itemName.length > 1 && f.service.length > 1;
-      })
-    );
-    console.log(items);
-    _.each(items, f => {
+    _.each(this.serviceItem, f => {
+      f["OrderId"] = this.carsale.OrderId;
+      this.formService
+        .create("car_booking_item", f)
+        .then(function(data) {}, err => {
+          console.log(err);
+        });
+    });
+    _.each(this.giveItem, f => {
       f["OrderId"] = this.carsale.OrderId;
       this.formService
         .create("car_booking_item", f)
