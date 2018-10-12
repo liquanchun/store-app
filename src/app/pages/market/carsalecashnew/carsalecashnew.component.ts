@@ -235,6 +235,7 @@ export class CarSaleCashNewComponent implements OnInit {
           time: new Date().getTime()
         });
         that.isEnable = false;
+        that.saveStatus();
       },
       err => {
         that._state.notifyDataChanged("messagebox", {
