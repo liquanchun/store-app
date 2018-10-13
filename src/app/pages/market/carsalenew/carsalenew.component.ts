@@ -79,6 +79,7 @@ export class CarSaleNewComponent implements OnInit {
     Creator: ""
   };
   customer: any = {
+    Id:0,
     Name: "",
     Address: "",
     Phone: "",
@@ -95,6 +96,7 @@ export class CarSaleNewComponent implements OnInit {
     Status: "",
     CarColor: "",
     CarTrim: "",
+    CarConfig:"",
     GuidePrice: 0,
     WholePrice: 0
   };

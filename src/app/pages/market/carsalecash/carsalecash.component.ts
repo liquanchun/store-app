@@ -58,8 +58,20 @@ export class CarSaleCashComponent implements OnInit {
     }
   };
 
-  configUpdate: FieldConfig[] = [];
-  configAdd: FieldConfig[] = [];
+  config: FieldConfig[] = [
+    {
+      type: "check",
+      label: "审核",
+      name: "AuditResult",
+      check: "radio",
+      options: [{ id: "通过", text: "通过" }, { id: "不通过", text: "不通过" }]
+    },
+    {
+      type: "input",
+      label: "审核意见",
+      name: "AuditSuggest"
+    }
+  ];
 
   //表格视图定义
   tableView: {};
@@ -164,7 +176,19 @@ export class CarSaleCashComponent implements OnInit {
         }
       );
     });
+    this._state.subscribe("print.carsale.audit", data => {
+      this.carsale = _.find(this.carsaleData, f => {
+        return f["Id"] == data.id;
+      });
+      this.onAudit();
+    });
 
+    this._state.subscribe("print.carsale.auditnot", data => {
+      this.carsale = _.find(this.carsaleData, f => {
+        return f["Id"] == data.id;
+      });
+      this.onAuditNot();
+    });
     this._state.subscribe("print.carsalecash", data => {
       this.carsale = _.find(this.carsaleData, f => {
         return f["Id"] == data.id;
@@ -357,7 +381,7 @@ export class CarSaleCashComponent implements OnInit {
       data => {
         this.carsaleData = data.Data;
         _.each(this.carsaleData, f => {
-          f["button"] = f["Id"];
+          f["button"] = f;
         });
 
         this.source.load(this.carsaleData);
@@ -389,9 +413,9 @@ export class CarSaleCashComponent implements OnInit {
         data => {
           this.carsaleData = data.Data;
           _.each(this.carsaleData, f => {
-            f["button"] = f["Id"];
+            f["button"] = f;
           });
-  
+
           this.source.load(this.carsaleData);
           this.totalRecord = data.Data.length;
           this.loading = false;
@@ -405,6 +429,14 @@ export class CarSaleCashComponent implements OnInit {
 
   onEdit(event) {
     const id = event.data.Id;
+    if (this.carsale["AuditResult"] == "通过") {
+      this._state.notifyDataChanged("messagebox", {
+        type: "warning",
+        msg: "已审核通过，不能修改",
+        time: new Date().getTime()
+      });
+      return;
+    }
     this.router.navigate(
       ["/pages/market/carsalecashnew", event.data.BookingId],
       {
@@ -415,6 +447,14 @@ export class CarSaleCashComponent implements OnInit {
 
   onDelete(event) {
     if (window.confirm("你确定要删除吗?")) {
+      if (this.carsale["AuditResult"] == "通过") {
+        this._state.notifyDataChanged("messagebox", {
+          type: "warning",
+          msg: "已审核通过，不能修改",
+          time: new Date().getTime()
+        });
+        return;
+      }
       this.formService.delete(this.tableView["ViewName"], event.data.Id).then(
         data => {
           this._state.notifyDataChanged("messagebox", {
@@ -433,6 +473,65 @@ export class CarSaleCashComponent implements OnInit {
         }
       );
     }
+  }
+
+  onAudit(): void {
+    const that = this;
+    const modalRef = this.modalService.open(NgbdModalContent);
+    modalRef.componentInstance.title = "审核预订单";
+    modalRef.componentInstance.config = this.config;
+    modalRef.componentInstance.saveFun = (result, closeBack) => {
+      let formValue = JSON.parse(result);
+      formValue["Id"] = that.carsale["Id"];
+      formValue["Auditor"] = sessionStorage.getItem("userName");
+      formValue["AuditTime"] = this._common.getTodayString();
+      console.log(formValue);
+
+      that.formService.create("car_sale_cash", formValue).then(
+        data => {
+          closeBack();
+          this._state.notifyDataChanged("messagebox", {
+            type: "success",
+            msg: "审核成功。",
+            time: new Date().getTime()
+          });
+          that.getDataList();
+        },
+        err => {
+          this._state.notifyDataChanged("messagebox", {
+            type: "error",
+            msg: err,
+            time: new Date().getTime()
+          });
+        }
+      );
+    };
+  }
+
+  onAuditNot(): void {
+    let formValue = {};
+    formValue["Id"] = this.carsale["Id"];
+    formValue["AuditResult"] = " ";
+    formValue["AuditSuggest"] = " ";
+    formValue["Auditor"] = sessionStorage.getItem("userName");
+    formValue["AuditTime"] = this._common.getTodayString();
+    this.formService.create("car_sale_cash", formValue).then(
+      data => {
+        this._state.notifyDataChanged("messagebox", {
+          type: "success",
+          msg: "审核成功。",
+          time: new Date().getTime()
+        });
+        this.getDataList();
+      },
+      err => {
+        this._state.notifyDataChanged("messagebox", {
+          type: "error",
+          msg: err,
+          time: new Date().getTime()
+        });
+      }
+    );
   }
 
   onSelected(event) {

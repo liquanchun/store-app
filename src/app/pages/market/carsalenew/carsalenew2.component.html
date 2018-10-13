@@ -104,18 +104,18 @@
           <td>{{carinfo.CarTrim | numberSeparator}}</td>
           <td>{{carinfo.GuidePrice | numberSeparator}}</td>
           <td>{{carinfo.WholePrice | numberSeparator}}</td>
-          <td rowspan="3"><input [class.inputline]="!isEnable" [(ngModel)]="carsale.Count" type="number" class="form-control"></td>
+          <td rowspan="3">{{carsale.Count}}</td>
           <td rowspan="3"><input [class.inputline]="!isEnable" [(ngModel)]="carsale.Deposit" type="number" class="form-control"></td>
         </tr>
         <tr>
           <td>车架号码</td>
-          <td colspan="2"><input [class.inputline]="!isEnable" [(ngModel)]="carinfo.Vinno" type="text" readonly class="form-control"></td>
+          <td colspan="2">{{carinfo.Vinno}}</td>
           <td>车辆状态</td>
-          <td><input [class.inputline]="!isEnable" [(ngModel)]="carinfo.Status" type="text" readonly class="form-control"></td>
+          <td>{{carinfo.Status}}</td>
         </tr>
         <tr>
-          <td><span class="reqmark">*</span>个性配置</td>
-          <td colspan="2"><input [class.inputline]="!isEnable" [(ngModel)]="carsale.SelfConfig" type="text" class="form-control"></td>
+          <td>个性配置</td>
+          <td colspan="2">{{carinfo.CarConfig}}</td>
           <td><span class="reqmark">*</span>优惠点位或金额</td>
           <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.Discount" type="number" class="form-control"></td>
         </tr>

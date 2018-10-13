@@ -8,7 +8,9 @@ import * as _ from 'lodash';
   template: `
 	    <div class="btn-group" role="group" aria-label="Basic example">
         <button type="button" style="line-height: 15px;" class="btn btn-success btn-sm tablebutton" (click)="onDetail()">详情</button>
-        <button type="button" style="line-height: 15px;" class="btn btn-success btn-sm tablebutton" (click)="onClick()">打印</button>
+        <button *ngIf="value.AuditResult == '通过'" type="button" style="line-height: 15px;" class="btn btn-success btn-sm tablebutton" (click)="onClick()">打印</button>
+        <button *ngIf="value.AuditResult != '通过'" type="button" style="line-height: 15px;" class="btn btn-success btn-sm tablebutton" (click)="onAudit()">审核</button>
+        <button *ngIf="value.AuditResult == '通过'" type="button" style="line-height: 15px;" class="btn btn-success btn-sm tablebutton" (click)="onAuditNot()">反审核</button>
       </div>
     `,
 })
@@ -16,7 +18,7 @@ import * as _ from 'lodash';
 export class PrintCashComponent implements ViewCell, OnInit {
   renderValue: string;
 
-  @Input() value: string | number;
+  @Input() value: any;
   @Input() rowData: any;
 
   @Output() save: EventEmitter<any> = new EventEmitter();
@@ -33,7 +35,24 @@ export class PrintCashComponent implements ViewCell, OnInit {
     const getTimestamp = new Date().getTime();
     this._state.notifyDataChanged('print.carsalecash.detail', { id: this.value, time: getTimestamp });
   }
+  onAudit() {
+    this.save.emit(this.rowData);
 
+    const getTimestamp = new Date().getTime();
+    this._state.notifyDataChanged("print.carsale.audit", {
+      id: this.value.Id,
+      time: getTimestamp
+    });
+  }
+  onAuditNot() {
+    this.save.emit(this.rowData);
+
+    const getTimestamp = new Date().getTime();
+    this._state.notifyDataChanged("print.carsale.auditnot", {
+      id: this.value.Id,
+      time: getTimestamp
+    });
+  }
   onClick() {
     this.save.emit(this.rowData);
 

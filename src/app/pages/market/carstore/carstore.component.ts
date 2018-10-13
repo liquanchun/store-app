@@ -195,6 +195,7 @@ export class CarstoreComponent implements OnInit {
   }
   //获取数据
   getDataList() {
+    this.loading = true;
     this.formService.getForms(this.tableView['ViewName']).then((data) => {
       this.source.load(_.orderBy(data.Data, 'UpdateTime', 'desc'));
       this.totalRecord = data.Data.length;

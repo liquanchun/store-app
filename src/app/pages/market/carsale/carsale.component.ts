@@ -54,8 +54,20 @@ export class CarsaleComponent implements OnInit {
     }
   };
 
-  configUpdate: FieldConfig[] = [];
-  configAdd: FieldConfig[] = [];
+  config: FieldConfig[] = [
+    {
+      type: "check",
+      label: "审核",
+      name: "AuditResult",
+      check: "radio",
+      options: [{ id: "通过", text: "通过" }, { id: "不通过", text: "不通过" }]
+    },
+    {
+      type: "input",
+      label: "审核意见",
+      name: "AuditSuggest"
+    }
+  ];
 
   //表格视图定义
   tableView: {};
@@ -112,6 +124,20 @@ export class CarsaleComponent implements OnInit {
       this.router.navigate(["/pages/market/carsalecashnew", data.id], {
         queryParams: { n: this.printOrder.OrderId }
       });
+    });
+
+    this._state.subscribe("print.carsale.audit", data => {
+      this.printOrder = _.find(this.carsaleData, f => {
+        return f["Id"] == data.id;
+      });
+      this.onAudit();
+    });
+
+    this._state.subscribe("print.carsale.auditnot", data => {
+      this.printOrder = _.find(this.carsaleData, f => {
+        return f["Id"] == data.id;
+      });
+      this.onAuditNot();
     });
 
     this._state.subscribe("print.carsale", data => {
@@ -399,16 +425,33 @@ export class CarsaleComponent implements OnInit {
   onCreate(): void {
     this.router.navigate(["/pages/market/carsalenew", 0]);
   }
-  onSave(event){
+  onSave(event) {
     console.log(event);
   }
   onEdit(event) {
     const id = event.data.Id;
+    if (this.printOrder["AuditResult"] == "通过") {
+      this._state.notifyDataChanged("messagebox", {
+        type: "warning",
+        msg: "已审核通过，不能修改",
+        time: new Date().getTime()
+      });
+      return;
+    }
     this.router.navigate(["/pages/market/carsalenew", id]);
   }
 
   onDelete(event) {
     if (window.confirm("你确定要删除吗?")) {
+      if (this.printOrder["AuditResult"] == "通过") {
+        this._state.notifyDataChanged("messagebox", {
+          type: "warning",
+          msg: "已审核通过，不能修改",
+          time: new Date().getTime()
+        });
+        return;
+      }
+
       this.formService.delete(this.tableView["ViewName"], event.data.Id).then(
         data => {
           this._state.notifyDataChanged("messagebox", {
@@ -443,6 +486,65 @@ export class CarsaleComponent implements OnInit {
       }
       this.getItem();
     }
+  }
+
+  onAudit(): void {
+    const that = this;
+    const modalRef = this.modalService.open(NgbdModalContent);
+    modalRef.componentInstance.title = "审核预订单";
+    modalRef.componentInstance.config = this.config;
+    modalRef.componentInstance.saveFun = (result, closeBack) => {
+      let formValue = JSON.parse(result);
+      formValue["Id"] = that.printOrder["Id"];
+      formValue["Auditor"] = sessionStorage.getItem("userName");
+      formValue["AuditTime"] = this._common.getTodayString();
+      console.log(formValue);
+
+      that.formService.create("car_booking", formValue).then(
+        data => {
+          closeBack();
+          this._state.notifyDataChanged("messagebox", {
+            type: "success",
+            msg: "审核成功。",
+            time: new Date().getTime()
+          });
+          that.getDataList();
+        },
+        err => {
+          this._state.notifyDataChanged("messagebox", {
+            type: "error",
+            msg: err,
+            time: new Date().getTime()
+          });
+        }
+      );
+    };
+  }
+
+  onAuditNot(): void {
+    let formValue = {};
+    formValue["Id"] = this.printOrder["Id"];
+    formValue["AuditResult"] = " ";
+    formValue["AuditSuggest"] = " ";
+    formValue["Auditor"] = sessionStorage.getItem("userName");
+    formValue["AuditTime"] = this._common.getTodayString();
+    this.formService.create("car_booking", formValue).then(
+      data => {
+        this._state.notifyDataChanged("messagebox", {
+          type: "success",
+          msg: "审核成功。",
+          time: new Date().getTime()
+        });
+        this.getDataList();
+      },
+      err => {
+        this._state.notifyDataChanged("messagebox", {
+          type: "error",
+          msg: err,
+          time: new Date().getTime()
+        });
+      }
+    );
   }
 
   print() {
