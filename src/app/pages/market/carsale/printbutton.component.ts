@@ -28,7 +28,9 @@ export class PrintButtonComponent implements ViewCell, OnInit {
 
   constructor(private _state: GlobalState) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+     
+  }
   onDetail() {
     this.save.emit(this.rowData);
     const getTimestamp = new Date().getTime();

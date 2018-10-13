@@ -130,14 +130,34 @@ export class CarsaleComponent implements OnInit {
       this.printOrder = _.find(this.carsaleData, f => {
         return f["Id"] == data.id;
       });
-      this.onAudit();
+      this.checkRoles().then(d => {
+        if (d == 0) {
+          this._state.notifyDataChanged("messagebox", {
+            type: "warning",
+            msg: "你无权审核。",
+            time: new Date().getTime()
+          });
+        } else {
+          this.onAudit();
+        }
+      });
     });
 
     this._state.subscribe("print.carsale.auditnot", data => {
       this.printOrder = _.find(this.carsaleData, f => {
         return f["Id"] == data.id;
       });
-      this.onAuditNot();
+      this.checkRoles().then(d => {
+        if (d == 0) {
+          this._state.notifyDataChanged("messagebox", {
+            type: "warning",
+            msg: "你无权审核。",
+            time: new Date().getTime()
+          });
+        } else {
+          this.onAuditNot();
+        }
+      });
     });
 
     this._state.subscribe("print.carsale", data => {
@@ -545,6 +565,31 @@ export class CarsaleComponent implements OnInit {
         });
       }
     );
+  }
+
+  checkRoles() {
+    const that = this;
+    return new Promise((resolve, reject) => {
+      const roles = sessionStorage.getItem("roleIds");
+      const roleName = that.tableView["AuditRoles"];
+      if (roleName) {
+        that.formService.getForms("sys_role").then(
+          data => {
+            const roles = data.Data;
+            const rl = _.find(roles, f => {
+              return f["RoleName"] == roleName;
+            });
+            if (rl && roles.includes(rl["Id"])) {
+              resolve(1);
+            } else {
+              resolve(0);
+            }
+          },
+          err => {}
+        );
+      }
+      resolve(1);
+    });
   }
 
   print() {
