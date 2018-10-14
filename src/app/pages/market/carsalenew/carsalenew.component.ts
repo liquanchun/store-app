@@ -98,6 +98,7 @@ export class CarSaleNewComponent implements OnInit {
     CarTrim: "",
     CarConfig:"",
     GuidePrice: 0,
+    GuidePriceRemark:0,
     WholePrice: 0
   };
   serviceItem = [
@@ -343,6 +344,8 @@ export class CarSaleNewComponent implements OnInit {
                 that.carinfo = _.find(that.carinfoDataList, f => {
                   return f["Id"] == that.carsale.CarIncomeId;
                 });
+                that.carinfo.GuidePrice += that.carinfo.GuidePriceRemark;
+                that.carsale.Discount = that.carinfo.GuidePrice - that.carinfo.WholePrice;
                 callback(null, 3);
               }
             },
@@ -445,6 +448,8 @@ export class CarSaleNewComponent implements OnInit {
     if (event.isSelected) {
       this.carsale.CarIncomeId = event.data.Id;
       this.carinfo = event.data;
+      this.carinfo.GuidePrice += this.carinfo.GuidePriceRemark;
+      this.carsale.Discount = this.carinfo.GuidePrice - this.carinfo.WholePrice;
     } else {
       this.carinfo.CarColor = "";
       this.carinfo.CarTrim = "";
@@ -514,6 +519,9 @@ export class CarSaleNewComponent implements OnInit {
     this.carsale.PredictFee = _.sumBy(this.serviceItem, f => {
       return f["price"];
     });
+  }
+  discountChange(event) {
+    this.carinfo.GuidePrice = this.carinfo.WholePrice + this.carsale.Discount;
   }
   onBack() {
     this._router.navigate(["/pages/market/carsale"]);

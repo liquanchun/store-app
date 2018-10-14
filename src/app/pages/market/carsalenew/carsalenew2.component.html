@@ -51,7 +51,7 @@
       <tbody>
         <tr>
           <td>
-            <button placement="right" (shown)="showPopCustomer()" #pcust="ngbPopover" [ngbPopover]="popContentCustomer"
+            <button *ngIf="isEnable" placement="right" (shown)="showPopCustomer()" #pcust="ngbPopover" [ngbPopover]="popContentCustomer"
               popoverTitle="客户信息列表" type="button" class="btn btn-success btn-sm" container="body">
               <i class="fa fa-refresh" aria-hidden="true"></i> 选择客户</button>
             客户名称</td>
@@ -81,7 +81,7 @@
     </table>
     <div style="padding:8px;">一、订购车型、数量及价款</div>
     <div>
-      <button placement="right" (shown)="showPopCarInfo()" #pcar="ngbPopover" [ngbPopover]="popContentCar" popoverTitle="产品信息列表"
+      <button *ngIf="isEnable" placement="right" (shown)="showPopCarInfo()" #pcar="ngbPopover" [ngbPopover]="popContentCar" popoverTitle="产品信息列表"
         type="button" class="btn btn-success btn-sm" container="body">
         <i class="fa fa-refresh" aria-hidden="true"></i> 选择车辆</button>
     </div>
@@ -116,8 +116,8 @@
         <tr>
           <td>个性配置</td>
           <td colspan="2">{{carinfo.CarConfig}}</td>
-          <td><span class="reqmark">*</span>优惠点位或金额</td>
-          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.Discount" type="number" class="form-control"></td>
+          <td><span class="reqmark">*</span>优惠金额</td>
+          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.Discount" type="number" (change)="discountChange($event)" class="form-control"></td>
         </tr>
         <tr>
           <td>订金金额（大写）</td>
@@ -139,7 +139,7 @@
       <tbody>
         <tr *ngFor="let item of serviceItem">
           <td>{{item.itemName}}</td>
-          <td>{{item.service}}</td>
+          <td><input [class.inputline]="!isEnable" [(ngModel)]="item.service" type="text" class="form-control"></td>
           <td><input [class.inputline]="!isEnable" [(ngModel)]="item.price" type="number" (change)="priceChange($event)"
               class="form-control"></td>
         </tr>
@@ -152,7 +152,7 @@
     </table>
 
     <div style="padding:8px;font-weight: bold">赠送商品或服务产品</div>
-    <button type="button" class="btn btn-success btn-sm" (click)="newItem()">
+    <button *ngIf="isEnable" type="button" class="btn btn-success btn-sm" (click)="newItem()">
       <i class="fa fa-refresh" aria-hidden="true"></i> 添加项目</button>
     <table class="table table-bordered table-sm">
       <thead>
