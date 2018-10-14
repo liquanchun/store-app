@@ -99,9 +99,9 @@
       </thead>
       <tbody>
         <tr>
-          <td>{{carinfo.CarType  | numberSeparator}}</td>
-          <td>{{carinfo.CarColor | numberSeparator}}</td>
-          <td>{{carinfo.CarTrim | numberSeparator}}</td>
+          <td>{{carinfo.CarType}}</td>
+          <td>{{carinfo.CarColor}}</td>
+          <td>{{carinfo.CarTrim}}</td>
           <td>{{carsale.GuidePrice | numberSeparator}}</td>
           <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.SalePrice" type="number" min="0" (change)="saleChange($event)" class="form-control"></td>
           <td rowspan="3">{{carsale.Count}}</td>

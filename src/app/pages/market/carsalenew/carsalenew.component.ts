@@ -98,7 +98,7 @@ export class CarSaleNewComponent implements OnInit {
     CarTrim: "",
     CarConfig: "",
     GuidePrice: 0,
-    GuidePriceRemark: 0,
+    GuidePriceRemark: 0
   };
   serviceItem = [
     {
@@ -209,14 +209,12 @@ export class CarSaleNewComponent implements OnInit {
       edit: false,
       delete: false
     },
+    pager: {
+      perPage: 5
+    },
     mode: "external",
     hideSubHeader: true,
     columns: {
-      CarSeries: {
-        title: "车系",
-        type: "string",
-        filter: false
-      },
       CarType: {
         title: "车型",
         type: "string",
@@ -244,6 +242,21 @@ export class CarSaleNewComponent implements OnInit {
       },
       Status: {
         title: "状态",
+        type: "string",
+        filter: false
+      },
+      StoreSite: {
+        title: "库位",
+        type: "string",
+        filter: false
+      },
+      InDate: {
+        title: "入库日期",
+        type: "string",
+        filter: false
+      },
+      PreIncomeTime: {
+        title: "预计到车",
         type: "string",
         filter: false
       }
@@ -443,7 +456,8 @@ export class CarSaleNewComponent implements OnInit {
     if (event.isSelected) {
       this.carsale.CarIncomeId = event.data.Id;
       this.carinfo = event.data;
-      this.carsale.GuidePrice = this.carinfo.GuidePrice + this.carinfo.GuidePriceRemark;
+      this.carsale.GuidePrice =
+        this.carinfo.GuidePrice + this.carinfo.GuidePriceRemark;
       this.carsale.SalePrice = this.carsale.GuidePrice;
     } else {
       this.carinfo.CarColor = "";
@@ -468,8 +482,8 @@ export class CarSaleNewComponent implements OnInit {
   showPopCarInfo(event): void {
     _.delay(
       function(text) {
-        $(".popover").css("max-width", "820px");
-        $(".popover").css("min-width", "600px");
+        $(".popover").css("max-width", "1024px");
+        $(".popover").css("min-width", "900px");
       },
       100,
       "later"
@@ -486,7 +500,8 @@ export class CarSaleNewComponent implements OnInit {
       [
         { field: "Vinno", search: query },
         { field: "CarType", search: query },
-        { field: "CarSeries", search: query },
+        { field: "CarColor", search: query },
+        { field: "Status", search: query },
         { field: "CarTypeCode", search: query }
       ],
       false
