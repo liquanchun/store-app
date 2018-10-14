@@ -200,7 +200,6 @@ export class CarSaleCashNewComponent implements OnInit {
   priceChange() {
     this.carsale.ShouldAllFee =
       this.carsale.NewCarFee -
-      this.carsale.FirstFee +
       this.carsale.InsureFee +
       this.carsale.BuyTaxFee +
       this.carsale.FinanceSerFee +
