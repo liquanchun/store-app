@@ -342,10 +342,6 @@ export class CarSaleNewComponent implements OnInit {
                 that.carinfo = _.find(that.carinfoDataList, f => {
                   return f["Id"] == that.carsale.CarIncomeId;
                 });
-                that.carsale.GuidePrice = that.carinfo.GuidePrice + that.carinfo.GuidePriceRemark;
-                that.carsale.Discount =
-                  that.carinfo.GuidePrice - that.carinfo.WholePrice;
-                that.carsale.SalePrice = that.carinfo.WholePrice;
                 callback(null, 3);
               }
             },
