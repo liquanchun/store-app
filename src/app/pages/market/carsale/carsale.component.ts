@@ -68,7 +68,12 @@ export class CarsaleComponent implements OnInit {
       name: "AuditSuggest"
     }
   ];
-
+  printSet: any = [
+    "第一联 销售顾问",
+    "第二联 销售计划",
+    "第三联 财务",
+    "第四联 客户"
+  ];
   //表格视图定义
   tableView: {};
   //表单修改时数据

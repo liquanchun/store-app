@@ -148,6 +148,12 @@ export class CarSaleCashComponent implements OnInit {
     GuidePrice: 0,
     WholePrice: 0
   };
+  printSet: any = [
+    "第一联 财务",
+    "第二联 销售顾问",
+    "第三联 销售计划",
+    "第四联 留档"
+  ];
   chineseMoney: string;
   constructor(
     private modalService: NgbModal,
@@ -498,7 +504,7 @@ export class CarSaleCashComponent implements OnInit {
   onAudit(): void {
     const that = this;
     const modalRef = this.modalService.open(NgbdModalContent);
-    modalRef.componentInstance.title = "审核预订单";
+    modalRef.componentInstance.title = "审核交款单";
     modalRef.componentInstance.config = this.config;
     modalRef.componentInstance.saveFun = (result, closeBack) => {
       let formValue = JSON.parse(result);

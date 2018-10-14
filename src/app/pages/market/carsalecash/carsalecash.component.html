@@ -55,7 +55,7 @@
 </div>
 
 <div style="display:none;" id="printDiv">
-  <div>
+  <div *ngFor="let pagename of printSet" style="margin-bottom:45px;">
     <table style="border:none" class="table noboderall table-sm">
       <tbody>
         <tr>
@@ -214,12 +214,12 @@
     <table class="table table-bordered table-sm">
       <tbody>
         <tr>
-          <td>车型</td>
-          <td>颜色</td>
-          <td>配置</td>
-          <td>车架号</td>
-          <td>数量（辆）</td>
-          <td>销售金额</td>
+          <td class="valueText">车型</td>
+          <td class="valueText">颜色</td>
+          <td class="valueText">配置</td>
+          <td class="valueText">车架号</td>
+          <td class="valueText">数量（辆）</td>
+          <td class="valueText">销售金额</td>
         </tr>
         <tr>
           <td class="valueText">{{carinfo.CarType}}</td>
@@ -260,8 +260,7 @@
         </tr>
       </tbody>
     </table>
-    <p style="text-align:right"><strong> 第四联 客户</strong></p>
+    <p style="text-align:right"><strong> {{pagename}}</strong></p>
 
   </div>
 </div>
-
