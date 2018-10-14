@@ -152,6 +152,36 @@
 
   </div>
 
+  <div style="padding:8px;font-weight: bold">精品装饰明细</div>
+  <button placement="right" (shown)="showPopCarItem()" #pitem="ngbPopover" [ngbPopover]="popContentPartItem"
+    popoverTitle="精品装饰列表" type="button" class="btn btn-success btn-sm" container="body">
+    <i class="fa fa-refresh" aria-hidden="true"></i> 自费项目</button>
+  <button placement="right" (shown)="showPopCarItem()" #pitem2="ngbPopover" [ngbPopover]="popContentPartItem2"
+    popoverTitle="精品装饰列表" type="button" class="btn btn-success btn-sm" container="body">
+    <i class="fa fa-refresh" aria-hidden="true"></i> 免费项目</button>
+  <table class="table table-bordered table-sm">
+    <thead>
+      <tr>
+        <th>分类</th>
+        <th>项目</th>
+        <th>数量</th>
+        <th>价格</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of partItem">
+        <td>{{item.ItemType}}</td>
+        <td>{{item.ItemName}}</td>
+        <td><input [class.inputline]="!isEnable" [(ngModel)]="item.Count" type="text" class="form-control"></td>
+        <td>{{item.Price}}</td>
+        <td>
+          <button type="button" (click)="removeItem(item.ItemName)" class="btn btn-warning">删除</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
   <div class="row">
     <div class="col-md-12 text-center title">
       销售出库单
@@ -240,3 +270,17 @@
   </div>
 
 </div>
+
+<ng-template #popContentPartItem>
+    <a href="javascrpit:void(0)" class="close" (click)='pitem.close()' aria-hidden="true">&times;</a>
+    <search-input (searchClick)="onSearchItem($event)"></search-input>
+    <ng2-smart-table [settings]="settingsItem" [source]="popCarItemGrid" (userRowSelect)="rowItemClicked($event)">
+    </ng2-smart-table>
+  </ng-template>
+
+  <ng-template #popContentPartItem2>
+    <a href="javascrpit:void(0)" class="close" (click)='pitem2.close()' aria-hidden="true">&times;</a>
+    <search-input (searchClick)="onSearchItem($event)"></search-input>
+    <ng2-smart-table [settings]="settingsItem" [source]="popCarItemGrid" (userRowSelect)="rowItem2Clicked($event)">
+    </ng2-smart-table>
+  </ng-template>

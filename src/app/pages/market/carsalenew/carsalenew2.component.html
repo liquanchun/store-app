@@ -55,27 +55,27 @@
               popoverTitle="客户信息列表" type="button" class="btn btn-success btn-sm" container="body">
               <i class="fa fa-refresh" aria-hidden="true"></i> 选择客户</button>
             客户名称</td>
-          <td><input [class.inputline]="!isEnable" [(ngModel)]="customer.Name" type="text"  class="form-control"></td>
+          <td><input [class.inputline]="!isEnable" [(ngModel)]="customer.Name" type="text" class="form-control"></td>
           <td>客户电话</td>
-          <td><input [class.inputline]="!isEnable" [(ngModel)]="customer.Phone" type="text"  class="form-control"></td>
+          <td><input [class.inputline]="!isEnable" [(ngModel)]="customer.Phone" type="text" class="form-control"></td>
         </tr>
         <tr>
           <td>身份证/代码证</td>
-          <td><input [class.inputline]="!isEnable" [(ngModel)]="customer.IdCard" type="text"  class="form-control"></td>
+          <td><input [class.inputline]="!isEnable" [(ngModel)]="customer.IdCard" type="text" class="form-control"></td>
           <td>牌照属性</td>
-          <td><input [class.inputline]="!isEnable" [(ngModel)]="customer.LicenseType" type="text"  class="form-control"></td>
+          <td><input [class.inputline]="!isEnable" [(ngModel)]="customer.LicenseType" type="text" class="form-control"></td>
         </tr>
         <tr>
           <td>证件地址</td>
-          <td><input [class.inputline]="!isEnable" [(ngModel)]="customer.IdAddress" type="text"  class="form-control"></td>
+          <td><input [class.inputline]="!isEnable" [(ngModel)]="customer.IdAddress" type="text" class="form-control"></td>
           <td>客户性质</td>
-          <td><input [class.inputline]="!isEnable" [(ngModel)]="customer.CustType" type="text"  class="form-control"></td>
+          <td><input [class.inputline]="!isEnable" [(ngModel)]="customer.CustType" type="text" class="form-control"></td>
         </tr>
         <tr>
           <td>居住地址</td>
-          <td><input [class.inputline]="!isEnable" [(ngModel)]="customer.Address" type="text"  class="form-control"></td>
+          <td><input [class.inputline]="!isEnable" [(ngModel)]="customer.Address" type="text" class="form-control"></td>
           <td>邮编</td>
-          <td><input [class.inputline]="!isEnable" [(ngModel)]="customer.PostNumber" type="text"  class="form-control"></td>
+          <td><input [class.inputline]="!isEnable" [(ngModel)]="customer.PostNumber" type="text" class="form-control"></td>
         </tr>
       </tbody>
     </table>
@@ -103,9 +103,11 @@
           <td>{{carinfo.CarColor}}</td>
           <td>{{carinfo.CarTrim}}</td>
           <td>{{carsale.GuidePrice | numberSeparator}}</td>
-          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.SalePrice" type="number" min="0" (change)="saleChange($event)" class="form-control"></td>
+          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.SalePrice" type="number" min="0" (change)="saleChange($event)"
+              class="form-control"></td>
           <td rowspan="3">{{carsale.Count}}</td>
-          <td rowspan="3"><input [class.inputline]="!isEnable" [(ngModel)]="carsale.Deposit" type="number" min="0" class="form-control"></td>
+          <td rowspan="3"><input [class.inputline]="!isEnable" [(ngModel)]="carsale.Deposit" type="number" min="0"
+              class="form-control"></td>
         </tr>
         <tr>
           <td>车架号码</td>
@@ -117,7 +119,8 @@
           <td>个性配置</td>
           <td colspan="2">{{carinfo.CarConfig}}</td>
           <td><span class="reqmark">*</span>优惠金额</td>
-          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.Discount" type="number" min="0" (change)="discountChange($event)" class="form-control"></td>
+          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.Discount" type="number" min="0" (change)="discountChange($event)"
+              class="form-control"></td>
         </tr>
         <tr>
           <td>订金金额（大写）</td>
@@ -168,6 +171,7 @@
         </tr>
       </tbody>
     </table>
+
     <div style="padding:8px;">二、交付日期、地点、履行方式、付款方式</div>
 
     <table class="table table-sm">
@@ -230,7 +234,8 @@
               <label class="form-check-labe3" for="inlineRadio3"> 1、现车付款：客户在签订本订单后</label>
             </div>
           </td>
-          <td class="longtext"><input [class.inputline]="!isEnable" [(ngModel)]="carsale.Days1" type="number" min="0" class="form-control"></td>
+          <td class="longtext"><input [class.inputline]="!isEnable" [(ngModel)]="carsale.Days1" type="number" min="0"
+              class="form-control"></td>
           <td>日内支付合同内余款。预收余款： 元，款到释放车。</td>
           <td colspan="2"></td>
         </tr>
@@ -243,7 +248,8 @@
               <label class="form-check-labe3" for="inlineRadio4"> 2、订单车辆付款：客户在接到到货通知后</label>
             </div>
           </td>
-          <td class="longtext"><input [class.inputline]="!isEnable" [(ngModel)]="carsale.Days2" type="number" min="0" class="form-control"></td>
+          <td class="longtext"><input [class.inputline]="!isEnable" [(ngModel)]="carsale.Days2" type="number" min="0"
+              class="form-control"></td>
           <td>日内支付合同内余款。预收余款： 元，款到释放车。</td>
           <td colspan="2"></td>
         </tr>
@@ -263,7 +269,7 @@
           <td>首付：</td>
           <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.FirstFee" type="number" min="0" class="form-control"></td>
           <td>分期</td>
-          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.Stages" type="number" min="0"  class="form-control"></td>
+          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.Stages" type="number" min="0" class="form-control"></td>
         </tr>
         <tr>
           <td></td>

@@ -363,47 +363,49 @@ export class CarSaleNewComponent implements OnInit {
           );
         },
         four: function(callback) {
-          that.formService.getForms("car_booking_item").then(
-            data => {
-              if (data.Data.length > 0) {
-                const zzitem = [],
-                  zsitem = [];
-                _.each(data.Data, f => {
-                  if (
-                    f["OrderId"] == that.carsale.OrderId &&
-                    f["ItemType"] == "增值服务"
-                  ) {
-                    zzitem.push({
-                      Id: f["Id"],
-                      FieldName: f["FieldName"],
-                      itemName: f["ItemName"],
-                      itemType: f["ItemType"],
-                      price: f["Price"],
-                      service: f["Service"]
-                    });
-                  }
-                  if (
-                    f["OrderId"] == that.carsale.OrderId &&
-                    f["ItemType"] == "赠送服务"
-                  ) {
-                    zsitem.push({
-                      Id: f["Id"],
-                      FieldName: f["FieldName"],
-                      itemName: f["ItemName"],
-                      itemType: f["ItemType"],
-                      price: f["Price"],
-                      service: f["Service"]
-                    });
-                  }
-                });
+          that.formService
+            .getForms("car_booking_item/OrderId/" + that.carsale.OrderId)
+            .then(
+              data => {
+                if (data.Data.length > 0) {
+                  const zzitem = [],
+                    zsitem = [];
+                  _.each(data.Data, f => {
+                    if (
+                      f["OrderId"] == that.carsale.OrderId &&
+                      f["ItemType"] == "增值服务"
+                    ) {
+                      zzitem.push({
+                        Id: f["Id"],
+                        FieldName: f["FieldName"],
+                        itemName: f["ItemName"],
+                        itemType: f["ItemType"],
+                        price: f["Price"],
+                        service: f["Service"]
+                      });
+                    }
+                    if (
+                      f["OrderId"] == that.carsale.OrderId &&
+                      f["ItemType"] == "赠送服务"
+                    ) {
+                      zsitem.push({
+                        Id: f["Id"],
+                        FieldName: f["FieldName"],
+                        itemName: f["ItemName"],
+                        itemType: f["ItemType"],
+                        price: f["Price"],
+                        service: f["Service"]
+                      });
+                    }
+                  });
 
-                that.serviceItem = zzitem;
-                that.giveItem = zsitem;
-              }
-              callback(null, 4);
-            },
-            err => {}
-          );
+                  that.serviceItem = zzitem;
+                  that.giveItem = zsitem;
+                }
+                callback(null, 4);
+              },
+              err => {}
+            );
         }
       },
       function(err, results) {
@@ -482,6 +484,7 @@ export class CarSaleNewComponent implements OnInit {
       "later"
     );
   }
+
   showPopCarInfo(event): void {
     _.delay(
       function(text) {
@@ -494,10 +497,11 @@ export class CarSaleNewComponent implements OnInit {
   }
   onSearchCus(query: string = "") {
     this.popCusInfoGrid.setFilter(
-      [{ field: "name", search: query }, { field: "phone", search: query }],
+      [{ field: "Name", search: query }, { field: "Phone", search: query }],
       false
     );
   }
+
   onSearchCar(query: string = "") {
     this.popCarInfoGrid.setFilter(
       [
@@ -592,12 +596,9 @@ export class CarSaleNewComponent implements OnInit {
       }
     );
 
-    this.formService.create("car_customer", this.customer).then(
-      data => {
-      },
-      err => {
-      }
-    );
+    this.formService
+      .create("car_customer", this.customer)
+      .then(data => {}, err => {});
   }
   //修改状态
   saveStatus() {

@@ -11,7 +11,7 @@ import { Common } from "../../../providers/common";
 import * as $ from "jquery";
 import * as _ from "lodash";
 import async from "async";
-
+import { LocalDataSource } from "ng2-smart-table";
 import { DicService } from "../../sys/dic/dic.services";
 import { FormService } from "../form/form.services";
 import { GlobalState } from "../../../global.state";
@@ -28,7 +28,7 @@ export class CarSaleCashNewComponent implements OnInit {
   title = "新增销售交款明细单";
   isSaved: boolean = false;
   isEnable: boolean = true;
-  loading= false;
+  loading = false;
   carsale: any = {
     Id: 0,
     OrderId: "",
@@ -85,13 +85,39 @@ export class CarSaleCashNewComponent implements OnInit {
     GuidePrice: 0,
     WholePrice: 0
   };
-
+  settingsItem = {
+    actions: false,
+    pager: {
+      perPage: 10
+    },
+    mode: "external",
+    hideSubHeader: true,
+    columns: {
+      PartType: {
+        title: "精品类别",
+        type: "string",
+        filter: false
+      },
+      ItemName: {
+        title: "项目",
+        type: "string",
+        filter: false
+      },
+      Price: {
+        title: "价格",
+        type: "string",
+        filter: false
+      }
+    }
+  };
+  partItem = [];
   //销售顾问
   saleman: any;
   customerId: number;
   carIncomeId: number;
   chineseMoney: string = "";
-
+  //弹出框表格
+  popCarItemGrid: LocalDataSource = new LocalDataSource();
   constructor(
     private _common: Common,
     private _state: GlobalState,
@@ -119,7 +145,7 @@ export class CarSaleCashNewComponent implements OnInit {
   }
 
   getCarsale(bookid: number) {
-    this.loading= true;
+    this.loading = true;
     const that = this;
     async.series(
       {
@@ -129,11 +155,16 @@ export class CarSaleCashNewComponent implements OnInit {
             .then(
               data => {
                 if (data && data.Data) {
-                  const bookitem = data.Data;
+                  const bookitem = _.filter(data.Data, f => {
+                    return f["ItemType"] != "自费" && f["ItemType"] != "免费";
+                  });
                   _.each(bookitem, f => {
                     if (f["FieldName"]) {
                       that.carsale[f["FieldName"]] = f["Price"];
                     }
+                  });
+                  that.partItem = _.filter(data.Data, f => {
+                    return f["ItemType"] == "自费" || f["ItemType"] == "免费";
                   });
                 }
                 callback(null, 0);
@@ -186,15 +217,24 @@ export class CarSaleCashNewComponent implements OnInit {
                   that.carsale = data.Data[0];
                   that.priceChange();
                 }
+                callback(null, 4);
               },
               err => {}
             );
           }
-          callback(null, 4);
+        },
+        five: function(callback) {
+          that.formService.getForms("car_part_item").then(
+            data => {
+              that.popCarItemGrid = data.Data;
+              callback(null, 5);
+            },
+            err => {}
+          );
         }
       },
       function(err, results) {
-        that.loading= false;
+        that.loading = false;
       }
     );
   }
@@ -213,10 +253,14 @@ export class CarSaleCashNewComponent implements OnInit {
       this.carsale.CardCashFee +
       this.carsale.OtherFee;
 
-    this.carsale.LastFee =this.carsale.SalePrice - this.carsale.FirstFee;
+    this.carsale.LastFee = this.carsale.SalePrice - this.carsale.FirstFee;
     this.carsale.InvoiceFee = this.carsale.NewCarFee;
     this.carsale.RealAllFee =
-      this.carsale.ShouldAllFee - this.carsale.Deposit - this.carsale.LastFee - this.carsale.OldChangeFee- this.carsale.OtherFee2;
+      this.carsale.ShouldAllFee -
+      this.carsale.Deposit -
+      this.carsale.LastFee -
+      this.carsale.OldChangeFee -
+      this.carsale.OtherFee2;
     this.chineseMoney = this._common.changeNumMoneyToChinese(
       this.carsale.RealAllFee
     );
@@ -246,12 +290,91 @@ export class CarSaleCashNewComponent implements OnInit {
         });
       }
     );
+    
+    _.each(this.partItem, f => {
+      f["OrderId"] = this.carsale.OrderId;
+      this.formService
+        .create("car_booking_item", f)
+        .then(function(data) {}, err => {
+          console.log(err);
+        });
+    });
   }
 
+  onSearchItem(query: string = "") {
+    this.popCarItemGrid.setFilter(
+      [
+        { field: "PartType", search: query },
+        { field: "ItemName", search: query }
+      ],
+      false
+    );
+  }
+
+  showPopCarItem(event): void {
+    _.delay(
+      function(text) {
+        $(".popover").css("max-width", "620px");
+        $(".popover").css("min-width", "500px");
+      },
+      100,
+      "later"
+    );
+  }
   //修改状态
   saveStatus() {
     const that = this;
     const carinfo = { Id: this.carIncomeId, Status: "已开票" };
     this.formService.create("car_income", carinfo).then(data => {}, err => {});
+  }
+
+  //选择房间
+  rowItemClicked(event): void {
+    if (event.isSelected) {
+      const f = _.find(this.partItem, f => {
+        return f.itemName == event.data.ItemName;
+      });
+      if (f) {
+        f.count++;
+      } else {
+        this.partItem.push({
+          ItemType: "自费",
+          ItemName: event.data.ItemName,
+          Count: 1,
+          Service: "",
+          Price: event.data.Price
+        });
+      }
+    }
+  }
+
+  //选择房间
+  rowItem2Clicked(event): void {
+    if (event.isSelected) {
+      const f = _.find(this.partItem, f => {
+        return f.itemName == event.data.ItemName;
+      });
+      if (f) {
+        f.count++;
+      } else {
+        this.partItem.push({
+          ItemType: "免费",
+          ItemName: event.data.ItemName,
+          Count: 1,
+          Service: "",
+          Price: event.data.Price
+        });
+      }
+    }
+  }
+
+  removeItem(itemname) {
+    const it = _.find(this.partItem,f =>{ return f["ItemName"] == itemname; });
+    if(it && it['Id']){
+      this.formService.delete("car_booking_item/id", it['Id']).then(data => {}, err => {});
+    }
+    _.remove(this.partItem, f => {
+      return f["ItemName"] == itemname;
+    });
   }
 }

@@ -33,7 +33,7 @@ export class PrintCashComponent implements ViewCell, OnInit {
     this.save.emit(this.rowData);
 
     const getTimestamp = new Date().getTime();
-    this._state.notifyDataChanged('print.carsalecash.detail', { id: this.value, time: getTimestamp });
+    this._state.notifyDataChanged('print.carsalecash.detail', { id: this.value.Id, time: getTimestamp });
   }
   onAudit() {
     this.save.emit(this.rowData);
