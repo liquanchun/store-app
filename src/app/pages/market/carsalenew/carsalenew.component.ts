@@ -79,7 +79,7 @@ export class CarSaleNewComponent implements OnInit {
     Creator: ""
   };
   customer: any = {
-    Id:0,
+    Id: 0,
     Name: "",
     Address: "",
     Phone: "",
@@ -96,9 +96,9 @@ export class CarSaleNewComponent implements OnInit {
     Status: "",
     CarColor: "",
     CarTrim: "",
-    CarConfig:"",
+    CarConfig: "",
     GuidePrice: 0,
-    GuidePriceRemark:0,
+    GuidePriceRemark: 0,
     WholePrice: 0
   };
   serviceItem = [
@@ -179,7 +179,6 @@ export class CarSaleNewComponent implements OnInit {
       delete: false
     },
     mode: "external",
-    selectMode: "multi",
     hideSubHeader: true,
     columns: {
       Name: {
@@ -212,7 +211,6 @@ export class CarSaleNewComponent implements OnInit {
       delete: false
     },
     mode: "external",
-    selectMode: "multi",
     hideSubHeader: true,
     columns: {
       CarSeries: {
@@ -344,8 +342,10 @@ export class CarSaleNewComponent implements OnInit {
                 that.carinfo = _.find(that.carinfoDataList, f => {
                   return f["Id"] == that.carsale.CarIncomeId;
                 });
-                that.carinfo.GuidePrice += that.carinfo.GuidePriceRemark;
-                that.carsale.Discount = that.carinfo.GuidePrice - that.carinfo.WholePrice;
+                that.carsale.GuidePrice = that.carinfo.GuidePrice + that.carinfo.GuidePriceRemark;
+                that.carsale.Discount =
+                  that.carinfo.GuidePrice - that.carinfo.WholePrice;
+                that.carsale.SalePrice = that.carinfo.WholePrice;
                 callback(null, 3);
               }
             },
@@ -448,8 +448,9 @@ export class CarSaleNewComponent implements OnInit {
     if (event.isSelected) {
       this.carsale.CarIncomeId = event.data.Id;
       this.carinfo = event.data;
-      this.carinfo.GuidePrice += this.carinfo.GuidePriceRemark;
+      this.carsale.GuidePrice = this.carinfo.GuidePrice + this.carinfo.GuidePriceRemark;
       this.carsale.Discount = this.carinfo.GuidePrice - this.carinfo.WholePrice;
+      this.carsale.SalePrice = this.carinfo.WholePrice;
     } else {
       this.carinfo.CarColor = "";
       this.carinfo.CarTrim = "";
@@ -521,7 +522,10 @@ export class CarSaleNewComponent implements OnInit {
     });
   }
   discountChange(event) {
-    this.carinfo.GuidePrice = this.carinfo.WholePrice + this.carsale.Discount;
+    this.carsale.SalePrice = this.carsale.GuidePrice - this.carsale.Discount;
+  }
+  saleChange(event) {
+    this.carsale.Discount = this.carsale.GuidePrice + this.carsale.SalePrice;
   }
   onBack() {
     this._router.navigate(["/pages/market/carsale"]);
@@ -549,8 +553,6 @@ export class CarSaleNewComponent implements OnInit {
       return;
     }
     this.carsale.Creator = sessionStorage.getItem("userName");
-    this.carsale.GuidePrice = this.carinfo.GuidePrice;
-    this.carsale.SalePrice = this.carinfo.WholePrice;
     const newcarsale = _.clone(this.carsale);
 
     delete newcarsale.PreCarDateObj;

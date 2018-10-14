@@ -57,58 +57,58 @@
           <td><span class="reqmark">*</span>保险公司</td>
           <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.InsureCompany" type="text" class="form-control"></td>
           <td><strong><span class="reqmark">*</span>优惠金额</strong></td>
-          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.Discount" type="number" class="form-control"></td>
+          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.Discount" type="number" min="0" class="form-control"></td>
         </tr>
 
         <tr>
           <td valign="middle" style="height:20px;line-height:20px" rowspan="12">付款信息单位：（元）</td>
           <td><span class="reqmark">*</span>新车款金额</td>
-          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.NewCarFee" type="number" (change)="priceChange()"
+          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.NewCarFee" type="number" min="0" (change)="priceChange()"
               class="form-control"></td>
           <td>分期首付款金额</td>
-          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.FirstFee" type="number" (change)="priceChange()"
+          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.FirstFee" type="number" min="0" (change)="priceChange()"
               class="form-control"></td>
         </tr>
         <tr>
           <td>保险费金额</td>
-          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.InsureFee" type="number" (change)="priceChange()"
+          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.InsureFee" type="number" min="0" (change)="priceChange()"
               class="form-control"></td>
           <td>购置税金额</td>
-          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.BuyTaxFee" type="number" (change)="priceChange()"
+          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.BuyTaxFee" type="number" min="0" (change)="priceChange()"
               class="form-control"></td>
         </tr>
         <tr>
           <td>金融服务费金额</td>
-          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.FinanceSerFee" type="number" (change)="priceChange()"
+          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.FinanceSerFee" type="number" min="0" (change)="priceChange()"
               class="form-control"></td>
           <td>装饰费金额</td>
-          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.DecorateFee" type="number" (change)="priceChange()"
+          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.DecorateFee" type="number" min="0" (change)="priceChange()"
               class="form-control"></td>
         </tr>
 
         <tr>
           <td>交车综合服务金额</td>
-          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.TakeAllFee" type="number" (change)="priceChange()"
+          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.TakeAllFee" type="number" min="0" (change)="priceChange()"
               class="form-control"></td>
           <td>安心服务费金额</td>
-          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.TakeCareFee" type="number" (change)="priceChange()"
+          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.TakeCareFee" type="number" min="0" (change)="priceChange()"
               class="form-control"></td>
         </tr>
 
         <tr>
           <td>贴心服务费金额</td>
-          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.IntimateFee" type="number" (change)="priceChange()"
+          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.IntimateFee" type="number" min="0" (change)="priceChange()"
               class="form-control"></td>
           <td>玻璃保障服务费金额</td>
-          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.GlassSerFee" type="number" (change)="priceChange()"
+          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.GlassSerFee" type="number" min="0" (change)="priceChange()"
               class="form-control"></td>
         </tr>
         <tr>
           <td>刷卡费金额</td>
-          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.CardCashFee" type="number" (change)="priceChange()"
+          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.CardCashFee" type="number" min="0" (change)="priceChange()"
               class="form-control"></td>
           <td>其他金额</td>
-          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.OtherFee" type="number" (change)="priceChange()"
+          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.OtherFee" type="number" min="0" (change)="priceChange()"
               class="form-control"></td>
         </tr>
         <tr>
@@ -126,16 +126,16 @@
           <td>减：已付订金金额</td>
           <td>{{carsale.Deposit | numberSeparator}}</td>
           <td>旧车置换金额</td>
-          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.OldChangeFee" (change)="priceChange()" type="number"
+          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.OldChangeFee" (change)="priceChange()" type="number" min="0"
               class="form-control"></td>
         </tr>
 
         <tr>
           <td>金融分期尾款金额</td>
-          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.LastFee" (change)="priceChange()" type="number"
+          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.LastFee" (change)="priceChange()" type="number" min="0"
               class="form-control"></td>
           <td>其他金额</td>
-          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.OtherFee2" (change)="priceChange()" type="number"
+          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.OtherFee2" (change)="priceChange()" type="number" min="0"
               class="form-control"></td>
         </tr>
 
@@ -211,21 +211,21 @@
         <tr>
           <td rowspan="3"><strong>赠送批准明细</strong></td>
           <td>装饰费</td>
-          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.ZhuangxFee" type="number" class="form-control"></td>
+          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.ZhuangxFee" type="number" min="0" class="form-control"></td>
           <td>汽油费</td>
-          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.GasFee" type="number" class="form-control"></td>
+          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.GasFee" type="number" min="0" class="form-control"></td>
         </tr>
         <tr>
           <td>保险费</td>
-          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.BaoxianFee" type="number" class="form-control"></td>
+          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.BaoxianFee" type="number" min="0" class="form-control"></td>
           <td>维修费</td>
-          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.MaintainFee" type="number" class="form-control"></td>
+          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.MaintainFee" type="number" min="0" class="form-control"></td>
         </tr>
         <tr>
           <td>佣金费</td>
-          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.Commission" type="number" class="form-control"></td>
+          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.Commission" type="number" min="0" class="form-control"></td>
           <td>其他</td>
-          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.OtherFee3" type="number" class="form-control"></td>
+          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.OtherFee3" type="number" min="0" class="form-control"></td>
         </tr>
       </tbody>
     </table>
