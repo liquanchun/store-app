@@ -199,7 +199,7 @@ export class CarSaleCashNewComponent implements OnInit {
 
   priceChange() {
     this.carsale.ShouldAllFee =
-      this.carsale.NewCarFee -
+      this.carsale.NewCarFee +
       this.carsale.InsureFee +
       this.carsale.BuyTaxFee +
       this.carsale.FinanceSerFee +
@@ -211,10 +211,10 @@ export class CarSaleCashNewComponent implements OnInit {
       this.carsale.CardCashFee +
       this.carsale.OtherFee;
 
-    this.carsale.LastFee = this.carsale.FirstFee;
+    this.carsale.LastFee =this.carsale.SalePrice - this.carsale.FirstFee;
     this.carsale.InvoiceFee = this.carsale.NewCarFee;
     this.carsale.RealAllFee =
-      this.carsale.ShouldAllFee - this.carsale.Deposit - this.carsale.LastFee;
+      this.carsale.ShouldAllFee - this.carsale.Deposit - this.carsale.LastFee - this.carsale.OldChangeFee- this.carsale.OtherFee2;
     this.chineseMoney = this._common.changeNumMoneyToChinese(
       this.carsale.RealAllFee
     );
