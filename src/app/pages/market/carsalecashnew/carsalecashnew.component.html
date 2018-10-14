@@ -1,11 +1,11 @@
 <div class="bill">
-  <ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '4px' }"></ngx-loading>
   <div class="row">
     <div class="col-md-12 text-center title">
       销售交款明细单
     </div>
   </div>
   <div>
+    <ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '4px' }"></ngx-loading>
     <table class="table table-bordered table-sm">
       <tbody>
         <tr>
@@ -174,7 +174,7 @@
           <td>{{carinfo.CarConfig}}</td>
           <td>{{carinfo.Vinno}}</td>
           <td>壹</td>
-          <td>{{carsale.SalePrice | numberSeparator}}</td>
+          <td>{{carsale.NewCarFee | numberSeparator}}</td>
         </tr>
         <tr>
           <td colspan="2">备注</td>

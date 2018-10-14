@@ -45,6 +45,7 @@ export class CarSaleNewComponent implements OnInit {
   title = "新增销售预定单";
   isSaved: boolean = false;
   isEnable: boolean = true;
+  loading = false;
   carsale: any = {
     Id: 0,
     OrderId: "",
@@ -305,6 +306,7 @@ export class CarSaleNewComponent implements OnInit {
 
   getCarsale(id: number) {
     const that = this;
+    this.loading = true;
     async.series(
       {
         zero: function(callback) {
@@ -398,13 +400,14 @@ export class CarSaleNewComponent implements OnInit {
                 that.serviceItem = zzitem;
                 that.giveItem = zsitem;
               }
-              callback(null, 2);
+              callback(null, 4);
             },
             err => {}
           );
         }
       },
       function(err, results) {
+        that.loading = false;
         console.log(results);
       }
     );
@@ -586,6 +589,13 @@ export class CarSaleNewComponent implements OnInit {
           msg: err,
           time: new Date().getTime()
         });
+      }
+    );
+
+    this.formService.create("car_customer", this.customer).then(
+      data => {
+      },
+      err => {
       }
     );
   }

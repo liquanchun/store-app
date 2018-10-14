@@ -1,11 +1,11 @@
 <div class="bill">
-  <ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '4px' }"></ngx-loading>
   <div class="row">
     <div class="col-md-12 text-center title">
       BMW新车销售订购单
     </div>
   </div>
   <div class="row">
+    <ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '4px' }"></ngx-loading>
     <div class="col-md-3 text-left">
       <div class="form-group row">
         <label for="inputremark" class="col-md-3 col-form-label">订单号</label>
@@ -55,27 +55,27 @@
               popoverTitle="客户信息列表" type="button" class="btn btn-success btn-sm" container="body">
               <i class="fa fa-refresh" aria-hidden="true"></i> 选择客户</button>
             客户名称</td>
-          <td><input [class.inputline]="!isEnable" [(ngModel)]="customer.Name" type="text" readonly class="form-control"></td>
+          <td><input [class.inputline]="!isEnable" [(ngModel)]="customer.Name" type="text"  class="form-control"></td>
           <td>客户电话</td>
-          <td><input [class.inputline]="!isEnable" [(ngModel)]="customer.Phone" type="text" readonly class="form-control"></td>
+          <td><input [class.inputline]="!isEnable" [(ngModel)]="customer.Phone" type="text"  class="form-control"></td>
         </tr>
         <tr>
           <td>身份证/代码证</td>
-          <td><input [class.inputline]="!isEnable" [(ngModel)]="customer.IdCard" type="text" readonly class="form-control"></td>
+          <td><input [class.inputline]="!isEnable" [(ngModel)]="customer.IdCard" type="text"  class="form-control"></td>
           <td>牌照属性</td>
-          <td><input [class.inputline]="!isEnable" [(ngModel)]="customer.LicenseType" type="text" readonly class="form-control"></td>
+          <td><input [class.inputline]="!isEnable" [(ngModel)]="customer.LicenseType" type="text"  class="form-control"></td>
         </tr>
         <tr>
           <td>证件地址</td>
-          <td><input [class.inputline]="!isEnable" [(ngModel)]="customer.IdAddress" type="text" readonly class="form-control"></td>
+          <td><input [class.inputline]="!isEnable" [(ngModel)]="customer.IdAddress" type="text"  class="form-control"></td>
           <td>客户性质</td>
-          <td><input [class.inputline]="!isEnable" [(ngModel)]="customer.CustType" type="text" readonly class="form-control"></td>
+          <td><input [class.inputline]="!isEnable" [(ngModel)]="customer.CustType" type="text"  class="form-control"></td>
         </tr>
         <tr>
           <td>居住地址</td>
-          <td><input [class.inputline]="!isEnable" [(ngModel)]="customer.Address" type="text" readonly class="form-control"></td>
+          <td><input [class.inputline]="!isEnable" [(ngModel)]="customer.Address" type="text"  class="form-control"></td>
           <td>邮编</td>
-          <td><input [class.inputline]="!isEnable" [(ngModel)]="customer.PostNumber" type="text" readonly class="form-control"></td>
+          <td><input [class.inputline]="!isEnable" [(ngModel)]="customer.PostNumber" type="text"  class="form-control"></td>
         </tr>
       </tbody>
     </table>

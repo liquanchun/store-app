@@ -119,6 +119,7 @@ export class CarSaleCashNewComponent implements OnInit {
   }
 
   getCarsale(bookid: number) {
+    this.loading= true;
     const that = this;
     async.series(
       {
@@ -193,6 +194,7 @@ export class CarSaleCashNewComponent implements OnInit {
         }
       },
       function(err, results) {
+        that.loading= false;
       }
     );
   }
