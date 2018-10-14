@@ -99,7 +99,6 @@ export class CarSaleNewComponent implements OnInit {
     CarConfig: "",
     GuidePrice: 0,
     GuidePriceRemark: 0,
-    WholePrice: 0
   };
   serviceItem = [
     {
@@ -445,8 +444,7 @@ export class CarSaleNewComponent implements OnInit {
       this.carsale.CarIncomeId = event.data.Id;
       this.carinfo = event.data;
       this.carsale.GuidePrice = this.carinfo.GuidePrice + this.carinfo.GuidePriceRemark;
-      this.carsale.Discount = this.carinfo.GuidePrice - this.carinfo.WholePrice;
-      this.carsale.SalePrice = this.carinfo.WholePrice;
+      this.carsale.SalePrice = this.carsale.GuidePrice;
     } else {
       this.carinfo.CarColor = "";
       this.carinfo.CarTrim = "";
