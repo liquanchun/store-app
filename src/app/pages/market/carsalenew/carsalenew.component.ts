@@ -319,7 +319,7 @@ export class CarSaleNewComponent implements OnInit {
           );
         },
         one: function(callback) {
-          that.formService.getForms("vw_car_income").then(
+          that.formService.getForms("vw_car_store").then(
             data => {
               that.carinfoDataList = data.Data;
               callback(null, 1);
@@ -416,7 +416,7 @@ export class CarSaleNewComponent implements OnInit {
   }
 
   getDataList(): void {
-    this.formService.getForms("vw_car_income").then(
+    this.formService.getForms("vw_car_store").then(
       data => {
         this.carinfoDataList = data.Data;
       },

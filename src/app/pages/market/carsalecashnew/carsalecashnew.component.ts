@@ -169,7 +169,7 @@ export class CarSaleCashNewComponent implements OnInit {
           );
         },
         two: function(callback) {
-          that.formService.getForms(`vw_car_income/${that.carIncomeId}`).then(
+          that.formService.getForms(`vw_car_store/${that.carIncomeId}`).then(
             data => {
               that.carinfo = data.Data[0];
               callback(null, 2);
