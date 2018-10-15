@@ -555,8 +555,11 @@ export class CarSaleCashComponent implements OnInit {
             msg: "审核成功。",
             time: new Date().getTime()
           });
-          that.saveStatus("已开票");
-          that.getDataList();
+          if (formValue["AuditResult"] == "通过") {
+            that.saveStatus("已开票");
+          } else {
+            that.getDataList();
+          }
         },
         err => {
           this._state.notifyDataChanged("messagebox", {
@@ -579,9 +582,12 @@ export class CarSaleCashComponent implements OnInit {
       Id: this.carbooking.CustomerId,
       CanUpdate: status == "已开票" ? 0 : 1
     };
-    this.formService
-      .create("car_customer", customer)
-      .then(data => {}, err => {});
+    this.formService.create("car_customer", customer).then(
+      data => {
+        that.getDataList();
+      },
+      err => {}
+    );
   }
 
   onAuditNot(): void {
@@ -599,7 +605,6 @@ export class CarSaleCashComponent implements OnInit {
           time: new Date().getTime()
         });
         this.saveStatus("订单");
-        this.getDataList();
       },
       err => {
         this._state.notifyDataChanged("messagebox", {

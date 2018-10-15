@@ -547,6 +547,7 @@ export class CarsaleComponent implements OnInit {
       formValue["Id"] = that.printOrder["Id"];
       formValue["Auditor"] = sessionStorage.getItem("userName");
       formValue["AuditTime"] = this._common.getTodayString();
+      formValue["AuditStatus"] = this.printOrder["Status"];
       console.log(formValue);
 
       that.formService.create("car_booking", formValue).then(
@@ -557,8 +558,11 @@ export class CarsaleComponent implements OnInit {
             msg: "审核成功。",
             time: new Date().getTime()
           });
-          that.getDataList();
-          this.saveStatus("订单");
+          if (formValue["AuditResult"] == "通过") {
+            this.saveStatus("订单");
+          } else {
+            that.getDataList();
+          }
         },
         err => {
           this._state.notifyDataChanged("messagebox", {
@@ -585,7 +589,11 @@ export class CarsaleComponent implements OnInit {
           msg: "审核成功。",
           time: new Date().getTime()
         });
-        this.getDataList();
+        if (this.printOrder["AuditStatus"]) {
+          this.saveStatus(this.printOrder["AuditStatus"]);
+        } else {
+          this.getDataList();
+        }
       },
       err => {
         this._state.notifyDataChanged("messagebox", {
@@ -600,7 +608,12 @@ export class CarsaleComponent implements OnInit {
   saveStatus(status: string) {
     const that = this;
     const carinfo = { Id: this.printOrder.CarIncomeId, Status: status };
-    this.formService.create("car_income", carinfo).then(data => {}, err => {});
+    this.formService.create("car_income", carinfo).then(
+      data => {
+        that.getDataList();
+      },
+      err => {}
+    );
   }
   checkRoles() {
     const that = this;

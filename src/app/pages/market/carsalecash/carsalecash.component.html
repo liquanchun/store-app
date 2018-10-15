@@ -55,7 +55,7 @@
 </div>
 
 <div style="display:none;" id="printDiv">
-  <div *ngFor="let pagename of printSet" style="margin-bottom:45px;">
+  <div *ngFor="let pagename of printSet" style="margin-bottom:2px;">
     <table style="border:none" class="table noboderall table-sm">
       <tbody>
         <tr>
@@ -196,7 +196,7 @@
       </tbody>
     </table>
 
-    <p style="margin-bottom:5px;">
+    <p>
       <span style="display:inline-block;margin-right:200px;">客户签名：</span><span style="display:inline-block;margin-right:200px;">销售顾问：</span><span
         style="display:inline-block;">销售审核：</span><br><br>
       <span style="display:inline-block;margin-right:200px;">财务审核：</span><span style="display:inline-block;margin-right:200px;">销售经理：</span><span
@@ -209,7 +209,7 @@
       ------------------------------------------------------------------------------------------------------------------------
     </p>
     <p style="text-align:center;font-size: 18px;font-weight: bold">销售出库单</p>
-    <p style="text-align:right;margin-top:-10px;">日期：{{carsale.InvoiceDate}}</p>
+    <p style="text-align:right;margin-top:-20px;">日期：{{carsale.InvoiceDate}}</p>
 
     <table class="table table-bordered table-sm">
       <tbody>
@@ -236,6 +236,10 @@
       </tbody>
     </table>
 
+    <p style="margin-top:5px;text-align:center;">
+      <span style="display:inline-block;margin-right:200px;">销售经理：</span><span style="display:inline-block;margin-right:200px;">销售计划：</span><span
+        style="display:inline-block;">销售顾问：</span><br>
+    </p>
 
     <table class="table table-bordered table-sm">
       <tbody>
@@ -270,7 +274,7 @@
   <p style="text-align:center;font-size: 18px;font-weight: bold">BMW精品装饰明细单</p>
   <p style="text-align:right;margin-top:-10px;">日期：{{carsale.InvoiceDate}}</p>
 
-  <table class="table table-bordered table-sm">
+  <table class="table table-bordered table-sm" style="margin-bottom:15px;">
     <tbody>
       <tr>
         <td class="valueText">客户名称</td>
@@ -291,7 +295,7 @@
     </tbody>
   </table>
 
-  <table class="table table-bordered table-sm " style="margin-top:15px;">
+  <table class="table table-bordered table-sm ">
     <tbody>
       <tr>
         <td class="valueText">分类</td>
@@ -313,7 +317,7 @@
   </table>
 
   <p style="margin-top:15px;text-align:center;">
-    <span style="display:inline-block;margin-right:200px;">销售经理：</span><span style="display:inline-block;margin-right:200px;">财务结算：</span><span
+    <span style="display:inline-block;margin-right:200px;">销售经理：</span><span style="display:inline-block;margin-right:200px;">销售计划：</span><span
       style="display:inline-block;">销售顾问：</span><br><br>
   </p>
   <p style="margin-top:15px;text-align:right;">

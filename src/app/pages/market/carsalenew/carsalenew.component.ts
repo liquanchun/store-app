@@ -568,6 +568,23 @@ export class CarSaleNewComponent implements OnInit {
       });
       return;
     }
+    if(this.carsale.CarIncomeId == 0){
+      this._state.notifyDataChanged("messagebox", {
+        type: "warning",
+        msg: "车辆信息不能为空。",
+        time: new Date().getTime()
+      });
+      return;
+    }
+    if(this.carsale.CustomerId == 0){
+      this._state.notifyDataChanged("messagebox", {
+        type: "warning",
+        msg: "客户信息不能为空。",
+        time: new Date().getTime()
+      });
+      return;
+    }
+
     this.carsale.Creator = sessionStorage.getItem("userName");
     const newcarsale = _.clone(this.carsale);
 

@@ -259,7 +259,7 @@ export class CarSaleCashNewComponent implements OnInit {
       this.carsale.CardCashFee +
       this.carsale.OtherFee;
 
-    this.carsale.LastFee = this.carsale.SalePrice - this.carsale.FirstFee;
+    this.carsale.LastFee = this.carsale.NewCarFee - this.carsale.FirstFee;
     this.carsale.InvoiceFee = this.carsale.NewCarFee;
     this.carsale.RealAllFee =
       this.carsale.ShouldAllFee -
