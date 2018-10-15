@@ -541,7 +541,7 @@ export class CarSaleNewComponent implements OnInit {
     this.carsale.SalePrice = this.carsale.GuidePrice - this.carsale.Discount;
   }
   saleChange(event) {
-    this.carsale.Discount = this.carsale.GuidePrice + this.carsale.SalePrice;
+    this.carsale.Discount = this.carsale.GuidePrice - this.carsale.SalePrice;
   }
   onBack() {
     this._router.navigate(["/pages/market/carsale"]);
