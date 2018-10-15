@@ -501,7 +501,7 @@ export class CarsaleComponent implements OnInit {
         return;
       }
 
-      this.formService.delete(this.tableView["ViewName"], event.data.Id).then(
+      this.formService.delete(this.tableView["TableName"], event.data.Id).then(
         data => {
           this._state.notifyDataChanged("messagebox", {
             type: "success",
@@ -558,6 +558,7 @@ export class CarsaleComponent implements OnInit {
             time: new Date().getTime()
           });
           that.getDataList();
+          this.saveStatus("订单");
         },
         err => {
           this._state.notifyDataChanged("messagebox", {
@@ -584,7 +585,6 @@ export class CarsaleComponent implements OnInit {
           msg: "审核成功。",
           time: new Date().getTime()
         });
-        this.saveStatus("订单");
         this.getDataList();
       },
       err => {
