@@ -198,6 +198,8 @@ export class CarSaleCashNewComponent implements OnInit {
               },
               err => {}
             );
+          } else {
+            callback(null, 4);
           }
         },
         five: function(callback) {
@@ -210,27 +212,31 @@ export class CarSaleCashNewComponent implements OnInit {
           );
         },
         six: function(callback) {
-          that.formService
-            .getForms(`car_booking_item/OrderId/${that.carsale.OrderId}`)
-            .then(
-              data => {
-                if (data && data.Data) {
-                  const bookitem = _.filter(data.Data, f => {
-                    return f["ItemType"] != "自费" && f["ItemType"] != "免费";
-                  });
-                  _.each(bookitem, f => {
-                    if (f["FieldName"]) {
-                      that.carsale[f["FieldName"]] = f["Price"];
-                    }
-                  });
-                  that.partItem = _.filter(data.Data, f => {
-                    return f["ItemType"] == "自费" || f["ItemType"] == "免费";
-                  });
-                }
-                callback(null, 6);
-              },
-              err => {}
-            );
+          if (that.carsale.OrderId) {
+            that.formService
+              .getForms(`car_booking_item/OrderId/${that.carsale.OrderId}`)
+              .then(
+                data => {
+                  if (data && data.Data) {
+                    const bookitem = _.filter(data.Data, f => {
+                      return f["ItemType"] != "自费" && f["ItemType"] != "免费";
+                    });
+                    _.each(bookitem, f => {
+                      if (f["FieldName"]) {
+                        that.carsale[f["FieldName"]] = f["Price"];
+                      }
+                    });
+                    that.partItem = _.filter(data.Data, f => {
+                      return f["ItemType"] == "自费" || f["ItemType"] == "免费";
+                    });
+                  }
+                  callback(null, 6);
+                },
+                err => {}
+              );
+          } else {
+            callback(null, 6);
+          }
         }
       },
       function(err, results) {
@@ -289,7 +295,7 @@ export class CarSaleCashNewComponent implements OnInit {
         });
       }
     );
-    
+
     _.each(this.partItem, f => {
       f["OrderId"] = this.carsale.OrderId;
       this.formService
@@ -361,9 +367,13 @@ export class CarSaleCashNewComponent implements OnInit {
   }
 
   removeItem(itemname) {
-    const it = _.find(this.partItem,f =>{ return f["ItemName"] == itemname; });
-    if(it && it['Id']){
-      this.formService.delete("car_booking_item/id", it['Id']).then(data => {}, err => {});
+    const it = _.find(this.partItem, f => {
+      return f["ItemName"] == itemname;
+    });
+    if (it && it["Id"]) {
+      this.formService
+        .delete("car_booking_item/id", it["Id"])
+        .then(data => {}, err => {});
     }
     _.remove(this.partItem, f => {
       return f["ItemName"] == itemname;
