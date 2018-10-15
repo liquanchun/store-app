@@ -99,7 +99,7 @@ export class CarsaleComponent implements OnInit {
   giveItem: any;
   htmlTd: any;
   htmlGiveTd: any;
-  marginbottom = "48px"; //小于2个48px
+  marginbottom = "20px"; //小于2个48px
   chineseMoney: string;
   constructor(
     private modalService: NgbModal,
@@ -269,10 +269,19 @@ export class CarsaleComponent implements OnInit {
               that.htmlGiveTd.push({
                 itemName1: zsitem[i].itemName,
                 service1: zsitem[i].service,
-                itemName2: zsitem[i + 1].itemName ? zsitem[i + 1].itemName : "",
-                service2: zsitem[i + 1].service ? zsitem[i + 1].service : ""
+                itemName2: i + 1 < zsitem.length ? zsitem[i + 1].itemName : "",
+                service2: i + 1 < zsitem.length ? zsitem[i + 1].service : ""
               });
             }
+          }
+          if (that.htmlGiveTd.length == 0) {
+            that.marginbottom = "40px";
+          }
+          if (that.htmlGiveTd.length == 1) {
+            that.marginbottom = "20px";
+          }
+          if (that.htmlGiveTd.length == 2) {
+            that.marginbottom = "2px";
           }
           that.giveItem = zsitem;
         }
