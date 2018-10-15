@@ -98,7 +98,8 @@ export class CarsaleComponent implements OnInit {
   serviceItem2: any;
   giveItem: any;
   htmlTd: any;
-
+  htmlGiveTd: any;
+  marginbottom = "48px"; //小于2个48px
   chineseMoney: string;
   constructor(
     private modalService: NgbModal,
@@ -256,6 +257,20 @@ export class CarsaleComponent implements OnInit {
                 price1: that.serviceItem2[i].price,
                 itemName2: that.serviceItem2[i + 1].itemName,
                 price2: that.serviceItem2[i + 1].price
+              });
+            }
+          }
+
+          that.htmlGiveTd = [];
+          index = 0;
+          for (index in zsitem) {
+            let i = index * 2;
+            if (i < zsitem.length) {
+              that.htmlGiveTd.push({
+                itemName1: zsitem[i].itemName,
+                service1: zsitem[i].service,
+                itemName2: zsitem[i + 1].itemName ? zsitem[i + 1].itemName : "",
+                service2: zsitem[i + 1].service ? zsitem[i + 1].service : ""
               });
             }
           }
@@ -560,7 +575,7 @@ export class CarsaleComponent implements OnInit {
           msg: "审核成功。",
           time: new Date().getTime()
         });
-        this.saveStatus('订单');
+        this.saveStatus("订单");
         this.getDataList();
       },
       err => {
@@ -635,6 +650,9 @@ export class CarsaleComponent implements OnInit {
           }
           .textleft{
             text-align:left;
+          }
+          .textcenter{
+            text-align:center;
           }
           </style>
         </head>

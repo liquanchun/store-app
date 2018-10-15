@@ -36,8 +36,8 @@
 
         <ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '4px' }"></ngx-loading>
         <div style="overflow-x:auto;width: 100%;white-space: nowrap;">
-          <ng2-smart-table [settings]="newSettings" [source]="source" (rowSelect)="onSelected($event)" (save)="onSave($event)" (edit)="onEdit($event)"
-            (delete)="onDelete($event)">
+          <ng2-smart-table [settings]="newSettings" [source]="source" (rowSelect)="onSelected($event)" (save)="onSave($event)"
+            (edit)="onEdit($event)" (delete)="onDelete($event)">
           </ng2-smart-table>
           <div style="color: blue;" [class.total]="totalRecord > 10">总记录：{{totalRecord}}</div>
         </div>
@@ -58,8 +58,8 @@
   </div>
 </div>
 
-<div  style="display:none"  id="printDiv">
-  <div *ngFor="let pagename of printSet" style="margin-bottom:50px;">
+<div style="display:none" id="printDiv">
+  <div *ngFor="let pagename of printSet" [style.margin-bottom]="marginbottom">
     <table style="border:none" class="table noboderall table-sm">
       <tbody>
         <tr>
@@ -179,14 +179,18 @@
     <table class="table table-bordered table-sm">
       <thead>
         <tr>
-          <th>项目</th>
-          <th>商品或服务产品</th>
+          <th class="textcenter">项目</th>
+          <th class="textcenter">商品或服务产品</th>
+          <th class="textcenter">项目</th>
+          <th class="textcenter">商品或服务产品</th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let item of giveItem">
-          <td>{{item.itemName}}</td>
-          <td>{{item.service}}</td>
+        <tr *ngFor="let item of htmlGiveTd">
+          <td class="textcenter">{{item.itemName1}}</td>
+          <td class="textcenter">{{item.service1}}</td>
+          <td class="textcenter">{{item.itemName2}}</td>
+          <td class="textcenter">{{item.service2}}</td>
         </tr>
       </tbody>
     </table>

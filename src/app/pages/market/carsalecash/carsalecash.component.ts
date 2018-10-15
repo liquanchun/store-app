@@ -574,6 +574,14 @@ export class CarSaleCashComponent implements OnInit {
     const that = this;
     const carinfo = { Id: this.carbooking.CarIncomeId, Status: status };
     this.formService.create("car_income", carinfo).then(data => {}, err => {});
+
+    const customer = {
+      Id: this.carbooking.CustomerId,
+      CanUpdate: status == "已开票" ? 0 : 1
+    };
+    this.formService
+      .create("car_customer", customer)
+      .then(data => {}, err => {});
   }
 
   onAuditNot(): void {

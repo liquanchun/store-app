@@ -2,7 +2,7 @@
 <div class="row">
   <div class="col-md-12">
     <ba-card [title]="title" class="card-primary" baCardClass="with-scroll">
-      <div>
+      <div style="overflow-x: scroll;">
         <div class="row">
           <div class="col-3">
             <search-input (searchClick)="onSearch($event)"></search-input>
@@ -16,7 +16,8 @@
           </div>
         </div>
         <ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '4px' }"></ngx-loading>
-        <ng2-smart-table  (rowSelect)="onSelected($event)" [settings]="newSettings" [source]="source" (edit)="onEdit($event)" (delete)="onDelete($event)"></ng2-smart-table>
+        <ng2-smart-table (rowSelect)="onSelected($event)" [settings]="newSettings" [source]="source" (edit)="onEdit($event)"
+          (delete)="onDelete($event)"></ng2-smart-table>
       </div>
     </ba-card>
   </div>

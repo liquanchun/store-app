@@ -1,47 +1,56 @@
-import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
-import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
-import { FormGroup, AbstractControl, FormBuilder, Validators } from '@angular/forms';
-import { LocalDataSource } from 'ng2-smart-table';
-import { FieldConfig } from '../../../theme/components/dynamic-form/models/field-config.interface';
-import { NgbdModalContent } from '../../../modal-content.component';
-import { ToastyService, ToastyConfig, ToastOptions, ToastData } from 'ng2-toasty';
-import { Router, ActivatedRoute, ParamMap } from '@angular/router';
-import { FormService } from './form.services';
-import { DicService } from '../../sys/dic/dic.services';
-import { GlobalState } from '../../../global.state';
-import { Common } from '../../../providers/common';
-import async from 'async';
-import * as $ from 'jquery';
-import * as _ from 'lodash';
+import { Component, OnInit, AfterViewInit, ViewChild } from "@angular/core";
+import { NgbModal, ModalDismissReasons } from "@ng-bootstrap/ng-bootstrap";
+import {
+  FormGroup,
+  AbstractControl,
+  FormBuilder,
+  Validators
+} from "@angular/forms";
+import { LocalDataSource } from "ng2-smart-table";
+import { FieldConfig } from "../../../theme/components/dynamic-form/models/field-config.interface";
+import { NgbdModalContent } from "../../../modal-content.component";
+import {
+  ToastyService,
+  ToastyConfig,
+  ToastOptions,
+  ToastData
+} from "ng2-toasty";
+import { Router, ActivatedRoute, ParamMap } from "@angular/router";
+import { FormService } from "./form.services";
+import { DicService } from "../../sys/dic/dic.services";
+import { GlobalState } from "../../../global.state";
+import { Common } from "../../../providers/common";
+import async from "async";
+import * as $ from "jquery";
+import * as _ from "lodash";
 
 @Component({
-  selector: 'app-form',
-  templateUrl: './form.component.html',
-  styleUrls: ['./form.component.scss'],
-  providers: [FormService, DicService],
+  selector: "app-form",
+  templateUrl: "./form.component.html",
+  styleUrls: ["./form.component.scss"],
+  providers: [FormService, DicService]
 })
 export class FormComponent implements OnInit {
-
   private toastOptions: ToastOptions = {
     title: "提示信息",
     msg: "The message",
     showClose: true,
     timeout: 2000,
-    theme: "bootstrap",
+    theme: "bootstrap"
   };
 
   loading = false;
-  title = '表单定义';
-  query: string = '';
+  title = "表单定义";
+  query: string = "";
   newSettings = {};
   settings = {
     pager: {
       perPage: 20
     },
-    mode: 'external',
+    mode: "external",
     edit: {
       editButtonContent: '<i class="ion-edit"></i>',
-      confirmSave: true,
+      confirmSave: true
     },
     delete: {
       deleteButtonContent: '<i class="ion-trash-a"></i>',
@@ -77,19 +86,20 @@ export class FormComponent implements OnInit {
     private toastyService: ToastyService,
     private toastyConfig: ToastyConfig,
     private _common: Common,
-    private _state: GlobalState) {
-    this.toastyConfig.position = 'top-center';
+    private _state: GlobalState
+  ) {
+    this.toastyConfig.position = "top-center";
   }
   ngOnInit() {
-    this.formname = this.route.snapshot.paramMap.get('id');
+    this.formname = this.route.snapshot.paramMap.get("id");
     this.start();
-    this._state.subscribe("newurl", (d) => {
-      const urls = d.split('/');
+    this._state.subscribe("newurl", d => {
+      const urls = d.split("/");
       if (urls[urls.length - 1] != this.formname) {
         this.formname = urls[urls.length - 1];
         this.start();
       }
-    })
+    });
   }
 
   start() {
@@ -98,7 +108,7 @@ export class FormComponent implements OnInit {
     this.settings.columns = {};
     const that = this;
     if (this.formname) {
-      this.getViewName(this.formname).then(function () {
+      this.getViewName(this.formname).then(function() {
         that.getTableField();
         that.getFormField();
       });
@@ -108,126 +118,148 @@ export class FormComponent implements OnInit {
   getViewName(formname: string) {
     const that = this;
     return new Promise((resolve, reject) => {
-      that.formService.getForms('form_set').then((data) => {
-        if (data.Data) {
-          that.tableView = _.find(data.Data, function (o) { return o['ViewType'] == 'table' && o['FormName'] == formname; });
-          that.formView = _.find(data.Data, function (o) { return o['ViewType'] == 'form' && o['FormName'] == formname; });
-          if (that.tableView) {
-            that.title = that.tableView['Title'];
-            that.canAdd = that.tableView['CanAdd'] == 1;
+      that.formService.getForms("form_set").then(
+        data => {
+          if (data.Data) {
+            that.tableView = _.find(data.Data, function(o) {
+              return o["ViewType"] == "table" && o["FormName"] == formname;
+            });
+            that.formView = _.find(data.Data, function(o) {
+              return o["ViewType"] == "form" && o["FormName"] == formname;
+            });
+            if (that.tableView) {
+              that.title = that.tableView["Title"];
+              that.canAdd = that.tableView["CanAdd"] == 1;
 
-            if (!that.tableView['CanUpdate'] && !that.tableView['CanDelete']) {
-              that.settings['actions'] = false;
-            } else {
-              that.settings['actions'] = {
-                columnTitle: '操作'
-              };
-              if (!that.tableView['CanUpdate']) {
-                that.settings['actions']['edit'] = false;
-              };
-              if (!that.tableView['CanDelete']) {
-                that.settings['actions']['delete'] = false;
-              };
+              if (
+                !that.tableView["CanUpdate"] &&
+                !that.tableView["CanDelete"]
+              ) {
+                that.settings["actions"] = false;
+              } else {
+                that.settings["actions"] = {
+                  columnTitle: "操作"
+                };
+                if (!that.tableView["CanUpdate"]) {
+                  that.settings["actions"]["edit"] = false;
+                }
+                if (!that.tableView["CanDelete"]) {
+                  that.settings["actions"]["delete"] = false;
+                }
+              }
             }
           }
+          resolve();
+        },
+        err => {
+          this.toastOptions.msg = err;
+          this.toastyService.error(this.toastOptions);
         }
-        resolve();
-      }, (err) => {
-        this.toastOptions.msg = err
-        this.toastyService.error(this.toastOptions)
-      });
-    })
+      );
+    });
   }
 
   getTableField(): void {
     this.loading = true;
     const that = this;
     //获取table定义
-    this.formService.getFormsFieldByName(this.tableView['ViewName']).then((data) => {
-      if (data.Data) {
-        const viewList = _.orderBy(data.Data, 'OrderInd', 'asc');
-        _.each(viewList, d => {
-          this.settings.columns[d['FieldName']] = {
-            title: d['Title'],
-            type: d['DataType'],
-            filter: false,
-          };
-        });
+    this.formService.getFormsFieldByName(this.tableView["ViewName"]).then(
+      data => {
+        if (data.Data) {
+          const viewList = _.orderBy(data.Data, "OrderInd", "asc");
+          _.each(viewList, d => {
+            this.settings.columns[d["FieldName"]] = {
+              title: d["Title"],
+              type: d["DataType"],
+              filter: false
+            };
+          });
 
-        this.newSettings = Object.assign({}, this.settings);
-        this.getDataList();
+          this.newSettings = Object.assign({}, this.settings);
+          this.getDataList();
+        }
+        this.loading = false;
+      },
+      err => {
+        this.loading = false;
+        this.toastOptions.msg = err;
+        this.toastyService.error(this.toastOptions);
       }
-      this.loading = false;
-    }, (err) => {
-      this.loading = false;
-      this.toastOptions.msg = err
-      this.toastyService.error(this.toastOptions)
-    });
+    );
   }
 
   getFormField(): void {
     const that = this;
-    this.formService.getFormsFieldByName(this.formView['ViewName']).then((data) => {
-      if (data.Data) {
-        const formFieldList = _.orderBy(data.Data, 'OrderInd', 'asc');
+    this.formService
+      .getFormsFieldByName(this.formView["ViewName"])
+      .then(data => {
+        if (data.Data) {
+          const formFieldList = _.orderBy(data.Data, "OrderInd", "asc");
 
-        async.eachSeries(formFieldList, function (field, callback) {
-          const config = that.setFormField(field);
-          if (config['add']) {
-            that.configAddArr.push(config['add']);
-          }
-          if (config['add']) {
-            that.configUpdateArr.push(config['add']);
-          }
-          that.setDicByName(field).then(() => {
-            callback();
-          });
-          // that.setSelectValue(field).then(() => {
-          //   callback();
-          // });
-        }, function (err) {
-          if (err) {
-            console.log('err');
-          } else {
-            that.configAdd = that.configAddArr;
-            that.configUpdate = that.configUpdateArr;
-          }
-        });
-      }
-    });
+          async.eachSeries(
+            formFieldList,
+            function(field, callback) {
+              const config = that.setFormField(field);
+              if (config["add"]) {
+                that.configAddArr.push(config["add"]);
+              }
+              if (config["add"]) {
+                that.configUpdateArr.push(config["add"]);
+              }
+              that.setDicByName(field).then(() => {
+                callback();
+              });
+              // that.setSelectValue(field).then(() => {
+              //   callback();
+              // });
+            },
+            function(err) {
+              if (err) {
+                console.log("err");
+              } else {
+                that.configAdd = that.configAddArr;
+                that.configUpdate = that.configUpdateArr;
+              }
+            }
+          );
+        }
+      });
   }
 
   //设置表单字段
   setFormField(d) {
     let cfgAdd: FieldConfig;
     let cfgUpdate: FieldConfig;
-    const placehd = d['DataSource'] == "list" || _.startsWith(d['DataSource'], 'table') ? '--请选择--' : '输入' + d['Title'];
+    const placehd =
+      d["DataSource"] == "list" || _.startsWith(d["DataSource"], "table")
+        ? "--请选择--"
+        : "输入" + d["Title"];
 
-    if (d['CanAdd']) {
+    if (d["CanAdd"]) {
       cfgAdd = {
-        type: d['FormType'],
-        label: d['Title'],
-        name: d['FieldName'],
-        placeholder: placehd,
+        type: d["FormType"],
+        label: d["Title"],
+        name: d["FieldName"],
+        placeholder: placehd
       };
     }
-    if (d['CanUpdate']) {
+    if (d["CanUpdate"]) {
       cfgUpdate = {
-        type: d['FormType'],
-        label: d['Title'],
-        name: d['FieldName'],
-        placeholder: placehd,
+        type: d["FormType"],
+        label: d["Title"],
+        name: d["FieldName"],
+        placeholder: placehd
       };
     } else {
       cfgUpdate = {
-        type: d['FormType'],
-        label: d['Title'],
-        name: d['FieldName'],
+        type: d["FormType"],
+        label: d["Title"],
+        name: d["FieldName"],
         placeholder: placehd,
         disabled: true
       };
     }
-    if (d['IsRequest']) {
+    if (d["IsRequest"]) {
       if (cfgAdd) {
         cfgAdd.validation = [Validators.required];
       }
@@ -235,34 +267,38 @@ export class FormComponent implements OnInit {
         cfgUpdate.validation = [Validators.required];
       }
     }
-    if (d['Default'] && cfgAdd) {
-      if (_.toLower(d['Default']) == "user") {
-        cfgAdd.value = sessionStorage.getItem('userId');
-      } else if (_.toLower(d['Default']) == "date") {
+    if (d["Default"] && cfgAdd) {
+      if (_.toLower(d["Default"]) == "user") {
+        cfgAdd.value = sessionStorage.getItem("userId");
+      } else if (_.toLower(d["Default"]) == "date") {
         cfgAdd.value = this._common.getTodayObj();
       } else {
-        cfgAdd.value = d['Default'];
+        cfgAdd.value = d["Default"];
       }
     }
 
-    if (cfgAdd && cfgAdd.type == 'select') {
+    if (cfgAdd && cfgAdd.type == "select") {
       cfgAdd.options = [];
     }
-    if (cfgUpdate && cfgUpdate.type == 'select') {
+    if (cfgUpdate && cfgUpdate.type == "select") {
       cfgUpdate.options = [];
     }
 
-    if (d['DataSource'] == "list" && d['DicName'] && d['DicName'].includes(',') > 0) {
+    if (
+      d["DataSource"] == "list" &&
+      d["DicName"] &&
+      d["DicName"].includes(",") > 0
+    ) {
       //如果有列出选项列表
       const dicList = [];
-      _.each(d['DicName'].split(','), d => {
+      _.each(d["DicName"].split(","), d => {
         dicList.push({ id: d, text: d });
       });
       if (cfgAdd) {
-        cfgAdd['options'] = dicList;
+        cfgAdd["options"] = dicList;
       }
       if (cfgUpdate) {
-        cfgUpdate['options'] = dicList;
+        cfgUpdate["options"] = dicList;
       }
     }
 
@@ -272,16 +308,24 @@ export class FormComponent implements OnInit {
   //设置词典下拉列表
   setDicByName(d) {
     return new Promise((resolve, reject) => {
-      if (d['DataSource'] == "list" && d['DicName'] && d['DicName'].includes(',') == 0) {
+      if (
+        d["DataSource"] == "list" &&
+        d["DicName"] &&
+        d["DicName"].includes(",") == 0
+      ) {
         //从词典中获取
-        this._dicService.getDicByName(d['DicName'], list => {
-          let cigAdd = _.find(this.configAddArr, f => { return f['name'] == d['FieldName'] });
+        this._dicService.getDicByName(d["DicName"], list => {
+          let cigAdd = _.find(this.configAddArr, f => {
+            return f["name"] == d["FieldName"];
+          });
           if (cigAdd) {
-            cigAdd['options'] = list;
+            cigAdd["options"] = list;
           }
-          let cigUpdate = _.find(this.configUpdateArr, f => { return f['name'] == d['FieldName'] });
+          let cigUpdate = _.find(this.configUpdateArr, f => {
+            return f["name"] == d["FieldName"];
+          });
           if (cigUpdate) {
-            cigUpdate['options'] = list;
+            cigUpdate["options"] = list;
           }
           resolve();
         });
@@ -293,47 +337,58 @@ export class FormComponent implements OnInit {
   //设置下拉类别数据
   setSelectValue(field) {
     return new Promise((resolve, reject) => {
-      if (_.startsWith(field['DataSource'], 'table')) {
+      if (_.startsWith(field["DataSource"], "table")) {
         //从数据表中获取,DataSource设置的格式：table_tableName_Id_Name
-        const dataS = field['DataSource'].split('-');
+        const dataS = field["DataSource"].split("-");
         if (dataS.length >= 4) {
-          this.formService.getForms(dataS[1]).then((d) => {
-            const data = d.Data;
-            let list = [];
-            _.each(data, dt => {
-              let display = dt[dataS[3]];
-              if (dataS.length >= 5) {
-                display = display + '|' + dt[dataS[4]];
-              }
-              if (dataS.length >= 6) {
-                display = display + '|' + dt[dataS[5]];
-              }
-              if (dataS.length >= 7) {
-                display = display + '|' + dt[dataS[6]];
-              }
+          this.formService.getForms(dataS[1]).then(
+            d => {
+              const data = d.Data;
+              let list = [];
+              _.each(data, dt => {
+                let display = dt[dataS[3]];
+                if (dataS.length >= 5) {
+                  display = display + "|" + dt[dataS[4]];
+                }
+                if (dataS.length >= 6) {
+                  display = display + "|" + dt[dataS[5]];
+                }
+                if (dataS.length >= 7) {
+                  display = display + "|" + dt[dataS[6]];
+                }
 
-              list.push({ id: dt[dataS[2]], text: display });
-            });
+                list.push({ id: dt[dataS[2]], text: display });
+              });
 
-            let cigAdd = _.find(this.configAddArr, f => { return f['name'] == field['FieldName'] });
-            if (cigAdd) {
-              cigAdd['options'] = list;
+              let cigAdd = _.find(this.configAddArr, f => {
+                return f["name"] == field["FieldName"];
+              });
+              if (cigAdd) {
+                cigAdd["options"] = list;
+              }
+              let cigUpdate = _.find(this.configUpdateArr, f => {
+                return f["name"] == field["FieldName"];
+              });
+              if (cigUpdate) {
+                cigUpdate["options"] = list;
+              }
+              resolve();
+            },
+            err => {
+              let cigAdd = _.find(this.configAddArr, f => {
+                return f["name"] == field["FieldName"];
+              });
+              if (cigAdd) {
+                cigAdd["options"] = [];
+              }
+              let cigUpdate = _.find(this.configUpdateArr, f => {
+                return f["name"] == field["FieldName"];
+              });
+              if (cigUpdate) {
+                cigUpdate["options"] = [];
+              }
             }
-            let cigUpdate = _.find(this.configUpdateArr, f => { return f['name'] == field['FieldName'] });
-            if (cigUpdate) {
-              cigUpdate['options'] = list;
-            }
-            resolve();
-          }, (err) => {
-            let cigAdd = _.find(this.configAddArr, f => { return f['name'] == field['FieldName'] });
-            if (cigAdd) {
-              cigAdd['options'] = [];
-            }
-            let cigUpdate = _.find(this.configUpdateArr, f => { return f['name'] == field['FieldName'] });
-            if (cigUpdate) {
-              cigUpdate['options'] = [];
-            }
-          });
+          );
         } else {
           resolve();
         }
@@ -343,22 +398,24 @@ export class FormComponent implements OnInit {
     });
   }
 
-
   //获取数据
   getDataList() {
-    this.formService.getForms(this.tableView['ViewName']).then((data) => {
-      this.source.load(data.Data);
-      this.onSearch('');
-      this.loading = false;
-    }, (err) => {
-      this.loading = false;
-    });
+    this.formService.getForms(this.tableView["ViewName"]).then(
+      data => {
+        this.source.load(data.Data);
+        this.onSearch("");
+        this.loading = false;
+      },
+      err => {
+        this.loading = false;
+      }
+    );
   }
   //设置过滤字段
-  onSearch(query: string = '') {
-    if (this.tableView && this.tableView['SearchField']) {
+  onSearch(query: string = "") {
+    if (this.tableView && this.tableView["SearchField"]) {
       let filterArr = [];
-      _.each(_.split(this.tableView['SearchField'], ','), (d) => {
+      _.each(_.split(this.tableView["SearchField"], ","), d => {
         filterArr.push({ field: d, search: query });
       });
       this.source.setFilter(filterArr, false);
@@ -367,40 +424,50 @@ export class FormComponent implements OnInit {
   onCreate(): void {
     const that = this;
     const modalRef = this.modalService.open(NgbdModalContent);
-    modalRef.componentInstance.title = '新增' + this.title;
+    modalRef.componentInstance.title = "新增" + this.title;
     modalRef.componentInstance.config = this.configAdd;
     modalRef.componentInstance.saveFun = (result, closeBack) => {
       let formValue = JSON.parse(result);
       _.each(this.configAdd, f => {
-        if (f.type === 'datepicker' && formValue[f.name]) {
+        if (f.type === "datepicker" && formValue[f.name]) {
           formValue[f.name] = this._common.getDateString(formValue[f.name]);
         }
       });
       console.log(formValue);
-      that.formService.create(that.formView['ViewName'], formValue).then((data) => {
-        closeBack();
-        this.toastOptions.msg = "新增成功。"
-        this.toastyService.success(this.toastOptions)
-        that.getDataList();
-      },
-        (err) => {
-          this.toastOptions.msg = err
-          this.toastyService.error(this.toastOptions)
+      that.formService.create(that.formView["ViewName"], formValue).then(
+        data => {
+          closeBack();
+          this.toastOptions.msg = "新增成功。";
+          this.toastyService.success(this.toastOptions);
+          that.getDataList();
+        },
+        err => {
+          this.toastOptions.msg = err;
+          this.toastyService.error(this.toastOptions);
         }
-      )
-    }
+      );
+    };
   }
 
   onEdit(event) {
     this.updateData = event.data;
+
+    if (_.keys(this.updateData).includes("CanUpdate")) {
+      if (!this.updateData["CanUpdate"]) {
+        this.toastOptions.msg = "销售订单已审核，不能修改。";
+        this.toastyService.warning(this.toastOptions);
+        return;
+      }
+    }
+    
     const that = this;
     const modalRef = this.modalService.open(NgbdModalContent);
-    modalRef.componentInstance.title = '修改' + this.title;
+    modalRef.componentInstance.title = "修改" + this.title;
     modalRef.componentInstance.config = this.configUpdate;
 
     let eventdata = event.data;
     _.each(this.configUpdate, f => {
-      if (f.type === 'datepicker' && eventdata[f.name]) {
+      if (f.type === "datepicker" && eventdata[f.name]) {
         const dv = eventdata[f.name];
         if (_.isString(dv)) {
           eventdata[f.name] = this._common.getDateObject(dv);
@@ -411,16 +478,17 @@ export class FormComponent implements OnInit {
     modalRef.componentInstance.formValue = eventdata;
     modalRef.componentInstance.saveFun = (result, closeBack) => {
       let formViewData = JSON.parse(result);
-      const cfgupdate = _.filter(that.configUpdate, function (o) { return o['disabled'] == true; });
+      const cfgupdate = _.filter(that.configUpdate, function(o) {
+        return o["disabled"] == true;
+      });
       _.each(cfgupdate, d => {
         if (that.updateData[d.name]) {
           formViewData[d.name] = that.updateData[d.name];
         }
-
       });
 
       _.each(this.configUpdate, f => {
-        if (f.type === 'datepicker' && formViewData[f.name]) {
+        if (f.type === "datepicker" && formViewData[f.name]) {
           const dv = formViewData[f.name];
           if (_.isObject(dv)) {
             formViewData[f.name] = this._common.getDateString(dv);
@@ -429,31 +497,34 @@ export class FormComponent implements OnInit {
       });
 
       console.log(formViewData);
-      that.formService.update(that.formView['ViewName'], formViewData).then((data) => {
-        closeBack();
-        this.toastOptions.msg = "修改成功。"
-        this.toastyService.success(this.toastOptions)
-        that.getDataList();
-      },
-        (err) => {
-          this.toastOptions.msg = err
-          this.toastyService.error(this.toastOptions)
+      that.formService.update(that.formView["ViewName"], formViewData).then(
+        data => {
+          closeBack();
+          this.toastOptions.msg = "修改成功。";
+          this.toastyService.success(this.toastOptions);
+          that.getDataList();
+        },
+        err => {
+          this.toastOptions.msg = err;
+          this.toastyService.error(this.toastOptions);
         }
-      )
+      );
     };
   }
 
   onDelete(event) {
-    if (window.confirm('你确定要删除吗?')) {
-      this.formService.delete(this.tableView['ViewName'], event.data.Id).then((data) => {
-        this.toastOptions.msg = "删除成功。"
-        this.toastyService.success(this.toastOptions)
-        this.getDataList();
-      }, (err) => {
-        this.toastOptions.msg = err
-        this.toastyService.error(this.toastOptions)
-      });
+    if (window.confirm("你确定要删除吗?")) {
+      this.formService.delete(this.tableView["ViewName"], event.data.Id).then(
+        data => {
+          this.toastOptions.msg = "删除成功。";
+          this.toastyService.success(this.toastOptions);
+          this.getDataList();
+        },
+        err => {
+          this.toastOptions.msg = err;
+          this.toastyService.error(this.toastOptions);
+        }
+      );
     }
   }
-
 }
