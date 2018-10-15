@@ -126,17 +126,17 @@
           <td>减：已付订金金额</td>
           <td>{{carsale.Deposit | numberSeparator}}</td>
           <td>旧车置换金额</td>
-          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.OldChangeFee" (change)="priceChange()" type="number" min="0"
-              class="form-control"></td>
+          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.OldChangeFee" (change)="priceChange()" type="number"
+              min="0" class="form-control"></td>
         </tr>
 
         <tr>
           <td>金融分期尾款金额</td>
-          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.LastFee" (change)="priceChange()" type="number" min="0"
-              class="form-control"></td>
+          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.LastFee" (change)="priceChange()" type="number"
+              min="0" class="form-control"></td>
           <td>其他金额</td>
-          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.OtherFee2" (change)="priceChange()" type="number" min="0"
-              class="form-control"></td>
+          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.OtherFee2" (change)="priceChange()" type="number"
+              min="0" class="form-control"></td>
         </tr>
 
         <tr>
@@ -153,12 +153,12 @@
   </div>
 
   <div style="padding:8px;font-weight: bold">精品装饰明细</div>
-  <button placement="right" (shown)="showPopCarItem()" #pitem="ngbPopover" [ngbPopover]="popContentPartItem"
+  <button [disabled]="!isEnable" placement="right" (shown)="showPopCarItem()" #pitem="ngbPopover" [ngbPopover]="popContentPartItem"
     popoverTitle="精品装饰列表" type="button" class="btn btn-success btn-sm" container="body">
-    <i class="fa fa-refresh" aria-hidden="true"></i> 自费项目</button>
-  <button placement="right" (shown)="showPopCarItem()" #pitem2="ngbPopover" [ngbPopover]="popContentPartItem2"
+    <i class="fa fa-pencil" aria-hidden="true"></i> 自费项目</button>
+  <button [disabled]="!isEnable" placement="right" (shown)="showPopCarItem()" #pitem2="ngbPopover" [ngbPopover]="popContentPartItem2"
     popoverTitle="精品装饰列表" type="button" class="btn btn-success btn-sm" container="body">
-    <i class="fa fa-refresh" aria-hidden="true"></i> 免费项目</button>
+    <i class="fa fa-pencil" aria-hidden="true"></i> 免费项目</button>
   <table class="table table-bordered table-sm">
     <thead>
       <tr>
@@ -176,7 +176,7 @@
         <td><input [class.inputline]="!isEnable" [(ngModel)]="item.Count" type="text" class="form-control"></td>
         <td>{{item.Price}}</td>
         <td>
-          <button type="button" (click)="removeItem(item.ItemName)" class="btn btn-warning">删除</button>
+          <button *ngIf="isEnable" type="button" (click)="removeItem(item.ItemName)" class="btn btn-warning">删除</button>
         </td>
       </tr>
     </tbody>
@@ -272,15 +272,15 @@
 </div>
 
 <ng-template #popContentPartItem>
-    <a href="javascrpit:void(0)" class="close" (click)='pitem.close()' aria-hidden="true">&times;</a>
-    <search-input (searchClick)="onSearchItem($event)"></search-input>
-    <ng2-smart-table [settings]="settingsItem" [source]="popCarItemGrid" (userRowSelect)="rowItemClicked($event)">
-    </ng2-smart-table>
-  </ng-template>
+  <a href="javascrpit:void(0)" class="close" (click)='pitem.close()' aria-hidden="true">&times;</a>
+  <search-input (searchClick)="onSearchItem($event)"></search-input>
+  <ng2-smart-table [settings]="settingsItem" [source]="popCarItemGrid" (userRowSelect)="rowItemClicked($event)">
+  </ng2-smart-table>
+</ng-template>
 
-  <ng-template #popContentPartItem2>
-    <a href="javascrpit:void(0)" class="close" (click)='pitem2.close()' aria-hidden="true">&times;</a>
-    <search-input (searchClick)="onSearchItem($event)"></search-input>
-    <ng2-smart-table [settings]="settingsItem" [source]="popCarItemGrid" (userRowSelect)="rowItem2Clicked($event)">
-    </ng2-smart-table>
-  </ng-template>
+<ng-template #popContentPartItem2>
+  <a href="javascrpit:void(0)" class="close" (click)='pitem2.close()' aria-hidden="true">&times;</a>
+  <search-input (searchClick)="onSearchItem($event)"></search-input>
+  <ng2-smart-table [settings]="settingsItem" [source]="popCarItemGrid" (userRowSelect)="rowItem2Clicked($event)">
+  </ng2-smart-table>
+</ng-template>

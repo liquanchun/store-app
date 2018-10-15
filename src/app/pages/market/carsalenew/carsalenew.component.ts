@@ -579,7 +579,6 @@ export class CarSaleNewComponent implements OnInit {
     this.formService.create("car_booking", newcarsale).then(
       data => {
         that.saveItem();
-        that.saveStatus();
         that._state.notifyDataChanged("messagebox", {
           type: "success",
           msg: "保存成功。",
@@ -600,12 +599,6 @@ export class CarSaleNewComponent implements OnInit {
       .create("car_customer", this.customer)
       .then(data => {}, err => {});
   }
-  //修改状态
-  saveStatus() {
-    const that = this;
-    const carinfo = { Id: this.carinfo.Id, Status: "订单" };
-    this.formService.create("car_income", carinfo).then(data => {}, err => {});
-  }
 
   saveItem() {
     const that = this;
@@ -625,5 +618,26 @@ export class CarSaleNewComponent implements OnInit {
           console.log(err);
         });
     });
+  }
+
+  checkRadio(event){
+    if(this.carsale.PayType=='现车付款'){
+      this.carsale.Days2 = 0;
+      this.carsale.FinaceCompany = '';
+      this.carsale.FirstFee = 0;
+      this.carsale.Stages = 0;
+      this.carsale.Days3 = 0;
+    }
+    if(this.carsale.PayType=='订单车辆付款'){
+      this.carsale.Days1 = 0;
+      this.carsale.FinaceCompany = '';
+      this.carsale.FirstFee = 0;
+      this.carsale.Stages = 0;
+      this.carsale.Days3 = 0;
+    }
+    if(this.carsale.PayType=='分期付款'){
+      this.carsale.Days1 = 0;
+      this.carsale.Days2 = 0;
+    }
   }
 }

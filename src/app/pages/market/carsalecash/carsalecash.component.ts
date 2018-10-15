@@ -155,6 +155,8 @@ export class CarSaleCashComponent implements OnInit {
     "第四联 留档"
   ];
   chineseMoney: string;
+  partItem: any;
+  partAmount: number = 0;
   constructor(
     private modalService: NgbModal,
     private formService: FormService,
@@ -236,8 +238,40 @@ export class CarSaleCashComponent implements OnInit {
         );
       }
     });
-  }
 
+    this._state.subscribe("print.carsalecash2", data => {
+      this.carsale = _.find(this.carsaleData, f => {
+        return f["Id"] == data.id;
+      });
+      if (this.carsale) {
+        this.getPartItem();
+        _.delay(
+          function(that) {
+            that.print2();
+          },
+          500,
+          this
+        );
+      }
+    });
+  }
+  getPartItem() {
+    this.formService
+      .getForms(`car_booking_item/OrderId/${this.carsale.OrderId}`)
+      .then(
+        data => {
+          if (data && data.Data) {
+            this.partItem = _.filter(data.Data, f => {
+              return f["ItemType"] == "自费" || f["ItemType"] == "免费";
+            });
+            this.partAmount = _.sumBy(this.partItem, f => {
+              return f["Count"] * f["Price"];
+            });
+          }
+        },
+        err => {}
+      );
+  }
   getCarsale(bookid: number) {
     const that = this;
     async.series(
@@ -521,6 +555,7 @@ export class CarSaleCashComponent implements OnInit {
             msg: "审核成功。",
             time: new Date().getTime()
           });
+          that.saveStatus("已开票");
           that.getDataList();
         },
         err => {
@@ -534,6 +569,13 @@ export class CarSaleCashComponent implements OnInit {
     };
   }
 
+  //修改状态
+  saveStatus(status: string) {
+    const that = this;
+    const carinfo = { Id: this.carbooking.CarIncomeId, Status: status };
+    this.formService.create("car_income", carinfo).then(data => {}, err => {});
+  }
+
   onAuditNot(): void {
     let formValue = {};
     formValue["Id"] = this.carsale["Id"];
@@ -545,9 +587,10 @@ export class CarSaleCashComponent implements OnInit {
       data => {
         this._state.notifyDataChanged("messagebox", {
           type: "success",
-          msg: "审核成功。",
+          msg: "反审核成功。",
           time: new Date().getTime()
         });
+        this.saveStatus("订单");
         this.getDataList();
       },
       err => {
@@ -631,6 +674,56 @@ export class CarSaleCashComponent implements OnInit {
           }
           .valueText{
             text-align:center;
+          }
+          .textright{
+            text-align:right;
+          }
+          .noboder td{
+            border-left:none;
+            border-right:none;
+          }
+          .noboderall td{
+            border:none;
+          }
+          </style>
+        </head>
+        <body onload="window.print();window.close()">${printContents}</body>
+      </html>`);
+    popupWin.document.close();
+  }
+
+  print2() {
+    let printContents, popupWin;
+    printContents = document.getElementById("printDivPart").innerHTML;
+    popupWin = window.open(
+      "",
+      "_blank",
+      "top=0,left=0,height=1098px,width=900px"
+    );
+    popupWin.document.open();
+    popupWin.document.write(`
+      <html>
+        <head>
+          <title style="font-size: 12px;"></title>
+          <style>
+          table{
+            width: 740px;
+            border-collapse: collapse;
+            font-size: 14px;
+            border:1px solid black;
+          }
+          p{
+            font-size: 14px;
+          }
+          th,td{
+            border:1px solid black;
+            padding:3px;
+          }
+          .valueText{
+            text-align:center;
+          }
+          .textright{
+            text-align:right;
           }
           .noboder td{
             border-left:none;

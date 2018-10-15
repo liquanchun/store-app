@@ -51,9 +51,10 @@
       <tbody>
         <tr>
           <td>
-            <button placement="right" (shown)="showPopCustomer()" #pcust="ngbPopover" [ngbPopover]="popContentCustomer"
-              popoverTitle="客户信息列表" type="button" class="btn btn-success btn-sm" container="body">
-              <i class="fa fa-refresh" aria-hidden="true"></i> 选择客户</button>
+            <button [disabled]="!isEnable" placement="right" (shown)="showPopCustomer()" #pcust="ngbPopover"
+              [ngbPopover]="popContentCustomer" popoverTitle="客户信息列表" type="button" class="btn btn-success btn-sm"
+              container="body">
+              <i class="fa fa-pencil" aria-hidden="true"></i> 选择客户</button>
             客户名称</td>
           <td><input [class.inputline]="!isEnable" [(ngModel)]="customer.Name" type="text" class="form-control"></td>
           <td>客户电话</td>
@@ -81,9 +82,9 @@
     </table>
     <div style="padding:8px;">一、订购车型、数量及价款</div>
     <div>
-      <button placement="right" (shown)="showPopCarInfo()" #pcar="ngbPopover" [ngbPopover]="popContentCar" popoverTitle="产品信息列表"
-        type="button" class="btn btn-success btn-sm" container="body">
-        <i class="fa fa-refresh" aria-hidden="true"></i> 选择车辆</button>
+      <button [disabled]="!isEnable" placement="right" (shown)="showPopCarInfo()" #pcar="ngbPopover" [ngbPopover]="popContentCar"
+        popoverTitle="产品信息列表" type="button" class="btn btn-success btn-sm" container="body">
+        <i class="fa fa-pencil" aria-hidden="true"></i> 选择车辆</button>
     </div>
     <table class="table table-bordered table-sm">
       <thead>
@@ -155,8 +156,8 @@
     </table>
 
     <div style="padding:8px;font-weight: bold">赠送商品或服务产品</div>
-    <button *ngIf="isEnable" type="button" class="btn btn-success btn-sm" (click)="newItem()">
-      <i class="fa fa-refresh" aria-hidden="true"></i> 添加项目</button>
+    <button [disabled]="!isEnable" type="button" class="btn btn-success btn-sm" (click)="newItem()">
+      <i class="fa fa-pencil" aria-hidden="true"></i> 添加项目</button>
     <table class="table table-bordered table-sm">
       <thead>
         <tr>
@@ -229,8 +230,8 @@
           <td></td>
           <td class="longtext">
             <div class="form-check">
-              <input [class.inputline]="!isEnable" type="radio" [checked]="carsale.PayType=='现车付款'" [(ngModel)]="carsale.PayType"
-                name="PayType" id="inlineRadio3" value="现车付款" class="form-check-input">
+              <input [class.inputline]="!isEnable" type="radio" (change)="checkRadio($event)" [checked]="carsale.PayType=='现车付款'"
+                [(ngModel)]="carsale.PayType" name="PayType" id="inlineRadio3" value="现车付款" class="form-check-input">
               <label class="form-check-labe3" for="inlineRadio3"> 1、现车付款：客户在签订本订单后</label>
             </div>
           </td>
@@ -243,8 +244,8 @@
           <td></td>
           <td class="longtext">
             <div class="form-check">
-              <input [class.inputline]="!isEnable" type="radio" [checked]="carsale.PayType=='订单车辆付款'" [(ngModel)]="carsale.PayType"
-                name="PayType" id="inlineRadio4" value="订单车辆付款" class="form-check-input">
+              <input [class.inputline]="!isEnable" type="radio" (change)="checkRadio($event)" [checked]="carsale.PayType=='订单车辆付款'"
+                [(ngModel)]="carsale.PayType" name="PayType" id="inlineRadio4" value="订单车辆付款" class="form-check-input">
               <label class="form-check-labe3" for="inlineRadio4"> 2、订单车辆付款：客户在接到到货通知后</label>
             </div>
           </td>
@@ -257,13 +258,13 @@
           <td></td>
           <td colspan="5" class="longtext">
             <div class="form-check">
-              <input [class.inputline]="!isEnable" type="radio" [checked]="carsale.PayType=='分期付款'" [(ngModel)]="carsale.PayType"
-                name="PayType" id="inlineRadio5" value="分期付款" class="form-check-input">
+              <input [class.inputline]="!isEnable" type="radio" (change)="checkRadio($event)" [checked]="carsale.PayType=='分期付款'"
+                [(ngModel)]="carsale.PayType" name="PayType" id="inlineRadio5" value="分期付款" class="form-check-input">
               <label class="form-check-labe3" for="inlineRadio5"> 3、分期付款</label>
             </div>
           </td>
         </tr>
-        <tr>
+        <tr *ngIf="carsale.PayType=='分期付款'">
           <td class="longtext">融资机构：</td>
           <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.FinaceCompany" type="text" class="form-control"></td>
           <td>首付：</td>
@@ -271,7 +272,7 @@
           <td>分期</td>
           <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.Stages" type="number" min="0" class="form-control"></td>
         </tr>
-        <tr>
+        <tr *ngIf="carsale.PayType=='分期付款'">
           <td></td>
           <td class="longtext">首付交款时间：</td>
           <td>金融机构批准放贷</td>

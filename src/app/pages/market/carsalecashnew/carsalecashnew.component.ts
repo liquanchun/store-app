@@ -149,29 +149,6 @@ export class CarSaleCashNewComponent implements OnInit {
     const that = this;
     async.series(
       {
-        zero: function(callback) {
-          that.formService
-            .getForms(`car_booking_item/OrderId/${that.carsale.OrderId}`)
-            .then(
-              data => {
-                if (data && data.Data) {
-                  const bookitem = _.filter(data.Data, f => {
-                    return f["ItemType"] != "自费" && f["ItemType"] != "免费";
-                  });
-                  _.each(bookitem, f => {
-                    if (f["FieldName"]) {
-                      that.carsale[f["FieldName"]] = f["Price"];
-                    }
-                  });
-                  that.partItem = _.filter(data.Data, f => {
-                    return f["ItemType"] == "自费" || f["ItemType"] == "免费";
-                  });
-                }
-                callback(null, 0);
-              },
-              err => {}
-            );
-        },
         one: function(callback) {
           that.formService.getForms(`car_booking/${bookid}`).then(
             data => {
@@ -231,6 +208,29 @@ export class CarSaleCashNewComponent implements OnInit {
             },
             err => {}
           );
+        },
+        six: function(callback) {
+          that.formService
+            .getForms(`car_booking_item/OrderId/${that.carsale.OrderId}`)
+            .then(
+              data => {
+                if (data && data.Data) {
+                  const bookitem = _.filter(data.Data, f => {
+                    return f["ItemType"] != "自费" && f["ItemType"] != "免费";
+                  });
+                  _.each(bookitem, f => {
+                    if (f["FieldName"]) {
+                      that.carsale[f["FieldName"]] = f["Price"];
+                    }
+                  });
+                  that.partItem = _.filter(data.Data, f => {
+                    return f["ItemType"] == "自费" || f["ItemType"] == "免费";
+                  });
+                }
+                callback(null, 6);
+              },
+              err => {}
+            );
         }
       },
       function(err, results) {
@@ -280,7 +280,6 @@ export class CarSaleCashNewComponent implements OnInit {
           time: new Date().getTime()
         });
         that.isEnable = false;
-        that.saveStatus();
       },
       err => {
         that._state.notifyDataChanged("messagebox", {
@@ -321,13 +320,6 @@ export class CarSaleCashNewComponent implements OnInit {
       "later"
     );
   }
-  //修改状态
-  saveStatus() {
-    const that = this;
-    const carinfo = { Id: this.carIncomeId, Status: "已开票" };
-    this.formService.create("car_income", carinfo).then(data => {}, err => {});
-  }
-
   //选择房间
   rowItemClicked(event): void {
     if (event.isSelected) {

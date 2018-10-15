@@ -560,6 +560,7 @@ export class CarsaleComponent implements OnInit {
           msg: "审核成功。",
           time: new Date().getTime()
         });
+        this.saveStatus('订单');
         this.getDataList();
       },
       err => {
@@ -571,7 +572,12 @@ export class CarsaleComponent implements OnInit {
       }
     );
   }
-
+  //修改状态
+  saveStatus(status: string) {
+    const that = this;
+    const carinfo = { Id: this.printOrder.CarIncomeId, Status: status };
+    this.formService.create("car_income", carinfo).then(data => {}, err => {});
+  }
   checkRoles() {
     const that = this;
     return new Promise((resolve, reject) => {
