@@ -515,7 +515,7 @@ export class CarSaleCashComponent implements OnInit {
         });
         return;
       }
-      this.formService.delete(this.tableView["ViewName"], event.data.Id).then(
+      this.formService.delete(this.tableView["TableName"], event.data.Id).then(
         data => {
           this._state.notifyDataChanged("messagebox", {
             type: "success",

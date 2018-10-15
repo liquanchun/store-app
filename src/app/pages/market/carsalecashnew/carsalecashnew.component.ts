@@ -372,7 +372,7 @@ export class CarSaleCashNewComponent implements OnInit {
     });
     if (it && it["Id"]) {
       this.formService
-        .delete("car_booking_item/id", it["Id"])
+        .delete("car_booking_item", it["Id"])
         .then(data => {}, err => {});
     }
     _.remove(this.partItem, f => {
