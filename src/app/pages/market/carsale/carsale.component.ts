@@ -659,22 +659,17 @@ export class CarsaleComponent implements OnInit {
             border-collapse: collapse;
             font-size: 12px;
             border:1px solid black;
+            table-layout: fixed;
           }
           th,td{
             border:1px solid black;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
           }
           .noboder td{
             border-left:none;
             border-right:none;
-          }
-          table {
-            table-layout: fixed;
-          }
-            
-          td {
-            overflow: hidden;
-            white-space: nowrap;
-            text-overflow: ellipsis;
           }
           .noboderall td{
             border:none;
