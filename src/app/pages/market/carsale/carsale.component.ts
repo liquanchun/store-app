@@ -667,6 +667,15 @@ export class CarsaleComponent implements OnInit {
             border-left:none;
             border-right:none;
           }
+          table {
+            table-layout: fixed;
+          }
+            
+          td {
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+          }
           .noboderall td{
             border:none;
           }
