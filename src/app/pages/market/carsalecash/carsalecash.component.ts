@@ -685,8 +685,14 @@ export class CarSaleCashComponent implements OnInit {
             border:1px solid black;
             padding:3px;
           }
+          .nowarptable{
+            table-layout: fixed;
+          }
           .valueText{
             text-align:center;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
           }
           .textright{
             text-align:right;

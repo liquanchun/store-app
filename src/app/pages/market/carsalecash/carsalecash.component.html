@@ -60,17 +60,17 @@
       <tbody>
         <tr>
           <td style="font-size:9px;text-align: left;">BMW授权经销商</td>
-          <td style="font-size:18px;text-align: center;font-weight: bold">销售价款明细单</td>
+          <td style="font-size:18px;text-align: center;font-weight: bold">销售交款明细单</td>
           <td style="font-size:9px;text-align: right;">北京博瑞宝</td>
         </tr>
       </tbody>
     </table>
     <p style="text-align:left">开票日期：{{carsale.InvoiceDate}}</p>
 
-    <table class="table table-bordered table-sm">
+    <table class="table nowarptable table-bordered table-sm">
       <tbody>
         <tr>
-          <td style="width:15px;" rowspan="3">客户信息</td>
+          <td style="width:30px;" rowspan="3">客户信息</td>
           <td>开票名称</td>
           <td class="valueText">{{customer.InvoiceName}}</td>
           <td>交款人姓名</td>
@@ -88,7 +88,7 @@
         </tr>
 
         <tr>
-          <td style="width:15px;" rowspan="2">车型信息</td>
+          <td style="width:30px;" rowspan="2">车型信息</td>
           <td>车型</td>
           <td class="valueText">{{carinfo.CarType}}</td>
           <td>厂家指导价</td>
@@ -102,7 +102,7 @@
         </tr>
 
         <tr>
-          <td style="width:15px;" rowspan="3">购买信息</td>
+          <td style="width:30px;" rowspan="3">购买信息</td>
           <td>购买性质</td>
           <td class="valueText">{{carsale.BuyType}}</td>
           <td>购买资质</td>
@@ -122,7 +122,7 @@
         </tr>
 
         <tr>
-          <td style="height:20px;line-height:20px;width:15px;" rowspan="12">付款信息单位：（元）</td>
+          <td style="height:20px;line-height:20px;width:30px;" rowspan="12">付款信息单位：（元）</td>
           <td>新车款金额</td>
           <td class="valueText">{{carsale.NewCarFee | numberSeparator}}</td>
           <td>分期首付款金额</td>
@@ -211,7 +211,7 @@
     <p style="text-align:center;font-size: 18px;font-weight: bold">销售出库单</p>
     <p style="text-align:right;margin-top:-20px;">日期：{{carsale.InvoiceDate}}</p>
 
-    <table class="table table-bordered table-sm">
+    <table class="table nowarptable table-bordered table-sm">
       <tbody>
         <tr>
           <td class="valueText">车型</td>
@@ -227,7 +227,7 @@
           <td class="valueText">{{carinfo.CarConfig}}</td>
           <td class="valueText">{{carinfo.Vinno}}</td>
           <td class="valueText">壹</td>
-          <td class="valueText">{{carinfo.WholePrice}}</td>
+          <td class="valueText">{{carsale.NewCarFee | numberSeparator}}</td>
         </tr>
         <tr>
           <td colspan="2">备注</td>
@@ -246,21 +246,21 @@
         <tr>
           <td rowspan="3"><strong>赠送批准明细</strong></td>
           <td>装饰费</td>
-          <td class="valueText">{{carsale.ZhuangxFee}}</td>
+          <td style="width:20%" class="valueText">{{carsale.ZhuangxFee | numberSeparator}}</td>
           <td>汽油费</td>
-          <td class="valueText">{{carsale.GasFee}}</td>
+          <td style="width:20%" class="valueText">{{carsale.GasFee | numberSeparator}}</td>
         </tr>
         <tr>
           <td>保险费</td>
-          <td class="valueText">{{carsale.BaoxianFee}}</td>
+          <td style="width:20%" class="valueText">{{carsale.BaoxianFee | numberSeparator}}</td>
           <td>维修费</td>
-          <td class="valueText">{{carsale.MaintainFee}}</td>
+          <td style="width:20%" class="valueText">{{carsale.MaintainFee | numberSeparator}}</td>
         </tr>
         <tr>
           <td>佣金费</td>
-          <td class="valueText">{{carsale.Commission}}</td>
+          <td style="width:20%" class="valueText">{{carsale.Commission | numberSeparator}}</td>
           <td>其他</td>
-          <td class="valueText">{{carsale.OtherFee3}}</td>
+          <td style="width:20%" class="valueText">{{carsale.OtherFee3 | numberSeparator}}</td>
         </tr>
       </tbody>
     </table>
