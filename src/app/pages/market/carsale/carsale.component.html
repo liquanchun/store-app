@@ -116,10 +116,10 @@
           <td>{{printOrder.CarType}}</td>
           <td>{{printOrder.CarColor}}</td>
           <td>{{printOrder.CarTrim}}</td>
-          <td>{{printOrder.GuidePrice | numberSeparator}}</td>
-          <td>{{printOrder.SalePrice | numberSeparator}}</td>
-          <td rowspan="3">{{printOrder.Count}}</td>
-          <td rowspan="3" style="font-size:13px;font-weight:bold;">{{printOrder.Deposit | numberSeparator}}</td>
+          <td class="textright">{{printOrder.GuidePrice | numberSeparator}}</td>
+          <td class="textright">{{printOrder.SalePrice | numberSeparator}}</td>
+          <td class="textcenter" rowspan="3">{{printOrder.Count}}</td>
+          <td class="textright" rowspan="3" style="font-size:13px;font-weight:bold;">{{printOrder.Deposit | numberSeparator}}</td>
         </tr>
         <tr>
           <td>车架号码</td>
@@ -131,7 +131,7 @@
           <td>个性配置</td>
           <td colspan="2">{{printOrder.SelfConfig}}</td>
           <td>优惠点位或金额</td>
-          <td>{{printOrder.Discount}}</td>
+          <td class="textright">{{printOrder.Discount}}</td>
         </tr>
         <tr>
           <td>订金金额（大写）</td>
@@ -152,9 +152,9 @@
       </thead>
       <tbody>
         <tr *ngFor="let item of serviceItem1">
-          <td>{{item.itemName}}</td>
-          <td>{{item.service}}</td>
-          <td>{{item.price | numberSeparator}}</td>
+          <td class="textcenter">{{item.itemName}}</td>
+          <td class="textcenter">{{item.service}}</td>
+          <td class="textright">{{item.price | numberSeparator}}</td>
         </tr>
       </tbody>
     </table>
@@ -162,14 +162,14 @@
     <table class="table table-bordered table-sm">
       <tbody>
         <tr *ngFor="let item of htmlTd">
-          <td>{{item.itemName1}}</td>
-          <td>{{item.price1 | numberSeparator}}</td>
-          <td>{{item.itemName2}}</td>
-          <td>{{item.price2 | numberSeparator}}</td>
+          <td class="textcenter">{{item.itemName1}}</td>
+          <td class="textright">{{item.price1 | numberSeparator}}</td>
+          <td class="textcenter">{{item.itemName2}}</td>
+          <td class="textright">{{item.price2 | numberSeparator}}</td>
         </tr>
         <tr>
           <td colspan="2">增值预估费用合计金额（小写）</td>
-          <td colspan="2">{{printOrder.PredictFee | numberSeparator}}</td>
+          <td class="textright" colspan="2">{{printOrder.PredictFee | numberSeparator}}</td>
         </tr>
       </tbody>
     </table>

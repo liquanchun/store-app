@@ -492,7 +492,7 @@ export class CarSaleCashComponent implements OnInit {
     if (this.carsale["AuditResult"] == "通过") {
       this._state.notifyDataChanged("messagebox", {
         type: "warning",
-        msg: "已审核通过，不能修改",
+        msg: "已审核通过，不能修改。",
         time: new Date().getTime()
       });
       return;
@@ -510,7 +510,7 @@ export class CarSaleCashComponent implements OnInit {
       if (this.carsale["AuditResult"] == "通过") {
         this._state.notifyDataChanged("messagebox", {
           type: "warning",
-          msg: "已审核通过，不能修改",
+          msg: "已审核通过，不能删除。",
           time: new Date().getTime()
         });
         return;
@@ -693,6 +693,9 @@ export class CarSaleCashComponent implements OnInit {
             overflow: hidden;
             white-space: nowrap;
             text-overflow: ellipsis;
+          }
+          .textcenter{
+            text-align:center;
           }
           .textright{
             text-align:right;

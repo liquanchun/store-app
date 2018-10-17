@@ -440,6 +440,9 @@ export class FormComponent implements OnInit {
         if (f.type === "datepicker" && formValue[f.name]) {
           formValue[f.name] = this._common.getDateString(formValue[f.name]);
         }
+        if (f.name === "Creator") {
+          formValue[f.name] = sessionStorage.getItem("userName");
+        }
       });
       console.log(formValue);
       that.formService.create(that.formView["ViewName"], formValue).then(
@@ -459,9 +462,18 @@ export class FormComponent implements OnInit {
 
   onEdit(event) {
     this.updateData = event.data;
+    if (this.selectedRow && this.selectedRow["Creator"]) {
+      if (sessionStorage.getItem("userName") != this.selectedRow["Creator"]) {
+        this.toastOptions.msg = `该客户创建人是${
+          this.selectedRow["Creator"]
+        }，你不能修改。`;
+        this.toastyService.warning(this.toastOptions);
+        return;
+      }
+    }
     if (this.selectedRow && _.keys(this.selectedRow).includes("CanUpdate")) {
       if (!this.selectedRow["CanUpdate"]) {
-        this.toastOptions.msg = "销售订单已审核，不能修改。";
+        this.toastOptions.msg = "该客户销售订单已审核，不能修改。";
         this.toastyService.warning(this.toastOptions);
         return;
       }
@@ -501,6 +513,9 @@ export class FormComponent implements OnInit {
             formViewData[f.name] = this._common.getDateString(dv);
           }
         }
+        if (f.name === "Creator") {
+          formViewData[f.name] = sessionStorage.getItem("userName");
+        }
       });
       formViewData["Id"] = this.recordId;
       console.log(formViewData);
@@ -520,9 +535,18 @@ export class FormComponent implements OnInit {
   }
 
   onDelete(event) {
+    if (this.selectedRow && this.selectedRow["Creator"]) {
+      if (sessionStorage.getItem("userName") != this.selectedRow["Creator"]) {
+        this.toastOptions.msg = `该客户创建人是${
+          this.selectedRow["Creator"]
+        }，你不能删除。`;
+        this.toastyService.warning(this.toastOptions);
+        return;
+      }
+    }
     if (this.selectedRow && _.keys(this.selectedRow).includes("CanUpdate")) {
       if (!this.selectedRow["CanUpdate"]) {
-        this.toastOptions.msg = "销售订单已审核，不能修改。";
+        this.toastOptions.msg = "该客户销售订单已审核，不能删除。";
         this.toastyService.warning(this.toastOptions);
         return;
       }

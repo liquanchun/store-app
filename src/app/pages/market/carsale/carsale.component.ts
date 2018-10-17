@@ -482,20 +482,43 @@ export class CarsaleComponent implements OnInit {
     if (this.printOrder["AuditResult"] == "通过") {
       this._state.notifyDataChanged("messagebox", {
         type: "warning",
-        msg: "已审核通过，不能修改",
+        msg: "已审核通过，不能修改。",
         time: new Date().getTime()
       });
       return;
+    }
+    if (this.printOrder && this.printOrder["Creator"]) {
+      if (sessionStorage.getItem("userName") != this.printOrder["Creator"]) {
+        this._state.notifyDataChanged("messagebox", {
+          type: "warning",
+          msg: `该单创建人是${this.printOrder["Creator"]}，你不能修改。`,
+          time: new Date().getTime()
+        });
+        return;
+      }
     }
     this.router.navigate(["/pages/market/carsalenew", id]);
   }
 
   onDelete(event) {
+    
     if (window.confirm("你确定要删除吗?")) {
+
+      if (this.printOrder && this.printOrder["Creator"]) {
+        if (sessionStorage.getItem("userName") != this.printOrder["Creator"]) {
+          this._state.notifyDataChanged("messagebox", {
+            type: "warning",
+            msg: `该单创建人是${this.printOrder["Creator"]}，你不能删除。`,
+            time: new Date().getTime()
+          });
+          return;
+        }
+      }
+
       if (this.printOrder["AuditResult"] == "通过") {
         this._state.notifyDataChanged("messagebox", {
           type: "warning",
-          msg: "已审核通过，不能修改",
+          msg: "已审核通过，不能删除。",
           time: new Date().getTime()
         });
         return;
@@ -676,6 +699,9 @@ export class CarsaleComponent implements OnInit {
           }
           .textleft{
             text-align:left;
+          }
+          .textright{
+            text-align:right;
           }
           .textcenter{
             text-align:center;
