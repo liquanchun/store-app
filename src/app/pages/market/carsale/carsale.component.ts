@@ -266,15 +266,13 @@ export class CarsaleComponent implements OnInit {
           that.htmlGiveTd = [];
           index = 0;
           for (index in zsitem) {
-            let i = index * 3;
+            let i = index * 2;
             if (i < zsitem.length) {
               that.htmlGiveTd.push({
                 itemName1: zsitem[i].itemName,
                 service1: zsitem[i].service,
                 itemName2: i + 1 < zsitem.length ? zsitem[i + 1].itemName : "",
-                service2: i + 1 < zsitem.length ? zsitem[i + 1].service : "",
-                itemName3: i + 2 < zsitem.length ? zsitem[i + 2].itemName : "",
-                service3: i + 2 < zsitem.length ? zsitem[i + 2].service : ""
+                service2: i + 1 < zsitem.length ? zsitem[i + 1].service : ""
               });
             }
           }
@@ -283,9 +281,6 @@ export class CarsaleComponent implements OnInit {
           }
           if (that.htmlGiveTd.length == 1) {
             that.marginbottom = "40px";
-          }
-          if (that.htmlGiveTd.length == 2) {
-            that.marginbottom = "2px";
           }
           that.giveItem = zsitem;
         }
@@ -693,6 +688,7 @@ export class CarsaleComponent implements OnInit {
             overflow: hidden;
             white-space: nowrap;
             text-overflow: ellipsis;
+            padding:1px 2px;
           }
           .noboder td{
             border-left:none;
