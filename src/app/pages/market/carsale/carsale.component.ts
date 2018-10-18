@@ -250,13 +250,15 @@ export class CarsaleComponent implements OnInit {
 
           let index;
           for (index in that.serviceItem2) {
-            let i = index * 2;
+            let i = index * 3;
             if (i < that.serviceItem2.length) {
               that.htmlTd.push({
                 itemName1: that.serviceItem2[i].itemName,
                 price1: that.serviceItem2[i].price,
-                itemName2: that.serviceItem2[i + 1].itemName,
-                price2: that.serviceItem2[i + 1].price
+                itemName2: i + 1 < that.serviceItem2.length ? that.serviceItem2[i + 1].itemName : "",
+                price2: i + 1 < that.serviceItem2.length ? that.serviceItem2[i + 1].price : "",
+                itemName3: i + 2 < that.serviceItem2.length ? that.serviceItem2[i + 2].itemName : "",
+                price3: i + 2 < that.serviceItem2.length ? that.serviceItem2[i + 2].price : ""
               });
             }
           }
@@ -264,21 +266,23 @@ export class CarsaleComponent implements OnInit {
           that.htmlGiveTd = [];
           index = 0;
           for (index in zsitem) {
-            let i = index * 2;
+            let i = index * 3;
             if (i < zsitem.length) {
               that.htmlGiveTd.push({
                 itemName1: zsitem[i].itemName,
                 service1: zsitem[i].service,
                 itemName2: i + 1 < zsitem.length ? zsitem[i + 1].itemName : "",
-                service2: i + 1 < zsitem.length ? zsitem[i + 1].service : ""
+                service2: i + 1 < zsitem.length ? zsitem[i + 1].service : "",
+                itemName3: i + 2 < zsitem.length ? zsitem[i + 2].itemName : "",
+                service3: i + 2 < zsitem.length ? zsitem[i + 2].service : ""
               });
             }
           }
           if (that.htmlGiveTd.length == 0) {
-            that.marginbottom = "40px";
+            that.marginbottom = "60px";
           }
           if (that.htmlGiveTd.length == 1) {
-            that.marginbottom = "20px";
+            that.marginbottom = "40px";
           }
           if (that.htmlGiveTd.length == 2) {
             that.marginbottom = "2px";

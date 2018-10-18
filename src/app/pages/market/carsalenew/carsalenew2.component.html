@@ -52,7 +52,7 @@
         <tr>
           <td>
             <button [disabled]="!isEnable" placement="right" (shown)="showPopCustomer()" #pcust="ngbPopover"
-              [ngbPopover]="popContentCustomer" popoverTitle="客户信息列表" type="button" class="btn btn-success btn-sm"
+              [ngbPopover]="popContentCustomer" popoverTitle="客户信息列表" type="button" class="btn btn-light btn-sm"
               container="body">
               <i class="fa fa-pencil" aria-hidden="true"></i> 选择客户</button>
             客户名称</td>
@@ -83,7 +83,7 @@
     <div style="padding:8px;">一、订购车型、数量及价款</div>
     <div>
       <button [disabled]="!isEnable" placement="right" (shown)="showPopCarInfo()" #pcar="ngbPopover" [ngbPopover]="popContentCar"
-        popoverTitle="产品信息列表" type="button" class="btn btn-success btn-sm" container="body">
+        popoverTitle="产品信息列表" type="button" class="btn btn-light btn-sm" container="body">
         <i class="fa fa-pencil" aria-hidden="true"></i> 选择车辆</button>
     </div>
     <table class="table table-bordered table-sm">
@@ -156,7 +156,7 @@
     </table>
 
     <div style="padding:8px;font-weight: bold">赠送商品或服务产品</div>
-    <button [disabled]="!isEnable" type="button" class="btn btn-success btn-sm" (click)="newItem()">
+    <button [disabled]="!isEnable" type="button" class="btn btn-light btn-sm" (click)="newItem()">
       <i class="fa fa-pencil" aria-hidden="true"></i> 添加项目</button>
     <table class="table table-bordered table-sm">
       <thead>
