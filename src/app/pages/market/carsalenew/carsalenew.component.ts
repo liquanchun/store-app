@@ -312,7 +312,7 @@ export class CarSaleNewComponent implements OnInit {
         zero: function(callback) {
           that.formService.getForms("vw_select_car").then(
             data => {
-              that.popCarInfoGrid = data.Data;
+              that.popCarInfoGrid.load(data.Data);
               callback(null, 0);
             },
             err => {}
@@ -331,7 +331,7 @@ export class CarSaleNewComponent implements OnInit {
           that.formService.getForms("car_customer").then(
             data => {
               that.custinfoDataList = data.Data;
-              that.popCusInfoGrid = data.Data;
+              that.popCusInfoGrid.load(data.Data);
               callback(null, 2);
             },
             err => {}
@@ -424,14 +424,14 @@ export class CarSaleNewComponent implements OnInit {
     );
     this.formService.getForms("vw_select_car").then(
       data => {
-        this.popCarInfoGrid = data.Data;
+        this.popCarInfoGrid.load(data.Data);
       },
       err => {}
     );
     this.formService.getForms("car_customer").then(
       data => {
         this.custinfoDataList = data.Data;
-        this.popCusInfoGrid = data.Data;
+        this.popCusInfoGrid.load(data.Data);
       },
       err => {}
     );
@@ -497,7 +497,7 @@ export class CarSaleNewComponent implements OnInit {
   }
   onSearchCus(query: string = "") {
     this.popCusInfoGrid.setFilter(
-      [{ field: "Name", search: query }, { field: "Phone", search: query }],
+      [{ field: "Name", search: query }, { field: "Phone", search: query }, { field: "LinkMan", search: query }],
       false
     );
   }

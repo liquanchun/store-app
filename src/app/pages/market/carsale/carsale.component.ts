@@ -277,9 +277,12 @@ export class CarsaleComponent implements OnInit {
             }
           }
           if (that.htmlGiveTd.length == 0) {
-            that.marginbottom = "60px";
+            that.marginbottom = "80px";
           }
           if (that.htmlGiveTd.length == 1) {
+            that.marginbottom = "60px";
+          }
+          if (that.htmlGiveTd.length == 2) {
             that.marginbottom = "40px";
           }
           that.giveItem = zsitem;
@@ -688,7 +691,7 @@ export class CarsaleComponent implements OnInit {
             overflow: hidden;
             white-space: nowrap;
             text-overflow: ellipsis;
-            padding:1px 2px;
+            padding:1px 3px;
           }
           .noboder td{
             border-left:none;
