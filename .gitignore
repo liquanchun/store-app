@@ -53,3 +53,7 @@ Thumbs.db
 *.docx
 *.rar
 src/app/providers/config.ts
+package-lock.json
+package-lock.json
+package.json
+src/app/providers/config.ts
