@@ -219,7 +219,11 @@ export class CarSaleCashNewComponent implements OnInit {
                 data => {
                   if (data && data.Data) {
                     const bookitem = _.filter(data.Data, f => {
-                      return f["ItemType"] != "自费" && f["ItemType"] != "免费";
+                      return (
+                        f["IsValid"] == 1 &&
+                        f["ItemType"] != "自费" &&
+                        f["ItemType"] != "免费"
+                      );
                     });
                     _.each(bookitem, f => {
                       if (f["FieldName"]) {
@@ -227,7 +231,10 @@ export class CarSaleCashNewComponent implements OnInit {
                       }
                     });
                     that.partItem = _.filter(data.Data, f => {
-                      return f["ItemType"] == "自费" || f["ItemType"] == "免费";
+                      return (
+                        (f["IsValid"] == 1 && (f["ItemType"] == "自费") ||
+                        f["ItemType"] == "免费")
+                      );
                     });
                   }
                   callback(null, 6);
@@ -372,7 +379,7 @@ export class CarSaleCashNewComponent implements OnInit {
     });
     if (it && it["Id"]) {
       this.formService
-        .delete("car_booking_item", it["Id"])
+        .delete2("car_booking_item", it["Id"])
         .then(data => {}, err => {});
     }
     _.remove(this.partItem, f => {

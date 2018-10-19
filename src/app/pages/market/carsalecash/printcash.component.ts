@@ -10,6 +10,7 @@ import * as _ from 'lodash';
         <button *ngIf="value.Creator == currentUser" type="button" style="line-height: 15px;" class="btn btn-light btn-sm tablebutton" (click)="onDetail()">详情</button>
         <button *ngIf="value.Creator == currentUser" type="button" style="line-height: 15px;" class="btn btn-light btn-sm tablebutton" (click)="onClick()">打印交款明细</button>
         <button *ngIf="value.Creator == currentUser" type="button" style="line-height: 15px;" class="btn btn-light btn-sm tablebutton" (click)="onClick2()">打印精品明细</button>
+        <button *ngIf="value.Creator == currentUser" type="button" style="line-height: 15px;" class="btn btn-light btn-sm tablebutton" (click)="onClick3()">打印销售合同</button>
         <button *ngIf="value.AuditResult != '通过'" type="button" style="line-height: 15px;" class="btn btn-light btn-sm tablebutton" (click)="onAudit()">审核</button>
         <button *ngIf="value.AuditResult == '通过'" type="button" style="line-height: 15px;" class="btn btn-light btn-sm tablebutton" (click)="onAuditNot()">反审核</button>
       </div>
@@ -67,5 +68,11 @@ export class PrintCashComponent implements ViewCell, OnInit {
 
     const getTimestamp = new Date().getTime();
     this._state.notifyDataChanged('print.carsalecash2', { id: this.value.Id, time: getTimestamp });
+  }
+  onClick3() {
+    this.save.emit(this.rowData);
+
+    const getTimestamp = new Date().getTime();
+    this._state.notifyDataChanged('print.carsalecash3', { id: this.value.Id, time: getTimestamp });
   }
 }

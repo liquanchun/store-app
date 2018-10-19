@@ -262,6 +262,22 @@ export class CarSaleCashComponent implements OnInit {
         );
       }
     });
+
+    this._state.subscribe("print.carsalecash3", data => {
+      this.carsale = _.find(this.carsaleData, f => {
+        return f["Id"] == data.id;
+      });
+      if (this.carsale) {
+        this.getPartItem();
+        _.delay(
+          function(that) {
+            that.print3();
+          },
+          500,
+          this
+        );
+      }
+    });
   }
   getPartItem() {
     this.formService
@@ -270,13 +286,13 @@ export class CarSaleCashComponent implements OnInit {
         data => {
           if (data && data.Data) {
             this.partItemDN =_.orderBy(_.filter(data.Data, f => {
-              return f["Service"] == "店内" && (f["ItemType"] == "自费" || f["ItemType"] == "免费");
+              return f["IsValid"] == 1 && f["Service"] == "店内" && (f["ItemType"] == "自费" || f["ItemType"] == "免费");
             }),'ItemType','desc');
             this.partAmountDN = _.sumBy(this.partItemDN, f => {
               return f["Count"] * f["Price"];
             });
             this.partItemDY = _.orderBy(_.filter(data.Data, f => {
-              return f["Service"] == "合作店" && (f["ItemType"] == "自费" || f["ItemType"] == "免费");
+              return f["IsValid"] == 1 && f["Service"] == "合作店" && (f["ItemType"] == "自费" || f["ItemType"] == "免费");
             }),'ItemType','desc');
             this.partAmountDY = _.sumBy(this.partItemDY, f => {
               return f["Count"] * f["Price"];
@@ -757,6 +773,59 @@ export class CarSaleCashComponent implements OnInit {
           }
           .valueText{
             text-align:center;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+          }
+          .textright{
+            text-align:right;
+          }
+          .noboder td{
+            border-left:none;
+            border-right:none;
+          }
+          .noboderall td{
+            border:none;
+          }
+          </style>
+        </head>
+        <body onload="window.print();window.close()">${printContents}</body>
+      </html>`);
+    popupWin.document.close();
+  }
+
+  print3() {
+    let printContents, popupWin;
+    printContents = document.getElementById("printContact").innerHTML;
+    popupWin = window.open(
+      "",
+      "_blank",
+      "top=0,left=0,height=1098px,width=900px"
+    );
+    popupWin.document.open();
+    popupWin.document.write(`
+      <html>
+        <head>
+          <title style="font-size: 12px;"></title>
+          <style>
+          table{
+            width: 740px;
+            border-collapse: collapse;
+            font-size: 14px;
+            border:1px solid black;
+          }
+          p{
+            font-size: 14px;
+          }
+          th,td{
+            border:1px solid black;
+            padding:3px;
+          }
+          .valueText{
+            text-align:center;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
           }
           .textright{
             text-align:right;

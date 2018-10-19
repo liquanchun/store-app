@@ -33,7 +33,9 @@ export class FormService {
   delete(viewname: string, id: any) {
     return this._httpService.delete2('delete/' + viewname, id);
   }
-
+  delete2(viewname: string, id: any) {
+    return this._httpService.delete2('delete2/' + viewname, id);
+  }
   create(view: string, user: any) {
     return this._httpService.create2(this.modelName + '/' + view, user);
   }

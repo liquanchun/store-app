@@ -387,3 +387,104 @@
     </div>
   </div>
 </div>
+
+<div id="printContact" style="display:none;">
+  <table style="border:none" class="table noboderall table-sm">
+    <tbody>
+      <tr>
+        <td style="font-size:9px;text-align: left;">BMW授权经销商</td>
+        <td style="font-size:18px;text-align: center;font-weight: bold">BMW新车购销合同</td>
+        <td style="font-size:9px;text-align: right;">北京博瑞宝</td>
+      </tr>
+    </tbody>
+  </table>
+  <p style="text-align:right;margin-right: 200px;">编号：</p>
+  <div style="float: left;width: 50%">
+    甲方：北京博瑞宝汽车销售服务有限公司<br>
+    地址：北京市丰台区西罗园南里44号<br>
+    邮编：100011<br>
+    电话：87839999<br>
+    传真：<br>
+    销售顾问：宫岩<br>
+  </div>
+  <div style="float: left;width: 50%">
+    乙方: 刘栋<br>
+    证件号：110111198602070038<br>
+    地址:北京市房山区城关街道学房胡同7号<br>
+    电话：18210271184<br>
+    邮编：100000<br>
+  </div>
+
+  <p style="padding-left: 30px;">乙方就订购所需车辆（以下简称[合同车辆]）事宜，与甲方达成一致意见，双方于 2018 年 6 月_29日签订[本合同]。</p>
+  <p style="padding-left: 30px;"><strong> 第一条、[合同车辆]规格及价款</strong></p>
+  <table class="table table-bordered table-sm ">
+    <tbody>
+      <tr>
+        <td class="valueText">车型</td>
+        <td class="valueText">颜色</td>
+        <td class="valueText">底盘号</td>
+        <td class="valueText">指导价格</td>
+        <td class="valueText">成交车价</td>
+      </tr>
+      <tr>
+        <td class="valueText">{{carinfo.CarType}}</td>
+        <td class="valueText">{{carinfo.CarColor}}</td>
+        <td class="textright">{{carinfo.Vinno}}</td>
+        <td class="textright">{{carinfo.GuidePrice | numberSeparator}}</td>
+        <td class="textright">{{carsale.NewCarFee | numberSeparator}}</td>
+      </tr>
+      <tr>
+        <td class="valueText" colspan="5">其他相关费用详见附件交款明细单，乙方认可并签字确认</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p style="padding-left: 30px;"><strong> 第二条 权利和义务</strong></p>
+  <p style="padding-left: 30px;">1、乙方应如实提供购车所需的有效证明文件和资料，并按本合同约定交纳车款和办理其他手续所应交纳的费用。</p>
+  <p style="padding-left: 30px;">2、乙方未按约定时间付齐全部车款，甲方有权对乙方所订购车辆另行出售，所交订金按本合同约定处理。</p>
+  <p style="padding-left: 30px;"><strong> 第三条  订金</strong></p>
+  <p style="padding-left: 30px;">乙方如在本合同签订之日向甲方一次性付清全部车款的，无需支付订金。除此之外，乙方应在本合同签订之日，向甲方支付人民币元作为订金。订金按本合同第四条的约定，抵作车款；   乙方不履行本合同约定的义务的，乙方无权要求返还订金。</p>
+  <p style="padding-left: 30px;"><strong> 第四条  付款方式</strong></p>
+  <p style="padding-left: 30px;">1、乙方选择按下述第 2 种方式，如期足额将车款支付给甲方。</p>
+  <p style="padding-left: 30px;">（1）一次性付款方式：</p>
+  <p style="padding-left: 30px;">乙方在年月日前，将全部车款扣除订金后的余额，向甲方一次性付清（订金抵作车款）。</p>
+  <p style="padding-left: 30px;">（2）贷款方式：</p>
+  <p style="padding-left: 30px;">乙方在 2018  年6 月29 日前，向甲方支付首付款人民币114830元（其中含订金，订金抵作首付款，即乙方实际付款金额为首付款扣除订金后的金额）；余款114830人民币元，由乙方通过向宝马金融机构申请汽车消费贷款的方式支付，在2020年7月30日前付清，贷款期限：24期</p>
+  <p style="padding-left: 30px;">2、以下情况视为乙方未按本合同约定时间付款，应当向甲方承担违约责任。</p>
+  <p style="padding-left: 30px;">（1）乙方未能在以上约定时间内向金融机构办妥有关汽车消费贷款事宜（以实际发放贷款到达甲方账户为准）。</p>
+  <p style="padding-left: 30px;">（2）乙方未能在以上约定时间内足额办出贷款，且余额未按时自行补足支付。</p>
+  <p style="padding-left: 30px;"><strong> 第五条  交车与验收</strong></p>
+  <p style="padding-left: 30px;">1、交车时间：  2018 年6 月29日前。但是，在乙方付清全部购车款之前，甲方有权拒绝交车，交车时间顺延。</p>
+  <p style="padding-left: 30px;">2、交车方式：乙方自提。</p>
+  <p style="padding-left: 30px;">3、交车地点：甲方营业场所。</p>
+  <p style="padding-left: 30px;">4、乙方在车辆交接时应当场验收。乙方对车辆外观、基本使用功能、质量、随车资料及备件、工具等应进行谨慎、合理、认真地检查确认，如有异议，应当场向甲方提出，如无异议则视为甲方交付的车辆验收合格、数量和质量均符合本合同的要求。</p>
+  <p style="padding-left: 30px;">5、验收完成后，甲方将车辆交由乙方实际支配时，双方应共同签署验收交接文件。验收交接文件签署后即视为车辆正式交付。自车辆交付时起，车辆的风险责任由乙方承担。</p>
+  <p style="padding-left: 30px;"><strong>  第六条  三包</strong></p>
+  <p style="padding-left: 30px;">1、车辆售后服务以生产厂商三包凭证、车辆说明书和保养手册为准。</p>
+  <p style="padding-left: 30px;">2、在包修期内车辆出现质量问题或需要保养的，乙方应在生产厂商公布或双方约定的特约维修站进行修理和保养。<strong>乙方在其他维修站修理车辆造成车辆损坏、多次维修或维修时间长等后果的，甲方不承担更换零部件或退换车等任何责任。</strong></p>
+  <p style="padding-left: 30px;">3、乙方使用车辆前应仔细阅读产品使用说明书、三包凭证、维修保养手册等相关资料，特别是所载明的安全注意事项。<strong>在包修期内乙方人为破坏、使用、保养装潢、改装车辆不当，或到生产厂商认定范围以外的维修站进行修理的，视为乙方未按照使用说明书要求正确使用、维护、修理车辆或对车辆的处置不当，因此产生的质量问题甲方不承担任何责任。</strong></p>
+  <p style="padding-left: 30px;"><strong>  第七条  违约责任</strong></p>
+  <p style="padding-left: 30px;">1、乙方未按时付款的，自迟延之日起至实际付款之日止，按乙方应付款依每日万分之一的标准向甲方支付违约金。迟延付款达30日时，甲方有权解除本合同，已收订金不予返还。</p>
+  <p style="padding-left: 30px;">2、如车辆到达甲方，且甲方通知乙方提车，乙方迟延提车达30日时，甲方有权解除本合同，已收订金不予返还。</p>
+  <p style="padding-left: 30px;">3、如乙方采用贷款方式付款，在车辆办理上牌手续后，因乙方迟延付款达30日而导致甲方解除本合同的，则乙方已支付的购车首付款不予退还，用于向甲方赔偿新车因上牌成为二手车的价值贬值损失、违约金，以及车船税、购置税、验车上牌费、过户费等相关税费损失。乙方还应按甲方要求提供相关证件资料并将车辆过户到甲方指定的第三人名下。</p>
+  <p style="padding-left: 30px;"><strong>  第八条  特别约定</strong></p>
+  <p style="padding-left: 30px;">1、乙方确认：甲方已向乙方书面提示了《北京市小客车数量调控暂行规定》（北京市人民政府令第227号）和《北京市小客车数量调控暂行规定实施细则》的具体内容，乙方已经充分知悉：由于北京市实施小客车数量调控措施，以摇号方式分配小客车配置指标，因此乙方如无更新指标而须以摇号获取配置指标的，则乙方所购车辆的上牌时间具有不确定性，取决于摇号结果，完全有可能在长时间等待后仍无法上牌。</p>
+  <p style="padding-left: 30px;">2、乙方承诺：<strong>购买本合同约定的车辆是乙方的真实意思表示，本合同对乙方具有法律约束力。自本合同签订后，乙方无权以与小客车指标、上牌有关的事由要求退车、换车，或要求甲方给予乙方赔偿、补偿等其他利益，或主张其他权利。</strong></p>
+  <p style="padding-left: 30px;">3、乙方支付订金、车款如需向银行等金融机构缴纳手续费的，手续费由乙方自行承担，上述手续费包括但不限于：刷卡手续费、转账手续费、汇款手续费等。</p>
+  <p style="padding-left: 30px;"><strong>  第九条  争议解决</strong></p>
+  <p style="padding-left: 30px;">本合同项下发生的争议，双方应协商解决，协商不成的，可向甲方所在地人民法院起诉解决。</p>
+  <p style="padding-left: 30px;"><strong>  第十条</strong>本合同一式二份，甲、乙双方各执一份，自双方签字、盖章之日起生效。</p>
+
+  <div style="float: left;width: 50%">
+      甲方（盖章）： <br><br>
+      甲方代表人签字：<br>
+      甲方销售经理签字：<br>
+      日期：<br>
+    </div>
+    <div style="float: left;width: 50%">
+      乙方（盖章）：<br><br>
+      乙方代表人签字：<br>
+      委托代理人（签字）：<br>
+      日期:<br>
+    </div>
+</div>
