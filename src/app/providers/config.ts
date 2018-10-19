@@ -24,8 +24,8 @@ export class Config {
 	tutorialVersion = '';
 	constructor() {
 		if (this.isProduct) {
-			this.server = 'http://localhost:8080/';
-			this.server2 = 'http://localhost:3000/';
+			this.server = 'http://140.143.129.65:8080/';
+			this.server2 = 'http://140.143.129.65:4000/';
 			this.pageSize = 20;
 
 			this.loadingText = '加载中,请稍候...';
@@ -40,8 +40,8 @@ export class Config {
 
 			this.tutorialVersion = "0.0.1";
 		} else {
-			this.server = 'http://localhost:8080/';
-			this.server2 = 'http://localhost:3000/';
+			this.server = 'http://140.143.129.65:8080/';
+			this.server2 = 'http://140.143.129.65:4000/';
 			this.pageSize = 20;
 			this.loadingText = '加载中,请稍候...';
 			// 30秒
