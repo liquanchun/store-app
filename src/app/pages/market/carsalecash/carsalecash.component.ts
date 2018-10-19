@@ -154,6 +154,12 @@ export class CarSaleCashComponent implements OnInit {
     "第三联 销售计划",
     "第四联 留档"
   ];
+  printPartSet: any = [
+    "第一联 财务收款",
+    "第二联 精品部安装使用",
+    "第三联 销售存档",
+  ];
+
   chineseMoney: string;
   partItemDN: any = [];
   partItemDY: any = [];
@@ -263,15 +269,15 @@ export class CarSaleCashComponent implements OnInit {
       .then(
         data => {
           if (data && data.Data) {
-            this.partItemDN = _.filter(data.Data, f => {
+            this.partItemDN =_.orderBy(_.filter(data.Data, f => {
               return f["Service"] == "店内" && (f["ItemType"] == "自费" || f["ItemType"] == "免费");
-            });
+            }),'ItemType','desc');
             this.partAmountDN = _.sumBy(this.partItemDN, f => {
               return f["Count"] * f["Price"];
             });
-            this.partItemDY = _.filter(data.Data, f => {
+            this.partItemDY = _.orderBy(_.filter(data.Data, f => {
               return f["Service"] == "合作店" && (f["ItemType"] == "自费" || f["ItemType"] == "免费");
-            });
+            }),'ItemType','desc');
             this.partAmountDY = _.sumBy(this.partItemDY, f => {
               return f["Count"] * f["Price"];
             });

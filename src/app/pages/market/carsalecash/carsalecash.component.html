@@ -270,117 +270,120 @@
 </div>
 
 <div id="printDivPart" *ngIf="partItemDN.length > 0" style="display:none;">
-  <p style="text-align:right;font-size: 10px;">北京博瑞宝</p>
-  <p style="text-align:center;font-size: 18px;font-weight: bold">BMW精品装饰（店内）明细单</p>
-  <p style="text-align:right;margin-top:-10px;">日期：{{carsale.InvoiceDate}}</p>
+  <div *ngFor="let pagename of printPartSet" style="height: 1064px;">
+    <div style="height: 530px;">
 
-  <table class="table table-bordered table-sm" style="margin-bottom:15px;">
-    <tbody>
-      <tr>
-        <td class="valueText">客户名称</td>
-        <td>{{customer.Name}}</td>
-        <td class="valueText">联系人</td>
-        <td>{{customer.LinkMan}}</td>
-        <td class="valueText">电话</td>
-        <td>{{customer.Phone}}</td>
-      </tr>
-      <tr>
-        <td class="valueText">车架号</td>
-        <td>{{carinfo.Vinno}}</td>
-        <td class="valueText">车型</td>
-        <td>{{carinfo.CarType}}</td>
-        <td class="valueText">颜色</td>
-        <td>{{carinfo.CarColor}}</td>
-      </tr>
-    </tbody>
-  </table>
+      <p style="text-align:right;font-size: 10px;">北京博瑞宝</p>
+      <p style="text-align:center;font-size: 18px;font-weight: bold">BMW精品（店内）装饰明细单</p>
+      <p style="text-align:right;margin-top:-10px;">日期：{{carsale.InvoiceDate}}</p>
 
-  <table class="table table-bordered table-sm ">
-    <tbody>
-      <tr>
-        <td class="valueText">分类</td>
-        <td class="valueText">项目</td>
-        <td class="valueText">数量</td>
-        <td class="valueText">价格</td>
-      </tr>
-      <tr *ngFor="let item of partItemDN">
-        <td class="valueText">{{item.ItemType}}</td>
-        <td class="valueText">{{item.ItemName}}</td>
-        <td class="textright">{{item.Count}}</td>
-        <td class="textright">{{item.Price | numberSeparator}}</td>
-      </tr>
-      <tr>
-        <td class="valueText" colspan="3">合计</td>
-        <td class="textright">{{partAmountDN | numberSeparator }}</td>
-      </tr>
-    </tbody>
-  </table>
+      <table class="table table-bordered table-sm" style="margin-bottom:15px;">
+        <tbody>
+          <tr>
+            <td class="valueText">客户名称</td>
+            <td>{{customer.Name}}</td>
+            <td class="valueText">联系人</td>
+            <td>{{customer.LinkMan}}</td>
+            <td class="valueText">电话</td>
+            <td>{{customer.Phone}}</td>
+          </tr>
+          <tr>
+            <td class="valueText">车架号</td>
+            <td>{{carinfo.Vinno}}</td>
+            <td class="valueText">车型</td>
+            <td>{{carinfo.CarType}}</td>
+            <td class="valueText">颜色</td>
+            <td>{{carinfo.CarColor}}</td>
+          </tr>
+        </tbody>
+      </table>
 
-  <p style="margin-top:15px;text-align:center;">
-    <span style="display:inline-block;margin-right:200px;">销售经理：</span><span style="display:inline-block;margin-right:200px;">销售计划：</span><span
-      style="display:inline-block;">销售顾问：</span><br><br>
-  </p>
-  <p style="margin-top:15px;text-align:right;">
-    <span style="font-size:9px;">第一联：财务收款留存 &nbsp;&nbsp;&nbsp;&nbsp; 第二联：精品部安装使用 &nbsp;&nbsp;&nbsp;&nbsp;第三联：销售档案留存
-    </span> <br>
-  </p>
+      <table class="table table-bordered table-sm ">
+        <tbody>
+          <tr>
+            <td class="valueText">分类</td>
+            <td class="valueText">项目</td>
+            <td class="valueText">数量</td>
+            <td class="valueText">价格</td>
+          </tr>
+          <tr *ngFor="let item of partItemDN">
+            <td class="valueText">{{item.ItemType}}</td>
+            <td class="valueText">{{item.ItemName}}</td>
+            <td class="textright">{{item.Count}}</td>
+            <td class="textright">{{item.Price | numberSeparator}}</td>
+          </tr>
+          <tr>
+            <td class="valueText" colspan="3">合计</td>
+            <td class="textright">{{partAmountDN | numberSeparator }}</td>
+          </tr>
+        </tbody>
+      </table>
 
-  <p style="margin-top: 20px;margin-bottom: 20px">
-    ------------------------------------------------------------------------------------------------------------------------
-  </p>
+      <p style="margin-top:10px;text-align:center;">
+        <span style="display:inline-block;margin-right:200px;">销售经理：</span><span style="display:inline-block;margin-right:200px;">销售计划：</span><span
+          style="display:inline-block;">销售顾问：</span><br><br>
+      </p>
+      <p style="margin-top:8px;text-align:right;">
+        <span style="font-size:9px;">{{pagename}}</span> <br>
+      </p>
+    </div>
+    <p style="height: 4px;">
+      ------------------------------------------------------------------------------------------------------------------------
+    </p>
+    <div>
+      <p style="text-align:right;font-size: 10px;">北京博瑞宝</p>
+      <p style="text-align:center;font-size: 18px;font-weight: bold">BMW精品（合作店）装饰明细单</p>
+      <p style="text-align:right;margin-top:-10px;">日期：{{carsale.InvoiceDate}}</p>
 
-  <p style="text-align:right;font-size: 10px;">北京博瑞宝</p>
-  <p style="text-align:center;font-size: 18px;font-weight: bold">BMW精品装饰（合作店）明细单</p>
-  <p style="text-align:right;margin-top:-10px;">日期：{{carsale.InvoiceDate}}</p>
+      <table class="table table-bordered table-sm" style="margin-bottom:15px;">
+        <tbody>
+          <tr>
+            <td class="valueText">客户名称</td>
+            <td>{{customer.Name}}</td>
+            <td class="valueText">联系人</td>
+            <td>{{customer.LinkMan}}</td>
+            <td class="valueText">电话</td>
+            <td>{{customer.Phone}}</td>
+          </tr>
+          <tr>
+            <td class="valueText">车架号</td>
+            <td>{{carinfo.Vinno}}</td>
+            <td class="valueText">车型</td>
+            <td>{{carinfo.CarType}}</td>
+            <td class="valueText">颜色</td>
+            <td>{{carinfo.CarColor}}</td>
+          </tr>
+        </tbody>
+      </table>
 
-  <table class="table table-bordered table-sm" style="margin-bottom:15px;">
-    <tbody>
-      <tr>
-        <td class="valueText">客户名称</td>
-        <td>{{customer.Name}}</td>
-        <td class="valueText">联系人</td>
-        <td>{{customer.LinkMan}}</td>
-        <td class="valueText">电话</td>
-        <td>{{customer.Phone}}</td>
-      </tr>
-      <tr>
-        <td class="valueText">车架号</td>
-        <td>{{carinfo.Vinno}}</td>
-        <td class="valueText">车型</td>
-        <td>{{carinfo.CarType}}</td>
-        <td class="valueText">颜色</td>
-        <td>{{carinfo.CarColor}}</td>
-      </tr>
-    </tbody>
-  </table>
+      <table class="table table-bordered table-sm ">
+        <tbody>
+          <tr>
+            <td class="valueText">分类</td>
+            <td class="valueText">项目</td>
+            <td class="valueText">数量</td>
+            <td class="valueText">价格</td>
+          </tr>
+          <tr *ngFor="let item of partItemDY">
+            <td class="valueText">{{item.ItemType}}</td>
+            <td class="valueText">{{item.ItemName}}</td>
+            <td class="textright">{{item.Count}}</td>
+            <td class="textright">{{item.Price | numberSeparator}}</td>
+          </tr>
+          <tr>
+            <td class="valueText" colspan="3">合计</td>
+            <td class="textright">{{partAmountDY | numberSeparator }}</td>
+          </tr>
+        </tbody>
+      </table>
 
-  <table class="table table-bordered table-sm ">
-    <tbody>
-      <tr>
-        <td class="valueText">分类</td>
-        <td class="valueText">项目</td>
-        <td class="valueText">数量</td>
-        <td class="valueText">价格</td>
-      </tr>
-      <tr *ngFor="let item of partItemDY">
-        <td class="valueText">{{item.ItemType}}</td>
-        <td class="valueText">{{item.ItemName}}</td>
-        <td class="textright">{{item.Count}}</td>
-        <td class="textright">{{item.Price | numberSeparator}}</td>
-      </tr>
-      <tr>
-        <td class="valueText" colspan="3">合计</td>
-        <td class="textright">{{partAmountDY | numberSeparator }}</td>
-      </tr>
-    </tbody>
-  </table>
-
-  <p style="margin-top:15px;text-align:center;">
-    <span style="display:inline-block;margin-right:200px;">销售经理：</span><span style="display:inline-block;margin-right:200px;">销售计划：</span><span
-      style="display:inline-block;">销售顾问：</span><br><br>
-  </p>
-  <p style="margin-top:15px;text-align:right;">
-    <span style="font-size:9px;">第一联：财务收款留存 &nbsp;&nbsp;&nbsp;&nbsp; 第二联：精品部安装使用 &nbsp;&nbsp;&nbsp;&nbsp;第三联：销售档案留存
-    </span> <br>
-  </p>
+      <p style="margin-top:10px;text-align:center;">
+        <span style="display:inline-block;margin-right:200px;">销售经理：</span><span style="display:inline-block;margin-right:200px;">销售计划：</span><span
+          style="display:inline-block;">销售顾问：</span><br><br>
+      </p>
+      <p style="margin-top:8px;text-align:right;">
+        <span style="font-size:9px;">{{pagename}}</span> <br>
+      </p>
+    </div>
+  </div>
 </div>
