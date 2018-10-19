@@ -339,7 +339,7 @@ export class CarSaleCashNewComponent implements OnInit {
           ItemType: "自费",
           ItemName: event.data.ItemName,
           Count: 1,
-          Service: "",
+          Service: event.data.PartType,
           Price: event.data.Price
         });
       }
@@ -359,7 +359,7 @@ export class CarSaleCashNewComponent implements OnInit {
           ItemType: "免费",
           ItemName: event.data.ItemName,
           Count: 1,
-          Service: "",
+          Service: event.data.PartType,
           Price: event.data.Price
         });
       }

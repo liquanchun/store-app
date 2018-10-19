@@ -155,8 +155,10 @@ export class CarSaleCashComponent implements OnInit {
     "第四联 留档"
   ];
   chineseMoney: string;
-  partItem: any;
-  partAmount: number = 0;
+  partItemDN: any = [];
+  partItemDY: any = [];
+  partAmountDN: number = 0;
+  partAmountDY: number = 0;
   constructor(
     private modalService: NgbModal,
     private formService: FormService,
@@ -261,10 +263,16 @@ export class CarSaleCashComponent implements OnInit {
       .then(
         data => {
           if (data && data.Data) {
-            this.partItem = _.filter(data.Data, f => {
-              return f["ItemType"] == "自费" || f["ItemType"] == "免费";
+            this.partItemDN = _.filter(data.Data, f => {
+              return f["Service"] == "店内" && (f["ItemType"] == "自费" || f["ItemType"] == "免费");
             });
-            this.partAmount = _.sumBy(this.partItem, f => {
+            this.partAmountDN = _.sumBy(this.partItemDN, f => {
+              return f["Count"] * f["Price"];
+            });
+            this.partItemDY = _.filter(data.Data, f => {
+              return f["Service"] == "合作店" && (f["ItemType"] == "自费" || f["ItemType"] == "免费");
+            });
+            this.partAmountDY = _.sumBy(this.partItemDY, f => {
               return f["Count"] * f["Price"];
             });
           }

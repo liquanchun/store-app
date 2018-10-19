@@ -163,6 +163,7 @@
     <thead>
       <tr>
         <th>分类</th>
+        <th>来源</th>
         <th>项目</th>
         <th>数量</th>
         <th>价格</th>
@@ -172,6 +173,7 @@
     <tbody>
       <tr *ngFor="let item of partItem">
         <td>{{item.ItemType}}</td>
+        <td>{{item.Service}}</td>
         <td>{{item.ItemName}}</td>
         <td><input [class.inputline]="!isEnable" [(ngModel)]="item.Count" type="text" class="form-control"></td>
         <td>{{item.Price}}</td>
