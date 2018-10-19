@@ -219,11 +219,7 @@ export class CarSaleCashNewComponent implements OnInit {
                 data => {
                   if (data && data.Data) {
                     const bookitem = _.filter(data.Data, f => {
-                      return (
-                        f["IsValid"] == 1 &&
-                        f["ItemType"] != "自费" &&
-                        f["ItemType"] != "免费"
-                      );
+                      return f["ItemType"] != "自费" && f["ItemType"] != "免费";
                     });
                     _.each(bookitem, f => {
                       if (f["FieldName"]) {
@@ -231,10 +227,7 @@ export class CarSaleCashNewComponent implements OnInit {
                       }
                     });
                     that.partItem = _.filter(data.Data, f => {
-                      return (
-                        (f["IsValid"] == 1 && (f["ItemType"] == "自费") ||
-                        f["ItemType"] == "免费")
-                      );
+                      return f["ItemType"] == "自费" || f["ItemType"] == "免费";
                     });
                   }
                   callback(null, 6);
@@ -350,6 +343,7 @@ export class CarSaleCashNewComponent implements OnInit {
           Price: event.data.Price
         });
       }
+      this.cacalItem();
     }
   }
 
@@ -370,6 +364,7 @@ export class CarSaleCashNewComponent implements OnInit {
           Price: event.data.Price
         });
       }
+      this.cacalItem();
     }
   }
 
@@ -385,5 +380,27 @@ export class CarSaleCashNewComponent implements OnInit {
     _.remove(this.partItem, f => {
       return f["ItemName"] == itemname;
     });
+    this.cacalItem();
+  }
+
+  cacalItem() {
+    this.carsale.ZhuangxFee = _.sumBy(
+      _.filter(this.partItem, f => {
+        return f["ItemType"] == "免费";
+      }),
+      f => {
+        return f["Count"] * f["Price"];
+      }
+    );
+
+    this.carsale.DecorateFee = _.sumBy(
+      _.filter(this.partItem, f => {
+        return f["ItemType"] == "自费";
+      }),
+      f => {
+        return f["Count"] * f["Price"];
+      }
+    );
+    this.priceChange();
   }
 }
