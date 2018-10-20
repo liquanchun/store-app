@@ -165,6 +165,10 @@ export class CarSaleCashComponent implements OnInit {
   partItemDY: any = [];
   partAmountDN: number = 0;
   partAmountDY: number = 0;
+
+  todayChieseString = '';
+  prepaycardate = '';
+  firstDate = '';
   constructor(
     private modalService: NgbModal,
     private formService: FormService,
@@ -180,6 +184,8 @@ export class CarSaleCashComponent implements OnInit {
     this.start();
     this.mainTableID = 0;
     const that = this;
+    this.todayChieseString = this._common.getTodayStringChinese();
+    this.firstDate = this._common.getTodayStringChinese();
 
     this._state.subscribe("print.carsalecash.detail", data => {
       this.carsale = _.find(this.carsaleData, f => {
@@ -311,6 +317,7 @@ export class CarSaleCashComponent implements OnInit {
             data => {
               if (data && data.Data) {
                 that.carbooking = data.Data[0];
+                that.prepaycardate = that.carbooking.PreCarDate;
               }
               callback(null, 1);
             },

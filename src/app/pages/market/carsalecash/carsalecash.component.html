@@ -398,7 +398,7 @@
       </tr>
     </tbody>
   </table>
-  <p style="text-align:right;margin-right: 200px;">编号：</p>
+  <p style="text-align:right;margin-right: 200px;">编号：<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></p>
   <div style="float: left;width: 50%">
     甲方：北京博瑞宝汽车销售服务有限公司<br>
     地址：北京市丰台区西罗园南里44号<br>
@@ -408,14 +408,14 @@
     销售顾问：宫岩<br>
   </div>
   <div style="float: left;width: 50%">
-    乙方: 刘栋<br>
-    证件号：110111198602070038<br>
-    地址:北京市房山区城关街道学房胡同7号<br>
-    电话：18210271184<br>
+    乙方: {{customer.Name}}<br>
+    证件号：{{customer.IdCard}}<br>
+    地址:{{customer.Address}}<br>
+    电话：{{customer.Phone}}<br>
     邮编：100000<br>
   </div>
 
-  <p style="padding-left: 30px;">乙方就订购所需车辆（以下简称[合同车辆]）事宜，与甲方达成一致意见，双方于 2018 年 6 月_29日签订[本合同]。</p>
+  <p style="padding-left: 30px;">乙方就订购所需车辆（以下简称[合同车辆]）事宜，与甲方达成一致意见，双方于&nbsp;&nbsp; <u>{{todayChieseString}}</u> &nbsp;&nbsp;签订[本合同]。</p>
   <p style="padding-left: 30px;"><strong> 第一条、[合同车辆]规格及价款</strong></p>
   <table class="table table-bordered table-sm ">
     <tbody>
@@ -445,17 +445,17 @@
   <p style="padding-left: 30px;"><strong> 第三条  订金</strong></p>
   <p style="padding-left: 30px;">乙方如在本合同签订之日向甲方一次性付清全部车款的，无需支付订金。除此之外，乙方应在本合同签订之日，向甲方支付人民币元作为订金。订金按本合同第四条的约定，抵作车款；   乙方不履行本合同约定的义务的，乙方无权要求返还订金。</p>
   <p style="padding-left: 30px;"><strong> 第四条  付款方式</strong></p>
-  <p style="padding-left: 30px;">1、乙方选择按下述第 2 种方式，如期足额将车款支付给甲方。</p>
+  <p style="padding-left: 30px;">1、乙方选择按下述第 &nbsp;&nbsp; <u>{{carbooking.PayType == '分期付款' ? 2:1}}</u> &nbsp;&nbsp;种方式，如期足额将车款支付给甲方。</p>
   <p style="padding-left: 30px;">（1）一次性付款方式：</p>
   <p style="padding-left: 30px;">乙方在年月日前，将全部车款扣除订金后的余额，向甲方一次性付清（订金抵作车款）。</p>
   <p style="padding-left: 30px;">（2）贷款方式：</p>
-  <p style="padding-left: 30px;">乙方在 2018  年6 月29 日前，向甲方支付首付款人民币114830元（其中含订金，订金抵作首付款，即乙方实际付款金额为首付款扣除订金后的金额）；余款114830人民币元，由乙方通过向宝马金融机构申请汽车消费贷款的方式支付，在2020年7月30日前付清，贷款期限：24期</p>
+  <p style="padding-left: 30px;">乙方在 2018  年6 月29 日前，向甲方支付首付款人民币&nbsp;&nbsp; &nbsp;&nbsp; <u>{{carsale.FirstFee}}</u> &nbsp;&nbsp; &nbsp;&nbsp;元（其中含订金，订金抵作首付款，即乙方实际付款金额为首付款扣除订金后的金额）；余款 &nbsp;&nbsp; &nbsp;&nbsp; <u>{{carsale.LastFee}}</u> &nbsp;&nbsp; &nbsp;&nbsp;人民币元，由乙方通过向宝马金融机构申请汽车消费贷款的方式支付，在2020年7月30日前付清，贷款期限：&nbsp;&nbsp; &nbsp;&nbsp; <u>{{carbooking.Stages}}</u> &nbsp;&nbsp; &nbsp;&nbsp;期</p>
   <p style="padding-left: 30px;">2、以下情况视为乙方未按本合同约定时间付款，应当向甲方承担违约责任。</p>
   <p style="padding-left: 30px;">（1）乙方未能在以上约定时间内向金融机构办妥有关汽车消费贷款事宜（以实际发放贷款到达甲方账户为准）。</p>
   <p style="padding-left: 30px;">（2）乙方未能在以上约定时间内足额办出贷款，且余额未按时自行补足支付。</p>
   <p style="padding-left: 30px;"><strong> 第五条  交车与验收</strong></p>
-  <p style="padding-left: 30px;">1、交车时间：  2018 年6 月29日前。但是，在乙方付清全部购车款之前，甲方有权拒绝交车，交车时间顺延。</p>
-  <p style="padding-left: 30px;">2、交车方式：乙方自提。</p>
+  <p style="padding-left: 30px;">1、交车时间：&nbsp;&nbsp; &nbsp;&nbsp; <u>{{prepaycardate}}</u> &nbsp;&nbsp; &nbsp;&nbsp; 前。但是，在乙方付清全部购车款之前，甲方有权拒绝交车，交车时间顺延。</p>
+  <p style="padding-left: 30px;">2、交车方式：&nbsp;&nbsp; &nbsp;&nbsp; <u>{{carbooking.PickCarType}}</u> &nbsp;&nbsp; &nbsp;&nbsp; </p>
   <p style="padding-left: 30px;">3、交车地点：甲方营业场所。</p>
   <p style="padding-left: 30px;">4、乙方在车辆交接时应当场验收。乙方对车辆外观、基本使用功能、质量、随车资料及备件、工具等应进行谨慎、合理、认真地检查确认，如有异议，应当场向甲方提出，如无异议则视为甲方交付的车辆验收合格、数量和质量均符合本合同的要求。</p>
   <p style="padding-left: 30px;">5、验收完成后，甲方将车辆交由乙方实际支配时，双方应共同签署验收交接文件。验收交接文件签署后即视为车辆正式交付。自车辆交付时起，车辆的风险责任由乙方承担。</p>
