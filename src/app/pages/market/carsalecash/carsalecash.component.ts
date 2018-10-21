@@ -91,7 +91,16 @@ export class CarSaleCashComponent implements OnInit {
   totalRecord: number = 0;
 
   carsaleData: any;
-  carbooking: any;
+  carbooking: any = {
+    PayType: "",
+    PreCarDate: "",
+    Days1: 0,
+    Days2: 0,
+    Days3: 0,
+    Stages: 0,
+    CarIncomeId: 0,
+    CustomerId: 0
+  };
   carsale: any = {
     Id: 0,
     OrderId: "",
@@ -157,7 +166,7 @@ export class CarSaleCashComponent implements OnInit {
   printPartSet: any = [
     "第一联 财务收款",
     "第二联 精品部安装使用",
-    "第三联 销售存档",
+    "第三联 销售存档"
   ];
 
   chineseMoney: string;
@@ -166,9 +175,16 @@ export class CarSaleCashComponent implements OnInit {
   partAmountDN: number = 0;
   partAmountDY: number = 0;
 
-  todayChieseString = '';
-  prepaycardate = '';
-  firstDate = '';
+  //签订合同当天
+  todayObj = {};
+  //现车付款日期
+  haveCarDate = {};
+  //预计交车日期
+  prepaycardate = {};
+  //首付款日期
+  firstDate = {};
+  //贷款缴清最后日期
+  lastDate = {};
   constructor(
     private modalService: NgbModal,
     private formService: FormService,
@@ -184,8 +200,7 @@ export class CarSaleCashComponent implements OnInit {
     this.start();
     this.mainTableID = 0;
     const that = this;
-    this.todayChieseString = this._common.getTodayStringChinese();
-    this.firstDate = this._common.getTodayStringChinese();
+    this.todayObj = this._common.getTodayObj();
 
     this._state.subscribe("print.carsalecash.detail", data => {
       this.carsale = _.find(this.carsaleData, f => {
@@ -198,7 +213,7 @@ export class CarSaleCashComponent implements OnInit {
         }
       );
     });
-    this._state.subscribe("print.carsale.audit", data => {
+    this._state.subscribe("print.carsalecash.audit", data => {
       this.carsale = _.find(this.carsaleData, f => {
         return f["Id"] == data.id;
       });
@@ -215,7 +230,7 @@ export class CarSaleCashComponent implements OnInit {
       });
     });
 
-    this._state.subscribe("print.carsale.auditnot", data => {
+    this._state.subscribe("print.carsalecash.auditnot", data => {
       this.carsale = _.find(this.carsaleData, f => {
         return f["Id"] == data.id;
       });
@@ -291,15 +306,31 @@ export class CarSaleCashComponent implements OnInit {
       .then(
         data => {
           if (data && data.Data) {
-            this.partItemDN =_.orderBy(_.filter(data.Data, f => {
-              return f["IsValid"] == 1 && f["Service"] == "店内" && (f["ItemType"] == "自费" || f["ItemType"] == "免费");
-            }),'ItemType','desc');
+            this.partItemDN = _.orderBy(
+              _.filter(data.Data, f => {
+                return (
+                  f["IsValid"] == 1 &&
+                  f["Service"] == "店内" &&
+                  (f["ItemType"] == "自费" || f["ItemType"] == "免费")
+                );
+              }),
+              "ItemType",
+              "desc"
+            );
             this.partAmountDN = _.sumBy(this.partItemDN, f => {
               return f["Count"] * f["Price"];
             });
-            this.partItemDY = _.orderBy(_.filter(data.Data, f => {
-              return f["IsValid"] == 1 && f["Service"] == "合作店" && (f["ItemType"] == "自费" || f["ItemType"] == "免费");
-            }),'ItemType','desc');
+            this.partItemDY = _.orderBy(
+              _.filter(data.Data, f => {
+                return (
+                  f["IsValid"] == 1 &&
+                  f["Service"] == "合作店" &&
+                  (f["ItemType"] == "自费" || f["ItemType"] == "免费")
+                );
+              }),
+              "ItemType",
+              "desc"
+            );
             this.partAmountDY = _.sumBy(this.partItemDY, f => {
               return f["Count"] * f["Price"];
             });
@@ -317,7 +348,25 @@ export class CarSaleCashComponent implements OnInit {
             data => {
               if (data && data.Data) {
                 that.carbooking = data.Data[0];
-                that.prepaycardate = that.carbooking.PreCarDate;
+                that.prepaycardate = that._common.getDateObject(
+                  that.carbooking.PreCarDate
+                );
+                if (that.carbooking.PayType == "") {
+                  that.haveCarDate = that._common.todayAddDays(
+                    that.carbooking.Days1
+                  );
+                } else {
+                  that.haveCarDate = that._common.todayAddDays(
+                    that.carbooking.Days2
+                  );
+                }
+                that.firstDate = that._common.todayAddDays(
+                  that.carbooking.Days3
+                );
+                that.lastDate = that._common.dateAddMonths(
+                  that._common.todayObjAddDays(that.carbooking.Days3),
+                  that.carbooking.Stages
+                );
               }
               callback(null, 1);
             },
@@ -348,7 +397,6 @@ export class CarSaleCashComponent implements OnInit {
         }
       },
       function(err, results) {
-        console.log(results);
       }
     );
   }
@@ -684,7 +732,6 @@ export class CarSaleCashComponent implements OnInit {
     this.carsale = _.find(this.carsaleData, f => {
       return f["Id"] == this.mainTableID;
     });
-    console.log(this.carsale);
     if (this.carsale) {
       if (this.carsale.RealAllFee) {
         this.chineseMoney = this._common.changeNumMoneyToChinese(
@@ -827,6 +874,9 @@ export class CarSaleCashComponent implements OnInit {
           th,td{
             border:1px solid black;
             padding:3px;
+          }
+          .clearfix{
+            clear: both;
           }
           .valueText{
             text-align:center;

@@ -5,6 +5,33 @@ import { retry } from 'rxjs/operator/retry';
 
 @Injectable()
 export class Common {
+    todayAddDays(days:number){
+      const d = new Date();
+      d.setDate(d.getDate() + days);
+      let day = d.getDate();
+      let month = d.getMonth() + 1;
+      let year = d.getFullYear();
+      return { "year": year, "month": month, "day": day };
+    }
+    todayObjAddDays(days:number):Date{
+      const d = new Date();
+      d.setDate(d.getDate() + days);
+      return d;
+    }
+    dateAddDays(d:Date, days:number){
+      d.setDate(d.getDate() + days);
+      let day = d.getDate();
+      let month = d.getMonth() + 1;
+      let year = d.getFullYear();
+      return { "year": year, "month": month, "day": day };
+    }
+    dateAddMonths(d:Date, months:number){
+      d.setMonth(d.getMonth() + months);
+      let day = d.getDate();
+      let month = d.getMonth() + 1;
+      let year = d.getFullYear();
+      return { "year": year, "month": month, "day": day };
+    }
     getTodayObj() {
         let d = new Date()
         let day = d.getDate();
