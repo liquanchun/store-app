@@ -26,11 +26,11 @@ export class PrintButtonComponent implements ViewCell, OnInit {
   @Output()
   save: EventEmitter<any> = new EventEmitter();
 
-  currentUser:string;
+  currentUser: string;
   constructor(private _state: GlobalState) {}
 
   ngOnInit() {
-     this.currentUser = sessionStorage.getItem("userName");
+    this.currentUser = sessionStorage.getItem("userName");
   }
   onDetail() {
     this.save.emit(this.rowData);
@@ -50,13 +50,21 @@ export class PrintButtonComponent implements ViewCell, OnInit {
     });
   }
   onAudit() {
-    this.save.emit(this.rowData);
+    if (this.value.Status == "现车") {
+      this.save.emit(this.rowData);
 
-    const getTimestamp = new Date().getTime();
-    this._state.notifyDataChanged("print.carsale.audit", {
-      id: this.value.Id,
-      time: getTimestamp
-    });
+      const getTimestamp = new Date().getTime();
+      this._state.notifyDataChanged("print.carsale.audit", {
+        id: this.value.Id,
+        time: getTimestamp
+      });
+    } else {
+      this._state.notifyDataChanged("messagebox", {
+        type: "warning",
+        msg: "只有现车才能审核。",
+        time: new Date().getTime()
+      });
+    }
   }
   onAuditNot() {
     this.save.emit(this.rowData);

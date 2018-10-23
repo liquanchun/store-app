@@ -43,8 +43,11 @@
         <ngb-tab *ngFor="let view of subViewName" [title]="view.Title">
           <ng-template ngbTabContent>
             <div class="row">
-              <div class="col-md-12">
+              <div *ngIf="view.ViewName.startsWith('car_')" class="col-md-12">
                 <app-edit-form [formView]="view" canSave="true" [mainTableID]="mainTableID"></app-edit-form>
+              </div>
+              <div *ngIf="view.ViewName.startsWith('vw_')" class="col-md-12">
+                <app-show-form [formView]="view" canSave="true" [mainTableID]="mainTableID"></app-show-form>
               </div>
             </div>
           </ng-template>

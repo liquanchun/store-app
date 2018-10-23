@@ -127,9 +127,29 @@ export class CarsaleComponent implements OnInit {
       this.printOrder = _.find(this.carsaleData, f => {
         return f["Id"] == data.id;
       });
-      this.router.navigate(["/pages/market/carsalecashnew", data.id], {
-        queryParams: { n: this.printOrder.OrderId }
-      });
+
+      this.formService
+        .getForms(`car_sale_cash/${this.printOrder.OrderId}`)
+        .then(
+          data => {
+            if (data.Data && data.Data.length > 0) {
+              this.router.navigate(
+                ["/pages/market/carsalecashnew", this.printOrder.Id],
+                {
+                  queryParams: {
+                    n: this.printOrder.OrderId,
+                    id: data.Data[0].Id
+                  }
+                }
+              );
+            } else {
+              this.router.navigate(["/pages/market/carsalecashnew", data.id], {
+                queryParams: { n: this.printOrder.OrderId }
+              });
+            }
+          },
+          err => {}
+        );
     });
 
     this._state.subscribe("print.carsale.audit", data => {
@@ -255,10 +275,22 @@ export class CarsaleComponent implements OnInit {
               that.htmlTd.push({
                 itemName1: that.serviceItem2[i].itemName,
                 price1: that.serviceItem2[i].price,
-                itemName2: i + 1 < that.serviceItem2.length ? that.serviceItem2[i + 1].itemName : "",
-                price2: i + 1 < that.serviceItem2.length ? that.serviceItem2[i + 1].price : "",
-                itemName3: i + 2 < that.serviceItem2.length ? that.serviceItem2[i + 2].itemName : "",
-                price3: i + 2 < that.serviceItem2.length ? that.serviceItem2[i + 2].price : ""
+                itemName2:
+                  i + 1 < that.serviceItem2.length
+                    ? that.serviceItem2[i + 1].itemName
+                    : "",
+                price2:
+                  i + 1 < that.serviceItem2.length
+                    ? that.serviceItem2[i + 1].price
+                    : "",
+                itemName3:
+                  i + 2 < that.serviceItem2.length
+                    ? that.serviceItem2[i + 2].itemName
+                    : "",
+                price3:
+                  i + 2 < that.serviceItem2.length
+                    ? that.serviceItem2[i + 2].price
+                    : ""
               });
             }
           }
@@ -503,9 +535,7 @@ export class CarsaleComponent implements OnInit {
   }
 
   onDelete(event) {
-    
     if (window.confirm("你确定要删除吗?")) {
-
       if (this.printOrder && this.printOrder["Creator"]) {
         if (sessionStorage.getItem("userName") != this.printOrder["Creator"]) {
           this._state.notifyDataChanged("messagebox", {
