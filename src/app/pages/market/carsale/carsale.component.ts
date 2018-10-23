@@ -129,7 +129,7 @@ export class CarsaleComponent implements OnInit {
       });
 
       this.formService
-        .getForms(`car_sale_cash/${this.printOrder.OrderId}`)
+        .getForms(`car_sale_cash/OrderId/${this.printOrder.OrderId}`)
         .then(
           data => {
             if (data.Data && data.Data.length > 0) {
