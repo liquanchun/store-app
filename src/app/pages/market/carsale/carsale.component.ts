@@ -101,6 +101,7 @@ export class CarsaleComponent implements OnInit {
   htmlGiveTd: any;
   marginbottom = "20px"; //小于2个48px
   chineseMoney: string;
+  notice = true;
   constructor(
     private modalService: NgbModal,
     private formService: FormService,
@@ -110,6 +111,8 @@ export class CarsaleComponent implements OnInit {
     private _common: Common,
     private _state: GlobalState
   ) {}
+  ngAfterViewInit(){
+  }
   ngOnDestroy() {
   }
   ngOnInit() {
@@ -118,7 +121,13 @@ export class CarsaleComponent implements OnInit {
     this.start();
     this.mainTableID = 0;
     const that = this;
-    
+
+    this._state.unsubscribe('print.carsale.detail');
+    this._state.unsubscribe('print.carsale.check');
+    this._state.unsubscribe('print.carsale.audit');
+    this._state.unsubscribe('print.carsale.auditnot');
+    this._state.unsubscribe('print.carsale');
+
     this._state.subscribe("print.carsale.detail", data => {
       this.router.navigate(["/pages/market/carsalenew", this.mainTableID], {
         queryParams: { n: 1 }
@@ -158,13 +167,17 @@ export class CarsaleComponent implements OnInit {
     });
 
     this._state.subscribe("print.carsale.audit", data => {
-      this.printOrder = _.find(this.carsaleData, f => {
-        return f["Id"] == data.id;
-      });
-      this.onAudit();
+      if (this.notice) {
+        this.notice = false;
+        this.printOrder = _.find(this.carsaleData, f => {
+          return f["Id"] == data.id;
+        });
+        this.onAudit();
+      }
     });
 
     this._state.subscribe("print.carsale.auditnot", data => {
+      this.notice = true;
       this.printOrder = _.find(this.carsaleData, f => {
         return f["Id"] == data.id;
       });
@@ -447,7 +460,7 @@ export class CarsaleComponent implements OnInit {
       data => {
         this.carsaleData = data.Data;
         _.each(this.carsaleData, f => {
-          f['AuditRoles'] = this.tableView["AuditRoles"];
+          f["AuditRoles"] = this.tableView["AuditRoles"];
           f["button"] = f;
         });
         this.source.load(this.carsaleData);
@@ -479,7 +492,7 @@ export class CarsaleComponent implements OnInit {
         data => {
           this.carsaleData = data.Data;
           _.each(this.carsaleData, f => {
-            f['AuditRoles'] = this.tableView["AuditRoles"];
+            f["AuditRoles"] = this.tableView["AuditRoles"];
             f["button"] = f;
           });
           this.source.load(this.carsaleData);
@@ -657,7 +670,6 @@ export class CarsaleComponent implements OnInit {
       err => {}
     );
   }
-  
 
   print() {
     let printContents, popupWin;

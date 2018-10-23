@@ -205,6 +205,11 @@ export class CarSaleCashComponent implements OnInit {
     const that = this;
     this.todayObj = this._common.getTodayObj();
 
+    this._state.unsubscribe('print.carsalecash.detail');
+    this._state.unsubscribe('print.carsalecash.audit');
+    this._state.unsubscribe('print.carsalecash.auditnot');
+    this._state.unsubscribe('print.carsalecash');
+
     this._state.subscribe("print.carsalecash.detail", data => {
       this.carsale = _.find(this.carsaleData, f => {
         return f["Id"] == data.id;
