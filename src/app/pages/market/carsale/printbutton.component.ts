@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
 import { ViewCell } from "ng2-smart-table";
 import { GlobalState } from "../../../global.state";
-
+import { FormService } from "../form/form.services";
 import * as _ from "lodash";
 @Component({
   selector: "print-button-view",
@@ -13,7 +13,8 @@ import * as _ from "lodash";
         <button *ngIf="value.Status != '已开票' && value.AuditResult != '通过'" type="button" style="line-height: 15px;" class="btn btn-light btn-sm tablebutton" (click)="onAudit()">审核</button>
         <button *ngIf="value.Status != '已开票' && value.AuditResult == '通过'" type="button" style="line-height: 15px;" class="btn btn-light btn-sm tablebutton" (click)="onAuditNot()">反审核</button>
         </div>
-    `
+    `,
+  providers: [FormService]
 })
 export class PrintButtonComponent implements ViewCell, OnInit {
   renderValue: string;
@@ -27,7 +28,7 @@ export class PrintButtonComponent implements ViewCell, OnInit {
   save: EventEmitter<any> = new EventEmitter();
 
   currentUser: string;
-  constructor(private _state: GlobalState) {}
+  constructor(private _state: GlobalState, private formService: FormService) {}
 
   ngOnInit() {
     this.currentUser = sessionStorage.getItem("userName");
@@ -50,29 +51,49 @@ export class PrintButtonComponent implements ViewCell, OnInit {
     });
   }
   onAudit() {
-    if (this.value.Status == "现车") {
-      this.save.emit(this.rowData);
+    this.checkRoles().then(d => {
+      if (d == 0) {
+        this._state.notifyDataChanged("messagebox", {
+          type: "warning",
+          msg: "你无权审核。",
+          time: new Date().getTime()
+        });
+      } else {
+        if (this.value.Status == "现车") {
+          this.save.emit(this.rowData);
 
-      const getTimestamp = new Date().getTime();
-      this._state.notifyDataChanged("print.carsale.audit", {
-        id: this.value.Id,
-        time: getTimestamp
-      });
-    } else {
-      this._state.notifyDataChanged("messagebox", {
-        type: "warning",
-        msg: "只有现车才能审核。",
-        time: new Date().getTime()
-      });
-    }
+          const getTimestamp = new Date().getTime();
+          this._state.notifyDataChanged("print.carsale.audit", {
+            id: this.value.Id,
+            time: getTimestamp
+          });
+        } else {
+          this._state.notifyDataChanged("messagebox", {
+            type: "warning",
+            msg: "只有现车才能审核。",
+            time: new Date().getTime()
+          });
+        }
+      }
+    });
   }
   onAuditNot() {
-    this.save.emit(this.rowData);
+    this.checkRoles().then(d => {
+      if (d == 0) {
+        this._state.notifyDataChanged("messagebox", {
+          type: "warning",
+          msg: "你无权审核。",
+          time: new Date().getTime()
+        });
+      } else {
+        this.save.emit(this.rowData);
 
-    const getTimestamp = new Date().getTime();
-    this._state.notifyDataChanged("print.carsale.auditnot", {
-      id: this.value.Id,
-      time: getTimestamp
+        const getTimestamp = new Date().getTime();
+        this._state.notifyDataChanged("print.carsale.auditnot", {
+          id: this.value.Id,
+          time: getTimestamp
+        });
+      }
     });
   }
   onClick() {
@@ -82,6 +103,31 @@ export class PrintButtonComponent implements ViewCell, OnInit {
     this._state.notifyDataChanged("print.carsale", {
       id: this.value.Id,
       time: getTimestamp
+    });
+  }
+
+  checkRoles() {
+    const that = this;
+    return new Promise((resolve, reject) => {
+      const roles = sessionStorage.getItem("roleIds");
+      const roleName = that.value["AuditRoles"];
+      if (roleName) {
+        that.formService.getForms("sys_role").then(
+          data => {
+            const roles = data.Data;
+            const rl = _.find(roles, f => {
+              return f["RoleName"] == roleName;
+            });
+            if (rl && roles.includes(rl["Id"])) {
+              resolve(1);
+            } else {
+              resolve(0);
+            }
+          },
+          err => {}
+        );
+      }
+      resolve(1);
     });
   }
 }

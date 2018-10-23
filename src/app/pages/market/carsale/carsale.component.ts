@@ -110,13 +110,15 @@ export class CarsaleComponent implements OnInit {
     private _common: Common,
     private _state: GlobalState
   ) {}
+  ngOnDestroy() {
+  }
   ngOnInit() {
     this.formname = "carsale";
     this.canUpdate = false;
     this.start();
     this.mainTableID = 0;
     const that = this;
-
+    
     this._state.subscribe("print.carsale.detail", data => {
       this.router.navigate(["/pages/market/carsalenew", this.mainTableID], {
         queryParams: { n: 1 }
@@ -143,9 +145,12 @@ export class CarsaleComponent implements OnInit {
                 }
               );
             } else {
-              this.router.navigate(["/pages/market/carsalecashnew", data.id], {
-                queryParams: { n: this.printOrder.OrderId }
-              });
+              this.router.navigate(
+                ["/pages/market/carsalecashnew", this.printOrder.Id],
+                {
+                  queryParams: { n: this.printOrder.OrderId }
+                }
+              );
             }
           },
           err => {}
@@ -156,34 +161,14 @@ export class CarsaleComponent implements OnInit {
       this.printOrder = _.find(this.carsaleData, f => {
         return f["Id"] == data.id;
       });
-      this.checkRoles().then(d => {
-        if (d == 0) {
-          this._state.notifyDataChanged("messagebox", {
-            type: "warning",
-            msg: "你无权审核。",
-            time: new Date().getTime()
-          });
-        } else {
-          this.onAudit();
-        }
-      });
+      this.onAudit();
     });
 
     this._state.subscribe("print.carsale.auditnot", data => {
       this.printOrder = _.find(this.carsaleData, f => {
         return f["Id"] == data.id;
       });
-      this.checkRoles().then(d => {
-        if (d == 0) {
-          this._state.notifyDataChanged("messagebox", {
-            type: "warning",
-            msg: "你无权审核。",
-            time: new Date().getTime()
-          });
-        } else {
-          this.onAuditNot();
-        }
-      });
+      this.onAuditNot();
     });
 
     this._state.subscribe("print.carsale", data => {
@@ -462,6 +447,7 @@ export class CarsaleComponent implements OnInit {
       data => {
         this.carsaleData = data.Data;
         _.each(this.carsaleData, f => {
+          f['AuditRoles'] = this.tableView["AuditRoles"];
           f["button"] = f;
         });
         this.source.load(this.carsaleData);
@@ -493,6 +479,7 @@ export class CarsaleComponent implements OnInit {
         data => {
           this.carsaleData = data.Data;
           _.each(this.carsaleData, f => {
+            f['AuditRoles'] = this.tableView["AuditRoles"];
             f["button"] = f;
           });
           this.source.load(this.carsaleData);
@@ -641,7 +628,7 @@ export class CarsaleComponent implements OnInit {
       data => {
         this._state.notifyDataChanged("messagebox", {
           type: "success",
-          msg: "审核成功。",
+          msg: "反审核成功。",
           time: new Date().getTime()
         });
         if (this.printOrder["AuditStatus"]) {
@@ -670,30 +657,7 @@ export class CarsaleComponent implements OnInit {
       err => {}
     );
   }
-  checkRoles() {
-    const that = this;
-    return new Promise((resolve, reject) => {
-      const roles = sessionStorage.getItem("roleIds");
-      const roleName = that.tableView["AuditRoles"];
-      if (roleName) {
-        that.formService.getForms("sys_role").then(
-          data => {
-            const roles = data.Data;
-            const rl = _.find(roles, f => {
-              return f["RoleName"] == roleName;
-            });
-            if (rl && roles.includes(rl["Id"])) {
-              resolve(1);
-            } else {
-              resolve(0);
-            }
-          },
-          err => {}
-        );
-      }
-      resolve(1);
-    });
-  }
+  
 
   print() {
     let printContents, popupWin;

@@ -14,7 +14,7 @@ export class GlobalState {
   }
 
   notifyDataChanged(event, value) {
-
+    console.log(`通知${event}`);
     let current = this._data[event];
     if (current !== value) {
       this._data[event] = value;
@@ -27,6 +27,7 @@ export class GlobalState {
   }
 
   subscribe(event: string, callback: Function) {
+    console.log(`订阅${event}`);
     let subscribers = this._subscriptions.get(event) || [];
     subscribers.push(callback);
 
@@ -34,6 +35,7 @@ export class GlobalState {
   }
 
   _onEvent(data: any) {
+    console.log(`取消${event}`);
     let subscribers = this._subscriptions.get(data['event']) || [];
 
     subscribers.forEach((callback) => {

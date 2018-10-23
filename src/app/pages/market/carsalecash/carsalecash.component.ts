@@ -194,6 +194,9 @@ export class CarSaleCashComponent implements OnInit {
     private _common: Common,
     private _state: GlobalState
   ) {}
+  ngOnDestroy() {
+    this._state = null;
+  }
   ngOnInit() {
     this.formname = "carsalecash";
     this.canUpdate = false;
