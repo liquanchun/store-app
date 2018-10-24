@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Subject } from "rxjs/Subject";
-
+import * as _ from "lodash";
 @Injectable()
 export class GlobalState {
   private _data = new Subject<Object>();
@@ -33,9 +33,14 @@ export class GlobalState {
   }
   subscribe(event: string, callback: Function) {
     let subscribers = this._subscriptions.get(event) || [];
-    subscribers.push(callback);
+    const fct = _.find(subscribers, f => {
+      return f == callback;
+    });
+    if (!fct) {
+      subscribers.push(callback);
 
-    this._subscriptions.set(event, subscribers);
+      this._subscriptions.set(event, subscribers);
+    }
   }
 
   _onEvent(data: any) {

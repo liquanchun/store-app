@@ -205,27 +205,38 @@ export class CarSaleCashComponent implements OnInit {
     const that = this;
     this.todayObj = this._common.getTodayObj();
 
-    this._state.unsubscribe('print.carsalecash.detail');
-    this._state.unsubscribe('print.carsalecash.audit');
-    this._state.unsubscribe('print.carsalecash.auditnot');
-    this._state.unsubscribe('print.carsalecash');
+    this._state.unsubscribe("print.carsalecash.detail");
+    this._state.unsubscribe("print.carsalecash.audit");
+    this._state.unsubscribe("print.carsalecash.auditnot");
+    this._state.unsubscribe("print.carsalecash");
 
     this._state.subscribe("print.carsalecash.detail", data => {
-      this.carsale = _.find(this.carsaleData, f => {
-        return f["Id"] == data.id;
-      });
-      this.router.navigate(
-        ["/pages/market/carsalecashnew", this.carsale.BookingId],
-        {
-          queryParams: { n: 1, id: data.id }
+      this.checkRoles("ReadRoles").then(d => {
+        if (d == 0) {
+          this._state.notifyDataChanged("messagebox", {
+            type: "warning",
+            msg: "你无权查看销售结单。",
+            time: new Date().getTime()
+          });
+        } else {
+          this.carsale = _.find(this.carsaleData, f => {
+            return f["Id"] == data.id;
+          });
+          this.router.navigate(
+            ["/pages/market/carsalecashnew", this.carsale.BookingId],
+            {
+              queryParams: { n: 1, id: data.id }
+            }
+          );
         }
-      );
+      });
     });
+
     this._state.subscribe("print.carsalecash.audit", data => {
       this.carsale = _.find(this.carsaleData, f => {
         return f["Id"] == data.id;
       });
-      this.checkRoles().then(d => {
+      this.checkRoles("AuditRoles").then(d => {
         if (d == 0) {
           this._state.notifyDataChanged("messagebox", {
             type: "warning",
@@ -242,11 +253,11 @@ export class CarSaleCashComponent implements OnInit {
       this.carsale = _.find(this.carsaleData, f => {
         return f["Id"] == data.id;
       });
-      this.checkRoles().then(d => {
+      this.checkRoles("AuditRoles").then(d => {
         if (d == 0) {
           this._state.notifyDataChanged("messagebox", {
             type: "warning",
-            msg: "你无权审核。",
+            msg: "你无权反审核。",
             time: new Date().getTime()
           });
         } else {
@@ -254,58 +265,89 @@ export class CarSaleCashComponent implements OnInit {
         }
       });
     });
+
     this._state.subscribe("print.carsalecash", data => {
       this.carsale = _.find(this.carsaleData, f => {
         return f["Id"] == data.id;
       });
-      console.log(this.carsale);
-      if (this.carsale) {
-        if (this.carsale.RealAllFee) {
-          this.chineseMoney = this._common.changeNumMoneyToChinese(
-            this.carsale.RealAllFee
-          );
+
+      this.checkRoles("ReadRoles").then(d => {
+        if (d == 0) {
+          this._state.notifyDataChanged("messagebox", {
+            type: "warning",
+            msg: "你无权打印。",
+            time: new Date().getTime()
+          });
+        } else {
+          if (this.carsale) {
+            if (this.carsale.RealAllFee) {
+              this.chineseMoney = this._common.changeNumMoneyToChinese(
+                this.carsale.RealAllFee
+              );
+            }
+            this.getCarsale(this.carsale.BookingId);
+            _.delay(
+              function(that) {
+                that.print();
+              },
+              500,
+              this
+            );
+          }
         }
-        this.getCarsale(this.carsale.BookingId);
-        _.delay(
-          function(that) {
-            that.print();
-          },
-          500,
-          this
-        );
-      }
+      });
     });
 
     this._state.subscribe("print.carsalecash2", data => {
       this.carsale = _.find(this.carsaleData, f => {
         return f["Id"] == data.id;
       });
-      if (this.carsale) {
-        this.getPartItem();
-        _.delay(
-          function(that) {
-            that.print2();
-          },
-          500,
-          this
-        );
-      }
+      this.checkRoles("ReadRoles").then(d => {
+        if (d == 0) {
+          this._state.notifyDataChanged("messagebox", {
+            type: "warning",
+            msg: "你无权打印。",
+            time: new Date().getTime()
+          });
+        } else {
+          if (this.carsale) {
+            this.getPartItem();
+            _.delay(
+              function(that) {
+                that.print2();
+              },
+              500,
+              this
+            );
+          }
+        }
+      });
     });
 
     this._state.subscribe("print.carsalecash3", data => {
       this.carsale = _.find(this.carsaleData, f => {
         return f["Id"] == data.id;
       });
-      if (this.carsale) {
-        this.getPartItem();
-        _.delay(
-          function(that) {
-            that.print3();
-          },
-          500,
-          this
-        );
-      }
+      this.checkRoles("ReadRoles").then(d => {
+        if (d == 0) {
+          this._state.notifyDataChanged("messagebox", {
+            type: "warning",
+            msg: "你无权打印。",
+            time: new Date().getTime()
+          });
+        } else {
+          if (this.carsale) {
+            this.getPartItem();
+            _.delay(
+              function(that) {
+                that.print3();
+              },
+              500,
+              this
+            );
+          }
+        }
+      });
     });
   }
   getPartItem() {
@@ -404,8 +446,7 @@ export class CarSaleCashComponent implements OnInit {
             );
         }
       },
-      function(err, results) {
-      }
+      function(err, results) {}
     );
   }
 
@@ -581,21 +622,31 @@ export class CarSaleCashComponent implements OnInit {
   }
 
   onEdit(event) {
-    const id = event.data.Id;
-    if (this.carsale["AuditResult"] == "通过") {
-      this._state.notifyDataChanged("messagebox", {
-        type: "warning",
-        msg: "已审核通过，不能修改。",
-        time: new Date().getTime()
-      });
-      return;
-    }
-    this.router.navigate(
-      ["/pages/market/carsalecashnew", event.data.BookingId],
-      {
-        queryParams: { n: this.carsale.OrderId, id: event.data.Id }
+    this.checkRoles("EditRoles").then(d => {
+      if (d == 0) {
+        this._state.notifyDataChanged("messagebox", {
+          type: "warning",
+          msg: "你无权修改结算单。",
+          time: new Date().getTime()
+        });
+      } else {
+        const id = event.data.Id;
+        if (this.carsale["AuditResult"] == "通过") {
+          this._state.notifyDataChanged("messagebox", {
+            type: "warning",
+            msg: "已审核通过，不能修改。",
+            time: new Date().getTime()
+          });
+          return;
+        }
+        this.router.navigate(
+          ["/pages/market/carsalecashnew", event.data.BookingId],
+          {
+            queryParams: { n: this.carsale.OrderId, id: event.data.Id }
+          }
+        );
       }
-    );
+    });
   }
 
   onDelete(event) {
@@ -608,23 +659,36 @@ export class CarSaleCashComponent implements OnInit {
         });
         return;
       }
-      this.formService.delete(this.tableView["TableName"], event.data.Id).then(
-        data => {
+
+      this.checkRoles("EditRoles").then(d => {
+        if (d == 0) {
           this._state.notifyDataChanged("messagebox", {
-            type: "success",
-            msg: "删除成功。",
+            type: "warning",
+            msg: "你无权删除结算单。",
             time: new Date().getTime()
           });
-          this.getDataList();
-        },
-        err => {
-          this._state.notifyDataChanged("messagebox", {
-            type: "error",
-            msg: err,
-            time: new Date().getTime()
-          });
+        } else {
+          this.formService
+            .delete(this.tableView["TableName"], event.data.Id)
+            .then(
+              data => {
+                this._state.notifyDataChanged("messagebox", {
+                  type: "success",
+                  msg: "删除成功。",
+                  time: new Date().getTime()
+                });
+                this.getDataList();
+              },
+              err => {
+                this._state.notifyDataChanged("messagebox", {
+                  type: "error",
+                  msg: err,
+                  time: new Date().getTime()
+                });
+              }
+            );
         }
-      );
+      });
     }
   }
 
@@ -709,11 +773,27 @@ export class CarSaleCashComponent implements OnInit {
     );
   }
 
-  checkRoles() {
+  onSelected(event) {
+    this.mainTableID = event.data.Id;
+
+    this.carsale = _.find(this.carsaleData, f => {
+      return f["Id"] == this.mainTableID;
+    });
+    if (this.carsale) {
+      if (this.carsale.RealAllFee) {
+        this.chineseMoney = this._common.changeNumMoneyToChinese(
+          this.carsale.RealAllFee
+        );
+      }
+      this.getCarsale(this.carsale.BookingId);
+    }
+  }
+
+  checkRoles(power) {
     const that = this;
     return new Promise((resolve, reject) => {
       const roles = sessionStorage.getItem("roleIds");
-      const roleName = that.tableView["AuditRoles"];
+      const roleName = that.tableView[power];
       if (roleName) {
         that.formService.getForms("sys_role").then(
           data => {
@@ -729,25 +809,10 @@ export class CarSaleCashComponent implements OnInit {
           },
           err => {}
         );
+      } else {
+        resolve(1);
       }
-      resolve(1);
     });
-  }
-
-  onSelected(event) {
-    this.mainTableID = event.data.Id;
-
-    this.carsale = _.find(this.carsaleData, f => {
-      return f["Id"] == this.mainTableID;
-    });
-    if (this.carsale) {
-      if (this.carsale.RealAllFee) {
-        this.chineseMoney = this._common.changeNumMoneyToChinese(
-          this.carsale.RealAllFee
-        );
-      }
-      this.getCarsale(this.carsale.BookingId);
-    }
   }
 
   print() {

@@ -430,144 +430,211 @@ export class FormComponent implements OnInit {
     }
   }
   onCreate(): void {
-    const that = this;
-    const modalRef = this.modalService.open(NgbdModalContent);
-    modalRef.componentInstance.title = "新增" + this.title;
-    modalRef.componentInstance.config = this.configAdd;
-    modalRef.componentInstance.saveFun = (result, closeBack) => {
-      let formValue = JSON.parse(result);
-      _.each(this.configAdd, f => {
-        if (f.type === "datepicker" && formValue[f.name]) {
-          formValue[f.name] = this._common.getDateString(formValue[f.name]);
-        }
-        if (f.name === "Creator") {
-          formValue[f.name] = sessionStorage.getItem("userName");
-        }
-      });
-      console.log(formValue);
-      that.formService.create(that.formView["ViewName"], formValue).then(
-        data => {
-          closeBack();
-          this.toastOptions.msg = "新增成功。";
-          this.toastyService.success(this.toastOptions);
-          that.getDataList();
-        },
-        err => {
-          this.toastOptions.msg = err;
-          this.toastyService.error(this.toastOptions);
-        }
-      );
-    };
+    this.checkRoles("EditRoles").then(d => {
+      if (d == 0) {
+        this._state.notifyDataChanged("messagebox", {
+          type: "warning",
+          msg: "你无权新增客户信息。",
+          time: new Date().getTime()
+        });
+      } else {
+        const that = this;
+        const modalRef = this.modalService.open(NgbdModalContent);
+        modalRef.componentInstance.title = "新增" + this.title;
+        modalRef.componentInstance.config = this.configAdd;
+        modalRef.componentInstance.saveFun = (result, closeBack) => {
+          let formValue = JSON.parse(result);
+          _.each(this.configAdd, f => {
+            if (f.type === "datepicker" && formValue[f.name]) {
+              formValue[f.name] = this._common.getDateString(formValue[f.name]);
+            }
+            if (f.name === "Creator") {
+              formValue[f.name] = sessionStorage.getItem("userName");
+            }
+          });
+          console.log(formValue);
+          that.formService.create(that.formView["ViewName"], formValue).then(
+            data => {
+              closeBack();
+              this.toastOptions.msg = "新增成功。";
+              this.toastyService.success(this.toastOptions);
+              that.getDataList();
+            },
+            err => {
+              this.toastOptions.msg = err;
+              this.toastyService.error(this.toastOptions);
+            }
+          );
+        };
+      }
+    });
   }
 
   onEdit(event) {
-    this.updateData = event.data;
-    if (this.selectedRow && this.selectedRow["Creator"]) {
-      if (sessionStorage.getItem("userName") != this.selectedRow["Creator"]) {
-        this.toastOptions.msg = `该客户创建人是${
-          this.selectedRow["Creator"]
-        }，你不能修改。`;
-        this.toastyService.warning(this.toastOptions);
-        return;
-      }
-    }
-    if (this.selectedRow && _.keys(this.selectedRow).includes("CanUpdate")) {
-      if (!this.selectedRow["CanUpdate"]) {
-        this.toastOptions.msg = "该客户销售订单已审核，不能修改。";
-        this.toastyService.warning(this.toastOptions);
-        return;
-      }
-    }
-
-    const that = this;
-    const modalRef = this.modalService.open(NgbdModalContent);
-    modalRef.componentInstance.title = "修改" + this.title;
-    modalRef.componentInstance.config = this.configUpdate;
-
-    let eventdata = event.data;
-    _.each(this.configUpdate, f => {
-      if (f.type === "datepicker" && eventdata[f.name]) {
-        const dv = eventdata[f.name];
-        if (_.isString(dv)) {
-          eventdata[f.name] = this._common.getDateObject(dv);
-        }
-      }
-    });
-
-    modalRef.componentInstance.formValue = eventdata;
-    modalRef.componentInstance.saveFun = (result, closeBack) => {
-      let formViewData = JSON.parse(result);
-      const cfgupdate = _.filter(that.configUpdate, function(o) {
-        return o["disabled"] == true;
-      });
-      _.each(cfgupdate, d => {
-        if (that.updateData[d.name]) {
-          formViewData[d.name] = that.updateData[d.name];
-        }
-      });
-
-      _.each(this.configUpdate, f => {
-        if (f.type === "datepicker" && formViewData[f.name]) {
-          const dv = formViewData[f.name];
-          if (_.isObject(dv)) {
-            formViewData[f.name] = this._common.getDateString(dv);
+    this.checkRoles("EditRoles").then(d => {
+      if (d == 0) {
+        this._state.notifyDataChanged("messagebox", {
+          type: "warning",
+          msg: "你无权修改客户资料。",
+          time: new Date().getTime()
+        });
+      } else {
+        this.updateData = event.data;
+        if (this.selectedRow && this.selectedRow["Creator"]) {
+          if (
+            sessionStorage.getItem("userName") != this.selectedRow["Creator"]
+          ) {
+            this.toastOptions.msg = `该客户创建人是${
+              this.selectedRow["Creator"]
+            }，你不能修改。`;
+            this.toastyService.warning(this.toastOptions);
+            return;
           }
         }
-        if (f.name === "Creator") {
-          formViewData[f.name] = sessionStorage.getItem("userName");
+        if (
+          this.selectedRow &&
+          _.keys(this.selectedRow).includes("CanUpdate")
+        ) {
+          if (!this.selectedRow["CanUpdate"]) {
+            this.toastOptions.msg = "该客户销售订单已审核，不能修改。";
+            this.toastyService.warning(this.toastOptions);
+            return;
+          }
         }
-      });
-      formViewData["Id"] = this.recordId;
-      console.log(formViewData);
-      that.formService.update(that.formView["ViewName"], formViewData).then(
-        data => {
-          closeBack();
-          this.toastOptions.msg = "修改成功。";
-          this.toastyService.success(this.toastOptions);
-          that.getDataList();
-        },
-        err => {
-          this.toastOptions.msg = err;
-          this.toastyService.error(this.toastOptions);
-        }
-      );
-    };
+
+        const that = this;
+        const modalRef = this.modalService.open(NgbdModalContent);
+        modalRef.componentInstance.title = "修改" + this.title;
+        modalRef.componentInstance.config = this.configUpdate;
+
+        let eventdata = event.data;
+        _.each(this.configUpdate, f => {
+          if (f.type === "datepicker" && eventdata[f.name]) {
+            const dv = eventdata[f.name];
+            if (_.isString(dv)) {
+              eventdata[f.name] = this._common.getDateObject(dv);
+            }
+          }
+        });
+
+        modalRef.componentInstance.formValue = eventdata;
+        modalRef.componentInstance.saveFun = (result, closeBack) => {
+          let formViewData = JSON.parse(result);
+          const cfgupdate = _.filter(that.configUpdate, function(o) {
+            return o["disabled"] == true;
+          });
+          _.each(cfgupdate, d => {
+            if (that.updateData[d.name]) {
+              formViewData[d.name] = that.updateData[d.name];
+            }
+          });
+
+          _.each(this.configUpdate, f => {
+            if (f.type === "datepicker" && formViewData[f.name]) {
+              const dv = formViewData[f.name];
+              if (_.isObject(dv)) {
+                formViewData[f.name] = this._common.getDateString(dv);
+              }
+            }
+            if (f.name === "Creator") {
+              formViewData[f.name] = sessionStorage.getItem("userName");
+            }
+          });
+          formViewData["Id"] = this.recordId;
+          console.log(formViewData);
+          that.formService.update(that.formView["ViewName"], formViewData).then(
+            data => {
+              closeBack();
+              this.toastOptions.msg = "修改成功。";
+              this.toastyService.success(this.toastOptions);
+              that.getDataList();
+            },
+            err => {
+              this.toastOptions.msg = err;
+              this.toastyService.error(this.toastOptions);
+            }
+          );
+        };
+      }
+    });
   }
 
   onDelete(event) {
-    if (this.selectedRow && this.selectedRow["Creator"]) {
-      if (sessionStorage.getItem("userName") != this.selectedRow["Creator"]) {
-        this.toastOptions.msg = `该客户创建人是${
-          this.selectedRow["Creator"]
-        }，你不能删除。`;
-        this.toastyService.warning(this.toastOptions);
-        return;
-      }
-    }
-    if (this.selectedRow && _.keys(this.selectedRow).includes("CanUpdate")) {
-      if (!this.selectedRow["CanUpdate"]) {
-        this.toastOptions.msg = "该客户销售订单已审核，不能删除。";
-        this.toastyService.warning(this.toastOptions);
-        return;
-      }
-    }
-    if (window.confirm("你确定要删除吗?")) {
-      this.formService.delete(this.tableView["ViewName"], event.data.Id).then(
-        data => {
-          this.toastOptions.msg = "删除成功。";
-          this.toastyService.success(this.toastOptions);
-          this.getDataList();
-        },
-        err => {
-          this.toastOptions.msg = err;
-          this.toastyService.error(this.toastOptions);
+    this.checkRoles("EditRoles").then(d => {
+      if (d == 0) {
+        this._state.notifyDataChanged("messagebox", {
+          type: "warning",
+          msg: "你无权删除客户资料。",
+          time: new Date().getTime()
+        });
+      } else {
+        if (this.selectedRow && this.selectedRow["Creator"]) {
+          if (
+            sessionStorage.getItem("userName") != this.selectedRow["Creator"]
+          ) {
+            this.toastOptions.msg = `该客户创建人是${
+              this.selectedRow["Creator"]
+            }，你不能删除。`;
+            this.toastyService.warning(this.toastOptions);
+            return;
+          }
         }
-      );
-    }
+        if (
+          this.selectedRow &&
+          _.keys(this.selectedRow).includes("CanUpdate")
+        ) {
+          if (!this.selectedRow["CanUpdate"]) {
+            this.toastOptions.msg = "该客户销售订单已审核，不能删除。";
+            this.toastyService.warning(this.toastOptions);
+            return;
+          }
+        }
+        if (window.confirm("你确定要删除吗?")) {
+          this.formService
+            .delete(this.tableView["ViewName"], event.data.Id)
+            .then(
+              data => {
+                this.toastOptions.msg = "删除成功。";
+                this.toastyService.success(this.toastOptions);
+                this.getDataList();
+              },
+              err => {
+                this.toastOptions.msg = err;
+                this.toastyService.error(this.toastOptions);
+              }
+            );
+        }
+      }
+    });
   }
 
   onSelected(event) {
     this.recordId = event.data.Id;
     this.selectedRow = event.data;
+  }
+
+  checkRoles(power) {
+    const that = this;
+    return new Promise((resolve, reject) => {
+      const roles = sessionStorage.getItem("roleIds");
+      const roleName = that.tableView[power];
+      if (roleName) {
+        that.formService.getForms("sys_role").then(
+          data => {
+            const roles = data.Data;
+            const rl = _.find(roles, f => {
+              return f["RoleName"] == roleName;
+            });
+            if (rl && roles.includes(rl["Id"])) {
+              resolve(1);
+            } else {
+              resolve(0);
+            }
+          },
+          err => {}
+        );
+      }
+      resolve(1);
+    });
   }
 }

@@ -34,11 +34,22 @@ export class PrintButtonComponent implements ViewCell, OnInit {
     this.currentUser = sessionStorage.getItem("userName");
   }
   onDetail() {
-    this.save.emit(this.rowData);
-    const getTimestamp = new Date().getTime();
-    this._state.notifyDataChanged("print.carsale.detail", {
-      id: this.value.Id,
-      time: getTimestamp
+    this.checkRoles("ReadRoles").then(d => {
+      if (d == 0) {
+        this._state.notifyDataChanged("messagebox", {
+          type: "warning",
+          msg: "你无权打印。",
+          time: new Date().getTime()
+        });
+      } else {
+        this.save.emit(this.rowData);
+
+        const getTimestamp = new Date().getTime();
+        this._state.notifyDataChanged("print.carsale.detail", {
+          id: this.value.Id,
+          time: getTimestamp
+        });
+      }
     });
   }
   onCheck() {
@@ -51,7 +62,7 @@ export class PrintButtonComponent implements ViewCell, OnInit {
     });
   }
   onAudit() {
-    this.checkRoles().then(d => {
+    this.checkRoles("AuditRoles").then(d => {
       if (d == 0) {
         this._state.notifyDataChanged("messagebox", {
           type: "warning",
@@ -78,7 +89,7 @@ export class PrintButtonComponent implements ViewCell, OnInit {
     });
   }
   onAuditNot() {
-    this.checkRoles().then(d => {
+    this.checkRoles("AuditRoles").then(d => {
       if (d == 0) {
         this._state.notifyDataChanged("messagebox", {
           type: "warning",
@@ -97,20 +108,30 @@ export class PrintButtonComponent implements ViewCell, OnInit {
     });
   }
   onClick() {
-    this.save.emit(this.rowData);
+    this.checkRoles("ReadRoles").then(d => {
+      if (d == 0) {
+        this._state.notifyDataChanged("messagebox", {
+          type: "warning",
+          msg: "你无权打印。",
+          time: new Date().getTime()
+        });
+      } else {
+        this.save.emit(this.rowData);
 
-    const getTimestamp = new Date().getTime();
-    this._state.notifyDataChanged("print.carsale", {
-      id: this.value.Id,
-      time: getTimestamp
+        const getTimestamp = new Date().getTime();
+        this._state.notifyDataChanged("print.carsale", {
+          id: this.value.Id,
+          time: getTimestamp
+        });
+      }
     });
   }
 
-  checkRoles() {
+  checkRoles(power) {
     const that = this;
     return new Promise((resolve, reject) => {
       const roles = sessionStorage.getItem("roleIds");
-      const roleName = that.value["AuditRoles"];
+      const roleName = that.value[power];
       if (roleName) {
         that.formService.getForms("sys_role").then(
           data => {
@@ -126,8 +147,9 @@ export class PrintButtonComponent implements ViewCell, OnInit {
           },
           err => {}
         );
+      } else {
+        resolve(1);
       }
-      resolve(1);
     });
   }
 }

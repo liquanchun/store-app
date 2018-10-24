@@ -111,10 +111,8 @@ export class CarsaleComponent implements OnInit {
     private _common: Common,
     private _state: GlobalState
   ) {}
-  ngAfterViewInit(){
-  }
-  ngOnDestroy() {
-  }
+  ngAfterViewInit() {}
+  ngOnDestroy() {}
   ngOnInit() {
     this.formname = "carsale";
     this.canUpdate = false;
@@ -122,11 +120,11 @@ export class CarsaleComponent implements OnInit {
     this.mainTableID = 0;
     const that = this;
 
-    this._state.unsubscribe('print.carsale.detail');
-    this._state.unsubscribe('print.carsale.check');
-    this._state.unsubscribe('print.carsale.audit');
-    this._state.unsubscribe('print.carsale.auditnot');
-    this._state.unsubscribe('print.carsale');
+    this._state.unsubscribe("print.carsale.detail");
+    this._state.unsubscribe("print.carsale.check");
+    this._state.unsubscribe("print.carsale.audit");
+    this._state.unsubscribe("print.carsale.auditnot");
+    this._state.unsubscribe("print.carsale");
 
     this._state.subscribe("print.carsale.detail", data => {
       this.router.navigate(["/pages/market/carsalenew", this.mainTableID], {
@@ -461,6 +459,8 @@ export class CarsaleComponent implements OnInit {
         this.carsaleData = data.Data;
         _.each(this.carsaleData, f => {
           f["AuditRoles"] = this.tableView["AuditRoles"];
+          f["ReadRoles"] = this.tableView["ReadRoles"];
+          f["EditRoles"] = this.tableView["EditRoles"];
           f["button"] = f;
         });
         this.source.load(this.carsaleData);
@@ -493,6 +493,8 @@ export class CarsaleComponent implements OnInit {
           this.carsaleData = data.Data;
           _.each(this.carsaleData, f => {
             f["AuditRoles"] = this.tableView["AuditRoles"];
+            f["ReadRoles"] = this.tableView["ReadRoles"];
+            f["EditRoles"] = this.tableView["EditRoles"];
             f["button"] = f;
           });
           this.source.load(this.carsaleData);
@@ -506,7 +508,17 @@ export class CarsaleComponent implements OnInit {
     }
   }
   onCreate(): void {
-    this.router.navigate(["/pages/market/carsalenew", 0]);
+    this.checkRoles("EditRoles").then(d => {
+      if (d == 0) {
+        this._state.notifyDataChanged("messagebox", {
+          type: "warning",
+          msg: "你无权新增销售预订单。",
+          time: new Date().getTime()
+        });
+      } else {
+        this.router.navigate(["/pages/market/carsalenew", 0]);
+      }
+    });
   }
   onSave(event) {
     console.log(event);
@@ -531,7 +543,18 @@ export class CarsaleComponent implements OnInit {
         return;
       }
     }
-    this.router.navigate(["/pages/market/carsalenew", id]);
+
+    this.checkRoles("EditRoles").then(d => {
+      if (d == 0) {
+        this._state.notifyDataChanged("messagebox", {
+          type: "warning",
+          msg: "你无权修改销售预订单。",
+          time: new Date().getTime()
+        });
+      } else {
+        this.router.navigate(["/pages/market/carsalenew", id]);
+      }
+    });
   }
 
   onDelete(event) {
@@ -556,23 +579,35 @@ export class CarsaleComponent implements OnInit {
         return;
       }
 
-      this.formService.delete(this.tableView["TableName"], event.data.Id).then(
-        data => {
+      this.checkRoles("EditRoles").then(d => {
+        if (d == 0) {
           this._state.notifyDataChanged("messagebox", {
-            type: "success",
-            msg: "删除成功。",
+            type: "warning",
+            msg: "你无权删除销售预订单。",
             time: new Date().getTime()
           });
-          this.getDataList();
-        },
-        err => {
-          this._state.notifyDataChanged("messagebox", {
-            type: "error",
-            msg: err,
-            time: new Date().getTime()
-          });
+        } else {
+          this.formService
+            .delete(this.tableView["TableName"], event.data.Id)
+            .then(
+              data => {
+                this._state.notifyDataChanged("messagebox", {
+                  type: "success",
+                  msg: "删除成功。",
+                  time: new Date().getTime()
+                });
+                this.getDataList();
+              },
+              err => {
+                this._state.notifyDataChanged("messagebox", {
+                  type: "error",
+                  msg: err,
+                  time: new Date().getTime()
+                });
+              }
+            );
         }
-      );
+      });
     }
   }
 
@@ -669,6 +704,32 @@ export class CarsaleComponent implements OnInit {
       },
       err => {}
     );
+  }
+
+  checkRoles(power) {
+    const that = this;
+    return new Promise((resolve, reject) => {
+      const roles = sessionStorage.getItem("roleIds");
+      const roleName = that.tableView[power];
+      if (roleName) {
+        that.formService.getForms("sys_role").then(
+          data => {
+            const roles = data.Data;
+            const rl = _.find(roles, f => {
+              return f["RoleName"] == roleName;
+            });
+            if (rl && roles.includes(rl["Id"])) {
+              resolve(1);
+            } else {
+              resolve(0);
+            }
+          },
+          err => {}
+        );
+      } else {
+        resolve(1);
+      }
+    });
   }
 
   print() {
