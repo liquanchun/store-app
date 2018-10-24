@@ -130,7 +130,7 @@ export class PrintButtonComponent implements ViewCell, OnInit {
   checkRoles(power) {
     const that = this;
     return new Promise((resolve, reject) => {
-      const roles = sessionStorage.getItem("roleIds");
+      const roleIds = sessionStorage.getItem("roleIds");
       const roleName = that.value[power];
       if (roleName) {
         that.formService.getForms("sys_role").then(
@@ -139,7 +139,7 @@ export class PrintButtonComponent implements ViewCell, OnInit {
             const rl = _.find(roles, f => {
               return f["RoleName"] == roleName;
             });
-            if (rl && roles.includes(rl["Id"])) {
+            if (rl && roleIds.includes(rl["Id"])) {
               resolve(1);
             } else {
               resolve(0);
