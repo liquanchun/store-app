@@ -330,8 +330,11 @@ export class CarSaleNewComponent implements OnInit {
         two: function(callback) {
           that.formService.getForms("car_customer").then(
             data => {
-              that.custinfoDataList = data.Data;
-              that.popCusInfoGrid.load(data.Data);
+              const mydata = _.filter(data.Data, f => {
+                return f["Creator"] == sessionStorage.getItem("userName");
+              });
+              that.custinfoDataList = mydata;
+              that.popCusInfoGrid.load(mydata);
               callback(null, 2);
             },
             err => {}

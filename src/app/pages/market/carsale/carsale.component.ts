@@ -456,16 +456,24 @@ export class CarsaleComponent implements OnInit {
     this.loading = true;
     this.formService.getForms(this.tableView["ViewName"]).then(
       data => {
-        this.carsaleData = data.Data;
-        _.each(this.carsaleData, f => {
-          f["AuditRoles"] = this.tableView["AuditRoles"];
-          f["ReadRoles"] = this.tableView["ReadRoles"];
-          f["EditRoles"] = this.tableView["EditRoles"];
-          f["button"] = f;
+        this.checkRoles("AuditRoles").then(d => {
+          this.carsaleData = data.Data;
+          if (d == 0) {
+            //如果没有审核权限，则只显示自己创建的单
+            this.carsaleData = _.filter(data.Data, f => {
+              return f["Creator"] == sessionStorage.getItem("userName");
+            });
+          }
+          _.each(this.carsaleData, f => {
+            f["AuditRoles"] = this.tableView["AuditRoles"];
+            f["ReadRoles"] = this.tableView["ReadRoles"];
+            f["EditRoles"] = this.tableView["EditRoles"];
+            f["button"] = f;
+          });
+          this.source.load(this.carsaleData);
+          this.totalRecord = data.Data.length;
+          this.loading = false;
         });
-        this.source.load(this.carsaleData);
-        this.totalRecord = data.Data.length;
-        this.loading = false;
       },
       err => {
         this.loading = false;

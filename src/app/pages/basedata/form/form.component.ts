@@ -405,11 +405,24 @@ export class FormComponent implements OnInit {
   getDataList() {
     this.formService.getForms(this.tableView["ViewName"]).then(
       data => {
-        if (this.tableView["OrderByField"]) {
-          const ordy = this.tableView["OrderByField"].split(",");
-          this.source.load(_.orderBy(data.Data, ordy, ["asc"]));
+        if (this.tableView["ViewName"] == "car_customer") {
+          const mydata = _.filter(data.Data, f => {
+            return f["Creator"] == sessionStorage.getItem("userName");
+          });
+
+          if (this.tableView["OrderByField"]) {
+            const ordy = this.tableView["OrderByField"].split(",");
+            this.source.load(_.orderBy(mydata, ordy, ["asc"]));
+          } else {
+            this.source.load(mydata);
+          }
         } else {
-          this.source.load(data.Data);
+          if (this.tableView["OrderByField"]) {
+            const ordy = this.tableView["OrderByField"].split(",");
+            this.source.load(_.orderBy(data.Data, ordy, ["asc"]));
+          } else {
+            this.source.load(data.Data);
+          }
         }
         this.onSearch("");
         this.loading = false;
