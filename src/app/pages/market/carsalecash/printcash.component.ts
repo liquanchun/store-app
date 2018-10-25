@@ -7,10 +7,10 @@ import * as _ from 'lodash';
   selector: 'print-cash-view',
   template: `
 	    <div class="btn-group" role="group" aria-label="Basic example">
-        <button *ngIf="value.Creator == currentUser" type="button" style="line-height: 15px;" class="btn btn-light btn-sm tablebutton" (click)="onDetail()">详情</button>
-        <button *ngIf="value.Creator == currentUser" type="button" style="line-height: 15px;" class="btn btn-light btn-sm tablebutton" (click)="onClick()">打印交款明细</button>
-        <button *ngIf="value.Creator == currentUser" type="button" style="line-height: 15px;" class="btn btn-light btn-sm tablebutton" (click)="onClick2()">打印精品明细</button>
-        <button *ngIf="value.Creator == currentUser" type="button" style="line-height: 15px;" class="btn btn-light btn-sm tablebutton" (click)="onClick3()">打印销售合同</button>
+        <button type="button" style="line-height: 15px;" class="btn btn-light btn-sm tablebutton" (click)="onDetail()">详情</button>
+        <button type="button" style="line-height: 15px;" class="btn btn-light btn-sm tablebutton" (click)="onClick()">打印交款明细</button>
+        <button type="button" style="line-height: 15px;" class="btn btn-light btn-sm tablebutton" (click)="onClick2()">打印精品明细</button>
+        <button type="button" style="line-height: 15px;" class="btn btn-light btn-sm tablebutton" (click)="onClick3()">打印销售合同</button>
         <button *ngIf="value.AuditResult != '通过'" type="button" style="line-height: 15px;" class="btn btn-light btn-sm tablebutton" (click)="onAudit()">审核</button>
         <button *ngIf="value.AuditResult == '通过'" type="button" style="line-height: 15px;" class="btn btn-light btn-sm tablebutton" (click)="onAuditNot()">反审核</button>
       </div>

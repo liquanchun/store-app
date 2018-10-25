@@ -639,6 +639,17 @@ export class CarSaleCashComponent implements OnInit {
           });
           return;
         }
+        if (this.carsale && this.carsale["Creator"]) {
+          if (sessionStorage.getItem("userName") != this.carsale["Creator"]) {
+            this._state.notifyDataChanged("messagebox", {
+              type: "warning",
+              msg: `该单创建人是${this.carsale["Creator"]}，你不能编辑。`,
+              time: new Date().getTime()
+            });
+            return;
+          }
+        }
+
         this.router.navigate(
           ["/pages/market/carsalecashnew", event.data.BookingId],
           {
@@ -668,6 +679,25 @@ export class CarSaleCashComponent implements OnInit {
             time: new Date().getTime()
           });
         } else {
+          if (this.carsale["AuditResult"] == "通过") {
+            this._state.notifyDataChanged("messagebox", {
+              type: "warning",
+              msg: "已审核通过，不能删除。",
+              time: new Date().getTime()
+            });
+            return;
+          }
+          if (this.carsale && this.carsale["Creator"]) {
+            if (sessionStorage.getItem("userName") != this.carsale["Creator"]) {
+              this._state.notifyDataChanged("messagebox", {
+                type: "warning",
+                msg: `该单创建人是${this.carsale["Creator"]}，你不能删除。`,
+                time: new Date().getTime()
+              });
+              return;
+            }
+          }
+
           this.formService
             .delete(this.tableView["TableName"], event.data.Id)
             .then(
