@@ -67,7 +67,10 @@ export class CarstoreComponent implements OnInit {
   //子表查询条件
   mainTableID: number = 0;
 
+  datalist: any;
   totalRecord: number = 0;
+  remind1: number = 0;
+  remind2: number = 0;
   constructor(
     private modalService: NgbModal,
     private formService: FormService,
@@ -230,8 +233,24 @@ export class CarstoreComponent implements OnInit {
     this.loading = true;
     this.formService.getForms(this.tableView["ViewName"]).then(
       data => {
-        this.source.load(_.orderBy(data.Data, "UpdateTime", "desc"));
-        this.totalRecord = data.Data.length;
+        this.datalist = _.orderBy(data.Data, "UpdateTime", "desc");
+        this.source.load(this.datalist);
+        this.totalRecord = this.datalist.length;
+
+        this.remind1 = _.size(
+          _.filter(this.datalist, f => {
+            return f["RemindId"] > 0;
+          })
+        );
+        this.remind2 = _.size(
+          _.filter(this.datalist, f => {
+            return (
+              f["StoreDays"] > 0 &&
+              f["StoreRemind"] > 0 &&
+              _.toNumber(f["StoreDays"]) > _.toNumber(f["StoreRemind"])
+            );
+          })
+        );
         //this.source.setPaging(2,10);
         //this.source.setPage(5);
         this.loading = false;
@@ -240,6 +259,27 @@ export class CarstoreComponent implements OnInit {
         this.loading = false;
       }
     );
+  }
+  //获取数据
+  remindData1() {
+    const data = _.filter(this.datalist, f => {
+      return f["RemindId"] > 0;
+    });
+    this.source.load(data);
+    this.totalRecord = data.length;
+  }
+  //获取数据
+  remindData2() {
+    //库龄大于库存提醒（天）
+    const data = _.filter(this.datalist, f => {
+      return (
+        f["StoreDays"] > 0 &&
+        f["StoreRemind"] > 0 &&
+        _.toNumber(f["StoreDays"]) > _.toNumber(f["StoreRemind"])
+      );
+    });
+    this.source.load(data);
+    this.totalRecord = data.length;
   }
   //设置过滤字段
   onSearch(query: string = "") {

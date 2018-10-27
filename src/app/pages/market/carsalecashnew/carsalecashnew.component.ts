@@ -74,7 +74,8 @@ export class CarSaleCashNewComponent implements OnInit {
     Address: "",
     Phone: "",
     InvoiceCode: "",
-    InvoiceName: ""
+    InvoiceName: "",
+    CustAttr:""
   };
   carinfo: any = {
     CarType: "",
@@ -116,6 +117,11 @@ export class CarSaleCashNewComponent implements OnInit {
   customerId: number;
   carIncomeId: number;
   chineseMoney: string = "";
+
+  gmxz:any;
+  gmzz:any;
+  fkfs:any;
+  bxgs:any;
   //弹出框表格
   popCarItemGrid: LocalDataSource = new LocalDataSource();
   constructor(
@@ -142,6 +148,22 @@ export class CarSaleCashNewComponent implements OnInit {
       this.carsale.InvoiceDate = this._common.getTodayString();
       this.getCarsale(bookid);
     }
+
+    this._dicService.getDicByName("购买性质", data => {
+      this.gmxz = data;
+    });
+
+    this._dicService.getDicByName("购买资质", data => {
+      this.gmzz = data;
+    });
+
+    this._dicService.getDicByName("付款方式", data => {
+      this.fkfs = data;
+    });
+
+    this._dicService.getDicByName("保险公司", data => {
+      this.bxgs = data;
+    });
   }
 
   getCarsale(bookid: number) {

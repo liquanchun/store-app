@@ -43,19 +43,49 @@
         <tr>
           <td valign="middle" rowspan="3">购买信息</td>
           <td><span class="reqmark">*</span>购买性质</td>
-          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.BuyType" type="text" class="form-control"></td>
+          <td>
+            <select [class.inputline]="!isEnable" [(ngModel)]="carsale.BuyType">
+              <option value="">--请选择--</option>
+              <option [value]="option.text" *ngFor="let option of gmxz">
+                {{ option.text }}
+              </option>
+            </select>
+          </td>
           <td><span class="reqmark">*</span>购买资质</td>
-          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.BuyLicense" type="text" class="form-control"></td>
+          <td>
+            <select [class.inputline]="!isEnable" [(ngModel)]="carsale.BuyLicense">
+              <option value="">--请选择--</option>
+              <option [value]="option.text" *ngFor="let option of gmzz">
+                {{ option.text }}
+              </option>
+            </select>
+          </td>
         </tr>
         <tr>
           <td><span class="reqmark">*</span>客户属性</td>
-          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.CustAttr" type="text" class="form-control"></td>
+          <td>
+            <input readonly [value]="customer.CustAttr" type="text" class="form-control inputline">
+          </td>
           <td><span class="reqmark">*</span>付款方式</td>
-          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.PayType" type="text" class="form-control"></td>
+          <td>
+            <select [class.inputline]="!isEnable" [(ngModel)]="carsale.PayType">
+              <option value="">--请选择--</option>
+              <option [value]="option.text" *ngFor="let option of fkfs">
+                {{ option.text }}
+              </option>
+            </select>
+          </td>
         </tr>
         <tr>
           <td><span class="reqmark">*</span>保险公司</td>
-          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.InsureCompany" type="text" class="form-control"></td>
+          <td>
+            <select [class.inputline]="!isEnable" [(ngModel)]="carsale.InsureCompany">
+              <option value="">--请选择--</option>
+              <option [value]="option.text" *ngFor="let option of bxgs">
+                {{ option.text }}
+              </option>
+            </select>
+          </td>
           <td><strong><span class="reqmark">*</span>优惠金额</strong></td>
           <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.Discount" type="number" min="0" class="form-control"></td>
         </tr>
@@ -174,9 +204,9 @@
       <tr *ngFor="let item of partItem">
         <td>{{item.ItemType}}</td>
         <td>{{item.Service}}</td>
-        <td>{{item.ItemName}}</td>
+        <td><input [class.inputline]="!isEnable" [(ngModel)]="item.ItemName" type="text" class="form-control"></td>
         <td><input [class.inputline]="!isEnable" [(ngModel)]="item.Count" type="text" class="form-control"></td>
-        <td>{{item.Price}}</td>
+        <td><input [class.inputline]="!isEnable" [(ngModel)]="item.Price" type="text" class="form-control"></td>
         <td>
           <button *ngIf="isEnable" type="button" (click)="removeItem(item.ItemName)" class="btn btn-warning">删除</button>
         </td>

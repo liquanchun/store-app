@@ -1,4 +1,11 @@
-import { Component, OnInit, AfterViewInit, ViewChild } from "@angular/core";
+import {
+  Component,
+  OnInit,
+  AfterViewInit,
+  ViewChild,
+  TemplateRef,
+  ViewContainerRef
+} from "@angular/core";
 import { NgbModal, ModalDismissReasons } from "@ng-bootstrap/ng-bootstrap";
 import {
   FormGroup,
@@ -28,7 +35,7 @@ import { reject } from "q";
   styleUrls: ["./carstorenew.component.scss"],
   providers: [FormService, DicService]
 })
-export class CarstoreNewComponent implements OnInit {
+export class CarstoreNewComponent implements OnInit, AfterViewInit {
   @ViewChild(DynamicForm2Component)
   form: DynamicForm2Component;
   @ViewChild(EditFormComponent)
@@ -50,10 +57,51 @@ export class CarstoreNewComponent implements OnInit {
   formname: string;
   canUpdate: boolean = false;
 
+  settingsCar = {
+    actions: {
+      add: false,
+      edit: false,
+      delete: false
+    },
+    mode: "external",
+    hideSubHeader: true,
+    columns: {
+      CarSeries: {
+        title: "车系",
+        type: "string",
+        filter: false
+      },
+      CarType: {
+        title: "车型",
+        type: "string",
+        filter: false
+      },
+      CarTypeCode: {
+        title: "车系代码",
+        type: "string",
+        filter: false
+      },
+      Config: {
+        title: "配置",
+        type: "string",
+        filter: false
+      }
+    }
+  };
+
+  //弹出框表格
+  popCarInfoGrid: LocalDataSource = new LocalDataSource();
+
   //子表视图
   subViewName: any;
   //子表查询条件
   mainTableID: number = 0;
+  cartypeList: any;
+  carseriesList: any = [];
+
+  @ViewChild("popContentCar")
+  tplRef: TemplateRef<any>;
+
   constructor(
     private modalService: NgbModal,
     private formService: FormService,
@@ -61,8 +109,10 @@ export class CarstoreNewComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private _common: Common,
-    private _state: GlobalState
+    private _state: GlobalState,
+    private vcRef: ViewContainerRef
   ) {}
+  ngAfterViewInit() {}
   ngOnInit() {
     this.formname = "carincome";
     this.mainTableID = _.toInteger(this.route.snapshot.paramMap.get("id"));
@@ -76,6 +126,22 @@ export class CarstoreNewComponent implements OnInit {
 
     this.selectData = {};
     this.updateData = {};
+
+    this.formService.getForms("car_type").then(
+      data => {
+        this.cartypeList = data.Data;
+        this.popCarInfoGrid.load(data.Data);
+        _.each(this.cartypeList, f => {
+          if (!_.includes(this.carseriesList, f["CarSeries"])) {
+            this.carseriesList.push({
+              id: f["CarSeries"],
+              text: f["CarSeries"]
+            });
+          }
+        });
+      },
+      err => {}
+    );
   }
 
   //根据视图名称获取表格和表单定义
@@ -496,6 +562,13 @@ export class CarstoreNewComponent implements OnInit {
   }
 
   onChange(e) {
+    if (e.target.innerText.includes("车系")) {
+      this.popCarInfoGrid.load(
+        _.filter(this.cartypeList, f => {
+          return f["CarSeries"] == e.target.value;
+        })
+      );
+    }
     this.selectData[e.target.name] = e.target.value;
   }
   onNew() {
@@ -506,5 +579,38 @@ export class CarstoreNewComponent implements OnInit {
   }
   onBack() {
     this.router.navigate(["/pages/market/carstore"]);
+  }
+
+  //选择房间
+  rowCarClicked(event): void {
+    const fields = ["CarSeries","CarType", "CarTypeCode", "Config", "GuidePrice"];
+    _.each(fields, fd => {
+      _.each(this.config, f => {
+        if (f["name"] == fd) {
+          f["value"] = event.data[fd];
+        }
+      });
+    });
+  }
+  showPopCar(event): void {
+    _.delay(
+      function(text) {
+        $(".popover").css("max-width", "820px");
+        $(".popover").css("min-width", "600px");
+      },
+      100,
+      "later"
+    );
+  }
+  onSearchCar(query: string = "") {
+    this.popCarInfoGrid.setFilter(
+      [
+        { field: "CarSeries", search: query },
+        { field: "CarType", search: query },
+        { field: "TypeCode", search: query },
+        { field: "Config", search: query }
+      ],
+      false
+    );
   }
 }
