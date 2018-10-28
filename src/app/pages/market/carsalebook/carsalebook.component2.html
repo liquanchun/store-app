@@ -1,0 +1,328 @@
+<div class="row">
+  <div class="col-md-12">
+    <ba-card [title]="title" class="card-primary" baCardClass="with-scroll">
+      <div style="margin-bottom: 5px;">
+        <div class="row">
+          <div class="col-12">
+            <app-search-form [formView]="searchview" (searchClick)="onSearchAll($event)"></app-search-form>
+          </div>
+        </div>
+      </div>
+    </ba-card>
+    <ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '4px' }"></ngx-loading>
+    <div style="overflow:scroll;">
+      <table class="table">
+        <thead>
+          <tr>
+            <td rowspan="3">序号</td>
+            <td rowspan="3">其他</td>
+            <td colspan="8">新车信息</td>
+            <!-- <td></td>
+            <td></td>
+
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td> -->
+
+            <td colspan="5">客户信息</td>
+            <!-- <td></td>
+            <td></td>
+            <td></td>
+            <td></td> -->
+
+            <td rowspan="3">销售分类</td>
+            <td rowspan="3">销售结构</td>
+            <td colspan="16">整车毛利（含税 元）</td>
+            <!-- <td></td>
+            <td></td> -->
+
+            <!-- <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td> -->
+
+            <!-- <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td> -->
+
+            <!-- <td></td>
+            <td></td>
+            <td></td> -->
+            <td colspan="32">水平事业毛利（含税 元）</td>
+            <!-- <td></td>-->
+
+            <!-- <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td> -->
+
+            <!-- <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td> -->
+
+            <!-- <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td> -->
+
+            <!-- <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td> -->
+
+            <!-- <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td> -->
+
+            <!-- <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td> -->
+
+            <td colspan="6">赠送成本（含税 元）</td>
+            <!-- <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            
+            <td></td> -->
+            <td rowspan="3">综合毛利（含税）</td>
+            <td rowspan="3">送2年交强险</td>
+            <td rowspan="3">送2年盗抢险</td>
+            <td colspan="4">系统信息</td>
+
+            <!-- <td></td>
+            <td></td>
+            <td></td>-->
+            <td rowspan="3">三者(万元）</td>
+            <td rowspan="3">划痕（元）</td>
+
+          </tr>
+          <tr>
+            <!-- <td>序号</td>
+            <td>其他</td> -->
+            <td rowspan="2">采购日期</td>
+            <td rowspan="2">入库日期</td>
+            <td rowspan="2">开票日期</td>
+
+            <td rowspan="2">车型</td>
+            <td rowspan="2">配置</td>
+            <td rowspan="2">车型代码</td>
+            <td rowspan="2">颜色</td>
+            <td rowspan="2">底盘号</td>
+
+            <td rowspan="2">开票名称</td>
+            <td rowspan="2">DMS联系方式</td>
+            <td rowspan="2">地址</td>
+            <td rowspan="2">身份证号</td>
+            <td rowspan="2">销售顾问</td>
+
+            <!-- <td></td>
+            <td></td>-->
+            <td rowspan="2">指导价</td>
+            <td rowspan="2">个性化定制</td>
+            <td rowspan="2">采购价（含税）</td>
+
+            <td rowspan="2">采购价（不含税）</td>
+            <td rowspan="2">新车批售毛利</td>
+            <td rowspan="2">新车奖金</td>
+            <td rowspan="2">销售折让</td>
+            <td rowspan="2">目标达成折让</td>
+
+            <td rowspan="2">其他折让</td>
+            <td rowspan="2">返利预测合计</td>
+            <td rowspan="2">成本价（含税）</td>
+            <td rowspan="2">开票价（含税）</td>
+            <td rowspan="2">优惠点位</td>
+
+            <td rowspan="2">开票价（不含税）</td>
+            <td rowspan="2">进销差（不含税）</td>
+            <td rowspan="2">整车毛利（含税）</td>
+            <td colspan="5">新车保险</td>
+            <!-- <td></td>
+
+            <td></td>
+            <td></td>
+            <td></td> -->
+            <td colspan="3">精品装潢</td>
+            <!-- <td></td> -->
+
+            <!-- <td></td> -->
+            <td colspan="2">金融服务</td>
+            <!-- <td></td> -->
+            <td colspan="5">二手车利润</td>
+            <!-- <td></td>
+
+            <td></td>
+            <td></td>
+            <td></td> -->
+            <td rowspan="2">综合服务费</td>
+            <td colspan="3">代办验车</td>
+
+            <!-- <td></td>
+            <td></td> -->
+            <td colspan="2">玻璃保障服务</td>
+            <!-- <td></td>-->
+            <td colspan="3">贴心会员服务（GAP)</td>
+
+            <!-- <td></td>
+            <td></td>-->
+            <td colspan="3">安心会员服务（集团延保）</td>
+            <!-- <td></td>
+            <td></td>-->
+
+            <td colspan="3">厂家延保</td>
+            <!-- <td></td>
+            <td></td>-->
+            <td rowspan="2">水平业务毛利合计</td>
+            <td rowspan="2">自费保养</td>
+
+            <td rowspan="2">装饰</td>
+            <td rowspan="2">保险</td>
+            <td rowspan="2">保养</td>
+            <td rowspan="2">金融手续费</td>
+            <td rowspan="2">其他</td>
+
+            <td rowspan="2">成本合计</td>
+            <!-- <td></td>
+            <td></td>
+            <td></td> -->
+            <td rowspan="2">DMS录入时间</td>
+
+            <td rowspan="2">DMS编号</td>
+            <td rowspan="2">保修三包开具</td>
+            <td rowspan="2">CRM手续文件齐全</td>
+            <!-- <td></td>
+            <td></td> -->
+
+          </tr>
+          <tr>
+            <!-- <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+
+            <td></td>
+            <td></td>
+            <td></td> -->
+            <td>保险公司</td>
+            <td>保费收入</td>
+
+            <td>其中商业险</td>
+            <td>交强险</td>
+            <td>毛利</td>
+            <td>收入</td>
+            <td>成本</td>
+
+            <td>毛利</td>
+            <td>金融公司</td>
+            <td>服务费收入</td>
+            <td>收购价</td>
+            <td>销售价</td>
+
+            <td>成本（整备+验车）</td>
+            <td>销售毛利</td>
+            <td>销售渠道</td>
+            <!-- <td></td> -->
+            <td>收入</td>
+
+            <td>成本</td>
+            <td>毛利</td>
+            <td>收入</td>
+            <td>毛利</td>
+            <td>收入</td>
+
+            <td>成本</td>
+            <td>毛利</td>
+            <td>收入</td>
+            <td>成本</td>
+            <td>毛利</td>
+
+            <td>收入</td>
+            <td>成本</td>
+            <td>毛利</td>
+            <!-- <td></td>
+            <td></td>
+
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>-->
+
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of dataList">
+            <td *ngFor="let key of keyArr" >
+              <span *ngIf="!showKey[key]">{{item[key]}}</span>
+
+              <a *ngIf="editKey[key] && !showKey[key]" href="javascript:void(0)" (click)="onEdit(key)"><i class="fa fa-pencil"
+                  aria-hidden="true"></i> </a>
+
+              <input *ngIf="showKey[key]" [(value)]="item[key]" type="text" />
+              <a *ngIf="showKey[key]" href="javascript:void(0)" (click)="onSave($event,key,item['CarIncomeId'])">保存</a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</div>

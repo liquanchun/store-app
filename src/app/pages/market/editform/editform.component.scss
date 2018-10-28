@@ -13,9 +13,12 @@
     color: rgba(33, 74, 81, 0.85);
   }
   .col-form-label{
-    width: 85px;
+    width: 95px;
   }
-
+  .col-md-3{
+    padding-left: 5px !important;
+    padding-right: 5px !important;
+  }
   ng2-smart-table {
 
     th,
