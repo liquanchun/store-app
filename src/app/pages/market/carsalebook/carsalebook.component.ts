@@ -107,7 +107,7 @@ export class CarSaleBookComponent implements OnInit {
     const data = _.find(this.dataList, f => f["CarIncomeId"] == id);
     if (val && data) {
       const save = {
-        Id: data["10-Id"],
+        Id: data["10_Id"],
         CarIncomeId: data["CarIncomeId"]
       };
       data[key] = val;
