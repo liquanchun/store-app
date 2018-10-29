@@ -46,7 +46,9 @@
     border-radius: 6px;
     box-shadow: 0 1px 1px black;
   }
-
+  table thead td{
+    font-weight: 700;
+  }
   tbody td {
     background-color: white;
   }

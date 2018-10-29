@@ -9,14 +9,14 @@ import * as _ from "lodash";
  *   {{ 2 | exponentialStrength:10 }}
  *   formats to: 1024
 */
-@Pipe({ name: "numberSeparator" })
-export class NumberSeparatorPipe implements PipeTransform {
+@Pipe({ name: "numberSeparator2" })
+export class NumberSeparatorPipe2 implements PipeTransform {
   transform(value: number): string {
     if (_.isNumber(value)) {
       const val = ("" + value).replace(/(\d{1,3})(?=(\d{3})+(?:$|\.))/g, "$1,");
-      return "￥" + val;
-    }else{
-        return value;
+      return val;
+    } else {
+      return value;
     }
   }
 }

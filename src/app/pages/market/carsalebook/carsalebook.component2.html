@@ -16,7 +16,7 @@
       <span style="margin-right:10px;"><strong>车架号：</strong>{{selectedData['19_新车信息_底盘号']}}</span>
     </div>
     <ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '4px' }"></ngx-loading>
-    <div class="test-1" style="overflow:scroll;">
+    <div class="test-1" style="overflow:scroll;max-height: 500px;">
       <table class="table">
         <thead>
           <tr>
@@ -317,7 +317,7 @@
         <tbody>
           <tr *ngFor="let item of dataList">
             <td *ngFor="let key of keyArr" (click)="onTdClick($event,item['CarIncomeId'])">
-              <span *ngIf="!showKey[key]">{{item[key]}}</span>
+              <span *ngIf="!showKey[key]">{{item[key] | numberSeparator2}}</span>
 
               <a *ngIf="editKey[key] && !showKey[key]" href="javascript:void(0)" (click)="onEdit(key)"><i class="fa fa-pencil"
                   aria-hidden="true"></i> </a>
