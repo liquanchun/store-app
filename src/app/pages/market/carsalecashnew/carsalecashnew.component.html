@@ -53,7 +53,7 @@
           </td>
           <td><span class="reqmark">*</span>购买资质</td>
           <td>
-            <select [class.inputline]="!isEnable" [(ngModel)]="carsale.BuyLicense">
+            <select [class.inputline]="!isEnable" (change)="onBuyLicense()" [(ngModel)]="carsale.BuyLicense">
               <option value="">--请选择--</option>
               <option [value]="option.text" *ngFor="let option of gmzz">
                 {{ option.text }}
@@ -64,7 +64,7 @@
         <tr>
           <td><span class="reqmark">*</span>客户属性</td>
           <td>
-            <input readonly [value]="customer.CustAttr" type="text" class="form-control inputline">
+            <input readonly [value]="customer.CustType" type="text" class="form-control inputline">
           </td>
           <td><span class="reqmark">*</span>付款方式</td>
           <td>

@@ -75,7 +75,7 @@ export class CarSaleCashNewComponent implements OnInit {
     Phone: "",
     InvoiceCode: "",
     InvoiceName: "",
-    CustAttr:""
+    CustType: ""
   };
   carinfo: any = {
     CarType: "",
@@ -118,10 +118,10 @@ export class CarSaleCashNewComponent implements OnInit {
   carIncomeId: number;
   chineseMoney: string = "";
 
-  gmxz:any;
-  gmzz:any;
-  fkfs:any;
-  bxgs:any;
+  gmxz: any;
+  gmzz: any;
+  fkfs: any;
+  bxgs: any;
   //弹出框表格
   popCarItemGrid: LocalDataSource = new LocalDataSource();
   constructor(
@@ -424,5 +424,11 @@ export class CarSaleCashNewComponent implements OnInit {
       }
     );
     this.priceChange();
+  }
+
+  onBuyLicense() {
+    if (this.carsale.BuyLicense == "分期付款") {
+      this.carsale.LastFee = 0;
+    }
   }
 }
