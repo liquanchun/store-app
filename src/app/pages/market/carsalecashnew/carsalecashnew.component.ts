@@ -427,7 +427,7 @@ export class CarSaleCashNewComponent implements OnInit {
   }
 
   onBuyLicense() {
-    if (this.carsale.BuyLicense == "分期付款") {
+    if (this.carsale.BuyLicense != "分期付款") {
       this.carsale.LastFee = 0;
     }
   }
