@@ -10,7 +10,7 @@
       </div>
     </ba-card>
     <ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '4px' }"></ngx-loading>
-    <div style="overflow:scroll;">
+    <div class="test-1" style="overflow:scroll;">
       <table class="table">
         <thead>
           <tr>
@@ -310,7 +310,7 @@
         </thead>
         <tbody>
           <tr *ngFor="let item of dataList">
-            <td *ngFor="let key of keyArr" >
+            <td *ngFor="let key of keyArr" (click)="onTdClick($event)">
               <span *ngIf="!showKey[key]">{{item[key]}}</span>
 
               <a *ngIf="editKey[key] && !showKey[key]" href="javascript:void(0)" (click)="onEdit(key)"><i class="fa fa-pencil"

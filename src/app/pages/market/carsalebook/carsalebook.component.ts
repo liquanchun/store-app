@@ -65,7 +65,7 @@ export class CarSaleBookComponent implements OnInit {
           this.keyArr = _.keys(this.dataList[0]);
           _.remove(this.keyArr, function(f) {
             return f == "IsValid" || f == "CarIncomeId";
-          })
+          });
           _.each(this.keyArr, f => {
             if (f.includes("-")) {
               this.editKey[f] = true;
@@ -132,5 +132,16 @@ export class CarSaleBookComponent implements OnInit {
       );
     }
     delete this.showKey[key];
+  }
+
+  onTdClick(event) {
+    const tr = $(event.target)
+      .parent()
+      .parent();
+    $("td.on").removeClass("on"); //去除其他项的高亮形式
+
+    $(tr)
+      .children("td")
+      .addClass("on");
   }
 }
