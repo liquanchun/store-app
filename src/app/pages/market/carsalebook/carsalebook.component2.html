@@ -1,14 +1,20 @@
 <div class="row">
   <div class="col-md-12">
-    <ba-card [title]="title" class="card-primary" baCardClass="with-scroll">
-      <div style="margin-bottom: 5px;">
-        <div class="row">
+    <ba-card [title]="title" style="margin-bottom:8px;" class="card-primary" baCardClass="with-scroll">
+      <div style="margin-bottom: 1px;">
+        <div class="row" style="margin-bottom: 1px;">
           <div class="col-12">
             <app-search-form [formView]="searchview" (searchClick)="onSearchAll($event)"></app-search-form>
           </div>
         </div>
       </div>
     </ba-card>
+    <div class="alert alert-primary" style="margin-bottom:8px;background-color: #cce5ff;padding:5px" role="alert">
+      <span style="margin-right:10px;">选择的车辆信息——</span>
+      <span style="margin-right:10px;"><strong>客户：</strong>{{selectedData['20_客户信息_开票名称']}}</span>
+      <span style="margin-right:10px;"><strong>车型：</strong>{{selectedData['15_新车信息_车型']}}</span>
+      <span style="margin-right:10px;"><strong>车架号：</strong>{{selectedData['19_新车信息_底盘号']}}</span>
+    </div>
     <ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '4px' }"></ngx-loading>
     <div class="test-1" style="overflow:scroll;">
       <table class="table">
@@ -310,7 +316,7 @@
         </thead>
         <tbody>
           <tr *ngFor="let item of dataList">
-            <td *ngFor="let key of keyArr" (click)="onTdClick($event)">
+            <td *ngFor="let key of keyArr" (click)="onTdClick($event,item['CarIncomeId'])">
               <span *ngIf="!showKey[key]">{{item[key]}}</span>
 
               <a *ngIf="editKey[key] && !showKey[key]" href="javascript:void(0)" (click)="onEdit(key)"><i class="fa fa-pencil"

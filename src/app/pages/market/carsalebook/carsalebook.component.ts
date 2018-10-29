@@ -23,6 +23,8 @@ export class CarSaleBookComponent implements OnInit {
   keyArr: any;
   editKey: any = {};
   showKey: any = {};
+
+  selectedData: any = {};
   constructor(private formService: FormService, private _state: GlobalState) {}
   ngOnInit() {
     this.getViewName("carsalebook").then(data => {
@@ -134,7 +136,8 @@ export class CarSaleBookComponent implements OnInit {
     delete this.showKey[key];
   }
 
-  onTdClick(event) {
+  onTdClick(event, id) {
+    this.selectedData = _.find(this.dataList, f => f["CarIncomeId"] == id);
     const tr = $(event.target)
       .parent()
       .parent();
