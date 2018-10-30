@@ -333,7 +333,7 @@ export class CarSaleNewComponent implements OnInit {
               const mydata = _.filter(data.Data, f => {
                 return f["Creator"] == sessionStorage.getItem("userName");
               });
-              that.custinfoDataList = mydata;
+              that.custinfoDataList = data.Data;
               that.popCusInfoGrid.load(mydata);
               callback(null, 2);
             },
