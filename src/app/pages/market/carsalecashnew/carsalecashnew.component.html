@@ -204,9 +204,9 @@
       <tr *ngFor="let item of partItem">
         <td>{{item.ItemType}}</td>
         <td>{{item.Service}}</td>
-        <td><input [class.inputline]="!isEnable" [(ngModel)]="item.ItemName" type="text" class="form-control"></td>
-        <td><input [class.inputline]="!isEnable" [(ngModel)]="item.Count" type="text" class="form-control"></td>
-        <td><input [class.inputline]="!isEnable" [(ngModel)]="item.Price" type="text" class="form-control"></td>
+        <td><input [class.inputline]="!isEnable" [(ngModel)]="item.ItemName" (change)="cacalItem()" type="text" class="form-control"></td>
+        <td><input [class.inputline]="!isEnable" [(ngModel)]="item.Count" (change)="cacalItem()" type="text" class="form-control"></td>
+        <td><input [class.inputline]="!isEnable" [(ngModel)]="item.Price" (change)="cacalItem()" type="text" class="form-control"></td>
         <td>
           <button *ngIf="isEnable" type="button" (click)="removeItem(item.ItemName)" class="btn btn-warning">删除</button>
         </td>
