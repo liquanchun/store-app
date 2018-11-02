@@ -300,6 +300,8 @@ export class CarSaleCashNewComponent implements OnInit {
   onConfirm(): void {
     const that = this;
     this.carsale.Creator = sessionStorage.getItem("userName");
+    if (this.carsale.UpdateTime) delete this.carsale.UpdateTime;
+
     this.formService.create("car_sale_cash", this.carsale).then(
       function(data) {
         that._state.notifyDataChanged("messagebox", {
@@ -319,6 +321,9 @@ export class CarSaleCashNewComponent implements OnInit {
     );
 
     _.each(this.partItem, f => {
+      if (f.UpdateTime) {
+        delete f.UpdateTime;
+      }
       f["OrderId"] = this.carsale.OrderId;
       this.formService
         .create("car_booking_item", f)

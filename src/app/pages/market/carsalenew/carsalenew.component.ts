@@ -500,7 +500,11 @@ export class CarSaleNewComponent implements OnInit {
   }
   onSearchCus(query: string = "") {
     this.popCusInfoGrid.setFilter(
-      [{ field: "Name", search: query }, { field: "Phone", search: query }, { field: "LinkMan", search: query }],
+      [
+        { field: "Name", search: query },
+        { field: "Phone", search: query },
+        { field: "LinkMan", search: query }
+      ],
       false
     );
   }
@@ -571,7 +575,7 @@ export class CarSaleNewComponent implements OnInit {
       });
       return;
     }
-    if(this.carsale.CarIncomeId == 0){
+    if (this.carsale.CarIncomeId == 0) {
       this._state.notifyDataChanged("messagebox", {
         type: "warning",
         msg: "车辆信息不能为空。",
@@ -579,7 +583,7 @@ export class CarSaleNewComponent implements OnInit {
       });
       return;
     }
-    if(this.carsale.CustomerId == 0){
+    if (this.carsale.CustomerId == 0) {
       this._state.notifyDataChanged("messagebox", {
         type: "warning",
         msg: "客户信息不能为空。",
@@ -593,6 +597,7 @@ export class CarSaleNewComponent implements OnInit {
 
     delete newcarsale.PreCarDateObj;
     delete newcarsale.OrderDateObj;
+    if (newcarsale.UpdateTime) delete newcarsale.UpdateTime;
 
     console.log(newcarsale);
     const that = this;
@@ -614,7 +619,7 @@ export class CarSaleNewComponent implements OnInit {
         });
       }
     );
-
+    if (this.customer.UpdateTime) delete this.customer.UpdateTime;
     this.formService
       .create("car_customer", this.customer)
       .then(data => {}, err => {});
@@ -640,22 +645,22 @@ export class CarSaleNewComponent implements OnInit {
     });
   }
 
-  checkRadio(event){
-    if(this.carsale.PayType=='现车付款'){
+  checkRadio(event) {
+    if (this.carsale.PayType == "现车付款") {
       this.carsale.Days2 = 0;
-      this.carsale.FinaceCompany = '';
+      this.carsale.FinaceCompany = "";
       this.carsale.FirstFee = 0;
       this.carsale.Stages = 0;
       this.carsale.Days3 = 0;
     }
-    if(this.carsale.PayType=='订单车辆付款'){
+    if (this.carsale.PayType == "订单车辆付款") {
       this.carsale.Days1 = 0;
-      this.carsale.FinaceCompany = '';
+      this.carsale.FinaceCompany = "";
       this.carsale.FirstFee = 0;
       this.carsale.Stages = 0;
       this.carsale.Days3 = 0;
     }
-    if(this.carsale.PayType=='分期付款'){
+    if (this.carsale.PayType == "分期付款") {
       this.carsale.Days1 = 0;
       this.carsale.Days2 = 0;
     }

@@ -531,6 +531,7 @@ export class CarstoreNewComponent implements OnInit, AfterViewInit {
         });
 
         console.log(value);
+        if (value.UpdateTime) delete value.UpdateTime;
         this.formService.create(this.tablename, value).then(
           function(data) {
             if (_.isArray(data) && data.length == 1) {
