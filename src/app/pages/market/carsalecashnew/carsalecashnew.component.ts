@@ -301,7 +301,7 @@ export class CarSaleCashNewComponent implements OnInit {
     const that = this;
     this.carsale.Creator = sessionStorage.getItem("userName");
     if (this.carsale.UpdateTime) delete this.carsale.UpdateTime;
-
+    this.carsale.IsValid = 1;
     this.formService.create("car_sale_cash", this.carsale).then(
       function(data) {
         that._state.notifyDataChanged("messagebox", {
