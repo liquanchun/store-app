@@ -3,10 +3,12 @@
     <ba-card [title]="title" style="margin-bottom:8px;" class="card-primary" baCardClass="with-scroll">
       <div style="margin-bottom: 1px;">
         <div class="row" style="margin-bottom: 1px;">
-          <div class="col-6">
+          <div class="col-12">
             <app-search-form [formView]="searchview" (searchClick)="onSearchAll($event)"></app-search-form>
           </div>
-          <div class="col-6">
+        </div>
+        <div class="row">
+          <div class="col-12">
             <div class="btn-group pull-right margin8" role="group" aria-label="Basic example">
               <button (click)="getDataList()" type="button" class="btn btn-info btn-sm">
                 <i class="fa fa-refresh" aria-hidden="true"></i> 刷新</button>
