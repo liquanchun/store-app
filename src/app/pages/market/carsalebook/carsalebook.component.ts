@@ -106,18 +106,25 @@ export class CarSaleBookComponent implements OnInit {
     const val = $(event.target)
       .prev()
       .val();
-    const data = _.find(this.dataList, f => f["CarIncomeId"] == id);
-    if (val && data) {
+    const cardata = _.find(this.dataList, f => f["CarIncomeId"] == id);
+    if (val && cardata) {
       const save = {
-        Id: data["10_Id"],
-        CarIncomeId: data["CarIncomeId"]
+        Id: cardata["10_Id"],
+        CarIncomeId: cardata["CarIncomeId"]
       };
-      data[key] = val;
+      cardata[key] = val;
       const field = key.split("-")[1];
       save[field] = val;
       console.log(save);
       this.formService.create("car_ledger", save).then(
         data => {
+          if(_.isArray(data)){
+            _.each(this.dataList,f =>{
+                if(f["CarIncomeId"] == cardata["CarIncomeId"]){
+                  f["10_Id"] = data[0];
+                }
+            });
+          }
           this._state.notifyDataChanged("messagebox", {
             type: "success",
             msg: "保存成功。",
