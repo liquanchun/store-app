@@ -90,6 +90,19 @@ export class CarSaleBookComponent implements OnInit {
       this.loading = true;
       this.formService.getFormsByPost("vw_car_salebook", query).then(
         data => {
+          this.dataList = data.Data;
+          if (this.dataList.length > 0) {
+            console.log(this.dataList[0]);
+            this.keyArr = _.keys(this.dataList[0]);
+            _.remove(this.keyArr, function(f) {
+              return f == "IsValid" || f == "CarIncomeId";
+            });
+            _.each(this.keyArr, f => {
+              if (f.includes("-")) {
+                this.editKey[f] = true;
+              }
+            });
+          }
           this.totalRecord = data.Data.length;
           this.loading = false;
         },
@@ -118,11 +131,11 @@ export class CarSaleBookComponent implements OnInit {
       console.log(save);
       this.formService.create("car_ledger", save).then(
         data => {
-          if(_.isArray(data)){
-            _.each(this.dataList,f =>{
-                if(f["CarIncomeId"] == cardata["CarIncomeId"]){
-                  f["10_Id"] = data[0];
-                }
+          if (_.isArray(data)) {
+            _.each(this.dataList, f => {
+              if (f["CarIncomeId"] == cardata["CarIncomeId"]) {
+                f["10_Id"] = data[0];
+              }
             });
           }
           this._state.notifyDataChanged("messagebox", {
