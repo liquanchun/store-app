@@ -155,7 +155,8 @@ export class CarSaleCashComponent implements OnInit {
     CarColor: "",
     CarTrim: "",
     GuidePrice: 0,
-    WholePrice: 0
+    WholePrice: 0,
+    OrderId:""
   };
   printSet: any = [
     "第一联 财务",

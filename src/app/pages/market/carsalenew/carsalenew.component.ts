@@ -99,7 +99,8 @@ export class CarSaleNewComponent implements OnInit {
     CarTrim: "",
     CarConfig: "",
     GuidePrice: 0,
-    GuidePriceRemark: 0
+    GuidePriceRemark: 0,
+    DMSCode: ""
   };
   serviceItem = [
     {
@@ -475,6 +476,7 @@ export class CarSaleNewComponent implements OnInit {
       this.carinfo.Status = "";
       this.carinfo.Vinno = "";
       this.carsale.CarIncomeId = 0;
+      this.carinfo.DMSCode = "";
     }
   }
 
