@@ -280,6 +280,7 @@ export class CarSaleNewComponent implements OnInit {
     }
     this._dicService.getDicByName("销售顾问", data => {
       this.saleman = data;
+      this.carsale.SaleMan = sessionStorage.getItem("userName");
     });
     if (id == 0) {
       this.getDataList();
