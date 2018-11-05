@@ -34,16 +34,12 @@
       <div class="form-group row">
         <label for="inputremark" class="col-md-3 col-form-label"><span class="reqmark">*</span>销售顾问</label>
         <div class="col-md-9">
-          <select [(ngModel)]="carsale.SaleMan">
-            <option value="">--请选择--</option>
-            <option [value]="option.text" *ngFor="let option of saleman">
-              {{ option.text }}
-            </option>
-          </select>
+          <input [class.inputline]="!isEnable" [(ngModel)]="carsale.SaleMan" type="text" class="form-control">
         </div>
       </div>
     </div>
   </div>
+
   <div>
 
     <table class="table table-bordered table-sm">

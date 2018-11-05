@@ -279,10 +279,8 @@ export class CarSaleNewComponent implements OnInit {
     if (n) {
       this.isEnable = false;
     }
-    this._dicService.getDicByName("销售顾问", data => {
-      this.saleman = data;
-      this.carsale.SaleMan = sessionStorage.getItem("userName");
-    });
+    this.carsale.SaleMan = sessionStorage.getItem("userName");
+
     if (id == 0) {
       this.getDataList();
       this.carsale.Creator = sessionStorage.getItem("userName");
