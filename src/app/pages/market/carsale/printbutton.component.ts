@@ -35,20 +35,32 @@ export class PrintButtonComponent implements ViewCell, OnInit {
   }
   // 详情
   onDetail() {
-    this.checkRoles("ReadRoles").then(d => {
-      if (d == 0) {
-        this._state.notifyDataChanged("messagebox", {
-          type: "warning",
-          msg: "你无权查看。",
-          time: new Date().getTime()
-        });
-      } else {
+    this.checkRoles("AuditRoles").then(d => {
+      if (d == 1) {
         this.save.emit(this.rowData);
 
         const getTimestamp = new Date().getTime();
         this._state.notifyDataChanged("print.carsale.detail", {
           id: this.value.Id,
           time: getTimestamp
+        });
+      } else {
+        this.checkRoles("ReadRoles").then(d => {
+          if (d == 0) {
+            this._state.notifyDataChanged("messagebox", {
+              type: "warning",
+              msg: "你无权查看。",
+              time: new Date().getTime()
+            });
+          } else {
+            this.save.emit(this.rowData);
+
+            const getTimestamp = new Date().getTime();
+            this._state.notifyDataChanged("print.carsale.detail", {
+              id: this.value.Id,
+              time: getTimestamp
+            });
+          }
         });
       }
     });

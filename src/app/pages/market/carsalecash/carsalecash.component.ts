@@ -156,7 +156,7 @@ export class CarSaleCashComponent implements OnInit {
     CarTrim: "",
     GuidePrice: 0,
     WholePrice: 0,
-    OrderId:""
+    OrderId: ""
   };
   printSet: any = [
     "第一联 财务",
@@ -212,14 +212,8 @@ export class CarSaleCashComponent implements OnInit {
     this._state.unsubscribe("print.carsalecash");
 
     this._state.subscribe("print.carsalecash.detail", data => {
-      this.checkRoles("ReadRoles").then(d => {
-        if (d == 0) {
-          this._state.notifyDataChanged("messagebox", {
-            type: "warning",
-            msg: "你无权查看销售结单。",
-            time: new Date().getTime()
-          });
-        } else {
+      this.checkRoles("AuditRoles").then(d => {
+        if (d == 1) {
           this.carsale = _.find(this.carsaleData, f => {
             return f["Id"] == data.id;
           });
@@ -229,6 +223,26 @@ export class CarSaleCashComponent implements OnInit {
               queryParams: { n: 1, id: data.id }
             }
           );
+        } else {
+          this.checkRoles("ReadRoles").then(d => {
+            if (d == 0) {
+              this._state.notifyDataChanged("messagebox", {
+                type: "warning",
+                msg: "你无权查看销售结单。",
+                time: new Date().getTime()
+              });
+            } else {
+              this.carsale = _.find(this.carsaleData, f => {
+                return f["Id"] == data.id;
+              });
+              this.router.navigate(
+                ["/pages/market/carsalecashnew", this.carsale.BookingId],
+                {
+                  queryParams: { n: 1, id: data.id }
+                }
+              );
+            }
+          });
         }
       });
     });
