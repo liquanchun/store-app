@@ -10,8 +10,8 @@ import * as _ from "lodash";
         <button type="button" style="line-height: 15px;" class="btn btn-light btn-sm tablebutton" (click)="onDetail()">详情</button>
         <button type="button" style="line-height: 15px;" class="btn btn-light btn-sm tablebutton" (click)="onClick()">打印</button>
         <button *ngIf="value.Creator == currentUser && value.Status == '订单' && value.AuditResult == '通过'" type="button" style="line-height: 15px;" class="btn btn-light btn-sm tablebutton" (click)="onCheck()">转结算单</button>
-        <button *ngIf="value.Status != '已开票' && value.AuditResult != '通过'" type="button" style="line-height: 15px;" class="btn btn-light btn-sm tablebutton" (click)="onAudit()">审核</button>
-        <button *ngIf="value.Status != '已开票' && value.AuditResult == '通过'" type="button" style="line-height: 15px;" class="btn btn-light btn-sm tablebutton" (click)="onAuditNot()">反审核</button>
+        <button *ngIf="value.Status != '订单' && value.AuditResult != '通过'" type="button" style="line-height: 15px;" class="btn btn-light btn-sm tablebutton" (click)="onAudit()">审核</button>
+        <button *ngIf="value.Status == '订单' && value.AuditResult == '通过'" type="button" style="line-height: 15px;" class="btn btn-light btn-sm tablebutton" (click)="onAuditNot()">反审核</button>
         </div>
     `,
   providers: [FormService]
@@ -84,7 +84,7 @@ export class PrintButtonComponent implements ViewCell, OnInit {
           time: new Date().getTime()
         });
       } else {
-        if (this.value.Status == "现车") {
+        if (this.value.CarStatus == "现车") {
           this.save.emit(this.rowData);
 
           const getTimestamp = new Date().getTime();

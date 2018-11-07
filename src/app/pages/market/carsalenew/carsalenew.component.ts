@@ -77,7 +77,8 @@ export class CarSaleNewComponent implements OnInit {
     Count: 1,
     TakeCarSite: "北京博瑞宝汽车销售服务公司",
     TakePhone: "010-87839999",
-    Creator: ""
+    Creator: "",
+    Status: ""
   };
   customer: any = {
     Id: 0,
@@ -602,6 +603,9 @@ export class CarSaleNewComponent implements OnInit {
 
     console.log(newcarsale);
     const that = this;
+    if (!newcarsale.Status) {
+      newcarsale.Status = this.carinfo.Status;
+    }
     this.formService.create("car_booking", newcarsale).then(
       data => {
         that.saveItem();
