@@ -58,6 +58,14 @@ export class CarSaleCashComponent implements OnInit {
     }
   };
 
+  configInvoice: FieldConfig[] = [
+    {
+      type: 'datepicker',
+      label: '日期',
+      name: 'ReceiveInvoice',
+    }
+  ];
+
   config: FieldConfig[] = [
     {
       type: "check",
@@ -211,6 +219,10 @@ export class CarSaleCashComponent implements OnInit {
     this._state.unsubscribe("print.carsalecash.auditnot");
     this._state.unsubscribe("print.carsalecash");
 
+    this._state.subscribe("print.carsalecash.invoice", data => {
+      this.invoiceDate(data.id);
+    });
+
     this._state.subscribe("print.carsalecash.detail", data => {
       this.checkRoles("ReadRoles").then(d => {
         if (d == 0) {
@@ -350,6 +362,32 @@ export class CarSaleCashComponent implements OnInit {
         }
       });
     });
+  }
+
+  invoiceDate(id){
+    const that = this;
+    const modalRef = this.modalService.open(NgbdModalContent);
+    modalRef.componentInstance.title = "收到发票";
+    modalRef.componentInstance.config = this.configInvoice;
+    modalRef.componentInstance.saveFun = (result, closeBack) => {
+      let formValue = JSON.parse(result);
+      _.each(this.configInvoice, f => {
+        if (f.type === "datepicker" && formValue[f.name]) {
+          formValue[f.name] = this._common.getDateString(formValue[f.name]);
+        }
+      });
+      formValue["Id"] = id;
+      console.log(formValue);
+
+      that.formService.create("car_sale_cash", formValue).then(
+        data => {
+          closeBack();
+          that.getDataList();
+        },
+        err => {
+        }
+      );
+    };
   }
   getPartItem() {
     this.formService

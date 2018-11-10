@@ -13,6 +13,7 @@ import * as _ from 'lodash';
         <button type="button" style="line-height: 15px;" class="btn btn-light btn-sm tablebutton" (click)="onClick3()">打印销售合同</button>
         <button *ngIf="value.AuditResult != '通过'" type="button" style="line-height: 15px;" class="btn btn-light btn-sm tablebutton" (click)="onAudit()">审核</button>
         <button *ngIf="value.AuditResult == '通过'" type="button" style="line-height: 15px;" class="btn btn-light btn-sm tablebutton" (click)="onAuditNot()">反审核</button>
+        <button type="button" style="line-height: 15px;" class="btn btn-light btn-sm tablebutton" (click)="onInvoice()">收到发票</button>
       </div>
     `,
 })
@@ -32,6 +33,12 @@ export class PrintCashComponent implements ViewCell, OnInit {
 
   ngOnInit() {
     this.currentUser = sessionStorage.getItem("userName");
+  }
+  onInvoice(){
+    this.save.emit(this.rowData);
+
+    const getTimestamp = new Date().getTime();
+    this._state.notifyDataChanged('print.carsalecash.invoice', { id: this.value.Id, time: getTimestamp });
   }
   onDetail() {
     this.save.emit(this.rowData);
