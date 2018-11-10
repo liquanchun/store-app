@@ -170,7 +170,21 @@ export class CarsaleComponent implements OnInit {
         this.printOrder = _.find(this.carsaleData, f => {
           return f["Id"] == data.id;
         });
-        this.onAudit();
+        const old = _.find(this.carsaleData, f => {
+          return (
+            f["CarIncomeId"] == this.printOrder["CarIncomeId"] &&
+            f["Id"] != this.printOrder["Id"]
+          );
+        });
+        if (old && old["Status"] == "订单") {
+          this._state.notifyDataChanged("messagebox", {
+            type: "warning",
+            msg: `该单车辆已被其他销售顾问创建并审核，你不能审核。`,
+            time: new Date().getTime()
+          });
+        } else {
+          this.onAudit();
+        }
       }
     });
 
@@ -645,7 +659,8 @@ export class CarsaleComponent implements OnInit {
       formValue["Id"] = that.printOrder["Id"];
       formValue["Auditor"] = sessionStorage.getItem("userName");
       formValue["AuditTime"] = this._common.getTodayString();
-      formValue["AuditStatus"] = this.printOrder["Status"];
+      formValue["AuditStatus"] = this.printOrder["CarStatus"];
+      formValue["Status"] = "订单";
       console.log(formValue);
 
       that.formService.create("car_booking", formValue).then(
@@ -675,7 +690,8 @@ export class CarsaleComponent implements OnInit {
 
   onAuditNot(): void {
     let formValue = {};
-    formValue["Id"] = this.printOrder["Id"];
+    formValue["Id"] = this.printOrder["AuditStatus"];
+    formValue["Status"] = this.printOrder["Id"];
     formValue["AuditResult"] = " ";
     formValue["AuditSuggest"] = " ";
     formValue["Auditor"] = sessionStorage.getItem("userName");
