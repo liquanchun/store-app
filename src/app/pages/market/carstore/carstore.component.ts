@@ -15,7 +15,7 @@ import { DicService } from "../../sys/dic/dic.services";
 import { GlobalState } from "../../../global.state";
 import { EditFormComponent } from "../editform/editform.component";
 import { Common } from "../../../providers/common";
-
+import { InvoiceComponent } from "./invoice.component";
 import * as $ from "jquery";
 import * as _ from "lodash";
 
@@ -47,6 +47,14 @@ export class CarstoreComponent implements OnInit {
     hideSubHeader: true,
     columns: {}
   };
+  
+  configInvoice: FieldConfig[] = [
+    {
+      type: 'datepicker',
+      label: '日期',
+      name: 'ReceiveInvoice',
+    }
+  ];
 
   configUpdate: FieldConfig[] = [];
   configAdd: FieldConfig[] = [];
@@ -77,7 +85,8 @@ export class CarstoreComponent implements OnInit {
     private _dicService: DicService,
     private route: ActivatedRoute,
     private router: Router,
-    private _state: GlobalState
+    private _state: GlobalState,
+    private _common:Common
   ) {}
   ngOnInit() {
     this.formname = "carincome";
@@ -85,10 +94,26 @@ export class CarstoreComponent implements OnInit {
     this.start();
     this.mainTableID = 0;
     const that = this;
+
+    this._state.subscribe("print.carsalecash.invoice", data => {
+      this.invoiceDate(data.id);
+    });
+
   }
 
   start() {
-    this.settings.columns = {};
+    this.settings.columns = {
+      button: {
+        title: "操作",
+        type: "custom",
+        renderComponent: InvoiceComponent,
+        onComponentInitFunction(instance) {
+          instance.save.subscribe(row => {
+            alert(`${row.orderNo} saved!`);
+          });
+        }
+      }
+    };
     const that = this;
     if (this.formname) {
       this.getViewName(this.formname).then(function() {
@@ -234,6 +259,11 @@ export class CarstoreComponent implements OnInit {
     this.formService.getForms(this.tableView["ViewName"]).then(
       data => {
         this.datalist = _.orderBy(data.Data, "UpdateTime", "desc");
+
+        _.each(this.datalist, f => {
+          f["button"] = f;
+        });
+
         this.source.load(this.datalist);
         this.totalRecord = this.datalist.length;
 
@@ -401,4 +431,31 @@ export class CarstoreComponent implements OnInit {
       }
     });
   }
+
+  invoiceDate(id){
+    const that = this;
+    const modalRef = this.modalService.open(NgbdModalContent);
+    modalRef.componentInstance.title = "收到发票";
+    modalRef.componentInstance.config = this.configInvoice;
+    modalRef.componentInstance.saveFun = (result, closeBack) => {
+      let formValue = JSON.parse(result);
+      _.each(this.configInvoice, f => {
+        if (f.type === "datepicker" && formValue[f.name]) {
+          formValue[f.name] = this._common.getDateString(formValue[f.name]);
+        }
+      });
+      formValue["Id"] = id;
+      console.log(formValue);
+      closeBack();
+      that.formService.create("car_income", formValue).then(
+        data => {
+          closeBack();
+          that.getDataList();
+        },
+        err => {
+        }
+      );
+    };
+  }
+
 }
