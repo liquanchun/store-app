@@ -47,12 +47,12 @@ export class CarstoreComponent implements OnInit {
     hideSubHeader: true,
     columns: {}
   };
-  
+
   configInvoice: FieldConfig[] = [
     {
-      type: 'datepicker',
-      label: '日期',
-      name: 'ReceiveInvoice',
+      type: "datepicker",
+      label: "日期",
+      name: "ReceiveInvoice"
     }
   ];
 
@@ -86,7 +86,7 @@ export class CarstoreComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private _state: GlobalState,
-    private _common:Common
+    private _common: Common
   ) {}
   ngOnInit() {
     this.formname = "carincome";
@@ -94,11 +94,30 @@ export class CarstoreComponent implements OnInit {
     this.start();
     this.mainTableID = 0;
     const that = this;
-
     this._state.subscribe("print.carsalecash.invoice", data => {
       this.invoiceDate(data.id);
     });
 
+    this._state.subscribe("print.carsalecash.future", data => {
+      const formValue = {
+        Id: data.id,
+        Status: "现车",
+        InDate: this._common.getTodayString()
+      };
+      if (data.text == "期货入库") {
+        formValue["FuturesDate"] = this._common.getTodayString();
+      }
+      if (data.text == "配额入库") {
+        formValue["QuotaDate"] = this._common.getTodayString();
+      }
+
+      that.formService.create("car_income", formValue).then(
+        data => {
+          that.getDataList();
+        },
+        err => {}
+      );
+    });
   }
 
   start() {
@@ -432,7 +451,7 @@ export class CarstoreComponent implements OnInit {
     });
   }
 
-  invoiceDate(id){
+  invoiceDate(id) {
     const that = this;
     const modalRef = this.modalService.open(NgbdModalContent);
     modalRef.componentInstance.title = "收到发票";
@@ -452,10 +471,8 @@ export class CarstoreComponent implements OnInit {
           closeBack();
           that.getDataList();
         },
-        err => {
-        }
+        err => {}
       );
     };
   }
-
 }
