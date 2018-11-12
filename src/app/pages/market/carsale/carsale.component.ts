@@ -660,7 +660,7 @@ export class CarsaleComponent implements OnInit {
       formValue["Auditor"] = sessionStorage.getItem("userName");
       formValue["AuditTime"] = this._common.getTodayString();
       formValue["AuditStatus"] = this.printOrder["CarStatus"];
-      formValue["Status"] = "订单";
+      formValue["SaleStatus"] = "订单";
       console.log(formValue);
 
       that.formService.create("car_booking", formValue).then(
@@ -690,8 +690,8 @@ export class CarsaleComponent implements OnInit {
 
   onAuditNot(): void {
     let formValue = {};
-    formValue["Id"] = this.printOrder["AuditStatus"];
-    formValue["Status"] = this.printOrder["Id"];
+    formValue["Id"] = this.printOrder["Id"];
+    formValue["SaleStatus"] = " ";
     formValue["AuditResult"] = " ";
     formValue["AuditSuggest"] = " ";
     formValue["Auditor"] = sessionStorage.getItem("userName");

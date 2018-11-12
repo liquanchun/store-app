@@ -815,7 +815,7 @@ export class CarSaleCashComponent implements OnInit {
   //修改状态
   saveStatus(status: string) {
     const that = this;
-    const carinfo = { Id: this.carbooking.CarIncomeId, Status: status };
+    const carinfo = { Id: this.carbooking.CarIncomeId, SaleStatus: status };
     this.formService.create("car_income", carinfo).then(data => {}, err => {});
 
     const customer = {
