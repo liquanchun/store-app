@@ -221,11 +221,9 @@ export class SearchFormComponent implements OnInit {
         value[f.name] = this._common.getDateString(value[f.name]);
       }
       //如果表单值未找到
-      if (!value[f.name]) {
-        if (this.selectData[f.name]) {
-          //下拉列表中
-          value[f.name] = this.selectData[f.name];
-        }
+      if (this.selectData[f.name]) {
+        //下拉列表中
+        value[f.name] = this.selectData[f.name];
       }
       if (!value[f.name]) {
         delete value[f.name];
