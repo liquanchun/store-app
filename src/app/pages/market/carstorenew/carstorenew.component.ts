@@ -224,15 +224,15 @@ export class CarstoreNewComponent implements OnInit, AfterViewInit {
                 const cfg = that.setFormField(field);
                 if (
                   cfg["add"] &&
-                  that.checkRole(roleData, field["FieldName"], "CanUpdate")
+                  that.checkRole(roleData, field["FieldName"], "CanAdd")
                 ) {
                   that.configAddArr.push(cfg["add"]);
                 }
                 if (
-                  cfg["add"] &&
+                  cfg["update"] &&
                   that.checkRole(roleData, field["FieldName"], "CanUpdate")
                 ) {
-                  that.configUpdateArr.push(cfg["add"]);
+                  that.configUpdateArr.push(cfg["update"]);
                 }
                 //that.setDicByName(field);
                 that.setSelectValue(field).then(() => {
@@ -298,18 +298,7 @@ export class CarstoreNewComponent implements OnInit, AfterViewInit {
         placeholder: placehd,
         config: { placeholder: placehd }
       };
-    } else {
-      cfgUpdate = {
-        type: d["FormType"],
-        label: d["Title"],
-        name: d["FieldName"],
-        width: d["Width"],
-        width2: d["Width2"],
-        placeholder: placehd,
-        config: { placeholder: placehd },
-        disabled: true
-      };
-    }
+    } 
     if (d["IsRequest"]) {
       if (cfgAdd) {
         cfgAdd.validation = [Validators.required];
@@ -339,10 +328,14 @@ export class CarstoreNewComponent implements OnInit, AfterViewInit {
       _.each(d["DicName"].split(","), d => {
         dicList.push({ id: d, text: d });
       });
-      cfgAdd["options"] = dicList;
-      cfgUpdate["options"] = dicList;
-      cfgAdd.config.minimumResultsForSearch = Infinity;
-      cfgUpdate.config.minimumResultsForSearch = Infinity;
+      if(cfgAdd){
+        cfgAdd["options"] = dicList;
+        cfgAdd.config.minimumResultsForSearch = Infinity;
+      }
+      if(cfgUpdate){
+        cfgUpdate["options"] = dicList;
+        cfgUpdate.config.minimumResultsForSearch = Infinity;
+      }
     }
 
     return { add: cfgAdd, update: cfgUpdate };
