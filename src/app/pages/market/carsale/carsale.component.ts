@@ -10,7 +10,8 @@ import { GlobalState } from "../../../global.state";
 import { EditFormComponent } from "../editform/editform.component";
 import { PrintButtonComponent } from "./printbutton.component";
 import { Common } from "../../../providers/common";
-
+import { HttpService } from "../../../providers/httpClient";
+import { Config } from '../../../providers/config';
 import * as $ from "jquery";
 import * as _ from "lodash";
 import { ClassGetter } from "@angular/compiler/src/output/output_ast";
@@ -19,12 +20,13 @@ import { ClassGetter } from "@angular/compiler/src/output/output_ast";
   selector: "app-carsale",
   templateUrl: "./carsale.component.html",
   styleUrls: ["./carsale.component.scss"],
-  providers: [FormService, DicService]
+  providers: [FormService, DicService,HttpService]
 })
 export class CarsaleComponent implements OnInit {
   loading = false;
   title = "车辆销售";
   query: string = "";
+  queryArr:any;
   newSettings = {};
   settings = {
     pager: {
@@ -109,7 +111,9 @@ export class CarsaleComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private _common: Common,
-    private _state: GlobalState
+    private _state: GlobalState,
+    private _httpClient:HttpService,
+    private _config:Config
   ) {}
   ngAfterViewInit() {}
   ngOnDestroy() {}
@@ -508,6 +512,7 @@ export class CarsaleComponent implements OnInit {
   //高级查询
   onSearchAll(query: any) {
     if (_.isObject(query) && _.keys(query).length > 0) {
+      this.queryArr = query;
       console.log("查询条件：" + JSON.stringify(query));
       this.loading = true;
       this.formService.getFormsByPost(this.tableView["ViewName"], query).then(
@@ -756,6 +761,18 @@ export class CarsaleComponent implements OnInit {
     });
   }
 
+  onExport(){
+    const fileName = `销售预定单——${this._common.getTodayString2()}.xls`;
+    const paras ={
+      ViewName:"vw_car_sale",
+      Where:"1=1",
+      FileName:fileName
+    };
+    const url = this._config.server + "api/values/getfile/" + fileName;
+    this._httpClient.create("/values/saleorder",paras).then((data)=>{
+      window.open(url);
+    });
+  }
   print() {
     let printContents, popupWin;
     printContents = document.getElementById("printDiv").innerHTML;
