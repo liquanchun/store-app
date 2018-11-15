@@ -15,6 +15,8 @@ import { DicService } from "../../sys/dic/dic.services";
 import { GlobalState } from "../../../global.state";
 import { PrintCashComponent } from "./printcash.component";
 import { Common } from "../../../providers/common";
+import { HttpService } from '../../../providers/httpClient';
+import { Config } from '../../../providers/config';
 
 import * as $ from "jquery";
 import * as _ from "lodash";
@@ -201,7 +203,9 @@ export class CarSaleCashComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private _common: Common,
-    private _state: GlobalState
+    private _state: GlobalState,
+    private _httpClient:HttpService,
+    private _config:Config
   ) {}
   ngOnDestroy() {
     this._state = null;
@@ -895,6 +899,19 @@ export class CarSaleCashComponent implements OnInit {
       } else {
         resolve(1);
       }
+    });
+  }
+
+  onExport(){
+    const fileName = `销售交款明细——${this._common.getTodayString2()}.xls`;
+    const paras ={
+      ViewName:"vw_car_sale_cash",
+      Where:"1=1",
+      FileName:fileName
+    };
+    const url = this._config.server + "api/values/getfile/" + fileName;
+    this._httpClient.create("values/cashorder",paras).then(function() {
+      window.open(url);
     });
   }
 

@@ -769,7 +769,8 @@ export class CarsaleComponent implements OnInit {
       FileName:fileName
     };
     const url = this._config.server + "api/values/getfile/" + fileName;
-    this._httpClient.create("/values/saleorder",paras).then((data)=>{
+    console.log(url);
+    this._httpClient.create("values/saleorder",paras).then(function() {
       window.open(url);
     });
   }
