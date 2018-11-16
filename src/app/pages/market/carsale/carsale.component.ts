@@ -664,8 +664,7 @@ export class CarsaleComponent implements OnInit {
       formValue["Id"] = that.printOrder["Id"];
       formValue["Auditor"] = sessionStorage.getItem("userName");
       formValue["AuditTime"] = this._common.getTodayString();
-      formValue["AuditStatus"] = this.printOrder["CarStatus"];
-      formValue["SaleStatus"] = "订单";
+      formValue["Status"] = "订单";
       console.log(formValue);
 
       that.formService.create("car_booking", formValue).then(
@@ -676,11 +675,7 @@ export class CarsaleComponent implements OnInit {
             msg: "审核成功。",
             time: new Date().getTime()
           });
-          if (formValue["AuditResult"] == "通过") {
-            this.saveStatus("订单");
-          } else {
-            that.getDataList();
-          }
+          that.getDataList();
         },
         err => {
           this._state.notifyDataChanged("messagebox", {
@@ -696,7 +691,7 @@ export class CarsaleComponent implements OnInit {
   onAuditNot(): void {
     let formValue = {};
     formValue["Id"] = this.printOrder["Id"];
-    formValue["SaleStatus"] = " ";
+    formValue["Status"] = " ";
     formValue["AuditResult"] = " ";
     formValue["AuditSuggest"] = " ";
     formValue["Auditor"] = sessionStorage.getItem("userName");
@@ -708,11 +703,7 @@ export class CarsaleComponent implements OnInit {
           msg: "反审核成功。",
           time: new Date().getTime()
         });
-        if (this.printOrder["AuditStatus"]) {
-          this.saveStatus(this.printOrder["AuditStatus"]);
-        } else {
-          this.getDataList();
-        }
+        this.getDataList();
       },
       err => {
         this._state.notifyDataChanged("messagebox", {
@@ -726,8 +717,8 @@ export class CarsaleComponent implements OnInit {
   //修改状态
   saveStatus(status: string) {
     const that = this;
-    const carinfo = { Id: this.printOrder.CarIncomeId, Status: status };
-    this.formService.create("car_income", carinfo).then(
+    const carinfo = { Id: this.printOrder.Id, Status: status };
+    this.formService.create("car_booking", carinfo).then(
       data => {
         that.getDataList();
       },
