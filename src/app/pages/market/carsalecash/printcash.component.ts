@@ -46,13 +46,22 @@ export class PrintCashComponent implements ViewCell, OnInit {
     this._state.notifyDataChanged('print.carsalecash.detail', { id: this.value.Id, time: getTimestamp });
   }
   onAudit() {
-    this.save.emit(this.rowData);
 
-    const getTimestamp = new Date().getTime();
-    this._state.notifyDataChanged("print.carsalecash.audit", {
-      id: this.value.Id,
-      time: getTimestamp
-    });
+    if (this.value.Status == "现车") {
+      this.save.emit(this.rowData);
+
+      const getTimestamp = new Date().getTime();
+      this._state.notifyDataChanged("print.carsalecash.audit", {
+        id: this.value.Id,
+        time: getTimestamp
+      });
+    } else {
+      this._state.notifyDataChanged("messagebox", {
+        type: "warning",
+        msg: "只有现车才能审核。",
+        time: new Date().getTime()
+      });
+    }
   }
   onAuditNot() {
     this.save.emit(this.rowData);
