@@ -53,6 +53,11 @@ export class CarstoreComponent implements OnInit {
       type: "datepicker",
       label: "日期",
       name: "ReceiveInvoice"
+    },
+    {
+      type: "input",
+      label: "发票号",
+      name: "InvoiceNo"
     }
   ];
 
