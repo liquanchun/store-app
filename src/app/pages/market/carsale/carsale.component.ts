@@ -675,7 +675,11 @@ export class CarsaleComponent implements OnInit {
             msg: "审核成功。",
             time: new Date().getTime()
           });
-          that.getDataList();
+          if (formValue["AuditResult"] == "通过") {
+            this.saveStatus("订单");
+          } else {
+            that.getDataList();
+          }
         },
         err => {
           this._state.notifyDataChanged("messagebox", {
@@ -703,6 +707,7 @@ export class CarsaleComponent implements OnInit {
           msg: "反审核成功。",
           time: new Date().getTime()
         });
+        this.saveStatus(' ');
         this.getDataList();
       },
       err => {
@@ -717,8 +722,8 @@ export class CarsaleComponent implements OnInit {
   //修改状态
   saveStatus(status: string) {
     const that = this;
-    const carinfo = { Id: this.printOrder.Id, Status: status };
-    this.formService.create("car_booking", carinfo).then(
+    const carinfo = { Id: this.printOrder.CarIncomeId, SaleStatus: status };
+    this.formService.create("car_income", carinfo).then(
       data => {
         that.getDataList();
       },
