@@ -228,6 +228,11 @@ export class CarSaleNewComponent implements OnInit {
         type: "string",
         filter: false
       },
+      CarConfig: {
+        title: "个性化配置",
+        type: "string",
+        filter: false
+      },
       CarColor: {
         title: "颜色",
         type: "string",
