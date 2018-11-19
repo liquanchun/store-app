@@ -451,7 +451,7 @@ export class CarSaleNewComponent implements OnInit {
     if (event.isSelected) {
       this.carsale.CustomerId = event.data.Id;
       this.customer = event.data;
-    } 
+    }
   }
 
   //选择房间
@@ -627,12 +627,14 @@ export class CarSaleNewComponent implements OnInit {
         });
     });
     _.each(this.giveItem, f => {
-      f["OrderId"] = this.carsale.OrderId;
-      this.formService
-        .create("car_booking_item", f)
-        .then(function(data) {}, err => {
-          console.log(err);
-        });
+      if (f["itemName"]) {
+        f["OrderId"] = this.carsale.OrderId;
+        this.formService
+          .create("car_booking_item", f)
+          .then(function(data) {}, err => {
+            console.log(err);
+          });
+      }
     });
   }
 

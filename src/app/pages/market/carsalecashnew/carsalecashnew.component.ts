@@ -321,15 +321,17 @@ export class CarSaleCashNewComponent implements OnInit {
     );
 
     _.each(this.partItem, f => {
-      if (f.UpdateTime) {
-        delete f.UpdateTime;
+      if (f["Price"]) {
+        if (f.UpdateTime) {
+          delete f.UpdateTime;
+        }
+        f["OrderId"] = this.carsale.OrderId;
+        this.formService
+          .create("car_booking_item", f)
+          .then(function(data) {}, err => {
+            console.log(err);
+          });
       }
-      f["OrderId"] = this.carsale.OrderId;
-      this.formService
-        .create("car_booking_item", f)
-        .then(function(data) {}, err => {
-          console.log(err);
-        });
     });
   }
 
@@ -357,7 +359,7 @@ export class CarSaleCashNewComponent implements OnInit {
   rowItemClicked(event): void {
     if (event.isSelected) {
       const f = _.find(this.partItem, f => {
-        return f.itemName == event.data.ItemName;
+        return f.ItemName == event.data.ItemName;
       });
       if (f) {
         f.count++;
@@ -378,7 +380,7 @@ export class CarSaleCashNewComponent implements OnInit {
   rowItem2Clicked(event): void {
     if (event.isSelected) {
       const f = _.find(this.partItem, f => {
-        return f.itemName == event.data.ItemName;
+        return f.ItemName == event.data.ItemName;
       });
       if (f) {
         f.count++;
