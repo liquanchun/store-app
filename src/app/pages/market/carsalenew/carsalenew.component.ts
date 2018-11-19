@@ -223,13 +223,18 @@ export class CarSaleNewComponent implements OnInit {
         type: "string",
         filter: false
       },
-      CarTypeCode: {
-        title: "车型代码",
+      CarConfig: {
+        title: "个性化配置",
         type: "string",
         filter: false
       },
-      CarConfig: {
-        title: "个性化配置",
+      GuidePriceRemark: {
+        title: "配置价格",
+        type: "string",
+        filter: false
+      },
+      GuidePrice: {
+        title: "指导价",
         type: "string",
         filter: false
       },
@@ -502,9 +507,9 @@ export class CarSaleNewComponent implements OnInit {
       [
         { field: "Vinno", search: query },
         { field: "CarType", search: query },
-        { field: "CarColor", search: query },
-        { field: "Status", search: query },
-        { field: "CarTypeCode", search: query }
+        { field: "CarConfig", search: query },
+        { field: "GuidePriceRemark", search: query },
+        { field: "GuidePrice", search: query }
       ],
       false
     );
