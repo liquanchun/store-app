@@ -308,8 +308,10 @@
   <ng-template #popContentCar>
     <a href="javascrpit:void(0)" class="close" (click)='pcar.close()' aria-hidden="true">&times;</a>
     <search-input (searchClick)="onSearchCar($event)"></search-input>
+    <div style="overflow:scroll">
     <ng2-smart-table [settings]="settingsCar" [source]="popCarInfoGrid" (userRowSelect)="rowCarClicked($event)">
     </ng2-smart-table>
+    </div>
   </ng-template>
 
 </div>
