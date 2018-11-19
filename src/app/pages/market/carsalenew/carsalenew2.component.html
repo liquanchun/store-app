@@ -303,6 +303,11 @@
     <search-input (searchClick)="onSearchCus($event)"></search-input>
     <ng2-smart-table [settings]="settingsCus" [source]="popCusInfoGrid" (userRowSelect)="rowCusClicked($event)">
     </ng2-smart-table>
+    <div class="row pull-right">
+      <div class="col-md-12 btn-group">
+        <button type="button" (click)="pcust.close()" class="btn btn-info btn-sm">确定</button>
+      </div>
+    </div>
   </ng-template>
 
   <ng-template #popContentCar>
@@ -311,6 +316,11 @@
     <div class="test-1" style="overflow-x:auto;width: 100%;white-space: nowrap;">
     <ng2-smart-table [settings]="settingsCar" [source]="popCarInfoGrid" (userRowSelect)="rowCarClicked($event)">
     </ng2-smart-table>
+    </div>
+    <div class="row pull-right">
+      <div class="col-md-12 btn-group">
+        <button type="button" (click)="pcar.close()" class="btn btn-info btn-sm">确定</button>
+      </div>
     </div>
   </ng-template>
 
