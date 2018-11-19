@@ -451,18 +451,7 @@ export class CarSaleNewComponent implements OnInit {
     if (event.isSelected) {
       this.carsale.CustomerId = event.data.Id;
       this.customer = event.data;
-    } else {
-      this.customer.Address = "";
-      this.customer.LinkMan = "";
-      this.customer.Name = "";
-      this.customer.Phone = "";
-      this.customer.IDCard = "";
-      this.customer.LicenseType = "";
-      this.customer.IdAddress = "";
-      this.customer.CustType = "";
-      this.customer.PostNumber = "";
-      this.carsale.CustomerId = 0;
-    }
+    } 
   }
 
   //选择房间
@@ -473,14 +462,6 @@ export class CarSaleNewComponent implements OnInit {
       this.carsale.GuidePrice =
         this.carinfo.GuidePrice + this.carinfo.GuidePriceRemark;
       this.carsale.SalePrice = this.carsale.GuidePrice;
-    } else {
-      this.carinfo.CarColor = "";
-      this.carinfo.CarTrim = "";
-      this.carinfo.CarType = "";
-      this.carinfo.Status = "";
-      this.carinfo.Vinno = "";
-      this.carsale.CarIncomeId = 0;
-      this.carinfo.DMSCode = "";
     }
   }
 
