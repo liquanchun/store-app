@@ -438,8 +438,7 @@ export class CarSaleCashNewComponent implements OnInit {
     if (this.carsale.BuyLicense == "全款") {
       this.carsale.LastFee = 0;
       this.carsale.FirstFee = 0;
-    } else {
-      this.priceChange();
-    }
+    } 
+    this.priceChange();
   }
 }
