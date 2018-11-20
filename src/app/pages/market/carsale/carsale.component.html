@@ -106,38 +106,38 @@
     <table class="table table-bordered table-sm">
       <thead>
         <tr>
-          <th style="width:38%">车型名称</th>
-          <th style="width:14%">车身颜色</th>
-          <th style="width:13%">内饰颜色</th>
-          <th style="width:13%">指导价（元）</th>
-          <th style="width:12%">销售价（元）</th>
-          <th style="width:10%">订金（元）</th>
+          <th style="width: 400px;" colspan="3">车型名称</th>
+          <th>车身颜色</th>
+          <th>指导价（元）</th>
+          <th>销售价（元）</th>
+          <th>订金（元）</th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td>{{printOrder.CarType}}</td>
+          <td colspan="3">{{printOrder.CarType}}</td>
           <td>{{printOrder.CarColor}}</td>
-          <td>{{printOrder.CarTrim}}</td>
           <td class="textright">{{printOrder.GuidePrice | numberSeparator}}</td>
           <td class="textright">{{printOrder.SalePrice | numberSeparator}}</td>
           <td class="textright" rowspan="3" style="font-size:13px;font-weight:bold;">{{printOrder.Deposit | numberSeparator}}</td>
         </tr>
         <tr>
           <td>车架号码</td>
-          <td colspan="2">{{printOrder.Vinno}}</td>
+          <td>{{printOrder.Vinno}}</td>
+          <td>内饰颜色</td>
+          <td>{{printOrder.CarTrim}}</td>
           <td>车辆状态</td>
-          <td>{{printOrder.Status}}</td>
+          <td>{{printOrder.CarStatus}}</td>
         </tr>
         <tr>
           <td>个性配置</td>
-          <td colspan="2">{{printOrder.SelfConfig}}</td>
+          <td colspan="3">{{printOrder.SelfConfig}}</td>
           <td>优惠点位或金额</td>
           <td class="textright">{{printOrder.Discount}}</td>
         </tr>
         <tr>
           <td>订金金额（大写）</td>
-          <td class="textleft" colspan="5">{{chineseMoney}}</td>
+          <td class="textleft" colspan="6">{{chineseMoney}}</td>
         </tr>
       </tbody>
     </table>
