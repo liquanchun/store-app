@@ -194,6 +194,8 @@ export class CarSaleCashNewComponent implements OnInit {
           that.formService.getForms(`vw_car_store/${that.carIncomeId}`).then(
             data => {
               that.carinfo = data.Data[0];
+              that.carinfo["GuidePrice"] =
+                that.carinfo["GuidePrice"] + that.carinfo["GuidePriceRemark"];
               callback(null, 2);
             },
             err => {}
@@ -438,7 +440,7 @@ export class CarSaleCashNewComponent implements OnInit {
     if (this.carsale.BuyLicense == "全款") {
       this.carsale.LastFee = 0;
       this.carsale.FirstFee = 0;
-    } 
+    }
     this.priceChange();
   }
 }
