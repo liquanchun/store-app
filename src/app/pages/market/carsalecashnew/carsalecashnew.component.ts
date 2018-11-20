@@ -280,8 +280,9 @@ export class CarSaleCashNewComponent implements OnInit {
       this.carsale.GlassSerFee +
       this.carsale.CardCashFee +
       this.carsale.OtherFee;
-
-    this.carsale.LastFee = this.carsale.NewCarFee - this.carsale.FirstFee;
+    if (this.carsale.BuyLicense == "分期") {
+      this.carsale.LastFee = this.carsale.NewCarFee - this.carsale.FirstFee;
+    }
     this.carsale.InvoiceFee = this.carsale.NewCarFee;
     this.carsale.RealAllFee =
       this.carsale.ShouldAllFee -
@@ -434,8 +435,11 @@ export class CarSaleCashNewComponent implements OnInit {
   }
 
   onBuyLicense() {
-    if (this.carsale.BuyLicense != "分期付款") {
+    if (this.carsale.BuyLicense == "全款") {
       this.carsale.LastFee = 0;
+      this.carsale.FirstFee = 0;
+    } else {
+      this.priceChange();
     }
   }
 }
