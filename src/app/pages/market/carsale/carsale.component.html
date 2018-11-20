@@ -119,7 +119,8 @@
           <td>{{printOrder.CarColor}}</td>
           <td class="textright">{{printOrder.GuidePrice | numberSeparator}}</td>
           <td class="textright">{{printOrder.SalePrice | numberSeparator}}</td>
-          <td class="textright" rowspan="3" style="font-size:13px;font-weight:bold;">{{printOrder.Deposit | numberSeparator}}</td>
+          <td class="textright" rowspan="2" style="font-size:13px;font-weight:bold;">{{printOrder.Deposit |
+            numberSeparator}}</td>
         </tr>
         <tr>
           <td>车架号码</td>
@@ -131,13 +132,13 @@
         </tr>
         <tr>
           <td>个性配置</td>
-          <td colspan="3">{{printOrder.SelfConfig}}</td>
-          <td>优惠金额</td>
-          <td class="textright">{{printOrder.Discount}}</td>
+          <td colspan="6">{{printOrder.SelfConfig}}</td>
         </tr>
         <tr>
+          <td>优惠金额</td>
+          <td class="textright">{{printOrder.Discount}}</td>
           <td>订金金额（大写）</td>
-          <td class="textleft" colspan="6">{{chineseMoney}}</td>
+          <td class="textleft" colspan="4">{{chineseMoney}}</td>
         </tr>
       </tbody>
     </table>
