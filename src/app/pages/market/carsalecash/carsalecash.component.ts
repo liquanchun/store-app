@@ -147,7 +147,8 @@ export class CarSaleCashComponent implements OnInit {
     Commission: 0,
     MaintainFee: 0,
     GasFee: 0,
-    OtherFee3: 0
+    OtherFee3: 0,
+    SaleMan:""
   };
   customer: any = {
     Name: "",
