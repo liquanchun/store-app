@@ -444,8 +444,11 @@ export class CarSaleNewComponent implements OnInit {
     );
     this.formService.getForms("car_customer").then(
       data => {
+        const mydata = _.filter(data.Data, f => {
+          return f["Creator"] == sessionStorage.getItem("userName");
+        });
         this.custinfoDataList = data.Data;
-        this.popCusInfoGrid.load(data.Data);
+        this.popCusInfoGrid.load(mydata);
       },
       err => {}
     );

@@ -189,6 +189,7 @@ export class CarSaleCashComponent implements OnInit {
 
   //签订合同当天
   todayObj = {};
+  todayStr = '';
   //现车付款日期
   haveCarDate = {};
   //预计交车日期
@@ -218,7 +219,7 @@ export class CarSaleCashComponent implements OnInit {
     this.mainTableID = 0;
     const that = this;
     this.todayObj = this._common.getTodayObj();
-
+    this.todayStr = this._common.getTodayTime();
     this._state.unsubscribe("print.carsalecash.detail");
     this._state.unsubscribe("print.carsalecash.audit");
     this._state.unsubscribe("print.carsalecash.auditnot");

@@ -15,17 +15,6 @@ import * as _ from "lodash";
       >
         收到发票
       </button>
-
-      <button
-      *ngIf="buttonText"
-      type="button"
-      style="line-height: 15px;"
-      class="btn btn-light btn-sm tablebutton"
-      (click)="onFuture()"
-    >
-      {{buttonText}}
-    </button>
-
     </div>
   `
 })
