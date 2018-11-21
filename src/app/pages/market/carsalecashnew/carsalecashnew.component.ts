@@ -246,7 +246,7 @@ export class CarSaleCashNewComponent implements OnInit {
                       return f["ItemType"] != "自费" && f["ItemType"] != "免费";
                     });
                     _.each(bookitem, f => {
-                      if (f["FieldName"]) {
+                      if (f["FieldName"] && !that.carsale[f["FieldName"]] ) {
                         that.carsale[f["FieldName"]] = f["Price"];
                       }
                     });
