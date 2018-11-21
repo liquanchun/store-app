@@ -486,6 +486,8 @@ export class CarSaleCashComponent implements OnInit {
             .then(
               data => {
                 that.carinfo = data.Data[0];
+                that.carinfo["GuidePrice"] =
+                that.carinfo["GuidePrice"] + that.carinfo["GuidePriceRemark"];
                 callback(null, 2);
               },
               err => {}
