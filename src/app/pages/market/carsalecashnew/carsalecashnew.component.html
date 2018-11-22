@@ -95,9 +95,9 @@
           <td><span class="reqmark">*</span>新车款金额</td>
           <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.NewCarFee" type="number" min="0" (change)="priceChange()"
               class="form-control"></td>
-          <td>分期首付比例(%)</td>
+          <td>分期首付金额</td>
           <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.FirstFee" type="number" min="0" max="100" (change)="priceChange()"
-              class="form-control">%</td>
+              class="form-control"></td>
         </tr>
         <tr>
           <td>保险费金额</td>

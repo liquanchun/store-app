@@ -181,7 +181,7 @@ export class CarSaleCashNewComponent implements OnInit {
                 that.carsale.Deposit = carbook.Deposit;
                 that.carsale.NewCarFee = carbook.SalePrice;
                 that.carsale.Discount = carbook.Discount;
-                that.carsale.FirstFee = carbook.FirstFee;
+                that.carsale.FirstFee =_.floor(that.carsale.NewCarFee * carbook.FirstFee/100);
 
                 that.priceChange();
               }
@@ -283,7 +283,7 @@ export class CarSaleCashNewComponent implements OnInit {
       this.carsale.CardCashFee +
       this.carsale.OtherFee;
     if (this.carsale.BuyLicense == "分期") {
-      this.carsale.LastFee = _.floor(this.carsale.NewCarFee * (1- this.carsale.FirstFee/100));
+      this.carsale.LastFee = this.carsale.NewCarFee - this.carsale.FirstFee;
     }
     this.carsale.InvoiceFee = this.carsale.NewCarFee;
     this.carsale.RealAllFee =
