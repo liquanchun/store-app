@@ -589,39 +589,60 @@ export class CarSaleNewComponent implements OnInit {
     }
 
     this.carsale.Creator = sessionStorage.getItem("userName");
-    const newcarsale = _.clone(this.carsale);
-
-    delete newcarsale.PreCarDateObj;
-    delete newcarsale.OrderDateObj;
-    if (newcarsale.UpdateTime) delete newcarsale.UpdateTime;
-
-    console.log(newcarsale);
     const that = this;
-    if (!newcarsale.Status) {
-      newcarsale.Status = this.carinfo.Status;
-    }
-    this.formService.create("car_booking", newcarsale).then(
-      data => {
-        that.saveItem();
-        that._state.notifyDataChanged("messagebox", {
-          type: "success",
-          msg: "保存成功。",
-          time: new Date().getTime()
-        });
-        that.isEnable = false;
-      },
-      err => {
-        that._state.notifyDataChanged("messagebox", {
-          type: "error",
-          msg: err,
-          time: new Date().getTime()
-        });
+    this.maxId().then(function() {
+      const newcarsale = _.clone(that.carsale);
+      delete newcarsale.PreCarDateObj;
+      delete newcarsale.OrderDateObj;
+      if (newcarsale.UpdateTime) delete newcarsale.UpdateTime;
+
+      console.log(newcarsale);
+      if (!newcarsale.Status) {
+        newcarsale.Status = that.carinfo.Status;
       }
-    );
-    if (this.customer.UpdateTime) delete this.customer.UpdateTime;
-    this.formService
-      .create("car_customer", this.customer)
-      .then(data => {}, err => {});
+      that.formService.create("car_booking", newcarsale).then(
+        data => {
+          that.saveItem();
+          that._state.notifyDataChanged("messagebox", {
+            type: "success",
+            msg: "保存成功。",
+            time: new Date().getTime()
+          });
+          that.isEnable = false;
+        },
+        err => {
+          that._state.notifyDataChanged("messagebox", {
+            type: "error",
+            msg: err,
+            time: new Date().getTime()
+          });
+        }
+      );
+      if (that.customer.UpdateTime) delete that.customer.UpdateTime;
+      that.formService
+        .create("car_customer", that.customer)
+        .then(data => {}, err => {});
+    });
+  }
+
+  maxId() {
+    const that = this;
+    return new Promise((resolve, reject) => {
+      that.formService.getMaxId("car_booking").then(
+        data => {
+          if (data) {
+            const cnt = _.toInteger(data.Data) + 1;
+            that.carsale.OrderId =
+              "YD" +
+              this._common.getTodayString2() +
+              _.padStart(_.toString(cnt), 4, "0");
+          }
+          console.log(`maxid:${that.carsale.OrderId}`);
+          resolve();
+        },
+        err => {}
+      );
+    });
   }
 
   saveItem() {
