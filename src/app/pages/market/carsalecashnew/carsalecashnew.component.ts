@@ -283,7 +283,7 @@ export class CarSaleCashNewComponent implements OnInit {
       this.carsale.CardCashFee +
       this.carsale.OtherFee;
     if (this.carsale.BuyLicense == "分期") {
-      this.carsale.LastFee = this.carsale.NewCarFee - this.carsale.FirstFee;
+      this.carsale.LastFee = _.floor(this.carsale.NewCarFee * (1- this.carsale.FirstFee/100));
     }
     this.carsale.InvoiceFee = this.carsale.NewCarFee;
     this.carsale.RealAllFee =
