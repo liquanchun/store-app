@@ -229,7 +229,7 @@
         </tr>
         <tr *ngIf="printOrder.PayType=='分期付款'">
           <td colspan="2">融资机构：{{printOrder.FinaceCompany}}</td>
-          <td colspan="2">首付：{{printOrder.FirstFee | numberSeparator}}%</td>
+          <td colspan="2">首付比例：{{printOrder.FirstFee | numberSeparator}}%</td>
           <td colspan="2">分期: {{printOrder.Stages}}</td>
         </tr>
         <tr *ngIf="printOrder.PayType=='分期付款'">

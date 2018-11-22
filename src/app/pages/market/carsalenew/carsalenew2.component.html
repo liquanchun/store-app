@@ -262,8 +262,8 @@
         <tr *ngIf="carsale.PayType=='分期付款'">
           <td class="longtext">融资机构：</td>
           <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.FinaceCompany" type="text" class="form-control"></td>
-          <td>首付：</td>
-          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.FirstFee" type="number" min="0" max="100" class="form-control">%</td>
+          <td>首付比例(%)：</td>
+          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.FirstFee" type="number" min="0" max="100" class="form-control"></td>
           <td>分期</td>
           <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.Stages" type="number" min="0" class="form-control"></td>
         </tr>
