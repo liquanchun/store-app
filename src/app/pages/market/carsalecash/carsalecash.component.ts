@@ -420,7 +420,7 @@ export class CarSaleCashComponent implements OnInit {
               _.filter(data.Data, f => {
                 return (
                   f["IsValid"] == 1 &&
-                  f["Service"] == "店内" &&
+                  f["Service"] == "DN" &&
                   (f["ItemType"] == "自费" || f["ItemType"] == "免费")
                 );
               }),
@@ -434,7 +434,7 @@ export class CarSaleCashComponent implements OnInit {
               _.filter(data.Data, f => {
                 return (
                   f["IsValid"] == 1 &&
-                  f["Service"] == "合作店" &&
+                  f["Service"] == "HZ" &&
                   (f["ItemType"] == "自费" || f["ItemType"] == "免费")
                 );
               }),
