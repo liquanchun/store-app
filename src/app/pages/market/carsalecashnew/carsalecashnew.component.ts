@@ -247,7 +247,7 @@ export class CarSaleCashNewComponent implements OnInit {
                     const bookitem = _.filter(data.Data, f => {
                       return f["ItemType"] != "自费" && f["ItemType"] != "免费";
                     });
-                    if (!this.carsale.Id) {
+                    if (!that.carsale.Id) {
                       _.each(bookitem, f => {
                         if (f["FieldName"] && !that.carsale[f["FieldName"]]) {
                           that.carsale[f["FieldName"]] = f["Price"];
