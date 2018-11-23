@@ -275,7 +275,7 @@ export class CarSaleNewComponent implements OnInit {
       }
     }
   };
-
+  recordId = 0;
   constructor(
     private _common: Common,
     private _state: GlobalState,
@@ -286,6 +286,7 @@ export class CarSaleNewComponent implements OnInit {
   ) {}
   ngOnInit() {
     const id = _.toInteger(this.route.snapshot.paramMap.get("id"));
+    this.recordId = id;
     const n = this.route.snapshot.queryParams["n"];
     if (n) {
       this.isEnable = false;
@@ -628,6 +629,7 @@ export class CarSaleNewComponent implements OnInit {
   maxId() {
     const that = this;
     return new Promise((resolve, reject) => {
+      if (this.recordId > 0) resolve();
       that.formService.getMaxId("car_booking").then(
         data => {
           if (data) {

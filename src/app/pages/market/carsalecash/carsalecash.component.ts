@@ -157,7 +157,8 @@ export class CarSaleCashComponent implements OnInit {
     Address: "",
     Phone: "",
     InvoiceCode: "",
-    InvoiceName: ""
+    InvoiceName: "",
+    PostNumber:""
   };
   carinfo: any = {
     CarType: "",

@@ -181,7 +181,9 @@ export class CarSaleCashNewComponent implements OnInit {
                 that.carsale.Deposit = carbook.Deposit;
                 that.carsale.NewCarFee = carbook.SalePrice;
                 that.carsale.Discount = carbook.Discount;
-                that.carsale.FirstFee =_.floor(that.carsale.NewCarFee * carbook.FirstFee/100);
+                that.carsale.FirstFee = _.floor(
+                  (that.carsale.NewCarFee * carbook.FirstFee) / 100
+                );
 
                 that.priceChange();
               }
@@ -245,11 +247,13 @@ export class CarSaleCashNewComponent implements OnInit {
                     const bookitem = _.filter(data.Data, f => {
                       return f["ItemType"] != "自费" && f["ItemType"] != "免费";
                     });
-                    _.each(bookitem, f => {
-                      if (f["FieldName"] && !that.carsale[f["FieldName"]] ) {
-                        that.carsale[f["FieldName"]] = f["Price"];
-                      }
-                    });
+                    if (!this.carsale.Id) {
+                      _.each(bookitem, f => {
+                        if (f["FieldName"] && !that.carsale[f["FieldName"]]) {
+                          that.carsale[f["FieldName"]] = f["Price"];
+                        }
+                      });
+                    }
                     that.partItem = _.filter(data.Data, f => {
                       return f["ItemType"] == "自费" || f["ItemType"] == "免费";
                     });
