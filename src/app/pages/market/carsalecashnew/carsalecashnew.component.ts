@@ -65,7 +65,8 @@ export class CarSaleCashNewComponent implements OnInit {
     Commission: 0,
     MaintainFee: 0,
     GasFee: 0,
-    OtherFee3: 0
+    OtherFee3: 0,
+    BookId:0
   };
   customer: any = {
     Name: "",
@@ -134,6 +135,7 @@ export class CarSaleCashNewComponent implements OnInit {
   ) {}
   ngOnInit() {
     const bookid = _.toInteger(this.route.snapshot.paramMap.get("id"));
+    this.carsale.BookId = bookid;
     this.carsale.OrderId = this.route.snapshot.queryParams["n"];
     if (this.route.snapshot.queryParams["id"]) {
       //修改
