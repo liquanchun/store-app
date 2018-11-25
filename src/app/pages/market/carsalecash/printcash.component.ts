@@ -6,14 +6,17 @@ import * as _ from 'lodash';
 @Component({
   selector: 'print-cash-view',
   template: `
-	    <div class="btn-group" role="group" aria-label="Basic example">
-        <button type="button" style="line-height: 15px;" class="btn btn-light btn-sm tablebutton" (click)="onDetail()">详情</button>
-        <button type="button" style="line-height: 15px;" class="btn btn-light btn-sm tablebutton" (click)="onClick()">打印交款明细</button>
-        <button type="button" style="line-height: 15px;" class="btn btn-light btn-sm tablebutton" (click)="onClick2()">打印精品明细</button>
-        <button type="button" style="line-height: 15px;" class="btn btn-light btn-sm tablebutton" (click)="onClick3()">打印销售合同</button>
-        <button *ngIf="value.AuditResult != '通过'" type="button" style="line-height: 15px;" class="btn btn-light btn-sm tablebutton" (click)="onAudit()">审核</button>
-        <button *ngIf="value.AuditResult == '通过'" type="button" style="line-height: 15px;" class="btn btn-light btn-sm tablebutton" (click)="onAuditNot()">反审核</button>
+      <div style="padding-top: 3px;padding-bottom: 3px;" class="dropdown">
+      <button style="height:32px;padding:0.1rem 1rem" class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">操作</button>
+      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+        <a class="dropdown-item" (click)="onDetail()" href="javaScript:void(0)">详情</a>
+        <a class="dropdown-item" (click)="onClick()" href="javaScript:void(0)">打印交款明细</a>
+        <a class="dropdown-item" (click)="onClick2()" href="javaScript:void(0)">打印精品明细</a>
+        <a class="dropdown-item" (click)="onClick3()" href="javaScript:void(0)">打印销售合同</a>
+        <a *ngIf="value.AuditResult != '通过'" class="dropdown-item" (click)="onAudit()" href="javaScript:void(0)">审核</a>
+        <a *ngIf="value.AuditResult == '通过'" class="dropdown-item" (click)="onAuditNot()" href="javaScript:void(0)">反审核</a>
       </div>
+    </div>
     `,
 })
 

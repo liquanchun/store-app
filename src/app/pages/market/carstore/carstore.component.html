@@ -33,8 +33,105 @@
         <div class="row">
           <div class="col-12">
             <div class="collapse" id="collapseExample">
-              <div class="card card-body">
-                <app-search-form [formView]="searchview" (searchClick)="onSearchAll($event)"></app-search-form>
+              <div class="row" style="margin-bottom:5px;">
+
+                <div class="col-3">
+                  <div class="row">
+                    <div style="padding-top:3px;padding-right: 0" class="col-3 text-right"> <label>车系</label> </div>
+                    <div class="col-9">
+                      <select (change)="onSelectCarSeries()" [(ngModel)]="search.CarSeries">
+                        <option value="">--请选择--</option>
+                        <option [value]="option.name" *ngFor="let option of carseries">
+                          {{ option.name }}
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-3">
+                  <div class="row">
+                    <div style="padding-top:3px;padding-right: 0" class="col-3 text-right"> <label>车型</label> </div>
+                    <div class="col-9">
+                      <select [(ngModel)]="search.CarTypeCode">
+                        <option value="">--请选择--</option>
+                        <option [value]="option.name" *ngFor="let option of cartype">
+                          {{ option.name }}
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+
+                <div class="col-3">
+                  <div class="row">
+                    <div style="padding-top:3px;padding-right: 0" class="col-3 text-right"> <label>颜色</label> </div>
+                    <div class="col-9">
+                      <select [(ngModel)]="search.CarColor">
+                        <option value="">--请选择--</option>
+                        <option [value]="option.name" *ngFor="let option of carcolor">
+                          {{ option.name }}
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+
+                <div class="col-3">
+                  <div class="row">
+                    <div style="padding-top:3px;padding-right: 0" class="col-3 text-right"> <label>内饰</label> </div>
+                    <div class="col-9">
+                      <select [(ngModel)]="search.CarTrim">
+                        <option value="">--请选择--</option>
+                        <option [value]="option.name" *ngFor="let option of cartrim">
+                          {{ option.name }}
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
+              <div class="row">
+                <div class="col-3">
+                  <div class="row">
+                    <div style="padding-top:3px;padding-right: 0" class="col-3 text-right"> <label>库存状态</label> </div>
+                    <div class="col-9">
+                      <select [(ngModel)]="search.Status">
+                        <option value="">--请选择--</option>
+                        <option value="期货">期货</option>
+                        <option value="配额">配额</option>
+                        <option value="现车">现车</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-3">
+                  <div class="row">
+                    <div style="padding-top:3px;padding-right: 0" class="col-3 text-right"> <label>销售状态</label> </div>
+                    <div class="col-9">
+                      <select [(ngModel)]="search.SaleStatus">
+                        <option value="">--请选择--</option>
+                        <option value="预留">预留</option>
+                        <option value="订单">订单</option>
+                        <option value="已开票">已开票</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-3">
+                  <div class="btn-group pull-right margin8" role="group" aria-label="Basic example">
+                    <button (click)="onQuery()" type="button" class="btn btn-info btn-sm">
+                      <i class="fa fa-refresh" aria-hidden="true"></i> 查询</button>
+                    <button (click)="onClear()" type="button" class="btn btn-info btn-sm">
+                      <i class="fa fa-pencil" aria-hidden="true"></i> 清空</button>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

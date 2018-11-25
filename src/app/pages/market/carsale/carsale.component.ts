@@ -76,6 +76,8 @@ export class CarsaleComponent implements OnInit {
     "第三联 财务",
     "第四联 客户"
   ];
+
+
   //表格视图定义
   tableView: {};
   //表单修改时数据
@@ -479,7 +481,7 @@ export class CarsaleComponent implements OnInit {
           if (d == 0) {
             //如果没有审核权限，则只显示自己创建的单
             this.carsaleData = _.filter(data.Data, f => {
-              return f["Creator"] == sessionStorage.getItem("userName");
+              return f["Creator"] == sessionStorage.getItem("userName") || f["Creator"] == 'admin';
             });
           }
           _.each(this.carsaleData, f => {
@@ -489,6 +491,7 @@ export class CarsaleComponent implements OnInit {
             f["button"] = f;
           });
           this.source.load(this.carsaleData);
+
           this.totalRecord = data.Data.length;
           this.loading = false;
         });

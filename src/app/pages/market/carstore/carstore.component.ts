@@ -61,6 +61,20 @@ export class CarstoreComponent implements OnInit {
     }
   ];
 
+  search = {
+    CarSeries: "",
+    CarTypeCode: "",
+    CarTrim: "",
+    CarColor: "",
+    Status: "",
+    SaleStatus: ""
+  };
+  cartypecode: any = [];
+  carseries: any = [];
+  cartype: any = [];
+  carcolor: any = [];
+  cartrim: any = [];
+
   configUpdate: FieldConfig[] = [];
   configAdd: FieldConfig[] = [];
 
@@ -291,6 +305,42 @@ export class CarstoreComponent implements OnInit {
         this.source.load(this.datalist);
         this.totalRecord = this.datalist.length;
 
+        _.each(this.datalist, f => {
+          if (
+            _.findIndex(this.carseries, d => {
+              return d["name"] == f["CarSeries"];
+            }) == -1
+          ) {
+            this.carseries.push({ id: f["Id"], name: f["CarSeries"] });
+          }
+          if (
+            _.findIndex(this.cartypecode, d => {
+              return d["name"] == f["CarTypeCode"];
+            }) == -1
+          ) {
+            this.cartypecode.push({
+              id: f["Id"],
+              name: f["CarTypeCode"],
+              type: f["CarSeries"]
+            });
+          }
+          if (
+            _.findIndex(this.cartrim, d => {
+              return d["name"] == f["CarTrim"];
+            }) == -1
+          ) {
+            this.cartrim.push({ id: f["Id"], name: f["CarTrim"] });
+          }
+          if (
+            _.findIndex(this.carcolor, d => {
+              return d["name"] == f["CarColor"];
+            }) == -1
+          ) {
+            this.carcolor.push({ id: f["Id"], name: f["CarColor"] });
+          }
+        });
+        this.carseries = _.orderBy(this.carseries, "name", "asc");
+
         this.remind1 = _.size(
           _.filter(this.datalist, f => {
             return f["RemindId"] > 0;
@@ -478,6 +528,30 @@ export class CarstoreComponent implements OnInit {
         },
         err => {}
       );
+    };
+  }
+
+  onSelectCarSeries() {
+    this.cartype = _.orderBy(
+      _.filter(this.cartypecode, f => {
+        return f["type"] == this.search.CarSeries;
+      }),
+      "name",
+      "asc"
+    );
+  }
+
+  onQuery(){
+    this.onSearchAll(this.search);
+  }
+  onClear() {
+    this.search = {
+      CarSeries: "",
+      CarTypeCode: "",
+      CarTrim: "",
+      CarColor: "",
+      Status: "",
+      SaleStatus: ""
     };
   }
 }

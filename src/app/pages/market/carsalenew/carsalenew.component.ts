@@ -601,6 +601,13 @@ export class CarSaleNewComponent implements OnInit {
       if (!newcarsale.Status) {
         newcarsale.Status = that.carinfo.Status;
       }
+      const keys = _.keys(newcarsale);
+      keys.forEach((k) => {
+        if(newcarsale[k] == null){
+            delete newcarsale[k];
+        }
+      });
+
       that.formService.create("car_booking", newcarsale).then(
         data => {
           that.saveItem();

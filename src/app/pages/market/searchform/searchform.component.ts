@@ -178,8 +178,9 @@ export class SearchFormComponent implements OnInit {
               if (dataS.length >= 7) {
                 display = display + '|' + dt[dataS[6]];
               }
-
-              list.push({ id: dt[dataS[2]], text: display });
+              if(_.find(list,f => { return f.text == display; }) == -1){
+                list.push({ id: dt[dataS[2]], text: display });
+              }
             });
 
             let cigAdd = _.find(this.configAddArr, f => { return f['name'] == field['FieldName'] });
