@@ -308,38 +308,40 @@ export class CarstoreComponent implements OnInit {
         _.each(this.datalist, f => {
           if (
             _.findIndex(this.carseries, d => {
-              return d["name"] == f["CarSeries"];
+              return d["name"] == _.trim(f["CarSeries"]);
             }) == -1
           ) {
-            this.carseries.push({ id: f["Id"], name: f["CarSeries"] });
+            this.carseries.push({ id: f["Id"], name: _.trim(f["CarSeries"]) });
           }
           if (
             _.findIndex(this.cartypecode, d => {
-              return d["name"] == f["CarTypeCode"];
+              return d["name"] == _.trim(f["CarTypeCode"]);
             }) == -1
           ) {
             this.cartypecode.push({
               id: f["Id"],
-              name: f["CarTypeCode"],
-              type: f["CarSeries"]
+              name: _.trim(f["CarTypeCode"]),
+              type: _.trim(f["CarSeries"])
             });
           }
           if (
             _.findIndex(this.cartrim, d => {
-              return d["name"] == f["CarTrim"];
+              return d["name"] == _.trim(f["CarTrim"]);
             }) == -1
           ) {
-            this.cartrim.push({ id: f["Id"], name: f["CarTrim"] });
+            this.cartrim.push({ id: f["Id"], name: _.trim(f["CarTrim"]) });
           }
           if (
             _.findIndex(this.carcolor, d => {
-              return d["name"] == f["CarColor"];
+              return d["name"] == _.trim(f["CarColor"]);
             }) == -1
           ) {
-            this.carcolor.push({ id: f["Id"], name: f["CarColor"] });
+            this.carcolor.push({ id: f["Id"], name: _.trim(f["CarColor"]) });
           }
         });
         this.carseries = _.orderBy(this.carseries, "name", "asc");
+        this.carcolor = _.orderBy(this.carcolor, "name", "asc");
+        this.cartrim = _.orderBy(this.cartrim, "name", "asc");
 
         this.remind1 = _.size(
           _.filter(this.datalist, f => {
