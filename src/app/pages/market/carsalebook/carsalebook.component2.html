@@ -1,22 +1,130 @@
 <div class="row">
   <div class="col-md-12">
     <ba-card [title]="title" style="margin-bottom:8px;" class="card-primary" baCardClass="with-scroll">
-      <div style="margin-bottom: 1px;">
-        <div class="row" style="margin-bottom: 1px;">
-          <div class="col-12">
-            <app-search-form [formView]="searchview" (searchClick)="onSearchAll($event)"></app-search-form>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-12">
-            <div class="btn-group pull-right margin8" role="group" aria-label="Basic example">
-              <button (click)="getDataList()" type="button" class="btn btn-info btn-sm">
-                <i class="fa fa-refresh" aria-hidden="true"></i> 刷新</button>
+    </ba-card>
+
+    <div style="margin-bottom: 1px;">
+
+      <div class="row" style="margin-bottom:5px;">
+
+        <div class="col-4">
+          <div class="row">
+            <div style="padding-top:3px;padding-right: 0" class="col-2 text-right"> <label>销售日期</label> </div>
+            <div class="col-5">
+              <div class="input-group">
+                <input [(ngModel)]="search.InvoiceDate1" class="form-control" placeholder="yyyy-mm-dd" ngbDatepicker #d1="ngbDatepicker">
+                <div class="input-group-addon" (click)="d1.toggle()">
+                  <i class="fa fa-calendar" aria-hidden="true"></i>
+                </div>
+              </div>
+            </div>
+            <div class="col-5">
+              <div class="input-group">
+                <input [(ngModel)]="search.InvoiceDate2" class="form-control" placeholder="yyyy-mm-dd" ngbDatepicker #d2="ngbDatepicker">
+                <div class="input-group-addon" (click)="d2.toggle()">
+                  <i class="fa fa-calendar" aria-hidden="true"></i>
+                </div>
+              </div>
             </div>
           </div>
         </div>
+
+        <div class="col-3">
+          <div class="row">
+            <div style="padding-top:3px;padding-right: 0" class="col-3 text-right"> <label>车系</label> </div>
+            <div class="col-9">
+              <select (change)="onSelectCarSeries()" [(ngModel)]="search.CarSeries">
+                <option value="">--请选择--</option>
+                <option [value]="option.name" *ngFor="let option of carseries">
+                  {{ option.name }}
+                </option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-3">
+          <div class="row">
+            <div style="padding-top:3px;padding-right: 0" class="col-3 text-right"> <label>车型</label> </div>
+            <div class="col-9">
+              <select [(ngModel)]="search.CarTypeCode">
+                <option value="">--请选择--</option>
+                <option [value]="option.name" *ngFor="let option of cartype">
+                  {{ option.name }}
+                </option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-2">
+          <div class="row">
+            <div style="padding-top:3px;padding-right: 0" class="col-3 text-right"> <label>车架号</label> </div>
+            <div class="col-9">
+              <input type="text" class="form-control" [(ngModel)]="search.carvinno">
+            </div>
+          </div>
+        </div>
+
       </div>
-    </ba-card>
+      <div class="row">
+        <div class="col-3">
+          <div class="row">
+            <div style="padding-top:3px;padding-right: 0" class="col-3 text-right"> <label>销售结构</label> </div>
+            <div class="col-9">
+              <select [(ngModel)]="search.buytype">
+                <option value="">--请选择--</option>
+                <option [value]="option.name" *ngFor="let option of buytype">
+                  {{ option.name }}
+                </option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="col-3">
+          <div class="row">
+            <div style="padding-top:3px;padding-right: 0" class="col-3 text-right"> <label>销售分类</label> </div>
+            <div class="col-9">
+              <select [(ngModel)]="search.custtype">
+                <option value="">--请选择--</option>
+                <option [value]="option.name" *ngFor="let option of custtype">
+                  {{ option.name }}
+                </option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-3">
+          <div class="row">
+            <div style="padding-top:3px;padding-right: 0" class="col-3 text-right"> <label>销售顾问</label> </div>
+            <div class="col-9">
+              <select [(ngModel)]="search.saleman">
+                <option value="">--请选择--</option>
+                <option [value]="option.name" *ngFor="let option of saleman">
+                  {{ option.name }}
+                </option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-3">
+          <div class="btn-group pull-right margin8" role="group" aria-label="Basic example">
+            <button (click)="onQuery()" type="button" class="btn btn-info btn-sm">
+              <i class="fa fa-refresh" aria-hidden="true"></i> 查询</button>
+            <button (click)="onClear()" type="button" class="btn btn-info btn-sm">
+              <i class="fa fa-pencil" aria-hidden="true"></i> 清空</button>
+            <button (click)="getDataList()" type="button" class="btn btn-info btn-sm">
+              <i class="fa fa-refresh" aria-hidden="true"></i> 刷新</button>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
     <div class="alert alert-primary" style="margin-bottom:8px;background-color: #cce5ff;padding:5px" role="alert">
       <span style="margin-right:10px;">选择的车辆信息——</span>
       <span style="margin-right:10px;"><strong>客户：</strong>{{selectedData['20_客户信息_开票名称']}}</span>
