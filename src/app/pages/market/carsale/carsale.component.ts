@@ -171,8 +171,8 @@ export class CarsaleComponent implements OnInit {
     });
 
     this._state.subscribe("print.carsale.audit", data => {
-      if (this.notice) {
-        this.notice = false;
+      // if (this.notice) {
+      //   this.notice = false;
         this.printOrder = _.find(this.carsaleData, f => {
           return f["Id"] == data.id;
         });
@@ -191,11 +191,11 @@ export class CarsaleComponent implements OnInit {
         } else {
           this.onAudit();
         }
-      }
+      // }
     });
 
     this._state.subscribe("print.carsale.auditnot", data => {
-      this.notice = true;
+      //this.notice = true;
       this.printOrder = _.find(this.carsaleData, f => {
         return f["Id"] == data.id;
       });

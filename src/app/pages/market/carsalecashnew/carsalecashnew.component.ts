@@ -66,7 +66,7 @@ export class CarSaleCashNewComponent implements OnInit {
     MaintainFee: 0,
     GasFee: 0,
     OtherFee3: 0,
-    BookId:0
+    BookId: 0
   };
   customer: any = {
     Name: "",
@@ -276,32 +276,106 @@ export class CarSaleCashNewComponent implements OnInit {
   }
 
   priceChange() {
-    this.carsale.ShouldAllFee =
-     _.round(this.carsale.NewCarFee +
-      this.carsale.InsureFee +
-      this.carsale.BuyTaxFee +
-      this.carsale.FinanceSerFee +
-      this.carsale.DecorateFee +
-      this.carsale.TakeAllFee +
-      this.carsale.TakeCareFee +
-      this.carsale.IntimateFee +
-      this.carsale.GlassSerFee +
-      this.carsale.CardCashFee +
-      this.carsale.OtherFee,2);
+    // this.carsale.ShouldAllFee = _.round(
+    //   this.carsale.NewCarFee +
+    //     this.carsale.InsureFee +
+    //     this.carsale.BuyTaxFee +
+    //     this.carsale.FinanceSerFee +
+    //     this.carsale.DecorateFee +
+    //     this.carsale.TakeAllFee +
+    //     this.carsale.TakeCareFee +
+    //     this.carsale.IntimateFee +
+    //     this.carsale.GlassSerFee +
+    //     this.carsale.CardCashFee +
+    //     this.carsale.OtherFee,
+    //   2
+    // );
+    const fee1 = this.add(this.carsale.NewCarFee,this.carsale.InsureFee);
+    const fee2 = this.add(this.carsale.BuyTaxFee,this.carsale.FinanceSerFee);
+    const fee3 = this.add(this.carsale.DecorateFee,this.carsale.TakeAllFee);
+    const fee4 = this.add(this.carsale.TakeCareFee,this.carsale.IntimateFee);
+    const fee5 = this.add(this.carsale.GlassSerFee,this.carsale.CardCashFee);
+
+    const fee6 = this.add(fee1,fee2);
+    const fee7 = this.add(fee3,fee4);
+    const fee8 = this.add(fee5,this.carsale.OtherFee);
+    const fee9 = this.add(fee6,fee7);
+    const fee10 = this.add(fee8,fee9);
+    this.carsale.ShouldAllFee = _.round(fee10,2);
+
     if (this.carsale.BuyLicense == "分期") {
-      this.carsale.LastFee = this.carsale.NewCarFee - this.carsale.FirstFee;
+      this.carsale.LastFee = this.sub(this.carsale.NewCarFee,this.carsale.FirstFee);
     }
     this.carsale.InvoiceFee = this.carsale.NewCarFee;
-    this.carsale.RealAllFee =
-      _.round(this.carsale.ShouldAllFee -
-      this.carsale.Deposit -
-      this.carsale.LastFee -
-      this.carsale.OldChangeFee -
-      this.carsale.OtherFee2,2);
+    // this.carsale.RealAllFee = _.round(
+    //   this.carsale.ShouldAllFee -
+    //     this.carsale.Deposit -
+    //     this.carsale.LastFee -
+    //     this.carsale.OldChangeFee -
+    //     this.carsale.OtherFee2,
+    //   2
+    // );
+    const sb1 = this.sub(this.carsale.ShouldAllFee,this.carsale.Deposit);
+    const sb2 = this.sub(sb1,this.carsale.LastFee);
+    const sb3 = this.sub(sb2,this.carsale.OldChangeFee);
+    const sb4 = this.sub(sb3,this.carsale.OtherFee2);
+    this.carsale.RealAllFee = _.round(sb4,2);
+
     this.chineseMoney = this._common.changeNumMoneyToChinese(
       this.carsale.RealAllFee
     );
   }
+
+  add(a, b) {
+    var c, d, e;
+    try {
+      c = a.toString().split(".")[1].length;
+    } catch (f) {
+      c = 0;
+    }
+    try {
+      d = b.toString().split(".")[1].length;
+    } catch (f) {
+      d = 0;
+    }
+    return (
+      (e = Math.pow(10, Math.max(c, d))), (this.mul(a, e) + this.mul(b, e)) / e
+    );
+  }
+
+  sub(a, b) {
+    var c, d, e;
+    try {
+      c = a.toString().split(".")[1].length;
+    } catch (f) {
+      c = 0;
+    }
+    try {
+      d = b.toString().split(".")[1].length;
+    } catch (f) {
+      d = 0;
+    }
+    return (
+      (e = Math.pow(10, Math.max(c, d))), (this.mul(a, e) - this.mul(b, e)) / e
+    );
+  }
+
+  mul(a, b) {
+    var c = 0,
+      d = a.toString(),
+      e = b.toString();
+    try {
+      c += d.split(".")[1].length;
+    } catch (f) {}
+    try {
+      c += e.split(".")[1].length;
+    } catch (f) {}
+    return (
+      (Number(d.replace(".", "")) * Number(e.replace(".", ""))) /
+      Math.pow(10, c)
+    );
+  }
+
   onBack() {
     this._router.navigate(["/pages/market/carsalecash"]);
   }
@@ -312,9 +386,9 @@ export class CarSaleCashNewComponent implements OnInit {
     if (this.carsale.UpdateTime) delete this.carsale.UpdateTime;
     this.carsale.IsValid = 1;
     const keys = _.keys(this.carsale);
-    keys.forEach((k) => {
-      if(this.carsale[k] == null){
-          delete this.carsale[k];
+    keys.forEach(k => {
+      if (this.carsale[k] == null) {
+        delete this.carsale[k];
       }
     });
     this.formService.create("car_sale_cash", this.carsale).then(
