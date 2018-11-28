@@ -167,7 +167,7 @@ export class CarSaleCashNewComponent implements OnInit {
     this._dicService.getDicByName("保险公司", data => {
       this.bxgs = data;
     });
-    this._dicService.getDicByName("客户属性", data => {
+    this._dicService.getDicByName("销售分类", data => {
       this.kfsx = data;
     });
   }
