@@ -96,6 +96,7 @@ export class CarsaleComponent implements OnInit {
   totalRecord: number = 0;
 
   carsaleData: any;
+  allcarsaleData:any;
   printOrder: any = {};
   serviceItem: any;
   serviceItem1: any;
@@ -176,7 +177,7 @@ export class CarsaleComponent implements OnInit {
         this.printOrder = _.find(this.carsaleData, f => {
           return f["Id"] == data.id;
         });
-        const old = _.find(this.carsaleData, f => {
+        const old = _.find(this.allcarsaleData, f => {
           return (
             f["CarIncomeId"] == this.printOrder["CarIncomeId"] &&
             f["Id"] != this.printOrder["Id"]
@@ -477,6 +478,7 @@ export class CarsaleComponent implements OnInit {
     this.formService.getForms(this.tableView["ViewName"]).then(
       data => {
         this.checkRoles("AuditRoles").then(d => {
+          this.allcarsaleData = data.Data;
           this.carsaleData = data.Data;
           if (d == 0) {
             //如果没有审核权限，则只显示自己创建的单
