@@ -20,6 +20,8 @@ import { HttpService } from '../../../providers/httpClient';
 import { Config } from '../../../providers/config';
 import * as $ from "jquery";
 import * as _ from "lodash";
+import * as XLSX from 'xlsx';
+type AOA = any[][];
 
 @Component({
   selector: "app-carstore",
@@ -100,6 +102,10 @@ export class CarstoreComponent implements OnInit {
   totalRecord: number = 0;
   remind1: number = 0;
   remind2: number = 0;
+
+  titles:any = [];
+  feilds:any=[];
+
   constructor(
     private modalService: NgbModal,
     private formService: FormService,
@@ -262,6 +268,8 @@ export class CarstoreComponent implements OnInit {
                 type: d["DataType"],
                 filter: false
               };
+              this.titles.push(d["Title"]);
+              this.feilds.push(d["FieldName"]);
             }
           });
 
@@ -549,18 +557,22 @@ export class CarstoreComponent implements OnInit {
   }
 
   onExport(){
-    const ids = this.datalist.map();
-    const fileName = `车辆库存明细——${this._common.getTodayString2()}.xls`;
-    const paras ={
-      ViewName:"vw_car_income",
-      Where:"1=1",
-      FileName:fileName
-    };
-
-    // const url = this._config.server + "api/values/getfile/" + fileName;
-    // this._httpClient.create("values/carstore",paras).then(function() {
-    //   window.open(url);
-    // });
+    const fileName = `车辆库存明细——${this._common.getTodayString2()}.xlsx`;
+    const data = [this.titles];
+    _.each(this.datalist,d =>{
+        const vals = [];
+        _.each(this.feilds,f =>{
+            vals.push(d[f]);
+        });
+        data.push(vals);
+    });
+    
+    const ws: XLSX.WorkSheet = XLSX.utils.aoa_to_sheet(data);
+		/* generate workbook and add the worksheet */
+		const wb: XLSX.WorkBook = XLSX.utils.book_new();
+		XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+		/* save to file */
+    XLSX.writeFile(wb, fileName);
   }
 
   onQuery(){

@@ -20,7 +20,10 @@ import { Config } from '../../../providers/config';
 
 import * as $ from "jquery";
 import * as _ from "lodash";
+import * as XLSX from 'xlsx';
 import async from "async";
+type AOA = any[][];
+
 @Component({
   selector: "app-carsalecash",
   templateUrl: "./carsalecash.component.html",
@@ -83,6 +86,8 @@ export class CarSaleCashComponent implements OnInit {
     }
   ];
 
+  titles:any = [];
+  feilds:any=[];
   //表格视图定义
   tableView: {};
   //表单修改时数据
@@ -611,6 +616,8 @@ export class CarSaleCashComponent implements OnInit {
                 type: d["DataType"],
                 filter: false
               };
+              this.titles.push(d["Title"]);
+              this.feilds.push(d["FieldName"]);
             }
           });
 
@@ -674,14 +681,21 @@ export class CarSaleCashComponent implements OnInit {
       this.loading = true;
       this.formService.getFormsByPost(this.tableView["ViewName"], query).then(
         data => {
-          this.carsaleData = data.Data;
-          _.each(this.carsaleData, f => {
-            f["button"] = f;
+          this.checkRoles("AuditRoles").then(d => {
+            this.carsaleData = data.Data;
+            if (d == 0) {
+              //如果没有审核权限，则只显示自己创建的单
+              this.carsaleData = _.filter(data.Data, f => {
+                return f["Creator"] == sessionStorage.getItem("userName") || f["Creator"] == 'admin';
+              });
+            }
+            _.each(this.carsaleData, f => {
+              f["button"] = f;
+            });
+            this.source.load(this.carsaleData);
+            this.totalRecord = data.Data.length;
+            this.loading = false;
           });
-
-          this.source.load(this.carsaleData);
-          this.totalRecord = data.Data.length;
-          this.loading = false;
         },
         err => {
           this.loading = false;
@@ -915,16 +929,22 @@ export class CarSaleCashComponent implements OnInit {
   }
 
   onExport(){
-    const fileName = `销售交款明细——${this._common.getTodayString2()}.xls`;
-    const paras ={
-      ViewName:"vw_car_sale_cash",
-      Where:"1=1",
-      FileName:fileName
-    };
-    const url = this._config.server + "api/values/getfile/" + fileName;
-    this._httpClient.create("values/cashorder",paras).then(function() {
-      window.open(url);
+    const fileName = `销售结算单——${this._common.getTodayString2()}.xlsx`;
+    const data = [this.titles];
+    _.each(this.carsaleData,d =>{
+        const vals = [];
+        _.each(this.feilds,f =>{
+            vals.push(d[f]);
+        });
+        data.push(vals);
     });
+    
+    const ws: XLSX.WorkSheet = XLSX.utils.aoa_to_sheet(data);
+		/* generate workbook and add the worksheet */
+		const wb: XLSX.WorkBook = XLSX.utils.book_new();
+		XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+		/* save to file */
+    XLSX.writeFile(wb, fileName);
   }
 
   print() {
