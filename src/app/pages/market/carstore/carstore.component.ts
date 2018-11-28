@@ -16,8 +16,12 @@ import { GlobalState } from "../../../global.state";
 import { EditFormComponent } from "../editform/editform.component";
 import { Common } from "../../../providers/common";
 import { InvoiceComponent } from "./invoice.component";
+import { HttpService } from '../../../providers/httpClient';
+import { Config } from '../../../providers/config';
 import * as $ from "jquery";
 import * as _ from "lodash";
+import * as XLSX from 'xlsx';
+type AOA = any[][];
 
 @Component({
   selector: "app-carstore",
@@ -98,6 +102,10 @@ export class CarstoreComponent implements OnInit {
   totalRecord: number = 0;
   remind1: number = 0;
   remind2: number = 0;
+
+  titles:any = [];
+  feilds:any=[];
+
   constructor(
     private modalService: NgbModal,
     private formService: FormService,
@@ -105,7 +113,9 @@ export class CarstoreComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private _state: GlobalState,
-    private _common: Common
+    private _common: Common,
+    private _httpClient:HttpService,
+    private _config:Config
   ) {}
   ngOnInit() {
     this.formname = "carincome";
@@ -258,6 +268,8 @@ export class CarstoreComponent implements OnInit {
                 type: d["DataType"],
                 filter: false
               };
+              this.titles.push(d["Title"]);
+              this.feilds.push(d["FieldName"]);
             }
           });
 
@@ -405,6 +417,7 @@ export class CarstoreComponent implements OnInit {
       console.log("查询条件：" + JSON.stringify(query));
       this.formService.getFormsByPost(this.tableView["ViewName"], query).then(
         data => {
+          this.datalist = data.Data;
           this.source.load(data.Data);
           this.totalRecord = data.Data.length;
           this.loading = false;
@@ -541,6 +554,25 @@ export class CarstoreComponent implements OnInit {
       "name",
       "asc"
     );
+  }
+
+  onExport(){
+    const fileName = `车辆库存明细——${this._common.getTodayString2()}.xlsx`;
+    const data = [this.titles];
+    _.each(this.datalist,d =>{
+        const vals = [];
+        _.each(this.feilds,f =>{
+            vals.push(d[f]);
+        });
+        data.push(vals);
+    });
+    
+    const ws: XLSX.WorkSheet = XLSX.utils.aoa_to_sheet(data);
+		/* generate workbook and add the worksheet */
+		const wb: XLSX.WorkBook = XLSX.utils.book_new();
+		XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+		/* save to file */
+    XLSX.writeFile(wb, fileName);
   }
 
   onQuery(){
