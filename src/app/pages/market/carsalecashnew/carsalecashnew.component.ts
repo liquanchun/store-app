@@ -200,6 +200,7 @@ export class CarSaleCashNewComponent implements OnInit {
               that.carinfo = data.Data[0];
               that.carinfo["GuidePrice"] =
                 that.carinfo["GuidePrice"] + that.carinfo["GuidePriceRemark"];
+                that.carsale.Discount = that.carinfo["GuidePrice"] - that.carsale.NewCarFee;
               callback(null, 2);
             },
             err => {}
