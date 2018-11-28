@@ -16,6 +16,8 @@ import { GlobalState } from "../../../global.state";
 import { EditFormComponent } from "../editform/editform.component";
 import { Common } from "../../../providers/common";
 import { InvoiceComponent } from "./invoice.component";
+import { HttpService } from '../../../providers/httpClient';
+import { Config } from '../../../providers/config';
 import * as $ from "jquery";
 import * as _ from "lodash";
 
@@ -105,7 +107,9 @@ export class CarstoreComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private _state: GlobalState,
-    private _common: Common
+    private _common: Common,
+    private _httpClient:HttpService,
+    private _config:Config
   ) {}
   ngOnInit() {
     this.formname = "carincome";
@@ -405,6 +409,7 @@ export class CarstoreComponent implements OnInit {
       console.log("查询条件：" + JSON.stringify(query));
       this.formService.getFormsByPost(this.tableView["ViewName"], query).then(
         data => {
+          this.datalist = data.Data;
           this.source.load(data.Data);
           this.totalRecord = data.Data.length;
           this.loading = false;
@@ -541,6 +546,21 @@ export class CarstoreComponent implements OnInit {
       "name",
       "asc"
     );
+  }
+
+  onExport(){
+    const ids = this.datalist.map();
+    const fileName = `车辆库存明细——${this._common.getTodayString2()}.xls`;
+    const paras ={
+      ViewName:"vw_car_income",
+      Where:"1=1",
+      FileName:fileName
+    };
+
+    // const url = this._config.server + "api/values/getfile/" + fileName;
+    // this._httpClient.create("values/carstore",paras).then(function() {
+    //   window.open(url);
+    // });
   }
 
   onQuery(){

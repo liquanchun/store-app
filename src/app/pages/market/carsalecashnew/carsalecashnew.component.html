@@ -64,7 +64,12 @@
         <tr>
           <td><span class="reqmark">*</span>客户属性</td>
           <td>
-            <input readonly [value]="customer.CustType" type="text" class="form-control inputline">
+            <select [class.inputline]="!isEnable" [(ngModel)]="carsale.CustAttr">
+              <option value="">--请选择--</option>
+              <option [value]="option.text" *ngFor="let option of kfsx">
+                {{ option.text }}
+              </option>
+            </select>
           </td>
           <td><span class="reqmark">*</span>付款方式</td>
           <td>
@@ -96,8 +101,8 @@
           <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.NewCarFee" type="number" min="0" (change)="priceChange()"
               class="form-control"></td>
           <td>分期首付金额</td>
-          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.FirstFee" type="number" min="0" max="100" (change)="priceChange()"
-              class="form-control"></td>
+          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.FirstFee" type="number" min="0" max="100"
+              (change)="priceChange()" class="form-control"></td>
         </tr>
         <tr>
           <td>保险费金额</td>
