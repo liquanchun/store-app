@@ -6,12 +6,6 @@
           <div class="col-3">
             <search-input (searchClick)="onSearch($event)"></search-input>
           </div>
-          <div class="col-1">
-            <a class="btn btn-secondary" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false"
-              aria-controls="collapseExample">
-              高级查询
-            </a>
-          </div>
           <div class="col-2">
             <div class="btn-group" role="group" aria-label="Basic example">
               <button (click)="remindData1()" title="付款类型等于宝马金融，金融等于未赎，且付款周期大于30天。" type="button" class="btn btn-light btn-sm">
@@ -21,7 +15,7 @@
             </div>
           </div>
 
-          <div class="col-6">
+          <div class="col-7">
             <div class="btn-group pull-right margin8" role="group" aria-label="Basic example">
               <button (click)="getDataList()" type="button" class="btn btn-info btn-sm">
                 <i class="fa fa-refresh" aria-hidden="true"></i> 刷新</button>
@@ -34,7 +28,6 @@
         </div>
         <div class="row">
           <div class="col-12">
-            <div class="collapse" id="collapseExample">
               <div class="row" style="margin-bottom:5px;">
 
                 <div class="col-3">
@@ -117,7 +110,8 @@
                     <div style="padding-top:3px;padding-right: 0" class="col-3 text-right"> <label>销售状态</label> </div>
                     <div class="col-9">
                       <select [(ngModel)]="search.SaleStatus">
-                        <option selected value="未售">未售</option>
+                        <option value="">--请选择--</option>
+                        <option value="未售">未售</option>
                         <option value="预留">预留</option>
                         <option value="订单">订单</option>
                         <option value="已开票">已开票</option>
@@ -135,7 +129,6 @@
                   </div>
                 </div>
               </div>
-            </div>
           </div>
         </div>
 

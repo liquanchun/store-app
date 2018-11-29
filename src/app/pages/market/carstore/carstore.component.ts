@@ -71,7 +71,7 @@ export class CarstoreComponent implements OnInit {
     CarTrim: "",
     CarColor: "",
     Status: "",
-    SaleStatus: ""
+    SaleStatus: "未售"
   };
   cartypecode: any = [];
   carseries: any = [];
