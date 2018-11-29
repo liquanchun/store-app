@@ -15,13 +15,14 @@ import { DicService } from "../../sys/dic/dic.services";
 import { GlobalState } from "../../../global.state";
 import { PrintCashComponent } from "./printcash.component";
 import { Common } from "../../../providers/common";
-import { HttpService } from '../../../providers/httpClient';
-import { Config } from '../../../providers/config';
+import { HttpService } from "../../../providers/httpClient";
+import { Config } from "../../../providers/config";
 
 import * as $ from "jquery";
 import * as _ from "lodash";
-import * as XLSX from 'xlsx';
+import * as XLSX from "xlsx";
 import async from "async";
+import { reject } from "q";
 type AOA = any[][];
 
 @Component({
@@ -65,9 +66,9 @@ export class CarSaleCashComponent implements OnInit {
 
   configInvoice: FieldConfig[] = [
     {
-      type: 'datepicker',
-      label: '日期',
-      name: 'ReceiveInvoice',
+      type: "datepicker",
+      label: "日期",
+      name: "ReceiveInvoice"
     }
   ];
 
@@ -86,8 +87,8 @@ export class CarSaleCashComponent implements OnInit {
     }
   ];
 
-  titles:any = [];
-  feilds:any=[];
+  titles: any = [];
+  feilds: any = [];
   //表格视图定义
   tableView: {};
   //表单修改时数据
@@ -153,7 +154,7 @@ export class CarSaleCashComponent implements OnInit {
     MaintainFee: 0,
     GasFee: 0,
     OtherFee3: 0,
-    SaleMan:""
+    SaleMan: ""
   };
   customer: any = {
     Name: "",
@@ -163,7 +164,7 @@ export class CarSaleCashComponent implements OnInit {
     Phone: "",
     InvoiceCode: "",
     InvoiceName: "",
-    PostNumber:""
+    PostNumber: ""
   };
   carinfo: any = {
     CarType: "",
@@ -195,7 +196,7 @@ export class CarSaleCashComponent implements OnInit {
 
   //签订合同当天
   todayObj = {};
-  todayStr = '';
+  todayStr = "";
   //现车付款日期
   haveCarDate = {};
   //预计交车日期
@@ -212,8 +213,8 @@ export class CarSaleCashComponent implements OnInit {
     private router: Router,
     private _common: Common,
     private _state: GlobalState,
-    private _httpClient:HttpService,
-    private _config:Config
+    private _httpClient: HttpService,
+    private _config: Config
   ) {}
   ngOnDestroy() {
     this._state = null;
@@ -324,14 +325,15 @@ export class CarSaleCashComponent implements OnInit {
                 this.carsale.RealAllFee
               );
             }
-            this.getCarsale(this.carsale.BookingId);
-            _.delay(
-              function(that) {
-                that.print();
-              },
-              500,
-              this
-            );
+            this.loading = true;
+            this.getCarsale(this.carsale.BookingId,this.print);
+            // _.delay(
+            //   function(that) {
+            //     that.print();
+            //   },
+            //   800,
+            //   this
+            // );
           }
         }
       });
@@ -350,14 +352,19 @@ export class CarSaleCashComponent implements OnInit {
           });
         } else {
           if (this.carsale) {
-            this.getPartItem();
-            _.delay(
-              function(that) {
+            this.loading = true;
+            this.getPartItem().then(d => {
+              this.loading = false;
+              if(this.partItemDN.length ==0){
+                this._state.notifyDataChanged("messagebox", {
+                  type: "warning",
+                  msg: "该单无精品配件。",
+                  time: new Date().getTime()
+                });
+              }else{
                 that.print2();
-              },
-              500,
-              this
-            );
+              }
+            });
           }
         }
       });
@@ -376,21 +383,18 @@ export class CarSaleCashComponent implements OnInit {
           });
         } else {
           if (this.carsale) {
-            this.getPartItem();
-            _.delay(
-              function(that) {
-                that.print3();
-              },
-              500,
-              this
-            );
+            this.loading = true;
+            this.getPartItem().then(d => {
+              this.loading = false;
+              that.print3();
+            });
           }
         }
       });
     });
   }
 
-  invoiceDate(id){
+  invoiceDate(id) {
     const that = this;
     const modalRef = this.modalService.open(NgbdModalContent);
     modalRef.componentInstance.title = "收到发票";
@@ -410,51 +414,56 @@ export class CarSaleCashComponent implements OnInit {
           closeBack();
           that.getDataList();
         },
-        err => {
-        }
+        err => {}
       );
     };
   }
   getPartItem() {
-    this.formService
-      .getForms(`car_booking_item/OrderId/${this.carsale.OrderId}`)
-      .then(
-        data => {
-          if (data && data.Data) {
-            this.partItemDN = _.orderBy(
-              _.filter(data.Data, f => {
-                return (
-                  f["IsValid"] == 1 &&
-                  f["Service"] == "DN" &&
-                  (f["ItemType"] == "自费" || f["ItemType"] == "免费")
-                );
-              }),
-              "ItemType",
-              "desc"
-            );
-            this.partAmountDN = _.sumBy(this.partItemDN, f => {
-              return f["Count"] * f["Price"];
-            });
-            this.partItemDY = _.orderBy(
-              _.filter(data.Data, f => {
-                return (
-                  f["IsValid"] == 1 &&
-                  f["Service"] == "HZ" &&
-                  (f["ItemType"] == "自费" || f["ItemType"] == "免费")
-                );
-              }),
-              "ItemType",
-              "desc"
-            );
-            this.partAmountDY = _.sumBy(this.partItemDY, f => {
-              return f["Count"] * f["Price"];
-            });
-          }
-        },
-        err => {}
-      );
+    const that = this;
+    return new Promise((resolve, reject) => {
+      that.formService
+        .getForms(`car_booking_item/OrderId/${that.carsale.OrderId}`)
+        .then(
+          data => {
+            if (data && data.Data) {
+              that.partItemDN = _.orderBy(
+                _.filter(data.Data, f => {
+                  return (
+                    f["IsValid"] == 1 &&
+                    f["Service"] == "DN" &&
+                    (f["ItemType"] == "自费" || f["ItemType"] == "免费")
+                  );
+                }),
+                "ItemType",
+                "desc"
+              );
+              console.log("partItemDN");
+              console.log(that.partItemDN);
+              that.partAmountDN = _.sumBy(that.partItemDN, f => {
+                return f["Count"] * f["Price"];
+              });
+              that.partItemDY = _.orderBy(
+                _.filter(data.Data, f => {
+                  return (
+                    f["IsValid"] == 1 &&
+                    f["Service"] == "HZ" &&
+                    (f["ItemType"] == "自费" || f["ItemType"] == "免费")
+                  );
+                }),
+                "ItemType",
+                "desc"
+              );
+              that.partAmountDY = _.sumBy(that.partItemDY, f => {
+                return f["Count"] * f["Price"];
+              });
+            }
+            resolve();
+          },
+          err => {}
+        );
+    });
   }
-  getCarsale(bookid: number) {
+  getCarsale(bookid: number,print:any) {
     const that = this;
     async.series(
       {
@@ -495,7 +504,7 @@ export class CarSaleCashComponent implements OnInit {
               data => {
                 that.carinfo = data.Data[0];
                 that.carinfo["GuidePrice"] =
-                that.carinfo["GuidePrice"] + that.carinfo["GuidePriceRemark"];
+                  that.carinfo["GuidePrice"] + that.carinfo["GuidePriceRemark"];
                 callback(null, 2);
               },
               err => {}
@@ -513,7 +522,12 @@ export class CarSaleCashComponent implements OnInit {
             );
         }
       },
-      function(err, results) {}
+      function(err, results) {
+        if(print){
+          that.loading = false;
+          print();
+        }
+      } 
     );
   }
 
@@ -647,7 +661,10 @@ export class CarSaleCashComponent implements OnInit {
           if (d == 0) {
             //如果没有审核权限，则只显示自己创建的单
             this.carsaleData = _.filter(data.Data, f => {
-              return f["Creator"] == sessionStorage.getItem("userName") || f["Creator"] == 'admin';
+              return (
+                f["Creator"] == sessionStorage.getItem("userName") ||
+                f["Creator"] == "admin"
+              );
             });
           }
           _.each(this.carsaleData, f => {
@@ -686,7 +703,10 @@ export class CarSaleCashComponent implements OnInit {
             if (d == 0) {
               //如果没有审核权限，则只显示自己创建的单
               this.carsaleData = _.filter(data.Data, f => {
-                return f["Creator"] == sessionStorage.getItem("userName") || f["Creator"] == 'admin';
+                return (
+                  f["Creator"] == sessionStorage.getItem("userName") ||
+                  f["Creator"] == "admin"
+                );
               });
             }
             _.each(this.carsaleData, f => {
@@ -898,7 +918,7 @@ export class CarSaleCashComponent implements OnInit {
           this.carsale.RealAllFee
         );
       }
-      this.getCarsale(this.carsale.BookingId);
+      this.getCarsale(this.carsale.BookingId,null);
     }
   }
 
@@ -928,22 +948,22 @@ export class CarSaleCashComponent implements OnInit {
     });
   }
 
-  onExport(){
+  onExport() {
     const fileName = `销售结算单——${this._common.getTodayString2()}.xlsx`;
     const data = [this.titles];
-    _.each(this.carsaleData,d =>{
-        const vals = [];
-        _.each(this.feilds,f =>{
-            vals.push(d[f]);
-        });
-        data.push(vals);
+    _.each(this.carsaleData, d => {
+      const vals = [];
+      _.each(this.feilds, f => {
+        vals.push(d[f]);
+      });
+      data.push(vals);
     });
-    
+
     const ws: XLSX.WorkSheet = XLSX.utils.aoa_to_sheet(data);
-		/* generate workbook and add the worksheet */
-		const wb: XLSX.WorkBook = XLSX.utils.book_new();
-		XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-		/* save to file */
+    /* generate workbook and add the worksheet */
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
+    /* save to file */
     XLSX.writeFile(wb, fileName);
   }
 

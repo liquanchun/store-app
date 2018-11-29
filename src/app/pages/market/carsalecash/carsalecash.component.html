@@ -111,8 +111,8 @@
           <td class="valueText">{{carsale.BuyLicense}}</td>
         </tr>
         <tr>
-          <td>客户属性</td>
-          <td class="valueText">{{customer.CustType}}</td>
+          <td>销售属性</td>
+          <td class="valueText">{{carsale.CustAttr}}</td>
           <td>付款方式</td>
           <td class="valueText">{{carsale.PayType}}</td>
         </tr>
@@ -271,7 +271,7 @@
   </div>
 </div>
 
-<div id="printDivPart" *ngIf="partItemDN.length > 0" style="display:none;">
+<div id="printDivPart" style="display:none;">
   <div *ngFor="let pagename of printPartSet" style="height: 1064px;">
     <div style="height: 530px;">
 

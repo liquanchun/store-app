@@ -57,7 +57,4 @@ package-lock.json
 package-lock.json
 package.json
 src/app/providers/config.ts
-*.js
-src/app/providers/config.ts
-package.json
-package-lock.json
+

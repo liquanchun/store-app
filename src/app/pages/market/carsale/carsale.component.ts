@@ -11,11 +11,12 @@ import { EditFormComponent } from "../editform/editform.component";
 import { PrintButtonComponent } from "./printbutton.component";
 import { Common } from "../../../providers/common";
 import { HttpService } from "../../../providers/httpClient";
-import { Config } from '../../../providers/config';
+import { Config } from "../../../providers/config";
 import * as $ from "jquery";
 import * as _ from "lodash";
-import * as XLSX from 'xlsx';
+import * as XLSX from "xlsx";
 import { ClassGetter } from "@angular/compiler/src/output/output_ast";
+import { promise } from "selenium-webdriver";
 
 type AOA = any[][];
 
@@ -23,13 +24,13 @@ type AOA = any[][];
   selector: "app-carsale",
   templateUrl: "./carsale.component.html",
   styleUrls: ["./carsale.component.scss"],
-  providers: [FormService, DicService,HttpService]
+  providers: [FormService, DicService, HttpService]
 })
 export class CarsaleComponent implements OnInit {
   loading = false;
   title = "车辆销售";
   query: string = "";
-  queryArr:any;
+  queryArr: any;
   newSettings = {};
   settings = {
     pager: {
@@ -58,8 +59,8 @@ export class CarsaleComponent implements OnInit {
       }
     }
   };
-  titles:any = [];
-  feilds:any=[];
+  titles: any = [];
+  feilds: any = [];
 
   config: FieldConfig[] = [
     {
@@ -100,7 +101,7 @@ export class CarsaleComponent implements OnInit {
   totalRecord: number = 0;
 
   carsaleData: any;
-  allcarsaleData:any;
+  allcarsaleData: any;
   printOrder: any = {};
   serviceItem: any;
   serviceItem1: any;
@@ -112,8 +113,6 @@ export class CarsaleComponent implements OnInit {
   chineseMoney: string;
   notice = true;
 
-  
-
   constructor(
     private modalService: NgbModal,
     private formService: FormService,
@@ -122,8 +121,8 @@ export class CarsaleComponent implements OnInit {
     private router: Router,
     private _common: Common,
     private _state: GlobalState,
-    private _httpClient:HttpService,
-    private _config:Config
+    private _httpClient: HttpService,
+    private _config: Config
   ) {}
   ngAfterViewInit() {}
   ngOnDestroy() {}
@@ -181,24 +180,24 @@ export class CarsaleComponent implements OnInit {
     this._state.subscribe("print.carsale.audit", data => {
       // if (this.notice) {
       //   this.notice = false;
-        this.printOrder = _.find(this.carsaleData, f => {
-          return f["Id"] == data.id;
+      this.printOrder = _.find(this.carsaleData, f => {
+        return f["Id"] == data.id;
+      });
+      const old = _.find(this.allcarsaleData, f => {
+        return (
+          f["CarIncomeId"] == this.printOrder["CarIncomeId"] &&
+          f["Id"] != this.printOrder["Id"]
+        );
+      });
+      if (old && old["Status"] == "订单") {
+        this._state.notifyDataChanged("messagebox", {
+          type: "warning",
+          msg: `该单车辆已被其他销售顾问创建并审核，你不能审核。`,
+          time: new Date().getTime()
         });
-        const old = _.find(this.allcarsaleData, f => {
-          return (
-            f["CarIncomeId"] == this.printOrder["CarIncomeId"] &&
-            f["Id"] != this.printOrder["Id"]
-          );
-        });
-        if (old && old["Status"] == "订单") {
-          this._state.notifyDataChanged("messagebox", {
-            type: "warning",
-            msg: `该单车辆已被其他销售顾问创建并审核，你不能审核。`,
-            time: new Date().getTime()
-          });
-        } else {
-          this.onAudit();
-        }
+      } else {
+        this.onAudit();
+      }
       // }
     });
 
@@ -220,15 +219,11 @@ export class CarsaleComponent implements OnInit {
             this.printOrder.Deposit
           );
         }
-
-        this.getItem();
-        _.delay(
-          function(that) {
-            that.print();
-          },
-          500,
-          this
-        );
+        this.loading = true;
+        this.getServiceItem().then((d)=>{
+          this.loading = false;
+          this.print();
+        });
       }
     });
   }
@@ -243,109 +238,113 @@ export class CarsaleComponent implements OnInit {
     }
   }
 
-  getItem() {
+  getServiceItem() {
     const that = this;
-    this.formService.getForms("car_booking_item").then(
-      data => {
-        if (data.Data.length > 0) {
-          const zzitem = [],
-            zsitem = [];
-          _.each(data.Data, f => {
-            if (
-              f["OrderId"] == that.printOrder.OrderId &&
-              f["ItemType"] == "增值服务"
-            ) {
-              zzitem.push({
-                itemName: f["ItemName"],
-                itemType: f["ItemType"],
-                price: f["Price"],
-                service: f["Service"]
-              });
-            }
-            if (
-              f["OrderId"] == that.printOrder.OrderId &&
-              f["ItemType"] == "赠送服务"
-            ) {
-              zsitem.push({
-                itemName: f["ItemName"],
-                itemType: f["ItemType"],
-                price: f["Price"],
-                service: f["Service"]
-              });
-            }
-          });
-
-          that.serviceItem = zzitem;
-          that.serviceItem1 = _.filter(zzitem, f => {
-            return f["service"] && f["service"].length > 1;
-          });
-          that.serviceItem2 = _.filter(zzitem, f => {
-            return !f["service"] || f["service"].length == 0;
-          });
-          if (that.serviceItem2.length % 2 != 0) {
-            that.serviceItem2.push({
-              itemName: "",
-              itemType: "增值服务",
-              price: 0,
-              service: ""
+    return new Promise((resolve, reject) => {
+      that.formService.getForms("car_booking_item").then(
+        data => {
+          if (data.Data.length > 0) {
+            const zzitem = [],
+              zsitem = [];
+            _.each(data.Data, f => {
+              if (
+                f["OrderId"] == that.printOrder.OrderId &&
+                f["ItemType"] == "增值服务"
+              ) {
+                zzitem.push({
+                  itemName: f["ItemName"],
+                  itemType: f["ItemType"],
+                  price: f["Price"],
+                  service: f["Service"]
+                });
+              }
+              if (
+                f["OrderId"] == that.printOrder.OrderId &&
+                f["ItemType"] == "赠送服务"
+              ) {
+                zsitem.push({
+                  itemName: f["ItemName"],
+                  itemType: f["ItemType"],
+                  price: f["Price"],
+                  service: f["Service"]
+                });
+              }
             });
-          }
-          that.htmlTd = [];
 
-          let index;
-          for (index in that.serviceItem2) {
-            let i = index * 3;
-            if (i < that.serviceItem2.length) {
-              that.htmlTd.push({
-                itemName1: that.serviceItem2[i].itemName,
-                price1: that.serviceItem2[i].price,
-                itemName2:
-                  i + 1 < that.serviceItem2.length
-                    ? that.serviceItem2[i + 1].itemName
-                    : "",
-                price2:
-                  i + 1 < that.serviceItem2.length
-                    ? that.serviceItem2[i + 1].price
-                    : "",
-                itemName3:
-                  i + 2 < that.serviceItem2.length
-                    ? that.serviceItem2[i + 2].itemName
-                    : "",
-                price3:
-                  i + 2 < that.serviceItem2.length
-                    ? that.serviceItem2[i + 2].price
-                    : ""
+            that.serviceItem = zzitem;
+            that.serviceItem1 = _.filter(zzitem, f => {
+              return f["service"] && f["service"].length > 1;
+            });
+            that.serviceItem2 = _.filter(zzitem, f => {
+              return !f["service"] || f["service"].length == 0;
+            });
+            if (that.serviceItem2.length % 2 != 0) {
+              that.serviceItem2.push({
+                itemName: "",
+                itemType: "增值服务",
+                price: 0,
+                service: ""
               });
             }
-          }
+            that.htmlTd = [];
 
-          that.htmlGiveTd = [];
-          index = 0;
-          for (index in zsitem) {
-            let i = index * 2;
-            if (i < zsitem.length) {
-              that.htmlGiveTd.push({
-                itemName1: zsitem[i].itemName,
-                service1: zsitem[i].service,
-                itemName2: i + 1 < zsitem.length ? zsitem[i + 1].itemName : "",
-                service2: i + 1 < zsitem.length ? zsitem[i + 1].service : ""
-              });
+            let index;
+            for (index in that.serviceItem2) {
+              let i = index * 3;
+              if (i < that.serviceItem2.length) {
+                that.htmlTd.push({
+                  itemName1: that.serviceItem2[i].itemName,
+                  price1: that.serviceItem2[i].price,
+                  itemName2:
+                    i + 1 < that.serviceItem2.length
+                      ? that.serviceItem2[i + 1].itemName
+                      : "",
+                  price2:
+                    i + 1 < that.serviceItem2.length
+                      ? that.serviceItem2[i + 1].price
+                      : "",
+                  itemName3:
+                    i + 2 < that.serviceItem2.length
+                      ? that.serviceItem2[i + 2].itemName
+                      : "",
+                  price3:
+                    i + 2 < that.serviceItem2.length
+                      ? that.serviceItem2[i + 2].price
+                      : ""
+                });
+              }
             }
+
+            that.htmlGiveTd = [];
+            index = 0;
+            for (index in zsitem) {
+              let i = index * 2;
+              if (i < zsitem.length) {
+                that.htmlGiveTd.push({
+                  itemName1: zsitem[i].itemName,
+                  service1: zsitem[i].service,
+                  itemName2:
+                    i + 1 < zsitem.length ? zsitem[i + 1].itemName : "",
+                  service2: i + 1 < zsitem.length ? zsitem[i + 1].service : ""
+                });
+              }
+            }
+            if (that.htmlGiveTd.length == 0) {
+              that.marginbottom = "80px";
+            }
+            if (that.htmlGiveTd.length == 1) {
+              that.marginbottom = "60px";
+            }
+            if (that.htmlGiveTd.length == 2) {
+              that.marginbottom = "40px";
+            }
+            that.giveItem = zsitem;
           }
-          if (that.htmlGiveTd.length == 0) {
-            that.marginbottom = "80px";
-          }
-          if (that.htmlGiveTd.length == 1) {
-            that.marginbottom = "60px";
-          }
-          if (that.htmlGiveTd.length == 2) {
-            that.marginbottom = "40px";
-          }
-          that.giveItem = zsitem;
-        }
-      },
-      err => {}
-    );
+          resolve();
+        },
+        err => {}
+      );
+    });
   }
   //根据视图名称获取表格和表单定义
   getViewName(formname: string) {
@@ -492,7 +491,10 @@ export class CarsaleComponent implements OnInit {
           if (d == 0) {
             //如果没有审核权限，则只显示自己创建的单
             this.carsaleData = _.filter(data.Data, f => {
-              return f["Creator"] == sessionStorage.getItem("userName") || f["Creator"] == 'admin';
+              return (
+                f["Creator"] == sessionStorage.getItem("userName") ||
+                f["Creator"] == "admin"
+              );
             });
           }
           _.each(this.carsaleData, f => {
@@ -536,7 +538,10 @@ export class CarsaleComponent implements OnInit {
             if (d == 0) {
               //如果没有审核权限，则只显示自己创建的单
               this.carsaleData = _.filter(data.Data, f => {
-                return f["Creator"] == sessionStorage.getItem("userName") || f["Creator"] == 'admin';
+                return (
+                  f["Creator"] == sessionStorage.getItem("userName") ||
+                  f["Creator"] == "admin"
+                );
               });
             }
             _.each(this.carsaleData, f => {
@@ -546,7 +551,7 @@ export class CarsaleComponent implements OnInit {
               f["button"] = f;
             });
             this.source.load(this.carsaleData);
-  
+
             this.totalRecord = data.Data.length;
             this.loading = false;
           });
@@ -673,7 +678,7 @@ export class CarsaleComponent implements OnInit {
           this.printOrder.Deposit
         );
       }
-      this.getItem();
+      this.getServiceItem();
     }
   }
 
@@ -730,7 +735,7 @@ export class CarsaleComponent implements OnInit {
           msg: "反审核成功。",
           time: new Date().getTime()
         });
-        this.saveStatus(' ');
+        this.saveStatus(" ");
         this.getDataList();
       },
       err => {
@@ -780,23 +785,22 @@ export class CarsaleComponent implements OnInit {
     });
   }
 
-  onExport(){
-    
+  onExport() {
     const fileName = `销售预定单——${this._common.getTodayString2()}.xlsx`;
     const data = [this.titles];
-    _.each(this.carsaleData,d =>{
-        const vals = [];
-        _.each(this.feilds,f =>{
-            vals.push(d[f]);
-        });
-        data.push(vals);
+    _.each(this.carsaleData, d => {
+      const vals = [];
+      _.each(this.feilds, f => {
+        vals.push(d[f]);
+      });
+      data.push(vals);
     });
-    
+
     const ws: XLSX.WorkSheet = XLSX.utils.aoa_to_sheet(data);
-		/* generate workbook and add the worksheet */
-		const wb: XLSX.WorkBook = XLSX.utils.book_new();
-		XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-		/* save to file */
+    /* generate workbook and add the worksheet */
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
+    /* save to file */
     XLSX.writeFile(wb, fileName);
   }
   print() {
