@@ -326,7 +326,7 @@ export class CarSaleCashComponent implements OnInit {
               );
             }
             this.loading = true;
-            this.getCarsale(this.carsale.BookingId,this.print);
+            this.getCarsale(this.carsale.BookingId, this.print);
             // _.delay(
             //   function(that) {
             //     that.print();
@@ -355,13 +355,13 @@ export class CarSaleCashComponent implements OnInit {
             this.loading = true;
             this.getPartItem().then(d => {
               this.loading = false;
-              if(this.partItemDN.length ==0){
+              if (this.partItemDN.length == 0 && this.partItemDY.length == 0) {
                 this._state.notifyDataChanged("messagebox", {
                   type: "warning",
                   msg: "该单无精品配件。",
                   time: new Date().getTime()
                 });
-              }else{
+              } else {
                 that.print2();
               }
             });
@@ -429,9 +429,10 @@ export class CarSaleCashComponent implements OnInit {
               that.partItemDN = _.orderBy(
                 _.filter(data.Data, f => {
                   return (
-                    f["IsValid"] == 1 &&
-                    f["Service"] == "DN" &&
-                    (f["ItemType"] == "自费" || f["ItemType"] == "免费")
+                    (f["IsValid"] == 1 &&
+                      f["Service"] == "DN" &&
+                      (f["ItemType"] == "自费" || f["ItemType"] == "免费")) ||
+                    (f["IsValid"] == 1 && f["ItemType"] == "赠送服务")
                   );
                 }),
                 "ItemType",
@@ -463,7 +464,7 @@ export class CarSaleCashComponent implements OnInit {
         );
     });
   }
-  getCarsale(bookid: number,print:any) {
+  getCarsale(bookid: number, print: any) {
     const that = this;
     async.series(
       {
@@ -523,11 +524,11 @@ export class CarSaleCashComponent implements OnInit {
         }
       },
       function(err, results) {
-        if(print){
+        if (print) {
           that.loading = false;
           print();
         }
-      } 
+      }
     );
   }
 
@@ -918,7 +919,7 @@ export class CarSaleCashComponent implements OnInit {
           this.carsale.RealAllFee
         );
       }
-      this.getCarsale(this.carsale.BookingId,null);
+      this.getCarsale(this.carsale.BookingId, null);
     }
   }
 
