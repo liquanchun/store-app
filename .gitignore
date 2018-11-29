@@ -58,3 +58,4 @@ package-lock.json
 package.json
 src/app/providers/config.ts
 
+src/app/providers/config.ts
