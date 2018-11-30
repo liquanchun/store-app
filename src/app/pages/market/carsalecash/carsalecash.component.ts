@@ -438,8 +438,7 @@ export class CarSaleCashComponent implements OnInit {
                 "ItemType",
                 "desc"
               );
-              console.log("partItemDN");
-              console.log(that.partItemDN);
+
               that.partAmountDN = _.sumBy(that.partItemDN, f => {
                 return f["Count"] * f["Price"];
               });
@@ -457,6 +456,9 @@ export class CarSaleCashComponent implements OnInit {
               that.partAmountDY = _.sumBy(that.partItemDY, f => {
                 return f["Count"] * f["Price"];
               });
+
+              console.log(that.partItemDN);
+              console.log(that.partItemDY);
             }
             resolve();
           },

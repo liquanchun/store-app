@@ -66,7 +66,8 @@ export class CarSaleCashNewComponent implements OnInit {
     MaintainFee: 0,
     GasFee: 0,
     OtherFee3: 0,
-    BookId: 0
+    BookId: 0,
+    CarIncomeId:0
   };
   customer: any = {
     Name: "",
@@ -184,6 +185,7 @@ export class CarSaleCashNewComponent implements OnInit {
                 const carbook = data.Data[0];
                 that.customerId = carbook.CustomerId;
                 that.carIncomeId = carbook.CarIncomeId;
+                that.carsale.CarIncomeId = carbook.CarIncomeId;
                 that.carsale.Deposit = carbook.Deposit;
                 that.carsale.NewCarFee = carbook.SalePrice;
                 that.carsale.Discount = carbook.Discount;
