@@ -72,7 +72,10 @@ export class CarstoreComponent implements OnInit {
     CarColor: "",
     Status: "",
     SaleStatus: "未售",
-    MarkTag:""
+    MarkTag:"",
+    GuidePrice:"",
+    OrderId:"",
+    Vinno:""
   };
   cartypecode: any = [];
   carseries: any = [];
@@ -587,7 +590,10 @@ export class CarstoreComponent implements OnInit {
       CarColor: "",
       Status: "",
       SaleStatus: "",
-      MarkTag:""
+      MarkTag:"",
+      GuidePrice:"",
+      OrderId:"",
+      Vinno:""
     };
   }
 }
