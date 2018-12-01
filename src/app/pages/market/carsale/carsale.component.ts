@@ -735,7 +735,7 @@ export class CarsaleComponent implements OnInit {
           msg: "反审核成功。",
           time: new Date().getTime()
         });
-        this.saveStatus(" ");
+        this.saveStatus("未售");
         this.getDataList();
       },
       err => {

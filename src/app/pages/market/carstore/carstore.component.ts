@@ -68,6 +68,7 @@ export class CarstoreComponent implements OnInit {
   search = {
     CarSeries: "",
     CarTypeCode: "",
+    CarType: "",
     CarTrim: "",
     CarColor: "",
     Status: "",
@@ -77,9 +78,9 @@ export class CarstoreComponent implements OnInit {
     OrderId:"",
     Vinno:""
   };
-  cartypecode: any = [];
-  carseries: any = [];
   cartype: any = [];
+  cartypeall: any = [];
+  carseries: any = [];
   carcolor: any = [];
   cartrim: any = [];
 
@@ -330,13 +331,13 @@ export class CarstoreComponent implements OnInit {
             this.carseries.push({ id: f["Id"], name: _.trim(f["CarSeries"]) });
           }
           if (
-            _.findIndex(this.cartypecode, d => {
-              return d["name"] == _.trim(f["CarTypeCode"]);
+            _.findIndex(this.cartypeall, d => {
+              return d["name"] == _.trim(f["CarType"]);
             }) == -1
           ) {
-            this.cartypecode.push({
+            this.cartypeall.push({
               id: f["Id"],
-              name: _.trim(f["CarTypeCode"]),
+              name: _.trim(f["CarType"]),
               type: _.trim(f["CarSeries"])
             });
           }
@@ -552,7 +553,7 @@ export class CarstoreComponent implements OnInit {
 
   onSelectCarSeries() {
     this.cartype = _.orderBy(
-      _.filter(this.cartypecode, f => {
+      _.filter(this.cartypeall, f => {
         return f["type"] == this.search.CarSeries;
       }),
       "name",
@@ -593,7 +594,8 @@ export class CarstoreComponent implements OnInit {
       MarkTag:"",
       GuidePrice:"",
       OrderId:"",
-      Vinno:""
+      Vinno:"",
+      CarType:""
     };
   }
 }
