@@ -128,6 +128,14 @@ export class CarstoreComponent implements OnInit {
     this.start();
     this.mainTableID = 0;
     const that = this;
+
+    const ser = sessionStorage.getItem("carstore_search");
+    if(ser){
+      _.mapKeys(JSON.parse(ser), function(value, key) {
+        that.search[key] = value;
+      });
+    }
+
     this._state.subscribe("print.carsalecash.invoice", data => {
       this.invoiceDate(data.id);
     });
@@ -581,6 +589,7 @@ export class CarstoreComponent implements OnInit {
   }
 
   onQuery(){
+    sessionStorage.setItem("carstore_search",JSON.stringify(this.search));
     this.onSearchAll(this.search);
   }
   onClear() {
