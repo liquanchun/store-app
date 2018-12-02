@@ -218,8 +218,8 @@
         </tr>
 
         <tr>
-          <td>付款方式：{{printOrder.PayType}}</td>
-          <td colspan="5"></td>
+          <td colspan="2">付款方式：{{printOrder.PayType}}</td>
+          <td colspan="4"></td>
         </tr>
         <tr *ngIf="printOrder.PayType=='现车付款'">
           <td colspan="6" class="longtext">客户在签订本订单后 {{printOrder.Days1}} 日内支付合同内余款。预收余款： 元，款到释放车。 </td>
