@@ -218,6 +218,11 @@ export class CarSaleNewComponent implements OnInit {
     mode: "external",
     hideSubHeader: true,
     columns: {
+      OrderId: {
+        title: "生产订单号",
+        type: "string",
+        filter: false
+      },
       CarType: {
         title: "车型",
         type: "string",
@@ -511,6 +516,7 @@ export class CarSaleNewComponent implements OnInit {
       [
         { field: "Vinno", search: query },
         { field: "CarType", search: query },
+        { field: "OrderId", search: query },
         { field: "CarConfig", search: query },
         { field: "GuidePriceRemark", search: query },
         { field: "GuidePrice", search: query }

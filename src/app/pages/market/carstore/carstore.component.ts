@@ -404,6 +404,7 @@ export class CarstoreComponent implements OnInit {
     //库龄大于库存提醒（天）
     const data = _.filter(this.datalist, f => {
       return (
+        f["SaleStatus"] != "已开票" &&
         f["StoreDays"] > 0 &&
         f["StoreRemind"] > 0 &&
         _.toNumber(f["StoreDays"]) > _.toNumber(f["StoreRemind"])
