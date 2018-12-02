@@ -608,9 +608,9 @@ export class CarSaleNewComponent implements OnInit {
         newcarsale.Status = that.carinfo.Status;
       }
       const keys = _.keys(newcarsale);
-      keys.forEach((k) => {
-        if(newcarsale[k] == null){
-            delete newcarsale[k];
+      keys.forEach(k => {
+        if (newcarsale[k] == null) {
+          delete newcarsale[k];
         }
       });
 
@@ -642,26 +642,30 @@ export class CarSaleNewComponent implements OnInit {
   maxId() {
     const that = this;
     return new Promise((resolve, reject) => {
-      if (this.recordId > 0) resolve();
-      that.formService.getMaxId("car_booking").then(
-        data => {
-          if (data) {
-            const cnt = _.toInteger(data.Data) + 1;
-            that.carsale.OrderId =
-              "YD" +
-              this._common.getTodayString2() +
-              _.padStart(_.toString(cnt), 4, "0");
-          }
-          console.log(`maxid:${that.carsale.OrderId}`);
-          resolve();
-        },
-        err => {}
-      );
+      if (this.recordId > 0) {
+        resolve();
+      } else {
+        that.formService.getMaxId("car_booking").then(
+          data => {
+            if (data) {
+              const cnt = _.toInteger(data.Data) + 1;
+              that.carsale.OrderId =
+                "YD" +
+                this._common.getTodayString2() +
+                _.padStart(_.toString(cnt), 4, "0");
+            }
+            console.log(`maxid:${that.carsale.OrderId}`);
+            resolve();
+          },
+          err => {}
+        );
+      }
     });
   }
 
   saveItem() {
     const that = this;
+    console.log(this.serviceItem);
     _.each(this.serviceItem, f => {
       f["OrderId"] = this.carsale.OrderId;
       this.formService
@@ -670,6 +674,7 @@ export class CarSaleNewComponent implements OnInit {
           console.log(err);
         });
     });
+    console.log(this.giveItem);
     _.each(this.giveItem, f => {
       if (f["itemName"]) {
         f["OrderId"] = this.carsale.OrderId;
