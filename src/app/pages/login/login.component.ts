@@ -95,6 +95,7 @@ export class Login {
           const mima = data["pwd"];
           const pd = Md5.hashStr(this.loginPassword.value).toString();
           if (mima == pd) {
+            sessionStorage.setItem("user_id", data["id"])
             sessionStorage.setItem("pwd", pd);
             sessionStorage.setItem("userName", data["userName"]);
             sessionStorage.setItem("userId", this.loginUserId.value);

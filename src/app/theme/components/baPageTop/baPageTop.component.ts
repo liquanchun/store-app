@@ -88,8 +88,10 @@ export class BaPageTop {
         that.toastOptions.msg = "原密码错误。";
         that.toastyService.error(that.toastOptions);
       } else {
-        user.userId = sessionStorage.getItem('userId');
-        that._userService.update(0, user).then((data) => {
+        user.Id = sessionStorage.getItem('user_id');
+        delete user.oldpwd;
+        delete user.newpwd2;
+        that._userService.updatePwd(user).then((data) => {
           closeBack();
           that.toastOptions.msg = "修改密码成功。";
           that.toastyService.success(that.toastOptions);

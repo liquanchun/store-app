@@ -26,6 +26,9 @@ export class UserService {
   update(id:any,user: any) {
     return this._httpService.update(this.modelName,id, user);
   }
+  updatePwd(user: any) {
+    return this._httpService.create2("data/sys_user",user);
+  }
   userAuth(modelName:any,user:any){
     return this._httpService.create(modelName, user);
   }
