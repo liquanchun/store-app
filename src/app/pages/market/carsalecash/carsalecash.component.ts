@@ -431,8 +431,7 @@ export class CarSaleCashComponent implements OnInit {
                   return (
                     (f["IsValid"] == 1 &&
                       f["Service"] == "DN" &&
-                      (f["ItemType"] == "自费" || f["ItemType"] == "免费")) ||
-                    (f["IsValid"] == 1 && f["ItemType"] == "赠送服务")
+                      (f["ItemType"] == "自费" || f["ItemType"] == "免费")) 
                   );
                 }),
                 "ItemType",
@@ -456,9 +455,6 @@ export class CarSaleCashComponent implements OnInit {
               that.partAmountDY = _.sumBy(that.partItemDY, f => {
                 return f["Count"] * f["Price"];
               });
-
-              console.log(that.partItemDN);
-              console.log(that.partItemDY);
             }
             resolve();
           },

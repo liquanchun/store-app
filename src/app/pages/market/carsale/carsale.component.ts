@@ -183,21 +183,23 @@ export class CarsaleComponent implements OnInit {
       this.printOrder = _.find(this.carsaleData, f => {
         return f["Id"] == data.id;
       });
-      const old = _.find(this.allcarsaleData, f => {
-        return (
-          f["CarIncomeId"] == this.printOrder["CarIncomeId"] &&
-          f["Id"] != this.printOrder["Id"]
-        );
-      });
-      if (old && old["Status"] == "订单") {
-        this._state.notifyDataChanged("messagebox", {
-          type: "warning",
-          msg: `该单车辆已被其他销售顾问创建并审核，你不能审核。`,
-          time: new Date().getTime()
+      this.formService.getForms(this.tableView["ViewName"]).then(data => {
+        const old = _.find(data.Data, f => {
+          return (
+            f["CarIncomeId"] == this.printOrder["CarIncomeId"] &&
+            f["Id"] != this.printOrder["Id"]
+          );
         });
-      } else {
-        this.onAudit();
-      }
+        if (old && old["Status"] == "订单") {
+          this._state.notifyDataChanged("messagebox", {
+            type: "warning",
+            msg: `该单车辆已被其他销售顾问创建并审核，你不能审核。`,
+            time: new Date().getTime()
+          });
+        } else {
+          this.onAudit();
+        }
+      });
       // }
     });
 
@@ -220,7 +222,7 @@ export class CarsaleComponent implements OnInit {
           );
         }
         this.loading = true;
-        this.getServiceItem().then((d)=>{
+        this.getServiceItem().then(d => {
           this.loading = false;
           this.print();
         });
