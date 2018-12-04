@@ -331,15 +331,20 @@ export class CarsaleComponent implements OnInit {
                 });
               }
             }
+            let bt = 0;
             if (that.htmlGiveTd.length == 0) {
-              that.marginbottom = "80px";
+              bt = 80;
             }
             if (that.htmlGiveTd.length == 1) {
-              that.marginbottom = "60px";
+              bt = 60;
             }
             if (that.htmlGiveTd.length == 2) {
-              that.marginbottom = "40px";
+              bt = 40;
             }
+            if(that.printOrder.PayType=='分期付款'){
+              bt = bt - 20;
+            }
+            that.marginbottom = bt + 'px';
             that.giveItem = zsitem;
           }
           resolve();
