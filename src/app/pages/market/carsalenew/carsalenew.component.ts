@@ -666,13 +666,35 @@ export class CarSaleNewComponent implements OnInit {
   saveItem() {
     const that = this;
     console.log(this.serviceItem);
+
     _.each(this.serviceItem, f => {
+      if (!f["itemName"] && f["Id"] ) {
+        this.formService
+          .delete2("car_booking_item", f["Id"])
+          .then(function(data) {}, err => {
+            console.log(err);
+          });
+        }
+    });
+    _.each(this.giveItem, f => {
+      if (!f["itemName"] && f["Id"] ) {
+      this.formService
+        .delete2("car_booking_item", f["Id"])
+        .then(function(data) {}, err => {
+          console.log(err);
+        });
+      }
+    });
+
+    _.each(this.serviceItem, f => {
+      if (f["itemName"]) {
       f["OrderId"] = this.carsale.OrderId;
       this.formService
         .create("car_booking_item", f)
         .then(function(data) {}, err => {
           console.log(err);
         });
+      }
     });
     console.log(this.giveItem);
     _.each(this.giveItem, f => {
