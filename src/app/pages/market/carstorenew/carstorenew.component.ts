@@ -479,18 +479,16 @@ export class CarstoreNewComponent implements OnInit, AfterViewInit {
       that.formService.getForms(`car_income/vinno/${vinno}`).then(
         data => {
           if (data && data.Data.length == 1) {
-            resolve(0);
-          } else {
-            resolve(1);
-          }
-        },
-        err => {}
-      );
-
-      this.formService.getForms(`car_income/orderid/${orderid}`).then(
-        data => {
-          if (data && data.Data.length == 1) {
-            resolve(0);
+            that.formService.getForms(`car_income/orderid/${orderid}`).then(
+              data => {
+                if (data && data.Data.length == 1) {
+                  resolve(0);
+                } else {
+                  resolve(1);
+                }
+              },
+              err => {}
+            );
           } else {
             resolve(1);
           }
