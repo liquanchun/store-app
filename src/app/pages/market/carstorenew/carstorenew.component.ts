@@ -476,6 +476,12 @@ export class CarstoreNewComponent implements OnInit, AfterViewInit {
       if (that.mainTableID > 0) {
         resolve(1);
       }
+      if(!vinno){
+        vinno = _.random(100,200);
+      }
+      if(!orderid){
+        orderid = _.random(100,200);
+      }
       that.formService.getForms(`car_income/vinno/${vinno}`).then(
         data => {
           if (data && data.Data.length == 1) {
