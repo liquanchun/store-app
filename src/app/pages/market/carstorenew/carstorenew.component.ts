@@ -538,7 +538,7 @@ export class CarstoreNewComponent implements OnInit, AfterViewInit {
           err => {
             that._state.notifyDataChanged("messagebox", {
               type: "error",
-              msg: err,
+              msg: "保存失败",
               time: new Date().getTime()
             });
           }

@@ -410,7 +410,7 @@ export class CarSaleCashNewComponent implements OnInit {
       err => {
         that._state.notifyDataChanged("messagebox", {
           type: "error",
-          msg: err,
+          msg: "保存失败",
           time: new Date().getTime()
         });
       }
