@@ -479,6 +479,8 @@ export class CarstoreNewComponent implements OnInit, AfterViewInit {
       that.formService.getForms(`car_income/vinno/${vinno}`).then(
         data => {
           if (data && data.Data.length == 1) {
+            resolve(0);
+          } else {
             that.formService.getForms(`car_income/orderid/${orderid}`).then(
               data => {
                 if (data && data.Data.length == 1) {
@@ -489,8 +491,6 @@ export class CarstoreNewComponent implements OnInit, AfterViewInit {
               },
               err => {}
             );
-          } else {
-            resolve(1);
           }
         },
         err => {}
