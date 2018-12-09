@@ -4,7 +4,7 @@ import { ReportComponent } from './report.component';
 import { DepartmentOutComponent } from './departmentout/departmentout.component';
 import { PersonoutComponent } from './personout/personout.component';
 import { StorelistComponent } from './storelist/storelist.component';
-
+import { SalelistComponent } from './salelist/salelist.component';
 const routes: Routes = [
   {
     path: '',
@@ -13,6 +13,7 @@ const routes: Routes = [
       { path: 'department', component: DepartmentOutComponent },
       { path: 'person', component: PersonoutComponent },
       { path: 'storelist', component: StorelistComponent },
+      { path: 'salelist', component: SalelistComponent },
     ]
   }
 ];

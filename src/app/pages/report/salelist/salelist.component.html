@@ -1,0 +1,46 @@
+<div class="row">
+  <div class="col-md-12">
+    <ba-card [title]="title" class="card-primary" baCardClass="with-scroll">
+      <div style="min-height:300px;">
+        <div class="row">
+
+          <div class="col-1 pull-right" style="padding-top:8px;" >
+            <label>销售日期</label>
+          </div>
+
+          <div class="col-2">
+            <div class="input-group">
+              <input [(ngModel)]="selectedStore.AuditTime_1" class="form-control" placeholder="yyyy-mm-dd" ngbDatepicker #d1="ngbDatepicker">
+              <div class="input-group-addon" (click)="d1.toggle()">
+                <i class="fa fa-calendar" aria-hidden="true"></i>
+              </div>
+            </div>
+          </div>
+          <div class="col-1 pull-center" style="padding-top:8px;" >
+            <label>至</label>
+          </div>
+
+          <div class="col-2 pull-left">
+            <div class="input-group">
+              <input [(ngModel)]="selectedStore.AuditTime_2" class="form-control" placeholder="yyyy-mm-dd" ngbDatepicker #d2="ngbDatepicker">
+              <div class="input-group-addon" (click)="d2.toggle()">
+                <i class="fa fa-calendar" aria-hidden="true"></i>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-3 pull-right">
+            <div class="btn-group margin8 pull-right" role="group" aria-label="Basic example">
+              <button (click)="queryData(selectedStore)" type="button" class="btn btn-info btn-sm">
+                <i class="fa fa-refresh" aria-hidden="true"></i> 查询</button>
+              <button (click)="print()" type="button" class="btn btn-info btn-sm">
+                <i class="fa fa-refresh" aria-hidden="true"></i> 导出</button>
+            </div>
+          </div>
+
+        </div>
+        <ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '4px' }"></ngx-loading>
+        <ng2-smart-table [settings]="settings" [source]="source"></ng2-smart-table>
+      </div>
+    </ba-card>
+  </div>

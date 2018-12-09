@@ -39,9 +39,23 @@ export class Common {
     let year = d.getFullYear();
     return { year: year, month: month, day: day };
   }
+  getToday1Obj() {
+    let d = new Date();
+    let day = d.getDate() + 1;
+    let month = d.getMonth() + 1;
+    let year = d.getFullYear();
+    return { year: year, month: month, day: day };
+  }
   getTodayString() {
     let d = new Date();
     let day = _.toString(d.getDate());
+    let month = _.toString(d.getMonth() + 1);
+    let year = d.getFullYear();
+    return `${year}-${_.padStart(month, 2, "0")}-${_.padStart(day, 2, "0")}`;
+  }
+  getToday1String() {
+    let d = new Date();
+    let day = _.toString(d.getDate()) + 1;
     let month = _.toString(d.getMonth() + 1);
     let year = d.getFullYear();
     return `${year}-${_.padStart(month, 2, "0")}-${_.padStart(day, 2, "0")}`;
