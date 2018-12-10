@@ -24,6 +24,7 @@ import { DepartmentOutComponent } from './departmentout/departmentout.component'
 import { PersonoutComponent } from './personout/personout.component';
 import { StorelistComponent } from './storelist/storelist.component';
 import { SalelistComponent } from './salelist/salelist.component';
+import { SalecountComponent } from './salecount/salecount.component';
 import { ToastyModule } from 'ng2-toasty';
 import { SysModule } from './../sys/sys.module';
 
@@ -49,7 +50,8 @@ import { SysModule } from './../sys/sys.module';
     DepartmentOutComponent,
     PersonoutComponent,
     StorelistComponent,
-    SalelistComponent
+    SalelistComponent,
+    SalecountComponent
   ],
   providers: [GlobalState, Config, HttpService, AppState,Common]
 })

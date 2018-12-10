@@ -341,10 +341,10 @@ export class CarsaleComponent implements OnInit {
             if (that.htmlGiveTd.length == 2) {
               bt = 40;
             }
-            if(that.printOrder.PayType=='分期付款'){
+            if (that.printOrder.PayType == "分期付款") {
               bt = bt - 20;
             }
-            that.marginbottom = bt + 'px';
+            that.marginbottom = bt + "px";
             that.giveItem = zsitem;
           }
           resolve();
@@ -587,88 +587,97 @@ export class CarsaleComponent implements OnInit {
   }
   onEdit(event) {
     const id = event.data.Id;
-    if (this.printOrder["AuditResult"] == "通过") {
-      this._state.notifyDataChanged("messagebox", {
-        type: "warning",
-        msg: "已审核通过，不能修改。",
-        time: new Date().getTime()
-      });
-      return;
-    }
-    if (this.printOrder && this.printOrder["Creator"]) {
-      if (sessionStorage.getItem("userName") != this.printOrder["Creator"]) {
+    this.formService.getForms(`car_booking/${id}`).then(data => {
+      const carbook = data.Data[0];
+      if (carbook["AuditResult"] == "通过") {
         this._state.notifyDataChanged("messagebox", {
           type: "warning",
-          msg: `该单创建人是${this.printOrder["Creator"]}，你不能修改。`,
+          msg: "已审核通过，不能修改。",
           time: new Date().getTime()
         });
         return;
       }
-    }
-
-    this.checkRoles("EditRoles").then(d => {
-      if (d == 0) {
-        this._state.notifyDataChanged("messagebox", {
-          type: "warning",
-          msg: "你无权修改销售预订单。",
-          time: new Date().getTime()
-        });
-      } else {
-        this.router.navigate(["/pages/market/carsalenew", id]);
-      }
-    });
-  }
-
-  onDelete(event) {
-    if (window.confirm("你确定要删除吗?")) {
-      if (this.printOrder && this.printOrder["Creator"]) {
-        if (sessionStorage.getItem("userName") != this.printOrder["Creator"]) {
+      if (carbook["Creator"]) {
+        if (sessionStorage.getItem("userName") != carbook["Creator"]) {
           this._state.notifyDataChanged("messagebox", {
             type: "warning",
-            msg: `该单创建人是${this.printOrder["Creator"]}，你不能删除。`,
+            msg: `该单创建人是${carbook["Creator"]}，你不能修改。`,
             time: new Date().getTime()
           });
           return;
         }
       }
 
-      if (this.printOrder["AuditResult"] == "通过") {
-        this._state.notifyDataChanged("messagebox", {
-          type: "warning",
-          msg: "已审核通过，不能删除。",
-          time: new Date().getTime()
-        });
-        return;
-      }
-
       this.checkRoles("EditRoles").then(d => {
         if (d == 0) {
           this._state.notifyDataChanged("messagebox", {
             type: "warning",
-            msg: "你无权删除销售预订单。",
+            msg: "你无权修改销售预订单。",
             time: new Date().getTime()
           });
         } else {
-          this.formService
-            .delete(this.tableView["TableName"], event.data.Id)
-            .then(
-              data => {
-                this._state.notifyDataChanged("messagebox", {
-                  type: "success",
-                  msg: "删除成功。",
-                  time: new Date().getTime()
-                });
-                this.getDataList();
-              },
-              err => {
-                this._state.notifyDataChanged("messagebox", {
-                  type: "error",
-                  msg: err,
-                  time: new Date().getTime()
-                });
-              }
-            );
+          this.router.navigate(["/pages/market/carsalenew", id]);
         }
+      });
+    });
+  }
+
+  onDelete(event) {
+    if (window.confirm("你确定要删除吗?")) {
+      const id = this.printOrder['Id'];
+      this.formService.getForms(`car_booking/${id}`).then(data => {
+        const carbook = data.Data[0];
+        if (carbook["Creator"]) {
+          if (
+            sessionStorage.getItem("userName") != carbook["Creator"]
+          ) {
+            this._state.notifyDataChanged("messagebox", {
+              type: "warning",
+              msg: `该单创建人是${carbook["Creator"]}，你不能删除。`,
+              time: new Date().getTime()
+            });
+            return;
+          }
+        }
+
+        if (carbook["AuditResult"] == "通过") {
+          this._state.notifyDataChanged("messagebox", {
+            type: "warning",
+            msg: "已审核通过，不能删除。",
+            time: new Date().getTime()
+          });
+          return;
+        }
+
+        this.checkRoles("EditRoles").then(d => {
+          if (d == 0) {
+            this._state.notifyDataChanged("messagebox", {
+              type: "warning",
+              msg: "你无权删除销售预订单。",
+              time: new Date().getTime()
+            });
+          } else {
+            this.formService
+              .delete(this.tableView["TableName"], event.data.Id)
+              .then(
+                data => {
+                  this._state.notifyDataChanged("messagebox", {
+                    type: "success",
+                    msg: "删除成功。",
+                    time: new Date().getTime()
+                  });
+                  this.getDataList();
+                },
+                err => {
+                  this._state.notifyDataChanged("messagebox", {
+                    type: "error",
+                    msg: err,
+                    time: new Date().getTime()
+                  });
+                }
+              );
+          }
+        });
       });
     }
   }
@@ -712,9 +721,9 @@ export class CarsaleComponent implements OnInit {
           });
           if (formValue["AuditResult"] == "通过") {
             this.saveStatus("订单");
-          } else {
-            that.getDataList();
           }
+          that.printOrder["AuditResult"] = "通过";
+          that.getDataList();
         },
         err => {
           this._state.notifyDataChanged("messagebox", {
@@ -728,6 +737,7 @@ export class CarsaleComponent implements OnInit {
   }
 
   onAuditNot(): void {
+    
     let formValue = {};
     formValue["Id"] = this.printOrder["Id"];
     formValue["Status"] = " ";
