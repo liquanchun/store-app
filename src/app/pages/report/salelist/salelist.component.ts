@@ -149,7 +149,10 @@ export class SalelistComponent implements OnInit {
 
   onExport() {
     if (this.dataList && _.size(this.dataList) > 0) {
-      const fileName = `销售明细单——${this._common.getTodayString2()}.xlsx`;
+      const t1 = this._common.getDateString(this.selectedStore.AuditTime_1);
+      const t2 = this._common.getDateString(this.selectedStore.AuditTime_2);
+      
+      const fileName = `销售明细单（${t1}至${t2}）.xlsx`;
       const title =_.union(['车系'],_.drop(_.keys(this.dataList[0])));
       const data = [title];
       _.each(this.dataList, d => {
