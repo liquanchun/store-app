@@ -134,7 +134,15 @@ export class SalecountComponent implements OnInit {
           let tit = _.replace(f["title"], "当日", "年累计");
           this.dataList[tit] += f["cnt"];
         });
-
+        const keysarr = _.keys(this.dataList);
+        _.each(keysarr, f => {
+          if (_.isNumber(this.dataList[_.toString(f)])) {
+            this.dataList[_.toString(f)] = _.round(
+              this.dataList[_.toString(f)],
+              2
+            );
+          }
+        });
         this.loading = false;
       },
       err => {
@@ -152,16 +160,70 @@ export class SalecountComponent implements OnInit {
     const t1 = this._common.getDateString(this.selectedStore.AuditTime);
 
     const fileName = `综合统计表（${t1}）.xlsx`;
-    const title = [this.daystr,'','',this.monstr,'','',this.yearstr,''];
-    const title2 = ['项目','包含','','项目','包含','','项目','包含'];
-    const data = [title,title2];
+    const title = [this.daystr, "", "", this.monstr, "", "", this.yearstr, ""];
+    const title2 = ["项目", "包含", "", "项目", "包含", "", "项目", "包含"];
+    const data = [title, title2];
 
-    data.push(['当日订单',this.dataList["当日订单"],'','月累计订单',this.dataList["月累计订单"],'','年累计订单',this.dataList["年累计订单"]]);
-    data.push(['当日开票',this.dataList["当日开票"],'','月累计开票',this.dataList["月累计开票"],'','年累计开票',this.dataList["年累计开票"]]);
-    data.push(['当日销售收入',this.dataList["当日销售收入"],'','月累计销售收入',this.dataList["月累计销售收入"],'','年累计销售收入',this.dataList["年累计销售收入"]]);
-    data.push(['当日进销差',this.dataList["当日进销差"],'','月累计进销差',this.dataList["月累计进销差"],'','年累计进销差',this.dataList["年累计进销差"]]);
-    data.push(['当日水平业务毛利',this.dataList["当日水平业务毛利"],'','月累计水平业务毛利',this.dataList["月累计水平业务毛利"],'','年累计水平业务毛利',this.dataList["年累计水平业务毛利"]]);
-    data.push(['当日综合毛利',this.dataList["当日综合毛利"],'','月累计综合毛利',this.dataList["月累计综合毛利"],'','年累计综合毛利',this.dataList["年累计综合毛利"]]);
+    data.push([
+      "当日订单",
+      this.dataList["当日订单"],
+      "",
+      "月累计订单",
+      this.dataList["月累计订单"],
+      "",
+      "年累计订单",
+      this.dataList["年累计订单"]
+    ]);
+    data.push([
+      "当日开票",
+      this.dataList["当日开票"],
+      "",
+      "月累计开票",
+      this.dataList["月累计开票"],
+      "",
+      "年累计开票",
+      this.dataList["年累计开票"]
+    ]);
+    data.push([
+      "当日销售收入",
+      this.dataList["当日销售收入"],
+      "",
+      "月累计销售收入",
+      this.dataList["月累计销售收入"],
+      "",
+      "年累计销售收入",
+      this.dataList["年累计销售收入"]
+    ]);
+    data.push([
+      "当日进销差",
+      this.dataList["当日进销差"],
+      "",
+      "月累计进销差",
+      this.dataList["月累计进销差"],
+      "",
+      "年累计进销差",
+      this.dataList["年累计进销差"]
+    ]);
+    data.push([
+      "当日水平业务毛利",
+      this.dataList["当日水平业务毛利"],
+      "",
+      "月累计水平业务毛利",
+      this.dataList["月累计水平业务毛利"],
+      "",
+      "年累计水平业务毛利",
+      this.dataList["年累计水平业务毛利"]
+    ]);
+    data.push([
+      "当日综合毛利",
+      this.dataList["当日综合毛利"],
+      "",
+      "月累计综合毛利",
+      this.dataList["月累计综合毛利"],
+      "",
+      "年累计综合毛利",
+      this.dataList["年累计综合毛利"]
+    ]);
 
     const ws: XLSX.WorkSheet = XLSX.utils.aoa_to_sheet(data);
     /* generate workbook and add the worksheet */
