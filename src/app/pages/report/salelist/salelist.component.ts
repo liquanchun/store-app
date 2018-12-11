@@ -94,7 +94,7 @@ export class SalelistComponent implements OnInit {
           let dataobj = { CarSeries: _.toString(f) };
 
           _.each(saleman, s => {
-            dataobj[_.toString(s)] = _.sum(
+            dataobj[_.toString(s)] = _.round(_.sum(
               _.map(
                 _.filter(data.Data, r => {
                   return (
@@ -104,27 +104,27 @@ export class SalelistComponent implements OnInit {
                 }),
                 "cnt"
               )
-            );
+            ),2);
           });
 
-          dataobj["小计"] = _.sum(
+          dataobj["小计"] =_.round(_.sum(
             _.map(
               _.filter(data.Data, r => {
                 return r["CarSeries"] == _.toString(f);
               }),
               "cnt"
             )
-          );
+          ),2);
 
           dataall.push(dataobj);
         });
 
         let rowheji = { CarSeries: "合计" };
         _.each(saleman, s => {
-          rowheji[_.toString(s)] = _.sum(_.map(dataall, _.toString(s)));
+          rowheji[_.toString(s)] = _.round(_.sum(_.map(dataall, _.toString(s))),2);
         });
 
-        rowheji["小计"] = _.sumBy(dataall, "小计");
+        rowheji["小计"] =_.round(_.sumBy(dataall, "小计"),2);
         dataall.push(rowheji);
         this.dataList = dataall;
         this.newSettings = Object.assign({}, this.settings);
