@@ -437,7 +437,7 @@
               <a *ngIf="editKey[key] && !showKey[key]" href="javascript:void(0)" (click)="onEdit(key)"><i class="fa fa-pencil"
                   aria-hidden="true"></i> </a>
 
-              <input *ngIf="showKey[key]" [(value)]="item[key]" type="text" />
+              <input *ngIf="showKey[key]" [(value)]="item[key]" [type]="key.includes('日期') ? 'date': 'text'" />
               <a *ngIf="showKey[key]" href="javascript:void(0)" (click)="onSave($event,key,item['CarIncomeId'])">保存</a>
             </td>
           </tr>

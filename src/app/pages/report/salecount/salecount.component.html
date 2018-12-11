@@ -4,26 +4,15 @@
       <div style="min-height:300px;">
         <div class="row">
 
-          <div class="col-1 pull-right" style="padding-top:8px;" >
-            <label>销售日期</label>
+          <div class="col-1 pull-right" style="padding-top:8px;">
+            <label>开票日期</label>
           </div>
 
           <div class="col-2">
             <div class="input-group">
-              <input [(ngModel)]="selectedStore.AuditTime_1" class="form-control" placeholder="yyyy-mm-dd" ngbDatepicker #d1="ngbDatepicker">
+              <input [(ngModel)]="selectedStore.AuditTime" class="form-control" placeholder="yyyy-mm-dd" ngbDatepicker
+                #d1="ngbDatepicker">
               <div class="input-group-addon" (click)="d1.toggle()">
-                <i class="fa fa-calendar" aria-hidden="true"></i>
-              </div>
-            </div>
-          </div>
-          <div class="col-1 pull-center" style="padding-top:8px;" >
-            <label>至</label>
-          </div>
-
-          <div class="col-2 pull-left">
-            <div class="input-group">
-              <input [(ngModel)]="selectedStore.AuditTime_2" class="form-control" placeholder="yyyy-mm-dd" ngbDatepicker #d2="ngbDatepicker">
-              <div class="input-group-addon" (click)="d2.toggle()">
                 <i class="fa fa-calendar" aria-hidden="true"></i>
               </div>
             </div>
@@ -33,14 +22,99 @@
             <div class="btn-group margin8 pull-right" role="group" aria-label="Basic example">
               <button (click)="queryData(selectedStore)" type="button" class="btn btn-info btn-sm">
                 <i class="fa fa-refresh" aria-hidden="true"></i> 查询</button>
-              <button (click)="print()" type="button" class="btn btn-info btn-sm">
+              <button (click)="onExport()" type="button" class="btn btn-info btn-sm">
                 <i class="fa fa-refresh" aria-hidden="true"></i> 导出</button>
             </div>
           </div>
 
         </div>
-        <ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '4px' }"></ngx-loading>
-        <ng2-smart-table [settings]="newSettings" [source]="source"></ng2-smart-table>
+
+        <div class="report" style="padding-left: 30px;">
+          <table>
+            <thead>
+              <tr>
+                <td colspan=2>{{daystr}}综合报表</td>
+                <td rowspan=7> </td>
+                <td colspan=2>{{monstr}}综合报表</td>
+                <td rowspan=7> </td>
+                <td colspan=2>{{yearstr}}综合报表</td>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="width:20%;" >项目</td>
+                <td style="width:10%;" >包含</td>
+                <td style="width:5%;" > </td>
+                <td style="width:20%;" >项目</td>
+                <td style="width:10%;" >包含</td>
+                <td style="width:5%;" > </td>
+                <td style="width:20%;" >项目</td>
+                <td style="width:10%;" >包含</td>
+              </tr>
+              <tr>
+                <td>当日订单</td>
+                <td class="textright">{{dataList['当日订单']}}</td>
+                <td></td>
+                <td>月累计订单</td>
+                <td class="textright">{{dataList['月累计订单']}}</td>
+                <td></td>
+                <td>年累计订单</td>
+                <td class="textright">{{dataList['年累计订单']}}</td>
+              </tr>
+              <tr>
+                <td>当日开票</td>
+                <td class="textright">{{dataList['当日开票']}}</td>
+                <td></td>
+                <td>月累计开票</td>
+                <td class="textright">{{dataList['月累计开票']}}</td>
+                <td></td>
+                <td>年累计开票</td>
+                <td class="textright">{{dataList['年累计开票']}}</td>
+              </tr>
+              <tr>
+                <td>当日销售收入</td>
+                <td class="textright">{{dataList['当日销售收入']}}</td>
+                <td></td>
+                <td>月累计销售收入</td>
+                <td class="textright">{{dataList['月累计销售收入']}}</td>
+                <td></td>
+                <td>年累计销售收入</td>
+                <td class="textright">{{dataList['年累计销售收入']}}</td>
+              </tr>
+              <tr>
+                <td>当日进销差</td>
+                <td class="textright">{{dataList['当日进销差']}}</td>
+                <td></td>
+                <td>月累计进销差</td>
+                <td class="textright">{{dataList['月累计进销差']}}</td>
+                <td></td>
+                <td>年累计进销差</td>
+                <td class="textright">{{dataList['年累计进销差']}}</td>
+              </tr>
+              <tr>
+                <td>当日水平业务毛利</td>
+                <td class="textright">{{dataList['当日水平业务毛利']}}</td>
+                <td></td>
+                <td>月累计水平业务毛利</td>
+                <td class="textright">{{dataList['月累计水平业务毛利']}}</td>
+                <td></td>
+                <td>年累计水平业务毛利</td>
+                <td class="textright">{{dataList['年累计水平业务毛利']}}</td>
+              </tr>
+              <tr>
+                <td>当日综合毛利</td>
+                <td class="textright">{{dataList['当日综合毛利']}}</td>
+                <td></td>
+                <td>月累计综合毛利</td>
+                <td class="textright">{{dataList['月累计综合毛利']}}</td>
+                <td></td>
+                <td>年累计综合毛利</td>
+                <td class="textright">{{dataList['年累计综合毛利']}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
       </div>
     </ba-card>
   </div>
