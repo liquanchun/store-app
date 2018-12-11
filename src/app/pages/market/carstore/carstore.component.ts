@@ -76,7 +76,8 @@ export class CarstoreComponent implements OnInit {
     MarkTag:"",
     GuidePrice:"",
     OrderId:"",
-    Vinno:""
+    Vinno:"",
+    CustName:""
   };
   cartype: any = [];
   cartypeall: any = [];
@@ -590,8 +591,9 @@ export class CarstoreComponent implements OnInit {
   }
 
   onQuery(){
-    sessionStorage.setItem("carstore_search",JSON.stringify(this.search));
-    this.onSearchAll(this.search);
+    let qry = _.omitBy(this.search, _.isEmpty);
+    sessionStorage.setItem("carstore_search",JSON.stringify(qry));
+    this.onSearchAll(qry);
   }
   onClear() {
     this.search = {
@@ -605,7 +607,8 @@ export class CarstoreComponent implements OnInit {
       GuidePrice:"",
       OrderId:"",
       Vinno:"",
-      CarType:""
+      CarType:"",
+      CustName:""
     };
   }
 }

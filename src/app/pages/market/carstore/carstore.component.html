@@ -4,168 +4,177 @@
       <div style="margin-bottom: 5px;">
         <div class="row">
           <div class="col-12">
-              <div class="row" style="margin-bottom:5px;">
-                <div class="col-3">
-                  <div class="row">
-                    <div style="padding-top:3px;padding-right: 0" class="col-3 text-right"> <label>车架号</label> </div>
-                    <div class="col-9">
-                      <input type="text" class="form-control" [(ngModel)]="search.Vinno">
-                    </div>
+            <div class="row" style="margin-bottom:5px;">
+              <div class="col-3">
+                <div class="row">
+                  <div style="padding-top:3px;padding-right: 0" class="col-3 text-right"> <label>车架号</label> </div>
+                  <div class="col-9">
+                    <input type="text" class="form-control" [(ngModel)]="search.Vinno">
                   </div>
                 </div>
-                <div class="col-3">
-                  <div class="row">
-                    <div style="padding-top:3px;padding-right: 0" class="col-3 text-right"> <label>指导价</label> </div>
-                    <div class="col-9">
-                        <input type="text" class="form-control" [(ngModel)]="search.GuidePrice">
-                    </div>
+              </div>
+              <div class="col-3">
+                <div class="row">
+                  <div style="padding-top:3px;padding-right: 0" class="col-3 text-right"> <label>指导价</label> </div>
+                  <div class="col-9">
+                    <input type="text" class="form-control" [(ngModel)]="search.GuidePrice">
                   </div>
                 </div>
+              </div>
 
-                <div class="col-3">
-                  <div class="row">
-                    <div style="padding-top:3px;padding-right: 0" class="col-3 text-right"> <label>生产订单号</label> </div>
-                    <div class="col-9">
-                        <input type="text" class="form-control" [(ngModel)]="search.OrderId">
-                    </div>
+              <div class="col-3">
+                <div class="row">
+                  <div style="padding-top:3px;padding-right: 0" class="col-3 text-right"> <label>生产订单号</label> </div>
+                  <div class="col-9">
+                    <input type="text" class="form-control" [(ngModel)]="search.OrderId">
                   </div>
                 </div>
-                <div class="col-3">
-                  <div class="row">
-                    <div style="padding-top:3px;padding-right: 0" class="col-3 text-right"> <label>车型代码</label> </div>
-                    <div class="col-9">
-                        <input type="text" class="form-control" [(ngModel)]="search.CarTypeCode">
-                    </div>
+              </div>
+              <div class="col-3">
+                <div class="row">
+                  <div style="padding-top:3px;padding-right: 0" class="col-3 text-right"> <label>车型代码</label> </div>
+                  <div class="col-9">
+                    <input type="text" class="form-control" [(ngModel)]="search.CarTypeCode">
                   </div>
                 </div>
+              </div>
 
-                <div class="col-3">
-                  <div class="row">
-                    <div style="padding-top:3px;padding-right: 0" class="col-3 text-right"> <label>车系</label> </div>
-                    <div class="col-9">
-                      <select (change)="onSelectCarSeries()" [(ngModel)]="search.CarSeries">
-                        <option value="">--请选择--</option>
-                        <option [value]="option.name" *ngFor="let option of carseries">
-                          {{ option.name }}
-                        </option>
-                      </select>
-                    </div>
+              <div class="col-3">
+                <div class="row">
+                  <div style="padding-top:3px;padding-right: 0" class="col-3 text-right"> <label>车系</label> </div>
+                  <div class="col-9">
+                    <select (change)="onSelectCarSeries()" [(ngModel)]="search.CarSeries">
+                      <option value="">--请选择--</option>
+                      <option [value]="option.name" *ngFor="let option of carseries">
+                        {{ option.name }}
+                      </option>
+                    </select>
                   </div>
                 </div>
+              </div>
 
-                <div class="col-3">
-                  <div class="row">
-                    <div style="padding-top:3px;padding-right: 0" class="col-3 text-right"> <label>车型名称</label> </div>
-                    <div class="col-9">
-                      <select [(ngModel)]="search.CarType">
-                        <option value="">--请选择--</option>
-                        <option [value]="option.name" *ngFor="let option of cartype">
-                          {{ option.name }}
-                        </option>
-                      </select>
-                    </div>
+              <div class="col-3">
+                <div class="row">
+                  <div style="padding-top:3px;padding-right: 0" class="col-3 text-right"> <label>车型名称</label> </div>
+                  <div class="col-9">
+                    <select [(ngModel)]="search.CarType">
+                      <option value="">--请选择--</option>
+                      <option [value]="option.name" *ngFor="let option of cartype">
+                        {{ option.name }}
+                      </option>
+                    </select>
                   </div>
                 </div>
+              </div>
 
 
 
-                <div class="col-3">
-                  <div class="row">
-                    <div style="padding-top:3px;padding-right: 0" class="col-3 text-right"> <label>颜色</label> </div>
-                    <div class="col-9">
-                      <select [(ngModel)]="search.CarColor">
-                        <option value="">--请选择--</option>
-                        <option [value]="option.name" *ngFor="let option of carcolor">
-                          {{ option.name }}
-                        </option>
-                      </select>
-                    </div>
+              <div class="col-3">
+                <div class="row">
+                  <div style="padding-top:3px;padding-right: 0" class="col-3 text-right"> <label>颜色</label> </div>
+                  <div class="col-9">
+                    <select [(ngModel)]="search.CarColor">
+                      <option value="">--请选择--</option>
+                      <option [value]="option.name" *ngFor="let option of carcolor">
+                        {{ option.name }}
+                      </option>
+                    </select>
                   </div>
                 </div>
+              </div>
 
-                <div class="col-3">
-                  <div class="row">
-                    <div style="padding-top:3px;padding-right: 0" class="col-3 text-right"> <label>内饰</label> </div>
-                    <div class="col-9">
-                      <select [(ngModel)]="search.CarTrim">
-                        <option value="">--请选择--</option>
-                        <option [value]="option.name" *ngFor="let option of cartrim">
-                          {{ option.name }}
-                        </option>
-                      </select>
-                    </div>
+              <div class="col-3">
+                <div class="row">
+                  <div style="padding-top:3px;padding-right: 0" class="col-3 text-right"> <label>内饰</label> </div>
+                  <div class="col-9">
+                    <select [(ngModel)]="search.CarTrim">
+                      <option value="">--请选择--</option>
+                      <option [value]="option.name" *ngFor="let option of cartrim">
+                        {{ option.name }}
+                      </option>
+                    </select>
                   </div>
                 </div>
+              </div>
 
-                <div class="col-3">
-                  <div class="row">
-                    <div style="padding-top:3px;padding-right: 0" class="col-3 text-right"> <label>库存状态</label> </div>
-                    <div class="col-9">
-                      <select [(ngModel)]="search.Status">
-                        <option value="">--请选择--</option>
-                        <option value="期货">期货</option>
-                        <option value="配额">配额</option>
-                        <option value="现车">现车</option>
-                      </select>
-                    </div>
+              <div class="col-3">
+                <div class="row">
+                  <div style="padding-top:3px;padding-right: 0" class="col-3 text-right"> <label>库存状态</label> </div>
+                  <div class="col-9">
+                    <select [(ngModel)]="search.Status">
+                      <option value="">--请选择--</option>
+                      <option value="期货">期货</option>
+                      <option value="配额">配额</option>
+                      <option value="现车">现车</option>
+                    </select>
                   </div>
                 </div>
+              </div>
 
-                <div class="col-3">
-                  <div class="row">
-                    <div style="padding-top:3px;padding-right: 0" class="col-3 text-right"> <label>销售状态</label> </div>
-                    <div class="col-9">
-                      <select [(ngModel)]="search.SaleStatus">
-                        <option value="">--请选择--</option>
-                        <option value="未售">未售</option>
-                        <option value="预留">预留</option>
-                        <option value="订单">订单</option>
-                        <option value="已开票">已开票</option>
-                      </select>
-                    </div>
+              <div class="col-3">
+                <div class="row">
+                  <div style="padding-top:3px;padding-right: 0" class="col-3 text-right"> <label>销售状态</label> </div>
+                  <div class="col-9">
+                    <select [(ngModel)]="search.SaleStatus">
+                      <option value="">--请选择--</option>
+                      <option value="未售">未售</option>
+                      <option value="预留">预留</option>
+                      <option value="订单">订单</option>
+                      <option value="已开票">已开票</option>
+                    </select>
                   </div>
                 </div>
+              </div>
 
-                
-                <div class="col-3">
-                    <div class="row">
-                      <div style="padding-top:3px;padding-right: 0" class="col-3 text-right"> <label>超报标识</label> </div>
-                      <div class="col-9">
-                        <select [(ngModel)]="search.MarkTag">
-                          <option value="">--请选择--</option>
-                          <option value="是">是</option>
-                          <option value="否">否</option>
-                        </select>
-                      </div>
-                    </div>
+
+              <div class="col-3">
+                <div class="row">
+                  <div style="padding-top:3px;padding-right: 0" class="col-3 text-right"> <label>超报标识</label> </div>
+                  <div class="col-9">
+                    <select [(ngModel)]="search.MarkTag">
+                      <option value="">--请选择--</option>
+                      <option value="是">是</option>
+                      <option value="否">否</option>
+                    </select>
                   </div>
+                </div>
+              </div>
+
+              <div class="col-3">
+                <div class="row">
+                  <div style="padding-top:3px;padding-right: 0" class="col-3 text-right"> <label>客户名称</label> </div>
+                  <div class="col-9">
+                    <input type="text" class="form-control" [(ngModel)]="search.CustName">
+                  </div>
+                </div>
+              </div>
+
+            </div>
+            <div class="row" style="margin-top:5px;">
+              <div class="col-3">
+                <div class="btn-group pull-left margin8" role="group" aria-label="Basic example">
+                  <button (click)="onQuery()" type="button" class="btn btn-info btn-sm">
+                    <i class="fa fa-search" aria-hidden="true"></i> 查询</button>
+                  <button (click)="onClear()" type="button" class="btn btn-info btn-sm">
+                    <i class="fa fa-pencil" aria-hidden="true"></i> 清空</button>
+                </div>
+              </div>
+              <div class="col-9">
+                <div class="btn-group pull-right margin8" role="group" aria-label="Basic example">
+                  <button (click)="getDataList()" type="button" class="btn btn-info btn-sm">
+                    <i class="fa fa-refresh" aria-hidden="true"></i> 刷新</button>
+                  <button *ngIf="canAdd" (click)="onCreate()" type="button" class="btn btn-info btn-sm">
+                    <i class="fa fa-pencil" aria-hidden="true"></i> 新增{{title}}</button>
+                  <button (click)="onExport()" type="button" class="btn btn-info btn-sm">
+                    <i class="fa fa-file-excel-o" aria-hidden="true"></i> 导出Excel</button>
+                  <button (click)="remindData1()" title="付款类型等于宝马金融，金融等于未赎，且付款周期大于30天。" type="button" class="btn btn-info btn-sm">
+                    金融还款提醒 <span class="badge badge-warning">{{remind1}}</span></button>
+                  <button (click)="remindData2()" title="库龄大于库存提醒（天）" type="button" class="btn btn-info btn-sm">
+                    库龄库存提醒 <span class="badge badge-warning">{{remind2}}</span></button>
+                </div>
 
               </div>
-              <div class="row" style="margin-top:5px;">
-                  <div class="col-3">
-                      <div class="btn-group pull-left margin8" role="group" aria-label="Basic example">
-                        <button (click)="onQuery()" type="button" class="btn btn-info btn-sm">
-                          <i class="fa fa-search" aria-hidden="true"></i> 查询</button>
-                        <button (click)="onClear()" type="button" class="btn btn-info btn-sm">
-                          <i class="fa fa-pencil" aria-hidden="true"></i> 清空</button>
-                      </div>
-                    </div>
-                    <div class="col-9">
-                        <div class="btn-group pull-right margin8" role="group" aria-label="Basic example">
-                            <button (click)="getDataList()" type="button" class="btn btn-info btn-sm">
-                              <i class="fa fa-refresh" aria-hidden="true"></i> 刷新</button>
-                            <button *ngIf="canAdd" (click)="onCreate()" type="button" class="btn btn-info btn-sm">
-                              <i class="fa fa-pencil" aria-hidden="true"></i> 新增{{title}}</button>
-                            <button (click)="onExport()" type="button" class="btn btn-info btn-sm">
-                                <i class="fa fa-file-excel-o" aria-hidden="true"></i> 导出Excel</button>
-                                <button (click)="remindData1()" title="付款类型等于宝马金融，金融等于未赎，且付款周期大于30天。" type="button" class="btn btn-info btn-sm">
-                                    金融还款提醒 <span class="badge badge-warning">{{remind1}}</span></button>
-                                  <button (click)="remindData2()" title="库龄大于库存提醒（天）" type="button" class="btn btn-info btn-sm">
-                                    库龄库存提醒 <span class="badge badge-warning">{{remind2}}</span></button>
-                          </div>
-  
-                      </div>
-              </div>
+            </div>
           </div>
         </div>
 
