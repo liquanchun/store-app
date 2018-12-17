@@ -483,7 +483,7 @@ export class CarstoreComponent implements OnInit {
           });
         } else {
           this.formService
-            .delete(this.tableView["ViewName"], event.data.Id)
+            .delete("car_income", event.data.Id)
             .then(
               data => {
                 this._state.notifyDataChanged("messagebox", {
