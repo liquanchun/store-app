@@ -22,6 +22,10 @@ export class SalelistService {
     return this._httpService.create2('datalist/' + viewname, paradata);
   }
 
+  getFormsBySP(spname: string, paradata: any) {
+    return this._httpService.create2('sp/' + spname, paradata);
+  }
+
   getFormsField() {
     return this._httpService.getDataServer2('fields');
   }
