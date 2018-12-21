@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head runat="server">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>工程任务单</title>
+    <style>
+        table {
+            width: 840px;
+            font-size: 12px;
+            border: 1px solid black;
+        }
+
+        table tr th,
+        table tr td {
+            border-color: black;
+        }
+
+        th,
+        td {
+            border: 1px solid black;
+            padding: 4px 3px;
+            text-align: center;
+        }
+
+        .textleft {
+            text-align: left;
+        }
+
+        .textright {
+            text-align: right;
+        }
+
+        .textcenter {
+            text-align: center;
+        }
+    </style>
+</head>
+<script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
+<script>
+    $(document).ready(function () {
+        //alert('ok')
+        var bl = "主营业务_销售_展厅销售_数量";
+        $("." + bl).text("120");
+    });
+</script>
+
+<body>
+    <form id="form1" runat="server">
+        <div class="report" style="padding-left: 30px;">
+            <table>
+                <thead>
+                    <tr>
+                        <td colspan="12">经销店销售日报（日期： ）</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td rowspan="2">项目</td>
+                        <td rowspan="2" colspan="4">类别</td>
+                        <!-- <td></td>
+                          <td></td>
+                          <td></td> -->
+
+                        <td colspan="7">经营数据</td>
+                        <!-- <td></td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+          
+                          <td></td>
+                          <td></td> -->
+                    </tr>
+                    <tr>
+                        <!-- <td>项目</td> -->
+                        <!-- <td colspan="4" >类别</td> -->
+                        <!-- <td></td>
+                          <td></td>
+                          <td></td> -->
+
+                        <td>当日</td>
+                        <td>当月累计</td>
+                        <td>全年累计</td>
+                        <td>自店目标</td>
+                        <td>任务完成率</td>
+
+                        <td>厂商任务</td>
+                        <td>任务完成率</td>
+                    </tr>
+                    <tr>
+                        <td rowspan="32">主营业务</td>
+                        <td rowspan="4" colspan="3">线索与集客</td>
+                        <!-- <td></td>
+                        <td></td> -->
+                        <td>线上线索</td>
+
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <!-- <td></td>
+                        <td>线索与集客</td> -->
+                        <!-- <td></td>
+                            <td></td> -->
+                        <td>首次到店</td>
+
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <!-- <td></td>
+                            <td>线索与集客</td> -->
+                        <!-- <td></td>
+                                <td></td> -->
+                        <td>二次到店</td>
+
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <!-- <td></td>
+                                <td>线索与集客</td> -->
+                        <!-- <td></td>
+                                    <td></td> -->
+                        <td>试驾组数</td>
+
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <!-- <td></td> -->
+                        <td rowspan="11">销售</td>
+                        <td colspan="2">展厅销售</td>
+                        <!-- <td></td> -->
+                        <td>数量</td>
+
+                        <td class="主营业务_销售_展厅销售_数量_当日"></td>
+                        <td class="主营业务_销售_展厅销售_数量_当月累计"></td>
+                        <td class="主营业务_销售_展厅销售_数量_全年累计"></td>
+                        <td></td>
+                        <td></td>
+
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <!-- <td></td>
+                        <td>销售</td> -->
+                        <td rowspan="2"> 其他渠道</td>
+                        <td>二级经销商</td>
+                        <td>数量</td>
+
+                        <td class="主营业务_销售_其他渠道_二级经销商_数量_当日"></td>
+                        <td class="主营业务_销售_其他渠道_二级经销商_数量_当月累计"></td>
+                        <td class="主营业务_销售_其他渠道_二级经销商_数量_全年累计"></td>
+                        <td></td>
+                        <td></td>
+
+                        <td></td>
+                        <td></td>
+                    </tr>
+
+                    <tr>
+                        <!-- <td></td>
+                            <td>销售</td> 
+                            <td> 其他渠道</td>-->
+                        <td>大客户</td>
+                        <td>数量</td>
+
+                        <td class="主营业务_销售_其他渠道_大客户_数量_当日"></td>
+                        <td class="主营业务_销售_其他渠道_大客户_数量_当月累计"></td>
+                        <td class="主营业务_销售_其他渠道_大客户_数量_全年累计"></td>
+                        <td></td>
+                        <td></td>
+
+                        <td></td>
+                        <td></td>
+                    </tr>
+
+                    <tr>
+                        <!-- <td></td>-->
+                        <!-- <td></td> -->
+                        <td colspan="3">合计</td>
+                        <!-- <td></td>
+                        <td></td> -->
+
+                        <td class="主营业务_销售_合计_当日"></td>
+                        <td class="主营业务_销售_合计_当月累计"></td>
+                        <td class="主营业务_销售_合计_全年累计"></td>
+                        <td></td>
+                        <td></td>
+
+                        <td></td>
+                        <td></td>
+                    </tr>
+
+                    <tr>
+                        <!-- <td></td>-->
+                        <!-- <td></td> -->
+                        <td rowspan="5" colspan="2">客户属性</td>
+                        <td>摇号</td>
+                        <!-- <td></td> -->
+
+                        <td class="主营业务_销售_客户属性_摇号_当日"></td>
+                        <td class="主营业务_销售_客户属性_摇号_当月累计"></td>
+                        <td class="主营业务_销售_客户属性_摇号_全年累计"></td>
+                        <td></td>
+                        <td></td>
+
+                        <td></td>
+                        <td></td>
+                    </tr>
+
+                    <tr>
+                        <!-- <td></td>-->
+                        <!-- <td></td>
+                        <td></td> -->
+                        <td>置换</td>
+                        <!-- <td></td> -->
+
+                        <td class="主营业务_销售_客户属性_置换_当日"></td>
+                        <td class="主营业务_销售_客户属性_置换_当月累计"></td>
+                        <td class="主营业务_销售_客户属性_置换_全年累计"></td>
+                        <td></td>
+                        <td></td>
+
+                        <td></td>
+                        <td></td>
+                    </tr>
+
+
+                    <tr>
+                        <!-- <td></td>-->
+                        <!-- <td></td>
+                            <td></td> -->
+                        <td>外销外用</td>
+                        <!-- <td></td> -->
+
+                        <td class="主营业务_销售_客户属性_外销外用_当日"></td>
+                        <td class="主营业务_销售_客户属性_外销外用_当月累计"></td>
+                        <td class="主营业务_销售_客户属性_外销外用_全年累计"></td>
+                        <td></td>
+                        <td></td>
+
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <!-- <td></td>-->
+                        <!-- <td></td>
+                                <td></td> -->
+                        <td>外销京用</td>
+                        <!-- <td></td> -->
+
+                        <td class="主营业务_销售_客户属性_外销京用_当日"></td>
+                        <td class="主营业务_销售_客户属性_外销京用_当月累计"></td>
+                        <td class="主营业务_销售_客户属性_外销京用_全年累计"></td>
+                        <td></td>
+                        <td></td>
+
+                        <td></td>
+                        <td></td>
+                    </tr>
+
+                    <tr>
+                        <!-- <td></td>-->
+                        <!-- <td></td>
+                                    <td></td> -->
+                        <td>其他</td>
+                        <!-- <td></td> -->
+
+                        <td class="主营业务_销售_客户属性_其他_当日"></td>
+                        <td class="主营业务_销售_客户属性_其他_当月累计"></td>
+                        <td class="主营业务_销售_客户属性_其他_全年累计"></td>
+                        <td></td>
+                        <td></td>
+
+                        <td></td>
+                        <td></td>
+                    </tr>
+
+                    <tr>
+                        <!-- <td></td>-->
+                        <!-- <td></td> -->
+                        <td colspan="3">新车销售收入</td>
+                        <!-- <td></td>
+                        <td></td> -->
+
+                        <td class="主营业务_销售_新车销售收入_当日"></td>
+                        <td class="主营业务_销售_新车销售收入_当月累计"></td>
+                        <td class="主营业务_销售_新车销售收入_全年累计"></td>
+                        <td></td>
+                        <td></td>
+
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <!-- <td></td>-->
+                        <!-- <td></td> -->
+                        <td colspan="3">销售进销差</td>
+                        <!-- <td></td>
+                            <td></td> -->
+
+                        <td class="主营业务_销售_销售进销差_当日"></td>
+                        <td class="主营业务_销售_销售进销差_当月累计"></td>
+                        <td class="主营业务_销售_销售进销差_全年累计"></td>
+                        <td></td>
+                        <td></td>
+
+                        <td></td>
+                        <td></td>
+                    </tr>
+
+                    <tr>
+                        <!-- <td></td>-->
+                        <td rowspan="2" colspan="4">类别</td>
+                        <!--<td></td>
+                        <td></td>
+                        <td></td> -->
+
+                        <td colspan="7">经营数据</td>
+                        <!-- <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+
+                        <td></td>
+                        <td></td> -->
+                    </tr>
+
+                    <tr>
+                        <!-- <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td> -->
+
+                        <td>当日</td>
+                        <td>当月</td>
+                        <td>当年</td>
+                        <td>自店目标</td>
+                        <td>任务完成率</td>
+
+                        <td></td>
+                        <td></td>
+                    </tr>
+
+                    <tr>
+                        <!-- <td></td> -->
+                        <td rowspan="4">订单</td>
+                        <td colspan="2">新增订单</td>
+                        <!-- <td></td> -->
+                        <td>数量</td>
+
+                        <td class="主营业务_订单_新增订单_数量_当日"></td>
+                        <td class="主营业务_订单_新增订单_数量_当月累计"></td>
+                        <td class="主营业务_订单_新增订单_数量_全年累计"></td>
+                        <td></td>
+                        <td></td>
+
+                        <td></td>
+                        <td></td>
+                    </tr>
+
+                    <tr>
+                        <!-- <td></td>
+                        <td></td> -->
+                        <td colspan="2">剩余订单</td>
+                        <!-- <td></td> -->
+                        <td>数量</td>
+
+                        <td class="主营业务_订单_剩余订单_数量_当日"></td>
+                        <td class="主营业务_订单_剩余订单_数量_当月累计"></td>
+                        <td class="主营业务_订单_剩余订单_数量_全年累计"></td>
+                        <td></td>
+                        <td></td>
+
+                        <td></td>
+                        <td></td>
+                    </tr>
+
+                    <tr>
+                        <!-- <td></td>
+                            <td></td> -->
+                        <td colspan="2">在库订单</td>
+                        <!-- <td></td> -->
+                        <td>数量</td>
+
+                        <td class="主营业务_订单_在库订单_数量_当日"></td>
+                        <td class="主营业务_订单_在库订单_数量_当月累计"></td>
+                        <td class="主营业务_订单_在库订单_数量_全年累计"></td>
+                        <td></td>
+                        <td></td>
+
+                        <td></td>
+                        <td></td>
+                    </tr>
+
+                    <tr>
+                        <!-- <td></td>
+                                <td></td> -->
+                        <td colspan="2">在途订单</td>
+                        <!-- <td></td> -->
+                        <td>数量</td>
+
+                        <td class="主营业务_订单_在途订单_数量_当日"></td>
+                        <td class="主营业务_订单_在途订单_数量_当月累计"></td>
+                        <td class="主营业务_订单_在途订单_数量_全年累计"></td>
+                        <td></td>
+                        <td></td>
+
+                        <td></td>
+                        <td></td>
+                    </tr>
+
+                    <tr>
+                        <!-- <td></td> -->
+                        <td colspan="4">类别</td>
+                        <!-- <td>/td>
+                        <td></td>
+                        <td></td> -->
+
+                        <td colspan="7">经营数据</td>
+                        <!-- <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+
+                        <td></td>
+                        <td></td> -->
+                    </tr>
+
+                    <tr>
+                        <!-- <td></td> -->
+                        <td rowspan="10">库存</td>
+                        <td rowspan="4" colspan="2">在库现车库存</td>
+                        <!-- <td></td> -->
+                        <td>60天以内</td>
+
+                        <td colspan="7" class="主营业务_库存_在库现车库存_60天以内"></td>
+                        <!-- <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+    
+                            <td></td>
+                            <td></td> -->
+                    </tr>
+
+                    <tr>
+                        <!-- <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td> -->
+                        <td>超60天库存</td>
+
+                        <td colspan="7" class="主营业务_库存_在库现车库存_超60天库存"></td>
+                        <!-- <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+        
+                                <td></td>
+                                <td></td> -->
+                    </tr>
+
+                    <tr>
+                        <!-- <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td> -->
+                        <td>无订单库存</td>
+
+                        <td colspan="7" class="主营业务_库存_在库现车库存_无订单库存"></td>
+                        <!-- <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+            
+                                    <td></td>
+                                    <td></td> -->
+                    </tr>
+
+                    <tr>
+                        <!-- <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td> -->
+                        <td>合计</td>
+
+                        <td colspan="7" class="主营业务_库存_在库现车库存_合计"></td>
+                        <!-- <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                
+                                        <td></td>
+                                        <td></td> -->
+                    </tr>
+
+
+                    <tr>
+                        <!-- <td></td>
+                            <td>库存</td> -->
+                        <td rowspan="3" colspan="2">在途期货库存</td>
+                        <!-- <td></td> -->
+                        <td>有订单库存</td>
+
+                        <td colspan="7" class="主营业务_库存_在途期货库存_有订单库存"></td>
+                        <!-- <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+        
+                                <td></td>
+                                <td></td> -->
+                    </tr>
+
+                    <tr>
+                        <!-- <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td> -->
+                        <td>无订单库存</td>
+
+                        <td colspan="7" class="主营业务_库存_在途期货库存_无订单库存"></td>
+                        <!-- <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+            
+                                    <td></td>
+                                    <td></td> -->
+                    </tr>
+
+                    <tr>
+                        <!-- <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td> -->
+                        <td>合计</td>
+
+                        <td colspan="7" class="主营业务_库存_在途期货库存_合计"></td>
+                        <!-- <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                
+                                        <td></td>
+                                        <td></td> -->
+                    </tr>
+
+                    <tr>
+                        <!-- <td></td>
+                                <td>库存</td> -->
+                        <td rowspan="3" colspan="2">配额库存</td>
+                        <!-- <td></td> -->
+                        <td>有订单库存</td>
+
+                        <td colspan="7" class="主营业务_库存_配额库存_有订单库存"></td>
+                        <!-- <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+            
+                                    <td></td>
+                                    <td></td> -->
+                    </tr>
+
+                    <tr>
+                        <!-- <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td> -->
+                        <td>无订单库存</td>
+
+                        <td colspan="7" class="主营业务_库存_配额库存_无订单库存"></td>
+                        <!-- <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                
+                                        <td></td>
+                                        <td></td> -->
+                    </tr>
+
+                    <tr>
+                        <!-- <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td> -->
+                        <td>合计</td>
+
+                        <td colspan="7" class="主营业务_库存_配额库存_合计"></td>
+                        <!-- <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                    
+                                            <td></td>
+                                            <td></td> -->
+                    </tr>
+
+
+                    <tr>
+                        <td rowspan="10">水平事业业务</td>
+                        <td colspan="4">项目</td>
+                        <!-- <td></td>
+                        <td></td>
+                        <td></td> -->
+
+                        <td>月度渗透率</td>
+                        <td>月度台数</td>
+                        <td>销售收入</td>
+                        <td>利润</td>
+                        <td>单车利润</td>
+
+                        <td>月预算目标</td>
+                        <td>达成率</td>
+                    </tr>
+
+                    <tr>
+                        <!-- <td></td> -->
+                        <td colspan="4">精品销售</td>
+                        <!-- <td></td>
+                            <td></td>
+                            <td></td> -->
+
+                        <td class="水平事业业务_精品销售_月度渗透率"></td>
+                        <td class="水平事业业务_精品销售_月度台数"></td>
+                        <td class="水平事业业务_精品销售_销售收入"></td>
+                        <td class="水平事业业务_精品销售_利润"></td>
+                        <td class="水平事业业务_精品销售_单车利润"></td>
+
+                        <td></td>
+                        <td></td>
+                    </tr>
+
+                    <tr>
+                        <!-- <td></td> -->
+                        <td colspan="4">保险投保</td>
+                        <!-- <td></td>
+                                <td></td>
+                                <td></td> -->
+
+                        <td class="水平事业业务_保险投保_月度渗透率"></td>
+                        <td class="水平事业业务_保险投保_月度台数"></td>
+                        <td class="水平事业业务_保险投保_销售收入"></td>
+                        <td class="水平事业业务_保险投保_利润"></td>
+                        <td class="水平事业业务_保险投保_单车利润"></td>
+
+                        <td></td>
+                        <td></td>
+                    </tr>
+
+                    <tr>
+                        <!-- <td></td> -->
+                        <td colspan="4">综合交车服务</td>
+                        <!-- <td></td>
+                                    <td></td>
+                                    <td></td> -->
+
+                        <td class="水平事业业务_综合交车服务_月度渗透率"></td>
+                        <td class="水平事业业务_综合交车服务_月度台数"></td>
+                        <td class="水平事业业务_综合交车服务_销售收入"></td>
+                        <td class="水平事业业务_综合交车服务_利润"></td>
+                        <td class="水平事业业务_综合交车服务_单车利润"></td>
+
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <!-- <td></td> -->
+                        <td colspan="4">金融分期</td>
+                        <!-- <td></td>
+                                        <td></td>
+                                        <td></td> -->
+                        <td class="水平事业业务_金融分期_月度渗透率"></td>
+                        <td class="水平事业业务_金融分期_月度台数"></td>
+                        <td class="水平事业业务_金融分期_销售收入"></td>
+                        <td class="水平事业业务_金融分期_利润"></td>
+                        <td class="水平事业业务_金融分期_单车利润"></td>
+
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <!-- <td></td> -->
+                        <td colspan="4">二手车置换</td>
+                        <!-- <td></td>
+                                            <td></td>
+                                            <td></td> -->
+                        <td class="水平事业业务_二手车置换_月度渗透率"></td>
+                        <td class="水平事业业务_二手车置换_月度台数"></td>
+                        <td class="水平事业业务_二手车置换_销售收入"></td>
+                        <td class="水平事业业务_二手车置换_利润"></td>
+                        <td class="水平事业业务_二手车置换_单车利润"></td>
+
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <!-- <td></td> -->
+                        <td colspan="4">延保与GAP</td>
+                        <!-- <td></td>
+                                                <td></td>
+                                                <td></td> -->
+                        <td class="水平事业业务_延保与GAP_月度渗透率"></td>
+                        <td class="水平事业业务_延保与GAP_月度台数"></td>
+                        <td class="水平事业业务_延保与GAP_销售收入"></td>
+                        <td class="水平事业业务_延保与GAP_利润"></td>
+                        <td class="水平事业业务_延保与GAP_单车利润"></td>
+
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <!-- <td></td> -->
+                        <td colspan="4">玻璃保障服务</td>
+                        <!-- <td></td>
+                                                    <td></td>
+                                                    <td></td> -->
+                        <td class="水平事业业务_玻璃保障服务_月度渗透率"></td>
+                        <td class="水平事业业务_玻璃保障服务_月度台数"></td>
+                        <td class="水平事业业务_玻璃保障服务_销售收入"></td>
+                        <td class="水平事业业务_玻璃保障服务_利润"></td>
+                        <td class="水平事业业务_玻璃保障服务_单车利润"></td>
+
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <!-- <td></td> -->
+                        <td colspan="4">三年联保服务</td>
+                        <!-- <td></td>
+                                                        <td></td>
+                                                        <td></td> -->
+                        <td class="水平事业业务_三年联保服务_月度渗透率"></td>
+                        <td class="水平事业业务_三年联保服务_月度台数"></td>
+                        <td class="水平事业业务_三年联保服务_销售收入"></td>
+                        <td class="水平事业业务_三年联保服务_利润"></td>
+                        <td class="水平事业业务_三年联保服务_单车利润"></td>
+
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <!-- <td></td> -->
+                        <td colspan="4">综合毛利合计</td>
+                        <!-- <td></td>
+                                                            <td></td>
+                                                            <td></td> -->
+
+                        <td colspan="3"></td>
+                        <!-- <td></td>
+                                                        <td></td> -->
+                        <td class="水平事业业务_综合毛利合计_利润"></td>
+                        <td class="水平事业业务_综合毛利合计_单车利润"></td>
+
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </form>
+</body>
+
+</html>

@@ -6,6 +6,7 @@ import { PersonoutComponent } from './personout/personout.component';
 import { StorelistComponent } from './storelist/storelist.component';
 import { SalelistComponent } from './salelist/salelist.component';
 import { SalecountComponent } from './salecount/salecount.component';
+import { SaledailyComponent } from './saledaily/saledaily.component';
 const routes: Routes = [
   {
     path: '',
@@ -16,6 +17,7 @@ const routes: Routes = [
       { path: 'storelist', component: StorelistComponent },
       { path: 'salelist', component: SalelistComponent },
       { path: 'salecount', component: SalecountComponent },
+      { path: 'saledaily', component: SaledailyComponent },
     ]
   }
 ];

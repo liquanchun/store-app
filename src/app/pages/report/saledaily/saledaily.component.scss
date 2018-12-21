@@ -1,0 +1,59 @@
+@import "../../../theme/sass/conf/conf";
+:host /deep/ .widgets {
+  .smart-table-container {
+    width: 100%;
+  }
+}
+.col-md-4,.col-md-3,.col-md-2{
+   padding-right: 0px;
+}
+select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  text-indent: .01px;
+  text-overflow: '';
+  overflow: hidden;
+  font-family: inherit;
+  font-size: 14px;
+  padding: 10px 12px;
+  border-radius: 5px;
+  color: rgba(0, 0, 0, 0.7);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  width: 100%;
+  outline: none; //background: linear-gradient(45deg, transparent 50%, rgba(0, 0, 0, 0.7) 50%) no-repeat calc(100% - 20px) calc(1em + 4px), linear-gradient(135deg, rgba(0, 0, 0, 0.7) 50%, transparent 50%) no-repeat calc(100% - 15px) calc(1em + 4px);
+  background-size: 5px 5px, 5px 5px;
+  &:focus {
+    border: 1px solid rgba(0, 0, 0, 0.4);
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
+  }
+}
+
+:host /deep/ ss-multiselect-dropdown .dropdown button.btn.btn-default.dropdown-toggle {
+  background-color: #fff !important;
+}
+
+:host /deep/ {
+  .card-body {
+    min-height: 600px;
+  }
+  .report{
+    table{
+      width: 840px;
+      font-size: 12px;
+      border:1px solid black;
+    }
+    th,td{
+      border:1px solid black;
+      padding:4px 7px;
+    }
+    .textleft{
+      text-align:left;
+    }
+    .textright{
+      text-align:right;
+    }
+    .textcenter{
+      text-align:center;
+    }
+  }
+}
