@@ -8,6 +8,9 @@ import {
 } from "@angular/core";
 import { Router, ActivatedRoute, Params } from "@angular/router";
 import { Common } from "../../../providers/common";
+import { FieldConfig } from "../../../theme/components/dynamic-form/models/field-config.interface";
+import { NgbdModalContent } from "../../../modal-content.component";
+import { NgbModal, ModalDismissReasons } from "@ng-bootstrap/ng-bootstrap";
 import * as $ from "jquery";
 import * as _ from "lodash";
 import async from "async";
@@ -113,12 +116,29 @@ export class CarSaleCashNewComponent implements OnInit {
       }
     }
   };
+
+  config: FieldConfig[] = [
+    {
+      type: "check",
+      label: "审核",
+      name: "AuditResult",
+      check: "radio",
+      options: [{ id: "通过", text: "通过" }, { id: "不通过", text: "不通过" }]
+    },
+    {
+      type: "input",
+      label: "审核意见",
+      name: "AuditSuggest"
+    }
+  ];
+
   partItem = [];
   //销售顾问
   saleman: any;
   customerId: number;
   carIncomeId: number;
   chineseMoney: string = "";
+  tableView:{};
 
   gmxz: any;
   gmzz: any;
@@ -133,7 +153,8 @@ export class CarSaleCashNewComponent implements OnInit {
     private _dicService: DicService,
     private formService: FormService,
     private _router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private modalService: NgbModal,
   ) {}
   ngOnInit() {
     const bookid = _.toInteger(this.route.snapshot.paramMap.get("id"));
@@ -171,6 +192,29 @@ export class CarSaleCashNewComponent implements OnInit {
     this._dicService.getDicByName("销售分类", data => {
       this.kfsx = data;
     });
+
+    this.getViewName();
+
+  }
+
+//根据视图名称获取表格和表单定义
+  getViewName() {
+    this.formService.getForms("form_set").then(
+      data => {
+        if (data.Data) {
+          this.tableView = _.find(data.Data, function(o) {
+            return o["ViewType"] == "table" && o["FormName"] == "carsalecash";
+          });
+        }
+      },
+      err => {
+        this._state.notifyDataChanged("messagebox", {
+          type: "error",
+          msg: err,
+          time: new Date().getTime()
+        });
+      }
+    );
   }
 
   getCarsale(bookid: number) {
@@ -536,4 +580,137 @@ export class CarSaleCashNewComponent implements OnInit {
     }
     this.priceChange();
   }
+
+  onAudit(){
+    this.checkRoles("AuditRoles").then(d => {
+      if (d == 0) {
+        this._state.notifyDataChanged("messagebox", {
+          type: "warning",
+          msg: "你无权反审核。",
+          time: new Date().getTime()
+        });
+      } else {
+        this.onAuditYes();
+      }
+    });
+  }
+
+  onAuditYes(): void {
+    const that = this;
+    const modalRef = this.modalService.open(NgbdModalContent);
+    modalRef.componentInstance.title = "审核交款单";
+    modalRef.componentInstance.config = this.config;
+    modalRef.componentInstance.saveFun = (result, closeBack) => {
+      let formValue = JSON.parse(result);
+      formValue["Id"] = that.carsale["Id"];
+      formValue["Auditor"] = sessionStorage.getItem("userName");
+      formValue["AuditTime"] = this._common.getTodayString();
+      console.log(formValue);
+
+      that.formService.create("car_sale_cash", formValue).then(
+        data => {
+          closeBack();
+          this._state.notifyDataChanged("messagebox", {
+            type: "success",
+            msg: "审核成功。",
+            time: new Date().getTime()
+          });
+          if (formValue["AuditResult"] == "通过") {
+            that.saveStatus("已开票");
+          } 
+        },
+        err => {
+          this._state.notifyDataChanged("messagebox", {
+            type: "error",
+            msg: err,
+            time: new Date().getTime()
+          });
+        }
+      );
+    };
+  }
+
+  //修改状态
+  saveStatus(status: string) {
+    const that = this;
+    const carinfo = { Id: this.carIncomeId, SaleStatus: status };
+    this.formService.create("car_income", carinfo).then(data => {}, err => {});
+
+    const customer = {
+      Id: this.customerId,
+      CanUpdate: status == "已开票" ? 0 : 1
+    };
+    this.formService.create("car_customer", customer).then(
+      data => {
+      },
+      err => {}
+    );
+  }
+
+  onNoAudit(){
+    this.checkRoles("AuditRoles").then(d => {
+      if (d == 0) {
+        this._state.notifyDataChanged("messagebox", {
+          type: "warning",
+          msg: "你无权反审核。",
+          time: new Date().getTime()
+        });
+      } else {
+        this.onAuditNot();
+      }
+    });
+  }
+
+  onAuditNot(): void {
+    let formValue = {};
+    formValue["Id"] = this.carsale["Id"];
+    formValue["AuditResult"] = " ";
+    formValue["AuditSuggest"] = " ";
+    formValue["Auditor"] = sessionStorage.getItem("userName");
+    formValue["AuditTime"] = this._common.getTodayString();
+    this.formService.create("car_sale_cash", formValue).then(
+      data => {
+        this._state.notifyDataChanged("messagebox", {
+          type: "success",
+          msg: "反审核成功。",
+          time: new Date().getTime()
+        });
+        this.saveStatus("订单");
+      },
+      err => {
+        this._state.notifyDataChanged("messagebox", {
+          type: "error",
+          msg: err,
+          time: new Date().getTime()
+        });
+      }
+    );
+  }
+
+  checkRoles(power) {
+    const that = this;
+    return new Promise((resolve, reject) => {
+      const roleIds = sessionStorage.getItem("roleIds");
+      const roleName = that.tableView[power];
+      if (roleName) {
+        that.formService.getForms("sys_role").then(
+          data => {
+            const roles = data.Data;
+            const rl = _.find(roles, f => {
+              return f["RoleName"] == roleName;
+            });
+            if (rl && roleIds.includes(rl["Id"])) {
+              resolve(1);
+            } else {
+              resolve(0);
+            }
+          },
+          err => {}
+        );
+      } else {
+        resolve(1);
+      }
+    });
+  }
+  
 }

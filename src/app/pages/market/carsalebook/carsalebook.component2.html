@@ -119,6 +119,8 @@
               <i class="fa fa-pencil" aria-hidden="true"></i> 清空</button>
             <button (click)="getDataList()" type="button" class="btn btn-info btn-sm">
               <i class="fa fa-refresh" aria-hidden="true"></i> 刷新</button>
+            <button (click)="exportExcel()" type="button" class="btn btn-info btn-sm">
+                <i class="fa fa-file-excel-o" aria-hidden="true"></i> 导出Excel</button>
           </div>
         </div>
 
@@ -133,7 +135,7 @@
     </div>
     <ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '4px' }"></ngx-loading>
     <div class="test-1" style="overflow:scroll;max-height: 500px;">
-      <table class="table">
+      <table  class="table">
         <thead>
           <tr>
             <td rowspan="3">序号</td>

@@ -5,7 +5,11 @@ import { GlobalState } from "../../../global.state";
 
 import * as $ from "jquery";
 import * as _ from "lodash";
-import { Common } from '../../../providers/common';
+import { Common } from "../../../providers/common";
+import * as XLSX from "xlsx";
+import FileSaver from "file-saver";
+
+type AOA = any[][];
 
 @Component({
   selector: "app-carsalebook",
@@ -32,21 +36,23 @@ export class CarSaleBookComponent implements OnInit {
   cartype: any = [];
   saleman: any = [];
   buytype: any = [];
-  custtype:any = [];
+  custtype: any = [];
 
-  search:any={
-    InvoiceDate1:"",
-    InvoiceDate2:"",
-    CarTypeCode:"",
-    CarSeries:"",
-    carvinno:"",
-    buytype:"",
-    custtype:"",
-    saleman:""
-  }
-  constructor(private formService: FormService, 
+  search: any = {
+    InvoiceDate1: "",
+    InvoiceDate2: "",
+    CarTypeCode: "",
+    CarSeries: "",
+    carvinno: "",
+    buytype: "",
+    custtype: "",
+    saleman: ""
+  };
+  constructor(
+    private formService: FormService,
     private _common: Common,
-    private _state: GlobalState) {}
+    private _state: GlobalState
+  ) {}
   ngOnInit() {
     this.getViewName("carsalebook").then(data => {
       this.getDataList();
@@ -77,32 +83,31 @@ export class CarSaleBookComponent implements OnInit {
       );
     });
   }
-  getCarInfo(){
-    this.formService.getForms("car_income").then(
-      data => {
-        const cardata = data.Data;
-        _.each(cardata, f => {
-          if (
-            _.findIndex(this.carseries, d => {
-              return d["name"] == _.trim(f["CarSeries"]);
-            }) == -1
-          ) {
-            this.carseries.push({ id: f["Id"], name: _.trim(f["CarSeries"]) });
-          }
-          if (
-            _.findIndex(this.cartypecode, d => {
-              return d["name"] == _.trim(f["CarTypeCode"]);
-            }) == -1
-          ) {
-            this.cartypecode.push({
-              id: f["Id"],
-              name: _.trim(f["CarTypeCode"]),
-              type: _.trim(f["CarSeries"])
-            });
-          }
-        });
-        this.carseries = _.orderBy(this.carseries, "name", "asc");
+  getCarInfo() {
+    this.formService.getForms("car_income").then(data => {
+      const cardata = data.Data;
+      _.each(cardata, f => {
+        if (
+          _.findIndex(this.carseries, d => {
+            return d["name"] == _.trim(f["CarSeries"]);
+          }) == -1
+        ) {
+          this.carseries.push({ id: f["Id"], name: _.trim(f["CarSeries"]) });
+        }
+        if (
+          _.findIndex(this.cartypecode, d => {
+            return d["name"] == _.trim(f["CarTypeCode"]);
+          }) == -1
+        ) {
+          this.cartypecode.push({
+            id: f["Id"],
+            name: _.trim(f["CarTypeCode"]),
+            type: _.trim(f["CarSeries"])
+          });
+        }
       });
+      this.carseries = _.orderBy(this.carseries, "name", "asc");
+    });
   }
   //获取数据
   getDataList() {
@@ -128,24 +133,32 @@ export class CarSaleBookComponent implements OnInit {
                 return d["name"] == _.trim(f["26_销售结构"]);
               }) == -1
             ) {
-              this.buytype.push({ id: f["Id"], name: _.trim(f["26_销售结构"]) });
+              this.buytype.push({
+                id: f["Id"],
+                name: _.trim(f["26_销售结构"])
+              });
             }
             if (
               _.findIndex(this.custtype, d => {
                 return d["name"] == _.trim(f["25_销售分类"]);
               }) == -1
             ) {
-              this.custtype.push({ id: f["Id"], name: _.trim(f["25_销售分类"]) });
+              this.custtype.push({
+                id: f["Id"],
+                name: _.trim(f["25_销售分类"])
+              });
             }
             if (
               _.findIndex(this.saleman, d => {
                 return d["name"] == _.trim(f["24_客户信息_销售顾问"]);
               }) == -1
             ) {
-              this.saleman.push({ id: f["Id"], name: _.trim(f["24_客户信息_销售顾问"]) });
+              this.saleman.push({
+                id: f["Id"],
+                name: _.trim(f["24_客户信息_销售顾问"])
+              });
             }
           });
-
         }
         this.totalRecord = data.Data.length;
         this.loading = false;
@@ -251,36 +264,39 @@ export class CarSaleBookComponent implements OnInit {
     );
   }
 
-  onQuery(){
-    
-    let query={
-      "14_新车信息_开票日期-1":"",
-      "14_新车信息_开票日期-2":"",
-      "17_新车信息_车型代码":"",
-      "19_新车信息_底盘号":"",
-      "26_销售结构":"",
-      "25_销售分类":"",
-      "24_客户信息_销售顾问":""
+  onQuery() {
+    let query = {
+      "14_新车信息_开票日期-1": "",
+      "14_新车信息_开票日期-2": "",
+      "17_新车信息_车型代码": "",
+      "19_新车信息_底盘号": "",
+      "26_销售结构": "",
+      "25_销售分类": "",
+      "24_客户信息_销售顾问": ""
+    };
+    if (this.search.InvoiceDate1) {
+      query["14_新车信息_开票日期-1"] = this._common.getDateString(
+        this.search.InvoiceDate1
+      );
     }
-    if(this.search.InvoiceDate1){
-      query["14_新车信息_开票日期-1"] = this._common.getDateString(this.search.InvoiceDate1);
+    if (this.search.InvoiceDate2) {
+      query["14_新车信息_开票日期-2"] = this._common.getDateString(
+        this.search.InvoiceDate2
+      );
     }
-    if(this.search.InvoiceDate2){
-      query["14_新车信息_开票日期-2"] = this._common.getDateString(this.search.InvoiceDate2);
-    }
-    if(this.search.CarTypeCode){
+    if (this.search.CarTypeCode) {
       query["17_新车信息_车型代码"] = this.search.CarTypeCode;
     }
-    if(this.search.carvinno){
+    if (this.search.carvinno) {
       query["19_新车信息_底盘号"] = this.search.carvinno;
     }
-    if(this.search.buytype){
+    if (this.search.buytype) {
       query["26_销售结构"] = this.search.buytype;
     }
-    if(this.search.custtype){
+    if (this.search.custtype) {
       query["25_销售分类"] = this.search.custtype;
     }
-    if(this.search.saleman){
+    if (this.search.saleman) {
       query["24_客户信息_销售顾问"] = this.search.saleman;
     }
     // console.log(query);
@@ -288,15 +304,32 @@ export class CarSaleBookComponent implements OnInit {
   }
   onClear() {
     this.search = {
-      InvoiceDate1:"",
-      InvoiceDate2:"",
-      CarTypeCode:"",
-      CarSeries:"",
-      carvinno:"",
-      buytype:"",
-      custtype:"",
-      saleman:""
+      InvoiceDate1: "",
+      InvoiceDate2: "",
+      CarTypeCode: "",
+      CarSeries: "",
+      carvinno: "",
+      buytype: "",
+      custtype: "",
+      saleman: ""
     };
   }
-
+  exportExcel() {
+    const fileName = `销售台账——${this._common.getTodayString2()}.xlsx`;
+    var wb = XLSX.utils.table_to_book(document.querySelector(".table"));
+    var wbout = XLSX.write(wb, {
+      bookType: "xlsx",
+      bookSST: true,
+      type: "array"
+    });
+    try {
+      FileSaver.saveAs(
+        new Blob([wbout], { type: "application/octet-stream" }),
+        fileName
+      );
+    } catch (e) {
+      if (typeof console !== "undefined") console.log(e, wbout);
+    }
+    return wbout;
+  }
 }

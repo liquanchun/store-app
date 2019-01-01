@@ -818,6 +818,11 @@ export class CarsaleComponent implements OnInit {
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
     /* save to file */
+    const merge = { s: {r:0, c:0}, e: {r:0, c:1} };
+    /* add merges */
+    if(!ws['!merges']) ws['!merges'] = [];
+    ws['!merges'].push(merge);
+
     XLSX.writeFile(wb, fileName);
   }
   print() {

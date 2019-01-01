@@ -303,6 +303,8 @@
       <button *ngIf="isEnable" type="button" (click)="onConfirm()" class="btn btn-info">{{ isSaved ?
         '正在保存...':'确认保存'}}</button>
       <button type="button" (click)="onBack()" class="btn btn-warning">返回列表</button>
+      <button *ngIf="!isEnable && carsale.AuditResult != '通过'" type="button" (click)="onAudit()" class="btn btn-success">审核</button>
+      <button *ngIf="!isEnable && carsale.AuditResult == '通过'" type="button" (click)="onNoAudit()" class="btn btn-danger">反审核</button>
     </div>
   </div>
 

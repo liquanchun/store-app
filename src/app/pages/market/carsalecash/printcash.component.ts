@@ -11,10 +11,9 @@ import * as _ from 'lodash';
       <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
         <a class="dropdown-item" (click)="onDetail()" href="javaScript:void(0)">详情</a>
         <a class="dropdown-item" (click)="onClick()" href="javaScript:void(0)">打印交款明细</a>
-        <a class="dropdown-item" (click)="onClick2()" href="javaScript:void(0)">打印精品明细</a>
+        <a class="dropdown-item" (click)="onClick2('DN')" href="javaScript:void(0)">打印精品明细(店内)</a>
+        <a class="dropdown-item" (click)="onClick2('HZ')" href="javaScript:void(0)">打印精品明细(合作店)</a>
         <a class="dropdown-item" (click)="onClick3()" href="javaScript:void(0)">打印销售合同</a>
-        <a *ngIf="value.AuditResult != '通过'" class="dropdown-item" (click)="onAudit()" href="javaScript:void(0)">审核</a>
-        <a *ngIf="value.AuditResult == '通过'" class="dropdown-item" (click)="onAuditNot()" href="javaScript:void(0)">反审核</a>
       </div>
     </div>
     `,
@@ -81,11 +80,11 @@ export class PrintCashComponent implements ViewCell, OnInit {
     const getTimestamp = new Date().getTime();
     this._state.notifyDataChanged('print.carsalecash', { id: this.value.Id, time: getTimestamp });
   }
-  onClick2() {
+  onClick2(dn) {
     this.save.emit(this.rowData);
 
     const getTimestamp = new Date().getTime();
-    this._state.notifyDataChanged('print.carsalecash2', { id: this.value.Id, time: getTimestamp });
+    this._state.notifyDataChanged('print.carsalecash2', { id: this.value.Id, time: getTimestamp,dn:dn });
   }
   onClick3() {
     this.save.emit(this.rowData);
