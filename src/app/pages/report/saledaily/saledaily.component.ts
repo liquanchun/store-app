@@ -33,7 +33,8 @@ export class SaledailyComponent implements OnInit {
     private _state: GlobalState
   ) {}
   ngOnInit() {
-          
+     this.selectedStore.AuditTime = this._common.getTodayObj();
+     this.queryData(this.selectedStore);
   }
 
   queryData(query: any) {
