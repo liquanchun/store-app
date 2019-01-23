@@ -190,7 +190,7 @@ export class CarsaleComponent implements OnInit {
             f["Id"] != this.printOrder["Id"]
           );
         });
-        if (old && old["Status"] == "订单") {
+        if (old && (old["Status"] == "订单" || old["Status"] == "已开票")) {
           this._state.notifyDataChanged("messagebox", {
             type: "warning",
             msg: `该单车辆已被其他销售顾问创建并审核，你不能审核。`,
@@ -228,6 +228,11 @@ export class CarsaleComponent implements OnInit {
         });
       }
     });
+
+    // _.delay(function (that) {
+    //   that.getDataList();
+    // }, 1000 * 60, this);
+
   }
 
   start() {
