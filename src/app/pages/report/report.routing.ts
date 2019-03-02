@@ -7,6 +7,7 @@ import { StorelistComponent } from './storelist/storelist.component';
 import { SalelistComponent } from './salelist/salelist.component';
 import { SalecountComponent } from './salecount/salecount.component';
 import { SaledailyComponent } from './saledaily/saledaily.component';
+import { PartslistComponent } from './partslist/partslist.component';
 const routes: Routes = [
   {
     path: '',
@@ -18,6 +19,7 @@ const routes: Routes = [
       { path: 'salelist', component: SalelistComponent },
       { path: 'salecount', component: SalecountComponent },
       { path: 'saledaily', component: SaledailyComponent },
+      { path: 'partslist', component: PartslistComponent },
     ]
   }
 ];

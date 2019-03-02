@@ -266,8 +266,8 @@ export class CarSaleBookComponent implements OnInit {
 
   onQuery() {
     let query = {
-      "14_新车信息_开票日期-1": "",
-      "14_新车信息_开票日期-2": "",
+      "14_新车信息_开票日期-InvoiceDate-1": "",
+      "14_新车信息_开票日期-InvoiceDate-2": "",
       "17_新车信息_车型代码": "",
       "19_新车信息_底盘号": "",
       "26_销售结构": "",
@@ -275,12 +275,12 @@ export class CarSaleBookComponent implements OnInit {
       "24_客户信息_销售顾问": ""
     };
     if (this.search.InvoiceDate1) {
-      query["14_新车信息_开票日期-1"] = this._common.getDateString(
+      query["14_新车信息_开票日期-InvoiceDate-1"] = this._common.getDateString(
         this.search.InvoiceDate1
       );
     }
     if (this.search.InvoiceDate2) {
-      query["14_新车信息_开票日期-2"] = this._common.getDateString(
+      query["14_新车信息_开票日期-InvoiceDate-2"] = this._common.getDateString(
         this.search.InvoiceDate2
       );
     }

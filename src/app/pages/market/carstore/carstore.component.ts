@@ -112,6 +112,8 @@ export class CarstoreComponent implements OnInit {
   titles:any = [];
   feilds:any=[];
 
+  exportData:any;
+
   constructor(
     private modalService: NgbModal,
     private formService: FormService,
@@ -319,6 +321,7 @@ export class CarstoreComponent implements OnInit {
   }
   //获取数据
   getDataList() {
+    this.exportData = null;
     this.loading = true;
     this.formService.getForms(this.tableView["ViewName"]).then(
       data => {
@@ -397,6 +400,7 @@ export class CarstoreComponent implements OnInit {
     const data = _.filter(this.datalist, f => {
       return f["RemindId"] > 0;
     });
+    this.exportData = data;
     this.source.load(data);
     this.totalRecord = data.length;
   }
@@ -411,6 +415,7 @@ export class CarstoreComponent implements OnInit {
         _.toNumber(f["StoreDays"]) > _.toNumber(f["StoreRemind"])
       );
     });
+    this.exportData = data;
     this.source.load(data);
     this.totalRecord = data.length;
   }
@@ -573,8 +578,9 @@ export class CarstoreComponent implements OnInit {
 
   onExport(){
     const fileName = `车辆库存明细——${this._common.getTodayString2()}.xlsx`;
+    const dl = this.exportData ? this.exportData : this.datalist;
     const data = [this.titles];
-    _.each(this.datalist,d =>{
+    _.each(dl,d =>{
         const vals = [];
         _.each(this.feilds,f =>{
             vals.push(d[f]);
@@ -591,6 +597,7 @@ export class CarstoreComponent implements OnInit {
   }
 
   onQuery(){
+    this.exportData = null;
     let qry = _.omitBy(this.search, _.isEmpty);
     sessionStorage.setItem("carstore_search",JSON.stringify(qry));
     this.onSearchAll(qry);

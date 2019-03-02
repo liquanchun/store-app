@@ -26,6 +26,7 @@ import { StorelistComponent } from './storelist/storelist.component';
 import { SalelistComponent } from './salelist/salelist.component';
 import { SalecountComponent } from './salecount/salecount.component';
 import { SaledailyComponent } from './saledaily/saledaily.component';
+import { PartslistComponent } from './partslist/partslist.component';
 import { ToastyModule } from 'ng2-toasty';
 import { SysModule } from './../sys/sys.module';
 
@@ -53,7 +54,8 @@ import { SysModule } from './../sys/sys.module';
     StorelistComponent,
     SalelistComponent,
     SalecountComponent,
-    SaledailyComponent
+    SaledailyComponent,
+    PartslistComponent
   ],
   providers: [GlobalState, Config, HttpService, AppState,Common]
 })
