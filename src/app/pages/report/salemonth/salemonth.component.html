@@ -1,0 +1,84 @@
+<div class="row">
+  <div class="col-md-12">
+    <ba-card [title]="title" class="card-primary" baCardClass="with-scroll">
+      <div>
+        <div class="row">
+
+          <div class="col-1 pull-right" style="padding-top:8px;">
+            <label>车系</label>
+          </div>
+          <div class="col-2 pull-left" style="padding-left: 30px;">
+            <div class="form-group row">
+              <select [(ngModel)]="q.carser">
+                <option [value]="option" *ngFor="let option of carseries">
+                  {{ option }}
+                </option>
+              </select>
+            </div>
+          </div>
+
+          <div class="col-1 pull-right" style="padding-top:8px;">
+            <label>销售月份</label>
+          </div>
+          <div class="col-2 pull-left" style="padding-left: 30px;">
+            <div class="input-group">
+              <select [(ngModel)]="q.yearmonth">
+                <option [value]="option" *ngFor="let option of salemon">
+                  {{ option }}
+                </option>
+              </select>
+            </div>
+          </div>
+
+          <div class="col-6 pull-right">
+            <div class="btn-group margin8 pull-right" role="group" aria-label="Basic example">
+              <button (click)="queryData()" type="button" class="btn btn-info btn-sm">
+                <i class="fa fa-refresh" aria-hidden="true"></i> 查询</button>
+              <button (click)="print()" type="button" class="btn btn-info btn-sm">
+                <i class="fa fa-refresh" aria-hidden="true"></i> 打印预览</button>
+            </div>
+          </div>
+        </div>
+        <ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '4px' }"></ngx-loading>
+        <div class="report" id="printDiv">
+          <table style="border:none">
+            <tr style="border:none">
+              <td style="border:none;font-size: 120%;font-weight: bold;" colspan="13">博瑞宝汽车销售与材料收发动态表（{{q.yearmonth}}）</td>
+            </tr>
+            <tr>
+              <td style="border:none;text-align: left" colspan="3" >打印日期：{{ printOrder.printDate }}</td>
+              <td style="border:none" colspan="9" ></td>
+              <td style="border:none;text-align: right">单位(辆)</td>
+            </tr>
+          </table>
+          <table>
+           <tr>
+              <td rowspan="2">{{title1[0]}}</td>
+              <td colspan="2">{{title1[1]}}</td>
+              <td colspan="6">{{title1[2]}}</td>
+              <td colspan="2">{{title1[3]}}</td>
+              <td colspan="2">{{title1[4]}}</td>
+            </tr>
+            <tr>
+              <td *ngFor="let item of title2">{{item}}</td>
+            </tr>
+            <tr *ngFor="let item of dataList" >
+              <td>{{item[0]}}</td>
+              <td>{{item[1]}}</td>
+              <td  style="text-align:right">{{item[2]| numberSeparator2}}</td>
+              <td>{{item[3]}}</td>
+              <td style="text-align:right">{{item[4]| numberSeparator2}}</td>
+              <td>{{item[5]}}</td>
+              <td style="text-align:right">{{item[6]| numberSeparator2}}</td>
+              <td>{{item[7]}}</td>
+              <td style="text-align:right">{{item[8]| numberSeparator2}}</td>
+              <td>{{item[9]}}</td>
+              <td style="text-align:right">{{item[10]| numberSeparator2}}</td>
+              <td>{{item[11]}}</td>
+              <td style="text-align:right">{{item[12]| numberSeparator2}}</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </ba-card>
+  </div>

@@ -338,14 +338,14 @@ export class CarstoreComponent implements OnInit {
           if (
             _.findIndex(this.carseries, d => {
               return d["name"] == _.trim(f["CarSeries"]);
-            }) == -1
+            }) == -1 && f["CarSeries"]
           ) {
             this.carseries.push({ id: f["Id"], name: _.trim(f["CarSeries"]) });
           }
           if (
             _.findIndex(this.cartypeall, d => {
               return d["name"] == _.trim(f["CarType"]);
-            }) == -1
+            }) == -1 && f["CarType"]
           ) {
             this.cartypeall.push({
               id: f["Id"],
@@ -356,14 +356,14 @@ export class CarstoreComponent implements OnInit {
           if (
             _.findIndex(this.cartrim, d => {
               return d["name"] == _.trim(f["CarTrim"]);
-            }) == -1
+            }) == -1 && f["CarTrim"]
           ) {
             this.cartrim.push({ id: f["Id"], name: _.trim(f["CarTrim"]) });
           }
           if (
             _.findIndex(this.carcolor, d => {
               return d["name"] == _.trim(f["CarColor"]);
-            }) == -1
+            }) == -1 && f["CarColor"]
           ) {
             this.carcolor.push({ id: f["Id"], name: _.trim(f["CarColor"]) });
           }

@@ -11,7 +11,8 @@ import * as _ from "lodash";
 */
 @Pipe({ name: "numberSeparator" })
 export class NumberSeparatorPipe implements PipeTransform {
-  transform(value: number): string {
+  transform(value): string {
+    if(_.toNumber(value) == 0) return '0';
     if (_.isNumber(value)) {
       const val = ("" + value).replace(/(\d{1,3})(?=(\d{3})+(?:$|\.))/g, "$1,");
       return "￥" + val;

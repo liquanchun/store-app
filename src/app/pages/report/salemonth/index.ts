@@ -1,0 +1,1 @@
+export * from './salemonth.component';
