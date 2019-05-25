@@ -128,6 +128,7 @@ export class HttpService {
         this.token = sessionStorage.getItem('ssid');
         if (this.token) {
             headers.append('Authorization', "Bearer " + this.token);
+            headers.set('user', sessionStorage.getItem("userId"));
         }
         return headers;
     }

@@ -165,7 +165,7 @@
                     <i class="fa fa-refresh" aria-hidden="true"></i> 刷新</button>
                   <button *ngIf="canAdd" (click)="onCreate()" type="button" class="btn btn-info btn-sm">
                     <i class="fa fa-pencil" aria-hidden="true"></i> 新增{{title}}</button>
-                  <button (click)="onExport()" type="button" class="btn btn-info btn-sm">
+                  <button *ngIf="canexport" (click)="onExport()" type="button" class="btn btn-info btn-sm">
                     <i class="fa fa-file-excel-o" aria-hidden="true"></i> 导出Excel</button>
                   <button (click)="remindData1()" title="付款类型等于宝马金融，金融等于未赎，且付款周期大于30天。" type="button" class="btn btn-info btn-sm">
                     金融还款提醒 <span class="badge badge-warning">{{remind1}}</span></button>

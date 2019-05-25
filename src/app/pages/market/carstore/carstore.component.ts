@@ -97,6 +97,7 @@ export class CarstoreComponent implements OnInit {
   formname: string;
   canAdd: boolean;
   canUpdate: boolean;
+  canexport = true;
   //子表视图
   subViewName: any = [];
   //查询视图
@@ -201,7 +202,9 @@ export class CarstoreComponent implements OnInit {
             if (that.tableView) {
               that.title = that.tableView["Title"];
               that.canAdd = that.tableView["CanAdd"] == 1;
-
+              if(that.tableView["ExportRoles"] && sessionStorage.getItem("userId") != "admin"){
+                that.canexport = sessionStorage.getItem("roleIds").includes(that.tableView["ExportRoles"]);
+              }
               if (
                 !that.tableView["CanUpdate"] &&
                 !that.tableView["CanDelete"]

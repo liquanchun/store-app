@@ -98,6 +98,7 @@ export class CarstoreNewComponent implements OnInit, AfterViewInit {
   mainTableID: number = 0;
   cartypeList: any;
   carseriesList: any = [];
+  carincomeobj: any;
 
   @ViewChild("popContentCar")
   tplRef: TemplateRef<any>;
@@ -111,15 +112,15 @@ export class CarstoreNewComponent implements OnInit, AfterViewInit {
     private _common: Common,
     private _state: GlobalState,
     private vcRef: ViewContainerRef
-  ) {}
-  ngAfterViewInit() {}
+  ) { }
+  ngAfterViewInit() { }
   ngOnInit() {
     this.formname = "carincome";
     this.mainTableID = _.toInteger(this.route.snapshot.paramMap.get("id"));
     //this.canUpdate = this.mainTableID > 0;
     const that = this;
     if (this.formname) {
-      this.getViewName(this.formname).then(function() {
+      this.getViewName(this.formname).then(function () {
         that.getFormRoles();
       });
     }
@@ -140,7 +141,7 @@ export class CarstoreNewComponent implements OnInit, AfterViewInit {
           }
         });
       },
-      err => {}
+      err => { }
     );
   }
 
@@ -151,7 +152,7 @@ export class CarstoreNewComponent implements OnInit, AfterViewInit {
       that.formService.getForms("form_set").then(
         data => {
           if (data.Data) {
-            that.formView = _.find(data.Data, function(o) {
+            that.formView = _.find(data.Data, function (o) {
               return o["ViewType"] == "form" && o["FormName"] == formname;
             });
             if (that.formView) {
@@ -219,7 +220,7 @@ export class CarstoreNewComponent implements OnInit, AfterViewInit {
 
           async.eachSeries(
             formFieldList,
-            function(field, callback) {
+            function (field, callback) {
               if (that.checkRole(roleData, field["FieldName"], "CanRead")) {
                 const cfg = that.setFormField(field);
                 if (
@@ -240,7 +241,7 @@ export class CarstoreNewComponent implements OnInit, AfterViewInit {
                 });
               }
             },
-            function(err) {
+            function (err) {
               if (err) {
                 console.log("err");
               } else {
@@ -298,7 +299,7 @@ export class CarstoreNewComponent implements OnInit, AfterViewInit {
         placeholder: placehd,
         config: { placeholder: placehd }
       };
-    } 
+    }
     if (d["IsRequest"]) {
       if (cfgAdd) {
         cfgAdd.validation = [Validators.required];
@@ -328,11 +329,11 @@ export class CarstoreNewComponent implements OnInit, AfterViewInit {
       _.each(d["DicName"].split(","), d => {
         dicList.push({ id: d, text: d });
       });
-      if(cfgAdd){
+      if (cfgAdd) {
         cfgAdd["options"] = dicList;
         cfgAdd.config.minimumResultsForSearch = Infinity;
       }
-      if(cfgUpdate){
+      if (cfgUpdate) {
         cfgUpdate["options"] = dicList;
         cfgUpdate.config.minimumResultsForSearch = Infinity;
       }
@@ -444,7 +445,7 @@ export class CarstoreNewComponent implements OnInit, AfterViewInit {
             resolve(data.Data);
           }
         },
-        err => {}
+        err => { }
       );
     });
   }
@@ -454,18 +455,19 @@ export class CarstoreNewComponent implements OnInit, AfterViewInit {
       this.formService.getForms(`${this.tablename}/${this.mainTableID}`).then(
         data => {
           if (data && data.Data)
-            _.each(this.config, f => {
-              let fieldValue = data.Data[0][f.name];
-              if (fieldValue) {
-                if (f.type === "datepicker" && _.isString(fieldValue)) {
-                  fieldValue = this._common.getDateObject(fieldValue);
-                }
-                f.value = fieldValue;
-                this.updateData[f.name] = fieldValue;
+            this.carincomeobj = data.Data[0];
+          _.each(this.config, f => {
+            let fieldValue = data.Data[0][f.name];
+            if (fieldValue) {
+              if (f.type === "datepicker" && _.isString(fieldValue)) {
+                fieldValue = this._common.getDateObject(fieldValue);
               }
-            });
+              f.value = fieldValue;
+              this.updateData[f.name] = fieldValue;
+            }
+          });
         },
-        err => {}
+        err => { }
       );
     }
   }
@@ -476,11 +478,11 @@ export class CarstoreNewComponent implements OnInit, AfterViewInit {
       if (that.mainTableID > 0) {
         resolve(1);
       }
-      if(!vinno){
-        vinno = _.random(100,200);
+      if (!vinno) {
+        vinno = _.random(100, 200);
       }
-      if(!orderid){
-        orderid = _.random(100,200);
+      if (!orderid) {
+        orderid = _.random(100, 200);
       }
       that.formService.getForms(`car_income/vinno/${vinno}`).then(
         data => {
@@ -495,68 +497,110 @@ export class CarstoreNewComponent implements OnInit, AfterViewInit {
                   resolve(1);
                 }
               },
-              err => {}
+              err => { }
             );
           }
         },
-        err => {}
+        err => { }
       );
     });
   }
 
-  onUpdate(value: { [name: string]: any }) {
+  // 检查是否已经下单
+  checkIsRetain(value) {
     const that = this;
-    this.checkVinno(value["Vinno"], value["OrderId"]).then(d => {
-      if (d == 1) {
-        value["Id"] = this.mainTableID;
-        _.each(this.config, f => {
-          if (f.type === "datepicker" && value[f.name]) {
-            value[f.name] = this._common.getDateString(value[f.name]);
-          }
-          //如果表单值未找到
-          if (!value[f.name]) {
-            if (this.selectData[f.name]) {
-              //下拉列表中
-              value[f.name] = this.selectData[f.name];
-            } else if (this.updateData[f.name]) {
-              //修改时列表中
-              value[f.name] = this.updateData[f.name];
-            } else {
-              delete value[f.name];
-            }
-          }
-        });
 
-        console.log(value);
-        if (value.UpdateTime) delete value.UpdateTime;
-        this.formService.create(this.tablename, value).then(
-          function(data) {
-            if (_.isArray(data) && data.length == 1) {
-              that.mainTableID = _.toInteger(data[0]);
-              //that.canUpdate = true;
+    return new Promise((resolve, reject) => {
+      if (value['RetainCar'] == '是' && this.carincomeobj && this.carincomeobj['RetainCar'] != '是') {
+
+        that.formService.getForms(`car_booking/CarIncomeId/${this.carincomeobj['Id']}`).then(
+          data => {
+            if (data && data.Data.length > 0) {
+              that._state.notifyDataChanged("messagebox", {
+                type: "warning",
+                msg: "该车已经被预定，不能修改为保留车。",
+                time: new Date().getTime()
+              });
+
+              reject();
+            } else {
+              resolve();
             }
-            that._state.notifyDataChanged("messagebox", {
-              type: "success",
-              msg: "保存成功。",
-              time: new Date().getTime()
-            });
           },
-          err => {
-            that._state.notifyDataChanged("messagebox", {
-              type: "error",
-              msg: "保存失败",
-              time: new Date().getTime()
-            });
-          }
+          err => { }
         );
-      } else {
-        that._state.notifyDataChanged("messagebox", {
-          type: "warning",
-          msg: "车架号或订单号已经存在，不能新增。",
-          time: new Date().getTime()
-        });
+      }else {
+        resolve();
       }
     });
+  }
+  // 保存
+  onUpdate(value: { [name: string]: any }) {
+    const that = this;
+    if (!_.trim(value['SpecialComment']) && this.carincomeobj && this.carincomeobj['SpecialComment']) {
+              this._state.notifyDataChanged("messagebox", {
+                type: "warning",
+                msg: "特别备注不能为空。",
+                time: new Date().getTime()
+              });
+              return;
+     }
+    // 修改为保留车，必须检查是否已经下了订单
+    this.checkIsRetain(value).then(() => {
+
+      this.checkVinno(value["Vinno"], value["OrderId"]).then(d => {
+        if (d == 1) {
+          value["Id"] = this.mainTableID;
+          _.each(this.config, f => {
+            if (f.type === "datepicker" && value[f.name]) {
+              value[f.name] = this._common.getDateString(value[f.name]);
+            }
+            //如果表单值未找到
+            if (!value[f.name]) {
+              if (this.selectData[f.name]) {
+                //下拉列表中
+                value[f.name] = this.selectData[f.name];
+              } else if (this.updateData[f.name]) {
+                //修改时列表中
+                value[f.name] = this.updateData[f.name];
+              } else {
+                delete value[f.name];
+              }
+            }
+          });
+
+          console.log(value);
+          if (value.UpdateTime) delete value.UpdateTime;
+          this.formService.create(this.tablename, value).then(
+            function (data) {
+              if (_.isArray(data) && data.length == 1) {
+                that.mainTableID = _.toInteger(data[0]);
+                //that.canUpdate = true;
+              }
+              that._state.notifyDataChanged("messagebox", {
+                type: "success",
+                msg: "保存成功。",
+                time: new Date().getTime()
+              });
+            },
+            err => {
+              that._state.notifyDataChanged("messagebox", {
+                type: "error",
+                msg: "保存失败",
+                time: new Date().getTime()
+              });
+            }
+          );
+        } else {
+          that._state.notifyDataChanged("messagebox", {
+            type: "warning",
+            msg: "车架号或订单号已经存在，不能新增。",
+            time: new Date().getTime()
+          });
+        }
+      });
+
+    })
   }
 
   onChange(e) {
@@ -581,7 +625,7 @@ export class CarstoreNewComponent implements OnInit, AfterViewInit {
 
   //选择房间
   rowCarClicked(event): void {
-    const fields = ["CarSeries","CarType", "CarTypeCode", "Config", "GuidePrice"];
+    const fields = ["CarSeries", "CarType", "CarTypeCode", "Config", "GuidePrice"];
     _.each(fields, fd => {
       _.each(this.config, f => {
         if (f["name"] == fd) {
@@ -592,7 +636,7 @@ export class CarstoreNewComponent implements OnInit, AfterViewInit {
   }
   showPopCar(event): void {
     _.delay(
-      function(text) {
+      function (text) {
         $(".popover").css("max-width", "820px");
         $(".popover").css("min-width", "600px");
       },
