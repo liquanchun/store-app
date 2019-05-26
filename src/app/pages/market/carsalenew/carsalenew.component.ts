@@ -134,7 +134,7 @@ export class CarSaleNewComponent implements OnInit {
     },
     {
       itemType: "增值服务",
-      itemName: "金融分期服务费",
+      itemName: "代办服务费",
       fieldName: "FinanceSerFee",
       service: "",
       price: 0
