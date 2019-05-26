@@ -36,8 +36,14 @@ export class FormService {
   delete2(viewname: string, id: any) {
     return this._httpService.delete2('delete2/' + viewname, id);
   }
+  deleteser(viewname: string, id: any) {
+    return this._httpService.delete2('deleteser/' + viewname, id);
+  }
   create(view: string, user: any) {
     return this._httpService.create2(this.modelName + '/' + view, user);
+  }
+  createser(view: string, user: any) {
+    return this._httpService.create2('dataarray/' + view, user);
   }
   update(view: string, user: any) {
     return this._httpService.create2(this.modelName + '/' + view, user);
