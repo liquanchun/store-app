@@ -202,9 +202,6 @@ export class CarstoreComponent implements OnInit {
             if (that.tableView) {
               that.title = that.tableView["Title"];
               that.canAdd = that.tableView["CanAdd"] == 1;
-              if(that.tableView["ExportRoles"] && sessionStorage.getItem("userId") != "admin"){
-                that.canexport = sessionStorage.getItem("roleIds").includes(that.tableView["ExportRoles"]);
-              }
               if (
                 !that.tableView["CanUpdate"] &&
                 !that.tableView["CanDelete"]
@@ -222,6 +219,9 @@ export class CarstoreComponent implements OnInit {
                 }
               }
 
+              if(that.tableView["ExportRoles"] && sessionStorage.getItem("userId") != "admin"){
+                that.canexport = sessionStorage.getItem("roleIds").includes(that.tableView["ExportRoles"]);
+              }
               that.getFormSetSub().then(function(data) {
                 let vn = [];
                 _.each(data, f => {
