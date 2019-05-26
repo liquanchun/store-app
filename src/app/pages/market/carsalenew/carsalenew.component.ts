@@ -288,7 +288,7 @@ export class CarSaleNewComponent implements OnInit {
     private formService: FormService,
     private _router: Router,
     private route: ActivatedRoute
-  ) {}
+  ) { }
   ngOnInit() {
     const id = _.toInteger(this.route.snapshot.paramMap.get("id"));
     this.recordId = id;
@@ -314,7 +314,7 @@ export class CarSaleNewComponent implements OnInit {
               _.padStart(_.toString(cnt), 4, "0");
           }
         },
-        err => {}
+        err => { }
       );
     } else {
       this.getCarsale(id);
@@ -326,25 +326,25 @@ export class CarSaleNewComponent implements OnInit {
     this.loading = true;
     async.series(
       {
-        zero: function(callback) {
+        zero: function (callback) {
           that.formService.getForms("vw_select_car").then(
             data => {
               that.popCarInfoGrid.load(data.Data);
               callback(null, 0);
             },
-            err => {}
+            err => { }
           );
         },
-        one: function(callback) {
+        one: function (callback) {
           that.formService.getForms("vw_car_store").then(
             data => {
               that.carinfoDataList = data.Data;
               callback(null, 1);
             },
-            err => {}
+            err => { }
           );
         },
-        two: function(callback) {
+        two: function (callback) {
           that.formService.getForms("car_customer").then(
             data => {
               const mydata = _.filter(data.Data, f => {
@@ -354,10 +354,10 @@ export class CarSaleNewComponent implements OnInit {
               that.popCusInfoGrid.load(mydata);
               callback(null, 2);
             },
-            err => {}
+            err => { }
           );
         },
-        three: function(callback) {
+        three: function (callback) {
           that.formService.getForms(`car_booking/${id}`).then(
             data => {
               if (data && data.Data) {
@@ -379,10 +379,10 @@ export class CarSaleNewComponent implements OnInit {
                 callback(null, 3);
               }
             },
-            err => {}
+            err => { }
           );
         },
-        four: function(callback) {
+        four: function (callback) {
           that.formService
             .getForms("car_booking_item/OrderId/" + that.carsale.OrderId)
             .then(
@@ -424,11 +424,11 @@ export class CarSaleNewComponent implements OnInit {
                 }
                 callback(null, 4);
               },
-              err => {}
+              err => { }
             );
         }
       },
-      function(err, results) {
+      function (err, results) {
         that.loading = false;
         console.log(results);
       }
@@ -440,13 +440,13 @@ export class CarSaleNewComponent implements OnInit {
       data => {
         this.carinfoDataList = data.Data;
       },
-      err => {}
+      err => { }
     );
     this.formService.getForms("vw_select_car").then(
       data => {
         this.popCarInfoGrid.load(data.Data);
       },
-      err => {}
+      err => { }
     );
     this.formService.getForms("car_customer").then(
       data => {
@@ -456,7 +456,7 @@ export class CarSaleNewComponent implements OnInit {
         this.custinfoDataList = data.Data;
         this.popCusInfoGrid.load(mydata);
       },
-      err => {}
+      err => { }
     );
   }
 
@@ -481,7 +481,7 @@ export class CarSaleNewComponent implements OnInit {
 
   showPopCustomer(event): void {
     _.delay(
-      function(text) {
+      function (text) {
         $(".popover").css("max-width", "820px");
         $(".popover").css("min-width", "600px");
       },
@@ -492,7 +492,7 @@ export class CarSaleNewComponent implements OnInit {
 
   showPopCarInfo(event): void {
     _.delay(
-      function(text) {
+      function (text) {
         $(".popover").css("max-width", "1024px");
         $(".popover").css("min-width", "900px");
       },
@@ -557,7 +557,7 @@ export class CarSaleNewComponent implements OnInit {
     this._router.navigate(["/pages/market/carsale"]);
   }
   //确认入住
-  onConfirm(): void {
+  async onConfirm() {
     if (_.isObject(this.carsale.OrderDateObj)) {
       this.carsale.OrderDate = this._common.getDateString(
         this.carsale.OrderDateObj
@@ -597,46 +597,48 @@ export class CarSaleNewComponent implements OnInit {
 
     this.carsale.Creator = sessionStorage.getItem("userName");
     const that = this;
-    this.maxId().then(function() {
-      const newcarsale = _.clone(that.carsale);
-      delete newcarsale.PreCarDateObj;
-      delete newcarsale.OrderDateObj;
-      if (newcarsale.UpdateTime) delete newcarsale.UpdateTime;
+    await this.maxId();
 
-      console.log(newcarsale);
-      if (!newcarsale.Status) {
-        newcarsale.Status = that.carinfo.Status;
+    const newcarsale = _.clone(that.carsale);
+    delete newcarsale.PreCarDateObj;
+    delete newcarsale.OrderDateObj;
+    if (newcarsale.UpdateTime) delete newcarsale.UpdateTime;
+
+    console.log(newcarsale);
+    if (!newcarsale.Status) {
+      newcarsale.Status = that.carinfo.Status;
+    }
+    const keys = _.keys(newcarsale);
+    keys.forEach(k => {
+      if (newcarsale[k] == null) {
+        delete newcarsale[k];
       }
-      const keys = _.keys(newcarsale);
-      keys.forEach(k => {
-        if (newcarsale[k] == null) {
-          delete newcarsale[k];
-        }
-      });
-
-      that.formService.create("car_booking", newcarsale).then(
-        data => {
-          that.saveItem();
-          that._state.notifyDataChanged("messagebox", {
-            type: "success",
-            msg: "保存成功。",
-            time: new Date().getTime()
-          });
-          that.isEnable = false;
-        },
-        err => {
-          that._state.notifyDataChanged("messagebox", {
-            type: "error",
-            msg: "保存失败",
-            time: new Date().getTime()
-          });
-        }
-      );
-      if (that.customer.UpdateTime) delete that.customer.UpdateTime;
-      that.formService
-        .create("car_customer", that.customer)
-        .then(data => {}, err => {});
     });
+
+    await this.saveItem();
+
+    that.formService.create("car_booking", newcarsale).then(
+      data => {
+        that._state.notifyDataChanged("messagebox", {
+          type: "success",
+          msg: "保存成功。",
+          time: new Date().getTime()
+        });
+        that.isEnable = false;
+      },
+      err => {
+        that._state.notifyDataChanged("messagebox", {
+          type: "error",
+          msg: "保存失败",
+          time: new Date().getTime()
+        });
+      }
+    );
+    if (that.customer.UpdateTime) delete that.customer.UpdateTime;
+    that.formService
+      .create("car_customer", that.customer)
+      .then(data => { }, err => { });
+
   }
 
   maxId() {
@@ -657,56 +659,72 @@ export class CarSaleNewComponent implements OnInit {
             console.log(`maxid:${that.carsale.OrderId}`);
             resolve();
           },
-          err => {}
+          err => { }
         );
       }
     });
   }
 
-  saveItem() {
-    const that = this;
-    console.log(this.serviceItem);
+  deleteSerItem() {
+    return new Promise(resolve => {
 
-    _.each(this.serviceItem, f => {
-      if (!f["itemName"] && f["Id"] ) {
-        this.formService
-          .delete2("car_booking_item", f["Id"])
-          .then(function(data) {}, err => {
-            console.log(err);
-          });
+      this.formService
+        .deleteser("car_booking_item", this.carsale.OrderId)
+        .then(function (data) {
+          resolve();
+        }, err => {
+          resolve();
+          console.log(err);
+        });
+    });
+  }
+
+  createSerItem() {
+    return new Promise(resolve => {
+
+      _.each(this.serviceItem, f => {
+        if (f["itemName"]) {
+          f["OrderId"] = this.carsale.OrderId;
         }
-    });
-    _.each(this.giveItem, f => {
-      if (!f["itemName"] && f["Id"] ) {
-      this.formService
-        .delete2("car_booking_item", f["Id"])
-        .then(function(data) {}, err => {
-          console.log(err);
-        });
-      }
-    });
+      });
 
-    _.each(this.serviceItem, f => {
-      if (f["itemName"]) {
-      f["OrderId"] = this.carsale.OrderId;
       this.formService
-        .create("car_booking_item", f)
-        .then(function(data) {}, err => {
+        .createser("car_booking_item", this.serviceItem)
+        .then(function (data) {
+          resolve();
+        }, err => {
+          resolve();
           console.log(err);
         });
-      }
+
     });
-    console.log(this.giveItem);
-    _.each(this.giveItem, f => {
-      if (f["itemName"]) {
-        f["OrderId"] = this.carsale.OrderId;
-        this.formService
-          .create("car_booking_item", f)
-          .then(function(data) {}, err => {
-            console.log(err);
-          });
-      }
+  }
+
+  createGiveItem() {
+    return new Promise(resolve => {
+
+      _.each(this.giveItem, f => {
+        if (f["itemName"]) {
+          f["OrderId"] = this.carsale.OrderId;
+        }
+      });
+
+      this.formService
+        .createser("car_booking_item", this.giveItem)
+        .then(function (data) {
+          resolve();
+        }, err => {
+          resolve();
+          console.log(err);
+        });
+
     });
+  }
+
+  async saveItem() {
+    await this.deleteSerItem();
+    await this.createSerItem();
+    await this.createGiveItem();
   }
 
   checkRadio(event) {
