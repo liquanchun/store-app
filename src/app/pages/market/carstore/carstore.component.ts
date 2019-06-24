@@ -34,6 +34,7 @@ export class CarstoreComponent implements OnInit {
   title = "表单定义";
   query: string = "";
   newSettings = {};
+  selectedid = 0;
   settings = {
     pager: {
       display: true,
@@ -546,6 +547,9 @@ export class CarstoreComponent implements OnInit {
 
   invoiceDate(id) {
     const that = this;
+    if(id){
+      this.selectedid = id;
+    }
     const modalRef = this.modalService.open(NgbdModalContent);
     modalRef.componentInstance.title = "收到发票";
     modalRef.componentInstance.config = this.configInvoice;
@@ -556,7 +560,7 @@ export class CarstoreComponent implements OnInit {
           formValue[f.name] = this._common.getDateString(formValue[f.name]);
         }
       });
-      formValue["Id"] = id;
+      formValue["Id"] = this.selectedid;
       console.log(formValue);
       //closeBack();
       that.formService.create("car_income", formValue).then(
