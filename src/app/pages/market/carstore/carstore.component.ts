@@ -558,7 +558,7 @@ export class CarstoreComponent implements OnInit {
       });
       formValue["Id"] = id;
       console.log(formValue);
-      closeBack();
+      //closeBack();
       that.formService.create("car_income", formValue).then(
         data => {
           closeBack();
