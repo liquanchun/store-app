@@ -74,7 +74,7 @@ export class SaleMonthComponent implements OnInit {
     }
     this.loading = true;
     let qt = {paras:this.q.carser +','+ this.q.yearmonth.replace('年','-').replace('月','')};
-    this.saleMonthService.getFormsBySP('sp_reportmonth',qt).then(
+    this.saleMonthService.getFormsBySP('sp_reportmonth3',qt).then(
       data => {
         this.loading = false;
         this.dataList = []; 
@@ -98,6 +98,32 @@ export class SaleMonthComponent implements OnInit {
     );
   }
 
+  queryData2() {
+    if(!this.q.yearmonth || !this.q.carser){
+       this._state.notifyDataChanged("messagebox", {
+          type: "warning",
+          msg: "车系和销售年月不能为空。",
+          time: new Date().getTime()
+        });
+        return;
+    }
+    this.loading = true;
+    let qt = {paras:this.q.carser +','+ this.q.yearmonth.replace('年','-').replace('月','')};
+    this.saleMonthService.getFormsBySP('sp_reportmonth_call',qt).then(
+      data => {
+        this.loading = false;
+      },
+      err => {
+        this.loading = false;
+        this._state.notifyDataChanged("messagebox", {
+          type: "error",
+          msg: err,
+          time: new Date().getTime()
+        });
+      }
+    );
+  }
+  
   getDataList(): void {
     
     this.saleMonthService.getFormsBySP('sp_getsalemonth',{carseries:'X5'}).then(data=>{
