@@ -23,6 +23,7 @@ import { routing } from './basedata.routing';
 import { BaseDataComponent } from './basedata.component';
 import { FormComponent } from './form/form.component';
 
+import { DicComponent } from './dic/dic.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -39,10 +40,7 @@ import { FormComponent } from './form/form.component';
     Ng2SmartTableModule,
     ToastyModule.forRoot()
   ],
-  declarations: [
-    BaseDataComponent,
-    FormComponent,
-  ],
+  declarations: [BaseDataComponent, FormComponent, DicComponent],
   providers: [GlobalState, Config, HttpService, AppState, AuthGuard, Common]
 })
-export class BaseDataModule { }
+export class BaseDataModule {}

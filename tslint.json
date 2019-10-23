@@ -95,7 +95,7 @@
       }
     ],
     "no-conditional-assignment": true,
-    "no-console": [true, "log"],
+    "no-console": [false, "log"],
     "space-in-parens": ["error", "info", "never"],
     "number-literal-format": true,
     "no-invalid-template-strings": true,

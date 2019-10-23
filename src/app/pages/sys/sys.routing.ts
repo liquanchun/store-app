@@ -3,7 +3,6 @@ import { Routes, RouterModule } from '@angular/router';
 import { UserRoleComponent } from './user-role/user-role.component';
 import { RoleMenuComponent } from './role-menu/role-menu.component';
 import { OrgUserComponent } from './org-user/org-user.component';
-import { DicComponent } from './dic/dic.component';
 import { SysComponent } from './sys.component';
 import { SetGroupComponent } from './set-group/set-group.component';
 import { SetAgentComponent } from './set-agent/set-agent.component';
@@ -17,17 +16,16 @@ const routes: Routes = [
     path: '',
     component: SysComponent,
     children: [
-      { path: 'form/:id', component: FormComponent,canActivate:[AuthGuard]},
+      { path: 'form/:id', component: FormComponent, canActivate: [AuthGuard] },
       { path: 'field-role', component: FieldRoleComponent },
       { path: 'user-role', component: UserRoleComponent },
       { path: 'role-menu', component: RoleMenuComponent },
       { path: 'org-user', component: OrgUserComponent },
-      { path: 'dic', component: DicComponent },
       { path: 'set-group', component: SetGroupComponent },
       { path: 'set-agent', component: SetAgentComponent },
-      { path: 'userinfo', component: UserInfoComponent },
+      { path: 'userinfo', component: UserInfoComponent }
     ]
-  },
+  }
 ];
 
 export const routing = RouterModule.forChild(routes);

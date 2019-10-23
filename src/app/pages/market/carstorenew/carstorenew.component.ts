@@ -477,13 +477,16 @@ export class CarstoreNewComponent implements OnInit, AfterViewInit {
         that.formService.getForms(`car_booking/CarIncomeId/${this.carincomeobj['Id']}`).then(
           data => {
             if (data && data.Data.length > 0) {
-              that._state.notifyDataChanged('messagebox', {
-                type: 'warning',
-                msg: '该车已经被预定，不能修改为保留车。',
-                time: new Date().getTime()
-              });
-
-              reject();
+              if (data.Data['AuditResult'] != '通过' && data.Data['AuditTime']) {
+                resolve();
+              } else {
+                that._state.notifyDataChanged('messagebox', {
+                  type: 'warning',
+                  msg: '该车已经被预定，不能修改为保留车。',
+                  time: new Date().getTime()
+                });
+                reject();
+              }
             } else {
               resolve();
             }

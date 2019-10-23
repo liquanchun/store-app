@@ -1,4 +1,3 @@
-
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -17,7 +16,6 @@ import { SysComponent } from './sys.component';
 import { UserRoleComponent } from './user-role/user-role.component';
 import { RoleMenuComponent } from './role-menu/role-menu.component';
 import { OrgUserComponent } from './org-user/org-user.component';
-import { DicComponent } from './dic/dic.component';
 import { SetGroupComponent } from './set-group/set-group.component';
 import { SetAgentComponent } from './set-agent/set-agent.component';
 import { FieldRoleComponent } from './field-role/field-role.component';
@@ -68,17 +66,15 @@ import { ToastyModule } from 'ng2-toasty';
     OrgComponent,
     RoleComponent,
     UserComponent,
-    DicComponent,
     OrgUserComponent,
     SelectUserComponent,
     SetGroupComponent,
     SetAgentComponent,
     UserInfoComponent,
     FieldRoleComponent,
-    FormComponent,
+    FormComponent
   ],
   exports: [OrgComponent],
   providers: [GlobalState, Config, HttpService, AppState, Common, AuthGuard]
 })
-export class SysModule { }
-
+export class SysModule {}
