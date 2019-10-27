@@ -13,7 +13,7 @@ import {
   Validators
 } from "@angular/forms";
 import { ShowFormService } from "./showform.services";
-import { DicService } from "../../sys/dic/dic.services";
+import { DicService } from "../../basedata/dic/dic.services";
 import { GlobalState } from "../../../global.state";
 import { Common } from "../../../providers/common";
 import async from "async";

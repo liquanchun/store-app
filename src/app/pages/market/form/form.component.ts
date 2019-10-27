@@ -17,7 +17,7 @@ import {
 } from "ng2-toasty";
 import { Router, ActivatedRoute, ParamMap } from "@angular/router";
 import { FormService } from "./form.services";
-import { DicService } from "../../sys/dic/dic.services";
+import { DicService } from "../../basedata/dic/dic.services";
 import { GlobalState } from "../../../global.state";
 import { Common } from "../../../providers/common";
 import async from "async";

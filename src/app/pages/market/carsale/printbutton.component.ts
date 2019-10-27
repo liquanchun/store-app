@@ -14,7 +14,7 @@ import * as _ from "lodash";
             <a *ngIf="value.Creator == currentUser && value.Status == '订单' && value.AuditResult == '通过'" class="dropdown-item" (click)="onCheck()" href="javaScript:void(0)">转结算单</a>
             <a *ngIf="value.Status != '订单' && value.AuditResult != '通过'" class="dropdown-item" (click)="onAudit()" href="javaScript:void(0)">审核</a>
             <a *ngIf="value.Status == '订单' && value.AuditResult == '通过'" class="dropdown-item" (click)="onAuditNot()" href="javaScript:void(0)">反审核</a>
-            <a *ngIf="value.Status == '订单' && value.AuditResult == '通过'" class="dropdown-item" (click)="on()" href="javaScript:void(0)">追加订金</a>
+            <a *ngIf="value.Status == '订单' && value.AuditResult == '通过'" class="dropdown-item" (click)="onAddDeposit()" href="javaScript:void(0)">追加订金</a>
           </div>
         </div>
 

@@ -29,7 +29,7 @@ import * as $ from "jquery";
 import * as _ from "lodash";
 import async from "async";
 
-import { DicService } from "../../sys/dic/dic.services";
+import { DicService } from "../../basedata/dic/dic.services";
 import { FormService } from "../form/form.services";
 import { GlobalState } from "../../../global.state";
 

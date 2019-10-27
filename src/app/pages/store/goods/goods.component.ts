@@ -7,7 +7,7 @@ import { FieldConfig } from '../../../theme/components/dynamic-form/models/field
 import { NgbdModalContent } from '../../../modal-content.component'
 import { GlobalState } from '../../../global.state';
 import { Common } from '../../../providers/common';
-import { DicService } from '../../sys/dic/dic.services';
+import { DicService } from '../../basedata/dic/dic.services';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Config } from '../../../providers/config';
 import * as $ from 'jquery';

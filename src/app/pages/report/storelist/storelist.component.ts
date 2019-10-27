@@ -2,7 +2,7 @@ import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
 import { OrgService } from '../../sys/components/org/org.services';
 import { LocalDataSource } from 'ng2-smart-table';
 import { StorelistService } from './storelist.services';
-import { DicService } from '../../sys/dic/dic.services';
+import { DicService } from '../../basedata/dic/dic.services';
 import { GlobalState } from '../../../global.state';
 import { Common } from '../../../providers/common';
 import * as _ from 'lodash';

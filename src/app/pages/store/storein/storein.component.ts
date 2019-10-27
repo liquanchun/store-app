@@ -7,7 +7,7 @@ import { LocalDataSource } from 'ng2-smart-table';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { StoreinService } from './storein.services';
 import { SupplierService } from '../supplier/supplier.services';
-import { DicService } from '../../sys/dic/dic.services';
+import { DicService } from '../../basedata/dic/dic.services';
 import { GlobalState } from '../../../global.state';
 import { Common } from '../../../providers/common';
 import { StoreinPrintComponent } from './storeinprint.component';

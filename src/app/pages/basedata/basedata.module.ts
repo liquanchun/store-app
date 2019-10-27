@@ -22,7 +22,9 @@ import { AuthGuard } from '../../providers/guard.service';
 import { routing } from './basedata.routing';
 import { BaseDataComponent } from './basedata.component';
 import { FormComponent } from './form/form.component';
-
+import { PartsComponent } from './parts/parts.component';
+import { PartsComboComponent } from './partscombo/partscombo.component';
+import { PartsItemComponent } from './partsitem/partsitem.component';
 import { DicComponent } from './dic/dic.component';
 @NgModule({
   imports: [
@@ -35,12 +37,12 @@ import { DicComponent } from './dic/dic.component';
     MultiselectDropdownModule,
     TreeModule,
     ComponentsModule,
-    NgbModule,
     LoadingModule,
     Ng2SmartTableModule,
-    ToastyModule.forRoot()
+    ToastyModule.forRoot(),
+    NgbModule.forRoot()
   ],
-  declarations: [BaseDataComponent, FormComponent, DicComponent],
+  declarations: [BaseDataComponent, FormComponent, DicComponent, PartsComponent, PartsComboComponent, PartsItemComponent],
   providers: [GlobalState, Config, HttpService, AppState, AuthGuard, Common]
 })
 export class BaseDataModule {}

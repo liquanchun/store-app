@@ -8,7 +8,7 @@ import { DynamicFormComponent }
   from '../../../theme/components/dynamic-form/containers/dynamic-form/dynamic-form.component';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { EditFormService } from './editform.services';
-import { DicService } from '../../sys/dic/dic.services';
+import { DicService } from '../../basedata/dic/dic.services';
 import { GlobalState } from '../../../global.state';
 import { Common } from '../../../providers/common';
 import async from 'async';

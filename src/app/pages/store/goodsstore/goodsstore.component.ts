@@ -3,7 +3,7 @@ import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { FormGroup, AbstractControl, FormBuilder, Validators } from '@angular/forms';
 import { LocalDataSource } from 'ng2-smart-table';
 
-import { DicService } from '../../sys/dic/dic.services';
+import { DicService } from '../../basedata/dic/dic.services';
 import { GoodsstoreService } from './goodsstore.services';
 import { GlobalState } from '../../../global.state';
 import { Common } from '../../../providers/common';

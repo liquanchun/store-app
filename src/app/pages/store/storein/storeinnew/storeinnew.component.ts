@@ -9,7 +9,7 @@ import * as $ from 'jquery';
 import * as _ from 'lodash';
 
 import { StoreinNewService } from './storeinnew.services';
-import { DicService } from '../../../sys/dic/dic.services';
+import { DicService } from '../../../basedata/dic/dic.services';
 import { SupplierService } from '../../supplier/supplier.services';
 import { UserService } from '../../../sys/components/user/user.services';
 import { OrgService } from '../../../sys/components/org/org.services';

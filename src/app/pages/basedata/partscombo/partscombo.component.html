@@ -1,0 +1,121 @@
+<div class="row">
+  <div class="col-md-12">
+    <ba-card *ngIf="!isShowAdd" [title]="title" class="card-primary" baCardClass="with-scroll">
+      <div>
+        <div class="row">
+          <div class="col-3">
+            <search-input (searchClick)="onSearch($event)"></search-input>
+          </div>
+
+          <div class="col-9">
+            <div class="btn-group pull-right margin8" role="group" aria-label="Basic example">
+              <button (click)="open()" type="button" class="btn btn-info btn-sm">
+                <i class="fa fa-refresh" aria-hidden="true"></i> 新增装饰套餐</button>
+            </div>
+          </div>
+        </div>
+        <ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '4px' }"></ngx-loading>
+        <ng2-smart-table [settings]="settings" [source]="source" (edit)="onEdit($event)" (delete)="onDelete($event)">
+        </ng2-smart-table>
+
+      </div>
+    </ba-card>
+
+    <div *ngIf="isShowAdd">
+      <div class="row">
+        <div class="col-md-5 offset-md-1">
+          <div class="form-group row">
+            <label for="type_name" class="col-sm-2 col-form-label">分类</label>
+            <div class="col-sm-10">
+              <input [(ngModel)]="partscombo.type_name" type="text" class="form-control" id="type_name"
+                placeholder="输入分类">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-5 offset-md-1">
+          <div class="form-group row">
+            <label for="item_name" class="col-sm-2 col-form-label">套餐名称</label>
+            <div class="col-sm-10">
+              <input [(ngModel)]="partscombo.item_name" type="text" class="form-control" id="item_name"
+                placeholder="输入套餐名称">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-5 offset-md-1">
+          <div class="form-group row">
+            <label for="item_no" class="col-sm-2 col-form-label">套餐编号</label>
+            <div class="col-sm-10">
+              <input [(ngModel)]="partscombo.item_no" type="text" class="form-control" id="item_no"
+                placeholder="输入套餐编号">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-5 offset-md-1">
+          <div class="form-group row">
+            <label for="item_no" class="col-sm-2 col-form-label">套餐项目</label>
+            <div class="col-sm-10">
+              <input [(ngModel)]="selectitemlist" readonly type="text" class="form-control" id="selectitemlist"
+                placeholder="输入套餐编号">
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-5">
+          <div class="btn-group" role="group" aria-label="Basic example">
+            <button placement="bottom" (shown)="showPop()" #p="ngbPopover" [ngbPopover]="popContent" popoverTitle="项目列表"
+              type="button" class="btn btn-success btn-sm" container="body">
+              <i class="fa fa-refresh" aria-hidden="true"></i> 选择项目</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-5 offset-md-1">
+          <div class="form-group row">
+            <label for="cost_price" class="col-sm-2 col-form-label">套餐成本</label>
+            <div class="col-sm-10">
+              <input [(ngModel)]="partscombo.cost_price" type="number" class="form-control" id="cost_price"
+                placeholder="输入套餐成本">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-5 offset-md-1">
+          <div class="form-group row">
+            <label for="sale_price" class="col-sm-2 col-form-label">销售价</label>
+            <div class="col-sm-10">
+              <input [(ngModel)]="partscombo.sale_price" type="number" class="form-control" id="sale_price"
+                placeholder="输入销售价">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-5 offset-md-1">
+          <div class="form-group row">
+            <div class="col-sm-10 btn-group offset-sm-2">
+              <button type="button" [disabled]="isEnable" (click)="onConfirm()"
+                class="btn btn-info">{{ isSaved ? '正在保存...':'保存'}}</button>
+              <button type="button" (click)="onBack()" class="btn btn-warning">返回列表</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+<ng-template #popContent>
+  <!-- <a href="javascrpit:void(0)" class="close" (click)='p.close()' aria-hidden="true">&times;</a> -->
+  <ng2-smart-table [settings]="settingsParts" [source]="sourceParts" (userRowSelect)="rowClicked($event)">
+  </ng2-smart-table>
+</ng-template>

@@ -1,0 +1,25 @@
+import { Injectable } from '@angular/core';
+import { HttpService } from '../../../providers/httpClient';
+import * as _ from 'lodash';
+
+@Injectable()
+export class PartsComboService {
+  constructor(private _httpService: HttpService) {}
+
+  getPartsCombo() {
+    return this._httpService.getDataServer2('data/vw_set_parts_combo');
+  }
+
+  create(model: any) {
+    delete model.Id;
+    return this._httpService.create2('data/set_parts_combo', model);
+  }
+
+  update(model: any) {
+    return this._httpService.create2('data/set_parts_combo', model);
+  }
+
+  delete(id: any) {
+    return this._httpService.delete2('data/set_parts_combo', id);
+  }
+}

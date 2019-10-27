@@ -11,7 +11,7 @@ import { FieldConfig } from "../../../theme/components/dynamic-form/models/field
 import { NgbdModalContent } from "../../../modal-content.component";
 import { Router, ActivatedRoute, ParamMap } from "@angular/router";
 import { FormService } from "../form/form.services";
-import { DicService } from "../../sys/dic/dic.services";
+import { DicService } from "../../basedata/dic/dic.services";
 import { GlobalState } from "../../../global.state";
 import { EditFormComponent } from "../editform/editform.component";
 import { Common } from "../../../providers/common";

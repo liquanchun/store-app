@@ -1,6 +1,6 @@
 import { Component, OnInit, AfterViewInit, ViewChild } from "@angular/core";
 import { FormService } from "../form/form.services";
-import { DicService } from "../../sys/dic/dic.services";
+import { DicService } from "../../basedata/dic/dic.services";
 import { GlobalState } from "../../../global.state";
 
 import * as $ from "jquery";

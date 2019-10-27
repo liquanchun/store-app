@@ -15,7 +15,7 @@ import { Http, RequestOptions, Headers, Response } from '@angular/http';
 import * as $ from 'jquery';
 import * as _ from 'lodash';
 
-import { DicService } from '../../../sys/dic/dic.services';
+import { DicService } from '../../../basedata/dic/dic.services';
 import { SupplierService } from '../../supplier/supplier.services';
 import { UserService } from '../../../sys/components/user/user.services';
 import { OrgService } from '../../../sys/components/org/org.services';
