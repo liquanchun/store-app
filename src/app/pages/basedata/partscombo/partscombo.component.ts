@@ -269,12 +269,19 @@ export class PartsComboComponent implements OnInit {
     this.partscombo = event.data;
     this.partscomboList = event.data.partslistname;
     this.partslinkid = event.data.partslinkid;
+    this.selectitemlist = event.data.partslistname;
     if (event.data.partslistname) {
       const ids = _.split(event.data.partslistid, ',');
       const names = _.split(event.data.partslistname, ',');
-      console.log('ids', ids);
-      console.log('names', names);
-      console.log('partslinkid', this.partslinkid);
+      for (let i = 0; i < ids.length; i++) {
+        if (!_.some(this.selectedItem, ['parts_id', ids[i]])) {
+          this.selectedItem.push({
+            parts_id: ids[i],
+            item_name: names[i]
+          });
+        }
+      }
+      this.partscombo['selectedPartsIds'] = _.join(_.map(this.selectedItem, 'parts_id'), ',');
     }
     this.isShowAdd = true;
   }
@@ -323,6 +330,7 @@ export class PartsComboComponent implements OnInit {
   }
 
   open() {
+    this.partscombo.Id = 0;
     this.isShowAdd = true;
   }
 
@@ -339,7 +347,7 @@ export class PartsComboComponent implements OnInit {
       return;
     }
     this.partscombo['createdBy'] = sessionStorage.getItem('userName');
-    if (this.partscombo['Id'] === 0) {
+    if (this.partscombo['Id'] == 0) {
       delete this.partscombo.Id;
     }
     this.partscomboService.create(this.partscombo).then(

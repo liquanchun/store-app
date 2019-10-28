@@ -69,8 +69,8 @@
 
         <div class="col-md-5">
           <div class="btn-group" role="group" aria-label="Basic example">
-            <button placement="bottom" (shown)="showPop()" #p="ngbPopover" [ngbPopover]="popContent" popoverTitle="项目列表"
-              type="button" class="btn btn-success btn-sm" container="body">
+            <button placement="bottom" (shown)="showPop()" #part="ngbPopover" [ngbPopover]="popContent"
+              popoverTitle="项目列表" type="button" class="btn btn-success btn-sm" container="body">
               <i class="fa fa-refresh" aria-hidden="true"></i> 选择项目</button>
           </div>
         </div>
@@ -115,7 +115,7 @@
   </div>
 </div>
 <ng-template #popContent>
-  <!-- <a href="javascrpit:void(0)" class="close" (click)='p.close()' aria-hidden="true">&times;</a> -->
+  <!-- <a href="javascrpit:void(0)" class="close" (click)='part.close()' aria-hidden="true">&times;</a> -->
   <ng2-smart-table [settings]="settingsParts" [source]="sourceParts" (userRowSelect)="rowClicked($event)">
   </ng2-smart-table>
 </ng-template>

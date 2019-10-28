@@ -1,61 +1,42 @@
-import {
-  Component,
-  ViewChild,
-  OnInit,
-  AfterViewInit,
-  Input,
-  SimpleChanges
-} from "@angular/core";
-import {
-  NgbModal,
-  ModalDismissReasons,
-  NgbAlert
-} from "@ng-bootstrap/ng-bootstrap";
-import {
-  FormGroup,
-  AbstractControl,
-  FormBuilder,
-  Validators
-} from "@angular/forms";
-import {
-  IMultiSelectOption,
-  IMultiSelectSettings,
-  IMultiSelectTexts
-} from "angular-2-dropdown-multiselect";
-import { Router, ActivatedRoute, Params } from "@angular/router";
-import { LocalDataSource } from "ng2-smart-table";
-import { Common } from "../../../providers/common";
-import * as $ from "jquery";
-import * as _ from "lodash";
-import async from "async";
+import { Component, ViewChild, OnInit, AfterViewInit, Input, SimpleChanges } from '@angular/core';
+import { NgbModal, ModalDismissReasons, NgbAlert } from '@ng-bootstrap/ng-bootstrap';
+import { FormGroup, AbstractControl, FormBuilder, Validators } from '@angular/forms';
+import { IMultiSelectOption, IMultiSelectSettings, IMultiSelectTexts } from 'angular-2-dropdown-multiselect';
+import { Router, ActivatedRoute, Params } from '@angular/router';
+import { LocalDataSource } from 'ng2-smart-table';
+import { Common } from '../../../providers/common';
+import * as $ from 'jquery';
+import * as _ from 'lodash';
+import async from 'async';
 
-import { DicService } from "../../basedata/dic/dic.services";
-import { FormService } from "../form/form.services";
-import { GlobalState } from "../../../global.state";
+import { DicService } from '../../basedata/dic/dic.services';
+import { PartsService } from '../../basedata/parts/parts.services';
+import { FormService } from '../form/form.services';
+import { GlobalState } from '../../../global.state';
 
 @Component({
-  selector: "app-carsalenew",
-  templateUrl: "./carsalenew2.component.html",
-  styleUrls: ["./carsalenew.component.scss"],
-  providers: [DicService, FormService]
+  selector: 'app-carsalenew',
+  templateUrl: './carsalenew2.component.html',
+  styleUrls: ['./carsalenew.component.scss'],
+  providers: [DicService, FormService, PartsService]
 })
 export class CarSaleNewComponent implements OnInit {
   @Input()
   showEditButton: boolean = true;
-  title = "新增销售预定单";
+  title = '新增销售预定单';
   isSaved: boolean = false;
   isEnable: boolean = true;
   loading = false;
   carsale: any = {
     Id: 0,
-    OrderId: "",
-    OrderDate: "",
+    OrderId: '',
+    OrderDate: '',
     OrderDateObj: {},
-    SaleMan: "",
-    DMSNo: "",
-    CustomerId: "",
-    CarIncomeId: "",
-    SelfConfig: "",
+    SaleMan: '',
+    DMSNo: '',
+    CustomerId: '',
+    CarIncomeId: '',
+    SelfConfig: '',
     GuidePrice: 0,
     SalePrice: 0,
     Discount: 0,
@@ -64,106 +45,104 @@ export class CarSaleNewComponent implements OnInit {
     PredictFee: 0,
     Days2: 0,
     WholeFee: 0,
-    FinaceCompany: "",
+    FinaceCompany: '',
     FirstFee: 0,
     Stages: 0,
     Days3: 0,
-    PreCarDate: "",
+    PreCarDate: '',
     PreCarDateObj: {},
-    PickCarType: "",
-    PickCarMan: "",
-    PickCarMobile: "",
-    Remark: "",
+    PickCarType: '',
+    PickCarMan: '',
+    PickCarMobile: '',
+    Remark: '',
     Count: 1,
-    TakeCarSite: "北京博瑞宝汽车销售服务公司",
-    TakePhone: "010-87839999",
-    Creator: "",
-    Status: ""
+    TakeCarSite: '北京博瑞宝汽车销售服务公司',
+    TakePhone: '010-87839999',
+    Creator: '',
+    Status: ''
   };
   customer: any = {
     Id: 0,
-    Name: "",
-    Address: "",
-    Phone: "",
-    LinkMan: "",
-    IDCard: "",
-    LicenseType: "",
-    IdAddress: "",
-    CustType: "",
-    PostNumber: ""
+    Name: '',
+    Address: '',
+    Phone: '',
+    LinkMan: '',
+    IDCard: '',
+    LicenseType: '',
+    IdAddress: '',
+    CustType: '',
+    PostNumber: ''
   };
   carinfo: any = {
-    CarType: "",
-    Vinno: "",
-    Status: "",
-    CarColor: "",
-    CarTrim: "",
-    CarConfig: "",
+    CarType: '',
+    Vinno: '',
+    Status: '',
+    CarColor: '',
+    CarTrim: '',
+    CarConfig: '',
     GuidePrice: 0,
     GuidePriceRemark: 0,
-    DMSCode: ""
+    DMSCode: ''
   };
   serviceItem = [
     {
-      itemType: "增值服务",
-      itemName: "精品装饰",
-      fieldName: "DecorateFee",
-      service: "全车贴膜",
+      itemType: '增值服务',
+      itemName: '精品装饰',
+      fieldName: 'DecorateFee',
+      service: '全车贴膜',
       price: 0
     },
     {
-      itemType: "增值服务",
-      itemName: "新车保险预估",
-      fieldName: "InsureFee",
-      service: "全险",
+      itemType: '增值服务',
+      itemName: '新车保险预估',
+      fieldName: 'InsureFee',
+      service: '全险',
       price: 0
     },
     {
-      itemType: "增值服务",
-      itemName: "购置税预估",
-      fieldName: "BuyTaxFee",
-      service: "",
+      itemType: '增值服务',
+      itemName: '购置税预估',
+      fieldName: 'BuyTaxFee',
+      service: '',
       price: 0
     },
     {
-      itemType: "增值服务",
-      itemName: "综合服务费",
-      fieldName: "TakeAllFee",
-      service: "",
+      itemType: '增值服务',
+      itemName: '综合服务费',
+      fieldName: 'TakeAllFee',
+      service: '',
       price: 0
     },
     {
-      itemType: "增值服务",
-      itemName: "代办服务费",
-      fieldName: "FinanceSerFee",
-      service: "",
+      itemType: '增值服务',
+      itemName: '代办服务费',
+      fieldName: 'FinanceSerFee',
+      service: '',
       price: 0
     },
     {
-      itemType: "增值服务",
-      itemName: "安心服务器预估",
-      service: "",
-      fieldName: "TakeCareFee",
+      itemType: '增值服务',
+      itemName: '安心服务器预估',
+      service: '',
+      fieldName: 'TakeCareFee',
       price: 0
     },
     {
-      itemType: "增值服务",
-      itemName: "贴心服务器预估",
-      fieldName: "IntimateFee",
-      service: "",
+      itemType: '增值服务',
+      itemName: '贴心服务器预估',
+      fieldName: 'IntimateFee',
+      service: '',
       price: 0
     },
     {
-      itemType: "增值服务",
-      itemName: "玻璃保险预估",
-      fieldName: "GlassSerFee",
-      service: "",
+      itemType: '增值服务',
+      itemName: '玻璃保险预估',
+      fieldName: 'GlassSerFee',
+      service: '',
       price: 0
     }
   ];
-  giveItem = [
-    { itemType: "赠送服务", itemName: "其他", service: "会员卡", price: 0 }
-  ];
+  giveItem = [{ itemType: '赠送服务', itemName: '其他', service: '会员卡', price: 0 }];
   //销售顾问
   saleman: any;
 
@@ -180,27 +159,27 @@ export class CarSaleNewComponent implements OnInit {
       edit: false,
       delete: false
     },
-    mode: "external",
+    mode: 'external',
     hideSubHeader: true,
     columns: {
       Name: {
-        title: "客户名称",
-        type: "string",
+        title: '客户名称',
+        type: 'string',
         filter: false
       },
       LinkMan: {
-        title: "联系人",
-        type: "string",
+        title: '联系人',
+        type: 'string',
         filter: false
       },
       Phone: {
-        title: "联系电话",
-        type: "string",
+        title: '联系电话',
+        type: 'string',
         filter: false
       },
       IdCard: {
-        title: "证件号码",
-        type: "string",
+        title: '证件号码',
+        type: 'string',
         filter: false
       }
     }
@@ -215,110 +194,155 @@ export class CarSaleNewComponent implements OnInit {
     pager: {
       perPage: 5
     },
-    mode: "external",
+    mode: 'external',
     hideSubHeader: true,
     columns: {
       OrderId: {
-        title: "生产订单号",
-        type: "string",
+        title: '生产订单号',
+        type: 'string',
         filter: false
       },
       CarType: {
-        title: "车型",
-        type: "string",
+        title: '车型',
+        type: 'string',
         filter: false
       },
       CarConfig: {
-        title: "个性化配置",
-        type: "string",
+        title: '个性化配置',
+        type: 'string',
         filter: false
       },
       GuidePriceRemark: {
-        title: "配置价格",
-        type: "string",
+        title: '配置价格',
+        type: 'string',
         filter: false
       },
       GuidePrice: {
-        title: "指导价",
-        type: "string",
+        title: '指导价',
+        type: 'string',
         filter: false
       },
       CarColor: {
-        title: "颜色",
-        type: "string",
+        title: '颜色',
+        type: 'string',
         filter: false
       },
       CarTrim: {
-        title: "内饰",
-        type: "string",
+        title: '内饰',
+        type: 'string',
         filter: false
       },
       Vinno: {
-        title: "车架号",
-        type: "string",
+        title: '车架号',
+        type: 'string',
         filter: false
       },
       Status: {
-        title: "状态",
-        type: "string",
+        title: '状态',
+        type: 'string',
         filter: false
       },
       StoreSite: {
-        title: "库位",
-        type: "string",
+        title: '库位',
+        type: 'string',
         filter: false
       },
       InDate: {
-        title: "入库日期",
-        type: "string",
+        title: '入库日期',
+        type: 'string',
         filter: false
       },
       PreIncomeTime: {
-        title: "预计到车",
-        type: "string",
+        title: '预计到车',
+        type: 'string',
         filter: false
       }
     }
   };
   recordId = 0;
+
+  settingsParts = {
+    pager: {
+      perPage: 50
+    },
+    selectMode: 'multi',
+    actions: false,
+    mode: 'external',
+    hideSubHeader: true,
+    columns: {
+      type_name: {
+        title: '分类',
+        type: 'string',
+        filter: false
+      },
+      item_name: {
+        title: '项目名称',
+        type: 'string',
+        filter: false
+      },
+      item_no: {
+        title: '项目编号',
+        type: 'string',
+        filter: false
+      }
+    }
+  };
+  sourceParts: LocalDataSource = new LocalDataSource();
+
   constructor(
     private _common: Common,
     private _state: GlobalState,
     private _dicService: DicService,
     private formService: FormService,
+    private partsService: PartsService,
     private _router: Router,
     private route: ActivatedRoute
-  ) { }
+  ) {}
   ngOnInit() {
-    const id = _.toInteger(this.route.snapshot.paramMap.get("id"));
+    const id = _.toInteger(this.route.snapshot.paramMap.get('id'));
     this.recordId = id;
-    const n = this.route.snapshot.queryParams["n"];
+    const n = this.route.snapshot.queryParams['n'];
     if (n) {
       this.isEnable = false;
     }
-    this.carsale.SaleMan = sessionStorage.getItem("userName");
+    this.carsale.SaleMan = sessionStorage.getItem('userName');
 
     if (id == 0) {
       this.getDataList();
-      this.carsale.Creator = sessionStorage.getItem("userName");
+      this.carsale.Creator = sessionStorage.getItem('userName');
       this.carsale.OrderDate = this._common.getTodayStringChinese();
       this.carsale.OrderDateObj = this._common.getTodayObj();
       //获取默认订单号
-      this.formService.getMaxId("car_booking").then(
+      this.formService.getMaxId('car_booking').then(
         data => {
           if (data) {
             const cnt = _.toInteger(data.Data) + 1;
-            this.carsale.OrderId =
-              "YD" +
-              this._common.getTodayString2() +
-              _.padStart(_.toString(cnt), 4, "0");
+            this.carsale.OrderId = 'YD' + this._common.getTodayString2() + _.padStart(_.toString(cnt), 4, '0');
           }
         },
-        err => { }
+        err => {}
       );
     } else {
       this.getCarsale(id);
     }
+
+    this.getPartsDataList();
+  }
+
+  getPartsDataList(): void {
+    this.loading = true;
+    this.partsService.getParts().then(
+      data => {
+        this.loading = false;
+        if (data.Data && data.Data.length > 0) {
+          this.sourceParts.load(data.Data);
+        }
+      },
+      err => {
+        this.loading = false;
+        this._state.notifyDataChanged('messagebox', { type: 'error', msg: err, time: new Date().getTime() });
+      }
+    );
   }
 
   getCarsale(id: number) {
@@ -326,109 +350,97 @@ export class CarSaleNewComponent implements OnInit {
     this.loading = true;
     async.series(
       {
-        zero: function (callback) {
-          that.formService.getForms("vw_select_car").then(
+        zero: function(callback) {
+          that.formService.getForms('vw_select_car').then(
             data => {
               that.popCarInfoGrid.load(data.Data);
               callback(null, 0);
             },
-            err => { }
+            err => {}
           );
         },
-        one: function (callback) {
-          that.formService.getForms("vw_car_store").then(
+        one: function(callback) {
+          that.formService.getForms('vw_car_store').then(
             data => {
               that.carinfoDataList = data.Data;
               callback(null, 1);
             },
-            err => { }
+            err => {}
           );
         },
-        two: function (callback) {
-          that.formService.getForms("car_customer").then(
+        two: function(callback) {
+          that.formService.getForms('car_customer').then(
             data => {
               const mydata = _.filter(data.Data, f => {
-                return f["Creator"] == sessionStorage.getItem("userName");
+                return f['Creator'] == sessionStorage.getItem('userName');
               });
               that.custinfoDataList = data.Data;
               that.popCusInfoGrid.load(mydata);
               callback(null, 2);
             },
-            err => { }
+            err => {}
           );
         },
-        three: function (callback) {
+        three: function(callback) {
           that.formService.getForms(`car_booking/${id}`).then(
             data => {
               if (data && data.Data) {
                 that.carsale = data.Data[0];
-                that.carsale.OrderDateObj = that._common.getDateObject(
-                  that.carsale.OrderDate
-                );
-                that.carsale.PreCarDateObj = that._common.getDateObject(
-                  that.carsale.PreCarDate
-                );
+                that.carsale.OrderDateObj = that._common.getDateObject(that.carsale.OrderDate);
+                that.carsale.PreCarDateObj = that._common.getDateObject(that.carsale.PreCarDate);
 
                 that.customer = _.find(that.custinfoDataList, f => {
-                  return f["Id"] == that.carsale.CustomerId;
+                  return f['Id'] == that.carsale.CustomerId;
                 });
 
                 that.carinfo = _.find(that.carinfoDataList, f => {
-                  return f["Id"] == that.carsale.CarIncomeId;
+                  return f['Id'] == that.carsale.CarIncomeId;
                 });
                 callback(null, 3);
               }
             },
-            err => { }
+            err => {}
           );
         },
-        four: function (callback) {
-          that.formService
-            .getForms("car_booking_item/OrderId/" + that.carsale.OrderId)
-            .then(
-              data => {
-                if (data.Data.length > 0) {
-                  const zzitem = [],
-                    zsitem = [];
-                  _.each(data.Data, f => {
-                    if (
-                      f["OrderId"] == that.carsale.OrderId &&
-                      f["ItemType"] == "增值服务"
-                    ) {
-                      zzitem.push({
-                        Id: f["Id"],
-                        FieldName: f["FieldName"],
-                        itemName: f["ItemName"],
-                        itemType: f["ItemType"],
-                        price: f["Price"],
-                        service: f["Service"]
-                      });
-                    }
-                    if (
-                      f["OrderId"] == that.carsale.OrderId &&
-                      f["ItemType"] == "赠送服务"
-                    ) {
-                      zsitem.push({
-                        Id: f["Id"],
-                        FieldName: f["FieldName"],
-                        itemName: f["ItemName"],
-                        itemType: f["ItemType"],
-                        price: f["Price"],
-                        service: f["Service"]
-                      });
-                    }
-                  });
+        four: function(callback) {
+          that.formService.getForms('car_booking_item/OrderId/' + that.carsale.OrderId).then(
+            data => {
+              if (data.Data.length > 0) {
+                const zzitem = [],
+                  zsitem = [];
+                _.each(data.Data, f => {
+                  if (f['OrderId'] == that.carsale.OrderId && f['ItemType'] == '增值服务') {
+                    zzitem.push({
+                      Id: f['Id'],
+                      FieldName: f['FieldName'],
+                      itemName: f['ItemName'],
+                      itemType: f['ItemType'],
+                      price: f['Price'],
+                      service: f['Service']
+                    });
+                  }
+                  if (f['OrderId'] == that.carsale.OrderId && f['ItemType'] == '赠送服务') {
+                    zsitem.push({
+                      Id: f['Id'],
+                      FieldName: f['FieldName'],
+                      itemName: f['ItemName'],
+                      itemType: f['ItemType'],
+                      price: f['Price'],
+                      service: f['Service']
+                    });
+                  }
+                });
 
-                  that.serviceItem = zzitem;
-                  that.giveItem = zsitem;
-                }
-                callback(null, 4);
-              },
-              err => { }
-            );
+                that.serviceItem = zzitem;
+                that.giveItem = zsitem;
+              }
+              callback(null, 4);
+            },
+            err => {}
+          );
         }
       },
-      function (err, results) {
+      function(err, results) {
         that.loading = false;
         console.log(results);
       }
@@ -436,27 +448,27 @@ export class CarSaleNewComponent implements OnInit {
   }
 
   getDataList(): void {
-    this.formService.getForms("vw_car_store").then(
+    this.formService.getForms('vw_car_store').then(
       data => {
         this.carinfoDataList = data.Data;
       },
-      err => { }
+      err => {}
     );
-    this.formService.getForms("vw_select_car").then(
+    this.formService.getForms('vw_select_car').then(
       data => {
         this.popCarInfoGrid.load(data.Data);
       },
-      err => { }
+      err => {}
     );
-    this.formService.getForms("car_customer").then(
+    this.formService.getForms('car_customer').then(
       data => {
         const mydata = _.filter(data.Data, f => {
-          return f["Creator"] == sessionStorage.getItem("userName");
+          return f['Creator'] == sessionStorage.getItem('userName');
         });
         this.custinfoDataList = data.Data;
         this.popCusInfoGrid.load(mydata);
       },
-      err => { }
+      err => {}
     );
   }
 
@@ -473,53 +485,45 @@ export class CarSaleNewComponent implements OnInit {
     if (event.isSelected) {
       this.carsale.CarIncomeId = event.data.Id;
       this.carinfo = event.data;
-      this.carsale.GuidePrice =
-        this.carinfo.GuidePrice + this.carinfo.GuidePriceRemark;
+      this.carsale.GuidePrice = this.carinfo.GuidePrice + this.carinfo.GuidePriceRemark;
       this.carsale.SalePrice = this.carsale.GuidePrice;
     }
   }
 
   showPopCustomer(event): void {
     _.delay(
-      function (text) {
-        $(".popover").css("max-width", "820px");
-        $(".popover").css("min-width", "600px");
+      function(text) {
+        $('.popover').css('max-width', '820px');
+        $('.popover').css('min-width', '600px');
       },
       100,
-      "later"
+      'later'
     );
   }
 
   showPopCarInfo(event): void {
     _.delay(
-      function (text) {
-        $(".popover").css("max-width", "1024px");
-        $(".popover").css("min-width", "900px");
+      function(text) {
+        $('.popover').css('max-width', '1024px');
+        $('.popover').css('min-width', '900px');
       },
       100,
-      "later"
+      'later'
     );
   }
-  onSearchCus(query: string = "") {
-    this.popCusInfoGrid.setFilter(
-      [
-        { field: "Name", search: query },
-        { field: "Phone", search: query },
-        { field: "LinkMan", search: query }
-      ],
-      false
-    );
+  onSearchCus(query: string = '') {
+    this.popCusInfoGrid.setFilter([{ field: 'Name', search: query }, { field: 'Phone', search: query }, { field: 'LinkMan', search: query }], false);
   }
 
-  onSearchCar(query: string = "") {
+  onSearchCar(query: string = '') {
     this.popCarInfoGrid.setFilter(
       [
-        { field: "Vinno", search: query },
-        { field: "CarType", search: query },
-        { field: "OrderId", search: query },
-        { field: "CarConfig", search: query },
-        { field: "GuidePriceRemark", search: query },
-        { field: "GuidePrice", search: query }
+        { field: 'Vinno', search: query },
+        { field: 'CarType', search: query },
+        { field: 'OrderId', search: query },
+        { field: 'CarConfig', search: query },
+        { field: 'GuidePriceRemark', search: query },
+        { field: 'GuidePrice', search: query }
       ],
       false
     );
@@ -536,15 +540,15 @@ export class CarSaleNewComponent implements OnInit {
   }
   newItem() {
     this.giveItem.push({
-      itemType: "赠送服务",
-      itemName: "",
-      service: "",
+      itemType: '赠送服务',
+      itemName: '',
+      service: '',
       price: 0
     });
   }
   priceChange(event) {
     this.carsale.PredictFee = _.sumBy(this.serviceItem, f => {
-      return f["price"];
+      return f['price'];
     });
   }
   discountChange(event) {
@@ -554,48 +558,41 @@ export class CarSaleNewComponent implements OnInit {
     this.carsale.Discount = this.carsale.GuidePrice - this.carsale.SalePrice;
   }
   onBack() {
-    this._router.navigate(["/pages/market/carsale"]);
+    this._router.navigate(['/pages/market/carsale']);
   }
   //确认入住
   async onConfirm() {
     if (_.isObject(this.carsale.OrderDateObj)) {
-      this.carsale.OrderDate = this._common.getDateString(
-        this.carsale.OrderDateObj
-      );
+      this.carsale.OrderDate = this._common.getDateString(this.carsale.OrderDateObj);
     }
-    if (
-      _.isObject(this.carsale.PreCarDateObj) &&
-      this.carsale.PreCarDateObj.year
-    ) {
-      this.carsale.PreCarDate = this._common.getDateString(
-        this.carsale.PreCarDateObj
-      );
+    if (_.isObject(this.carsale.PreCarDateObj) && this.carsale.PreCarDateObj.year) {
+      this.carsale.PreCarDate = this._common.getDateString(this.carsale.PreCarDateObj);
     } else {
-      this._state.notifyDataChanged("messagebox", {
-        type: "warning",
-        msg: "交车日期不能为空。",
+      this._state.notifyDataChanged('messagebox', {
+        type: 'warning',
+        msg: '交车日期不能为空。',
         time: new Date().getTime()
       });
       return;
     }
     if (this.carsale.CarIncomeId == 0) {
-      this._state.notifyDataChanged("messagebox", {
-        type: "warning",
-        msg: "车辆信息不能为空。",
+      this._state.notifyDataChanged('messagebox', {
+        type: 'warning',
+        msg: '车辆信息不能为空。',
         time: new Date().getTime()
       });
       return;
     }
     if (this.carsale.CustomerId == 0) {
-      this._state.notifyDataChanged("messagebox", {
-        type: "warning",
-        msg: "客户信息不能为空。",
+      this._state.notifyDataChanged('messagebox', {
+        type: 'warning',
+        msg: '客户信息不能为空。',
         time: new Date().getTime()
       });
       return;
     }
 
-    this.carsale.Creator = sessionStorage.getItem("userName");
+    this.carsale.Creator = sessionStorage.getItem('userName');
     const that = this;
     await this.maxId();
 
@@ -617,28 +614,25 @@ export class CarSaleNewComponent implements OnInit {
 
     await this.saveItem();
 
-    that.formService.create("car_booking", newcarsale).then(
+    that.formService.create('car_booking', newcarsale).then(
       data => {
-        that._state.notifyDataChanged("messagebox", {
-          type: "success",
-          msg: "保存成功。",
+        that._state.notifyDataChanged('messagebox', {
+          type: 'success',
+          msg: '保存成功。',
           time: new Date().getTime()
         });
         that.isEnable = false;
       },
       err => {
-        that._state.notifyDataChanged("messagebox", {
-          type: "error",
-          msg: "保存失败",
+        that._state.notifyDataChanged('messagebox', {
+          type: 'error',
+          msg: '保存失败',
           time: new Date().getTime()
         });
       }
     );
     if (that.customer.UpdateTime) delete that.customer.UpdateTime;
-    that.formService
-      .create("car_customer", that.customer)
-      .then(data => { }, err => { });
-
+    that.formService.create('car_customer', that.customer).then(data => {}, err => {});
   }
 
   maxId() {
@@ -647,19 +641,16 @@ export class CarSaleNewComponent implements OnInit {
       if (this.recordId > 0) {
         resolve();
       } else {
-        that.formService.getMaxId("car_booking").then(
+        that.formService.getMaxId('car_booking').then(
           data => {
             if (data) {
               const cnt = _.toInteger(data.Data) + 1;
-              that.carsale.OrderId =
-                "YD" +
-                this._common.getTodayString2() +
-                _.padStart(_.toString(cnt), 4, "0");
+              that.carsale.OrderId = 'YD' + this._common.getTodayString2() + _.padStart(_.toString(cnt), 4, '0');
             }
             console.log(`maxid:${that.carsale.OrderId}`);
             resolve();
           },
-          err => { }
+          err => {}
         );
       }
     });
@@ -667,57 +658,55 @@ export class CarSaleNewComponent implements OnInit {
 
   deleteSerItem() {
     return new Promise(resolve => {
-
-      this.formService
-        .deleteser("car_booking_item", this.carsale.OrderId)
-        .then(function (data) {
+      this.formService.deleteser('car_booking_item', this.carsale.OrderId).then(
+        function(data) {
           resolve();
-        }, err => {
+        },
+        err => {
           resolve();
           console.log(err);
-        });
+        }
+      );
     });
   }
 
   createSerItem() {
     return new Promise(resolve => {
-
       _.each(this.serviceItem, f => {
-        if (f["itemName"]) {
-          f["OrderId"] = this.carsale.OrderId;
+        if (f['itemName']) {
+          f['OrderId'] = this.carsale.OrderId;
         }
       });
 
-      this.formService
-        .createser("car_booking_item", this.serviceItem)
-        .then(function (data) {
+      this.formService.createser('car_booking_item', this.serviceItem).then(
+        function(data) {
           resolve();
-        }, err => {
+        },
+        err => {
           resolve();
           console.log(err);
-        });
-
+        }
+      );
     });
   }
 
   createGiveItem() {
     return new Promise(resolve => {
-
       _.each(this.giveItem, f => {
-        if (f["itemName"]) {
-          f["OrderId"] = this.carsale.OrderId;
+        if (f['itemName']) {
+          f['OrderId'] = this.carsale.OrderId;
         }
       });
 
-      this.formService
-        .createser("car_booking_item", this.giveItem)
-        .then(function (data) {
+      this.formService.createser('car_booking_item', this.giveItem).then(
+        function(data) {
           resolve();
-        }, err => {
+        },
+        err => {
           resolve();
           console.log(err);
-        });
-
+        }
+      );
     });
   }
 
@@ -728,23 +717,41 @@ export class CarSaleNewComponent implements OnInit {
   }
 
   checkRadio(event) {
-    if (this.carsale.PayType == "现车付款") {
+    if (this.carsale.PayType == '现车付款') {
       this.carsale.Days2 = 0;
-      this.carsale.FinaceCompany = "";
+      this.carsale.FinaceCompany = '';
       this.carsale.FirstFee = 0;
       this.carsale.Stages = 0;
       this.carsale.Days3 = 0;
     }
-    if (this.carsale.PayType == "订单车辆付款") {
+    if (this.carsale.PayType == '订单车辆付款') {
       this.carsale.Days1 = 0;
-      this.carsale.FinaceCompany = "";
+      this.carsale.FinaceCompany = '';
       this.carsale.FirstFee = 0;
       this.carsale.Stages = 0;
       this.carsale.Days3 = 0;
     }
-    if (this.carsale.PayType == "分期付款") {
+    if (this.carsale.PayType == '分期付款') {
       this.carsale.Days1 = 0;
       this.carsale.Days2 = 0;
+    }
+  }
+
+  selectedItem = [];
+  rowPartsClicked(event): void {
+    if (event.isSelected) {
+      if (!_.some(this.giveItem, ['itemName', event.data['item_name']])) {
+        this.giveItem.push({
+          itemType: '赠送服务',
+          itemName: event.data['item_name'],
+          service: '',
+          price: 0
+        });
+      }
+    } else {
+      _.remove(this.selectedItem, function(n) {
+        return n['itemName'] == event.data['item_name'];
+      });
     }
   }
 }
