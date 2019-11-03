@@ -66,6 +66,11 @@ export class PartsComponent implements OnInit {
         type: 'string',
         filter: false
       },
+      parttype: {
+        title: '套餐来源',
+        type: 'string',
+        filter: false
+      },
       createdBy: {
         title: '录入人',
         type: 'string',
@@ -108,6 +113,13 @@ export class PartsComponent implements OnInit {
       label: '销售价',
       name: 'sale_price',
       placeholder: '输入销售价',
+      validation: [Validators.required]
+    },
+    {
+      type: 'select',
+      label: '套餐来源',
+      name: 'parttype',
+      options: [{ id: 'DN', text: 'DN' }, { id: 'HZ', text: 'HZ' }],
       validation: [Validators.required]
     }
   ];

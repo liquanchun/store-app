@@ -1,46 +1,41 @@
-import {
-  Component,
-  ViewChild,
-  OnInit,
-  AfterViewInit,
-  Input,
-  SimpleChanges
-} from "@angular/core";
-import { Router, ActivatedRoute, Params } from "@angular/router";
-import { Common } from "../../../providers/common";
-import { FieldConfig } from "../../../theme/components/dynamic-form/models/field-config.interface";
-import { NgbdModalContent } from "../../../modal-content.component";
-import { NgbModal, ModalDismissReasons } from "@ng-bootstrap/ng-bootstrap";
-import * as $ from "jquery";
-import * as _ from "lodash";
-import async from "async";
-import { LocalDataSource } from "ng2-smart-table";
-import { DicService } from "../../basedata/dic/dic.services";
-import { FormService } from "../form/form.services";
-import { GlobalState } from "../../../global.state";
+import { Component, ViewChild, OnInit, AfterViewInit, Input, SimpleChanges } from '@angular/core';
+import { Router, ActivatedRoute, Params } from '@angular/router';
+import { Common } from '../../../providers/common';
+import { FieldConfig } from '../../../theme/components/dynamic-form/models/field-config.interface';
+import { NgbdModalContent } from '../../../modal-content.component';
+import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { PartsService } from '../../basedata/parts/parts.services';
+import { PartsComboService } from '../../basedata/partscombo/partscombo.services';
+import * as $ from 'jquery';
+import * as _ from 'lodash';
+import async from 'async';
+import { LocalDataSource } from 'ng2-smart-table';
+import { DicService } from '../../basedata/dic/dic.services';
+import { FormService } from '../form/form.services';
+import { GlobalState } from '../../../global.state';
 
 @Component({
-  selector: "app-carsalecashnew",
-  templateUrl: "./carsalecashnew.component.html",
-  styleUrls: ["./carsalecashnew.component.scss"],
-  providers: [DicService, FormService]
+  selector: 'app-carsalecashnew',
+  templateUrl: './carsalecashnew.component.html',
+  styleUrls: ['./carsalecashnew.component.scss'],
+  providers: [DicService, FormService, PartsService, PartsComboService]
 })
 export class CarSaleCashNewComponent implements OnInit {
   @Input()
   showEditButton: boolean = true;
-  title = "新增销售交款明细单";
+  title = '新增销售交款明细单';
   isSaved: boolean = false;
   isEnable: boolean = true;
   loading = false;
   carsale: any = {
     Id: 0,
-    OrderId: "",
-    InvoiceDate: "",
-    BuyType: "",
-    BuyLicense: "",
-    CustAttr: "",
-    PayType: "",
-    InsureCompany: "",
+    OrderId: '',
+    InvoiceDate: '',
+    BuyType: '',
+    BuyLicense: '',
+    CustAttr: '',
+    PayType: '',
+    InsureCompany: '',
     Discount: 0,
     NewCarFee: 0,
     FirstFee: 0,
@@ -61,8 +56,8 @@ export class CarSaleCashNewComponent implements OnInit {
     LastFee: 0,
     OtherFee2: 0,
     RealAllFee: 0,
-    Remark: "",
-    Creator: "",
+    Remark: '',
+    Creator: '',
     BaoxianFee: 0,
     ZhuangxFee: 0,
     Commission: 0,
@@ -70,24 +65,24 @@ export class CarSaleCashNewComponent implements OnInit {
     GasFee: 0,
     OtherFee3: 0,
     BookId: 0,
-    CarIncomeId:0
+    CarIncomeId: 0
   };
   customer: any = {
-    Name: "",
-    LinkMan: "",
-    IdCard: "",
-    Address: "",
-    Phone: "",
-    InvoiceCode: "",
-    InvoiceName: "",
-    CustType: ""
+    Name: '',
+    LinkMan: '',
+    IdCard: '',
+    Address: '',
+    Phone: '',
+    InvoiceCode: '',
+    InvoiceName: '',
+    CustType: ''
   };
   carinfo: any = {
-    CarType: "",
-    Vinno: "",
-    Status: "",
-    CarColor: "",
-    CarTrim: "",
+    CarType: '',
+    Vinno: '',
+    Status: '',
+    CarColor: '',
+    CarTrim: '',
     GuidePrice: 0,
     WholePrice: 0
   };
@@ -96,22 +91,22 @@ export class CarSaleCashNewComponent implements OnInit {
     pager: {
       perPage: 10
     },
-    mode: "external",
+    mode: 'external',
     hideSubHeader: true,
     columns: {
       PartType: {
-        title: "精品类别",
-        type: "string",
+        title: '精品类别',
+        type: 'string',
         filter: false
       },
       ItemName: {
-        title: "项目",
-        type: "string",
+        title: '项目',
+        type: 'string',
         filter: false
       },
       Price: {
-        title: "价格",
-        type: "string",
+        title: '价格',
+        type: 'string',
         filter: false
       }
     }
@@ -119,16 +114,16 @@ export class CarSaleCashNewComponent implements OnInit {
 
   config: FieldConfig[] = [
     {
-      type: "check",
-      label: "审核",
-      name: "AuditResult",
-      check: "radio",
-      options: [{ id: "通过", text: "通过" }, { id: "不通过", text: "不通过" }]
+      type: 'check',
+      label: '审核',
+      name: 'AuditResult',
+      check: 'radio',
+      options: [{ id: '通过', text: '通过' }, { id: '不通过', text: '不通过' }]
     },
     {
-      type: "input",
-      label: "审核意见",
-      name: "AuditSuggest"
+      type: 'input',
+      label: '审核意见',
+      name: 'AuditSuggest'
     }
   ];
 
@@ -137,16 +132,101 @@ export class CarSaleCashNewComponent implements OnInit {
   saleman: any;
   customerId: number;
   carIncomeId: number;
-  chineseMoney: string = "";
-  tableView:{};
+  chineseMoney: string = '';
+  tableView: {};
 
   gmxz: any;
   gmzz: any;
   fkfs: any;
   bxgs: any;
-  kfsx:any;
-  //弹出框表格
-  popCarItemGrid: LocalDataSource = new LocalDataSource();
+  kfsx: any;
+
+  settingsParts = {
+    pager: {
+      perPage: 50
+    },
+    selectMode: 'multi',
+    actions: false,
+    mode: 'external',
+    hideSubHeader: true,
+    columns: {
+      type_name: {
+        title: '分类',
+        type: 'string',
+        filter: false
+      },
+      item_name: {
+        title: '项目名称',
+        type: 'string',
+        filter: false
+      },
+      item_no: {
+        title: '项目编号',
+        type: 'string',
+        filter: false
+      },
+      cost_price: {
+        title: '套餐成本',
+        type: 'string',
+        filter: false
+      },
+      sale_price: {
+        title: '销售价',
+        type: 'string',
+        filter: false
+      },
+      parttype: {
+        title: '来源',
+        type: 'string',
+        filter: false
+      }
+    }
+  };
+
+  settingsPartsCombo = {
+    pager: {
+      perPage: 15
+    },
+    selectMode: 'multi',
+    mode: 'external',
+    actions: false,
+    hideSubHeader: true,
+    columns: {
+      type_name: {
+        title: '分类',
+        type: 'string',
+        filter: false
+      },
+      item_name: {
+        title: '套餐名称',
+        type: 'string',
+        filter: false
+      },
+      item_no: {
+        title: '套餐编号',
+        type: 'string',
+        filter: false
+      },
+      cost_price: {
+        title: '套餐成本',
+        type: 'string',
+        filter: false
+      },
+      sale_price: {
+        title: '销售价',
+        type: 'string',
+        filter: false
+      },
+      parttype: {
+        title: '来源',
+        type: 'string',
+        filter: false
+      }
+    }
+  };
+  sourcePartsCombo: LocalDataSource = new LocalDataSource();
+
+  sourceParts: LocalDataSource = new LocalDataSource();
   constructor(
     private _common: Common,
     private _state: GlobalState,
@@ -155,61 +235,96 @@ export class CarSaleCashNewComponent implements OnInit {
     private _router: Router,
     private route: ActivatedRoute,
     private modalService: NgbModal,
+    private partsService: PartsService,
+    private partsComboService: PartsComboService
   ) {}
   ngOnInit() {
-    const bookid = _.toInteger(this.route.snapshot.paramMap.get("id"));
+    const bookid = _.toInteger(this.route.snapshot.paramMap.get('id'));
     this.carsale.BookId = bookid;
-    this.carsale.OrderId = this.route.snapshot.queryParams["n"];
-    if (this.route.snapshot.queryParams["id"]) {
+    this.carsale.OrderId = this.route.snapshot.queryParams['n'];
+    if (this.route.snapshot.queryParams['id']) {
       //修改
-      this.carsale.Id = this.route.snapshot.queryParams["id"];
+      this.carsale.Id = this.route.snapshot.queryParams['id'];
       this.getCarsale(bookid);
       if (this.carsale.OrderId == 1) {
         //查看详情
         this.isEnable = false;
       }
     } else {
-      this.carsale.Creator = sessionStorage.getItem("userName");
+      this.carsale.Creator = sessionStorage.getItem('userName');
       this.carsale.InvoiceDate = this._common.getTodayString();
       this.getCarsale(bookid);
     }
 
-    this._dicService.getDicByName("购买性质", data => {
+    this._dicService.getDicByName('购买性质', data => {
       this.gmxz = data;
     });
 
-    this._dicService.getDicByName("购买资质", data => {
+    this._dicService.getDicByName('购买资质', data => {
       this.gmzz = data;
     });
 
-    this._dicService.getDicByName("付款方式", data => {
+    this._dicService.getDicByName('付款方式', data => {
       this.fkfs = data;
     });
 
-    this._dicService.getDicByName("保险公司", data => {
+    this._dicService.getDicByName('保险公司', data => {
       this.bxgs = data;
     });
-    this._dicService.getDicByName("销售分类", data => {
+    this._dicService.getDicByName('销售分类', data => {
       this.kfsx = data;
     });
 
     this.getViewName();
 
+    this.getPartsDataList();
+    this.getPartComboDataList();
   }
 
-//根据视图名称获取表格和表单定义
+  getPartComboDataList(): void {
+    this.loading = true;
+    this.partsComboService.getPartsCombo().then(
+      data => {
+        this.loading = false;
+        if (data.Data && data.Data.length > 0) {
+          this.sourcePartsCombo.load(data.Data);
+        }
+      },
+      err => {
+        this.loading = false;
+        this._state.notifyDataChanged('messagebox', { type: 'error', msg: err, time: new Date().getTime() });
+      }
+    );
+  }
+  getPartsDataList(): void {
+    this.loading = true;
+    this.partsService.getParts().then(
+      data => {
+        this.loading = false;
+        if (data.Data && data.Data.length > 0) {
+          this.sourceParts.load(data.Data);
+        }
+      },
+      err => {
+        this.loading = false;
+        this._state.notifyDataChanged('messagebox', { type: 'error', msg: err, time: new Date().getTime() });
+      }
+    );
+  }
+
+  //根据视图名称获取表格和表单定义
   getViewName() {
-    this.formService.getForms("form_set").then(
+    this.formService.getForms('form_set').then(
       data => {
         if (data.Data) {
           this.tableView = _.find(data.Data, function(o) {
-            return o["ViewType"] == "table" && o["FormName"] == "carsalecash";
+            return o['ViewType'] == 'table' && o['FormName'] == 'carsalecash';
           });
         }
       },
       err => {
-        this._state.notifyDataChanged("messagebox", {
-          type: "error",
+        this._state.notifyDataChanged('messagebox', {
+          type: 'error',
           msg: err,
           time: new Date().getTime()
         });
@@ -233,9 +348,7 @@ export class CarSaleCashNewComponent implements OnInit {
                 that.carsale.Deposit = carbook.Deposit;
                 that.carsale.NewCarFee = carbook.SalePrice;
                 that.carsale.Discount = carbook.Discount;
-                that.carsale.FirstFee = _.floor(
-                  (that.carsale.NewCarFee * carbook.FirstFee) / 100
-                );
+                that.carsale.FirstFee = _.floor((that.carsale.NewCarFee * carbook.FirstFee) / 100);
 
                 that.priceChange();
               }
@@ -248,9 +361,8 @@ export class CarSaleCashNewComponent implements OnInit {
           that.formService.getForms(`vw_car_store/${that.carIncomeId}`).then(
             data => {
               that.carinfo = data.Data[0];
-              that.carinfo["GuidePrice"] =
-                that.carinfo["GuidePrice"] + that.carinfo["GuidePriceRemark"];
-                that.carsale.Discount = that.carinfo["GuidePrice"] - that.carsale.NewCarFee;
+              that.carinfo['GuidePrice'] = that.carinfo['GuidePrice'] + that.carinfo['GuidePriceRemark'];
+              that.carsale.Discount = that.carinfo['GuidePrice'] - that.carsale.NewCarFee;
               callback(null, 2);
             },
             err => {}
@@ -282,39 +394,37 @@ export class CarSaleCashNewComponent implements OnInit {
           }
         },
         five: function(callback) {
-          that.formService.getForms("car_part_item").then(
-            data => {
-              that.popCarItemGrid = data.Data;
-              callback(null, 5);
-            },
-            err => {}
-          );
+          // that.formService.getForms("car_part_item").then(
+          //   data => {
+          //     that.popCarItemGrid = data.Data;
+          //     callback(null, 5);
+          //   },
+          //   err => {}
+          // );
         },
         six: function(callback) {
           if (that.carsale.OrderId) {
-            that.formService
-              .getForms(`car_booking_item/OrderId/${that.carsale.OrderId}`)
-              .then(
-                data => {
-                  if (data && data.Data) {
-                    const bookitem = _.filter(data.Data, f => {
-                      return f["ItemType"] != "自费" && f["ItemType"] != "免费";
-                    });
-                    if (!that.carsale.Id) {
-                      _.each(bookitem, f => {
-                        if (f["FieldName"] && !that.carsale[f["FieldName"]]) {
-                          that.carsale[f["FieldName"]] = f["Price"];
-                        }
-                      });
-                    }
-                    that.partItem = _.filter(data.Data, f => {
-                      return f["ItemType"] == "自费" || f["ItemType"] == "免费";
+            that.formService.getForms(`car_booking_item/OrderId/${that.carsale.OrderId}`).then(
+              data => {
+                if (data && data.Data) {
+                  const bookitem = _.filter(data.Data, f => {
+                    return f['ItemType'] != '自费' && f['ItemType'] != '免费';
+                  });
+                  if (!that.carsale.Id) {
+                    _.each(bookitem, f => {
+                      if (f['FieldName'] && !that.carsale[f['FieldName']]) {
+                        that.carsale[f['FieldName']] = f['Price'];
+                      }
                     });
                   }
-                  callback(null, 6);
-                },
-                err => {}
-              );
+                  that.partItem = _.filter(data.Data, f => {
+                    return f['ItemType'] == '自费' || f['ItemType'] == '免费';
+                  });
+                }
+                callback(null, 6);
+              },
+              err => {}
+            );
           } else {
             callback(null, 6);
           }
@@ -341,21 +451,21 @@ export class CarSaleCashNewComponent implements OnInit {
     //     this.carsale.OtherFee,
     //   2
     // );
-    const fee1 = this.add(this.carsale.NewCarFee,this.carsale.InsureFee);
-    const fee2 = this.add(this.carsale.BuyTaxFee,this.carsale.FinanceSerFee);
-    const fee3 = this.add(this.carsale.DecorateFee,this.carsale.TakeAllFee);
-    const fee4 = this.add(this.carsale.TakeCareFee,this.carsale.IntimateFee);
-    const fee5 = this.add(this.carsale.GlassSerFee,this.carsale.CardCashFee);
+    const fee1 = this.add(this.carsale.NewCarFee, this.carsale.InsureFee);
+    const fee2 = this.add(this.carsale.BuyTaxFee, this.carsale.FinanceSerFee);
+    const fee3 = this.add(this.carsale.DecorateFee, this.carsale.TakeAllFee);
+    const fee4 = this.add(this.carsale.TakeCareFee, this.carsale.IntimateFee);
+    const fee5 = this.add(this.carsale.GlassSerFee, this.carsale.CardCashFee);
 
-    const fee6 = this.add(fee1,fee2);
-    const fee7 = this.add(fee3,fee4);
-    const fee8 = this.add(fee5,this.carsale.OtherFee);
-    const fee9 = this.add(fee6,fee7);
-    const fee10 = this.add(fee8,fee9);
-    this.carsale.ShouldAllFee = _.round(fee10,2);
+    const fee6 = this.add(fee1, fee2);
+    const fee7 = this.add(fee3, fee4);
+    const fee8 = this.add(fee5, this.carsale.OtherFee);
+    const fee9 = this.add(fee6, fee7);
+    const fee10 = this.add(fee8, fee9);
+    this.carsale.ShouldAllFee = _.round(fee10, 2);
 
-    if (this.carsale.BuyLicense == "分期") {
-      this.carsale.LastFee = this.sub(this.carsale.NewCarFee,this.carsale.FirstFee);
+    if (this.carsale.BuyLicense == '分期') {
+      this.carsale.LastFee = this.sub(this.carsale.NewCarFee, this.carsale.FirstFee);
     }
     this.carsale.InvoiceFee = this.carsale.NewCarFee;
     // this.carsale.RealAllFee = _.round(
@@ -366,49 +476,43 @@ export class CarSaleCashNewComponent implements OnInit {
     //     this.carsale.OtherFee2,
     //   2
     // );
-    const sb1 = this.sub(this.carsale.ShouldAllFee,this.carsale.Deposit);
-    const sb2 = this.sub(sb1,this.carsale.LastFee);
-    const sb3 = this.sub(sb2,this.carsale.OldChangeFee);
-    const sb4 = this.sub(sb3,this.carsale.OtherFee2);
-    this.carsale.RealAllFee = _.round(sb4,2);
+    const sb1 = this.sub(this.carsale.ShouldAllFee, this.carsale.Deposit);
+    const sb2 = this.sub(sb1, this.carsale.LastFee);
+    const sb3 = this.sub(sb2, this.carsale.OldChangeFee);
+    const sb4 = this.sub(sb3, this.carsale.OtherFee2);
+    this.carsale.RealAllFee = _.round(sb4, 2);
 
-    this.chineseMoney = this._common.changeNumMoneyToChinese(
-      this.carsale.RealAllFee
-    );
+    this.chineseMoney = this._common.changeNumMoneyToChinese(this.carsale.RealAllFee);
   }
 
   add(a, b) {
     var c, d, e;
     try {
-      c = a.toString().split(".")[1].length;
+      c = a.toString().split('.')[1].length;
     } catch (f) {
       c = 0;
     }
     try {
-      d = b.toString().split(".")[1].length;
+      d = b.toString().split('.')[1].length;
     } catch (f) {
       d = 0;
     }
-    return (
-      (e = Math.pow(10, Math.max(c, d))), (this.mul(a, e) + this.mul(b, e)) / e
-    );
+    return (e = Math.pow(10, Math.max(c, d))), (this.mul(a, e) + this.mul(b, e)) / e;
   }
 
   sub(a, b) {
     var c, d, e;
     try {
-      c = a.toString().split(".")[1].length;
+      c = a.toString().split('.')[1].length;
     } catch (f) {
       c = 0;
     }
     try {
-      d = b.toString().split(".")[1].length;
+      d = b.toString().split('.')[1].length;
     } catch (f) {
       d = 0;
     }
-    return (
-      (e = Math.pow(10, Math.max(c, d))), (this.mul(a, e) - this.mul(b, e)) / e
-    );
+    return (e = Math.pow(10, Math.max(c, d))), (this.mul(a, e) - this.mul(b, e)) / e;
   }
 
   mul(a, b) {
@@ -416,24 +520,21 @@ export class CarSaleCashNewComponent implements OnInit {
       d = a.toString(),
       e = b.toString();
     try {
-      c += d.split(".")[1].length;
+      c += d.split('.')[1].length;
     } catch (f) {}
     try {
-      c += e.split(".")[1].length;
+      c += e.split('.')[1].length;
     } catch (f) {}
-    return (
-      (Number(d.replace(".", "")) * Number(e.replace(".", ""))) /
-      Math.pow(10, c)
-    );
+    return (Number(d.replace('.', '')) * Number(e.replace('.', ''))) / Math.pow(10, c);
   }
 
   onBack() {
-    this._router.navigate(["/pages/market/carsalecash"]);
+    this._router.navigate(['/pages/market/carsalecash']);
   }
   //确认入住
   onConfirm(): void {
     const that = this;
-    this.carsale.Creator = sessionStorage.getItem("userName");
+    this.carsale.Creator = sessionStorage.getItem('userName');
     if (this.carsale.UpdateTime) delete this.carsale.UpdateTime;
     this.carsale.IsValid = 1;
     const keys = _.keys(this.carsale);
@@ -442,76 +543,74 @@ export class CarSaleCashNewComponent implements OnInit {
         delete this.carsale[k];
       }
     });
-    this.formService.create("car_sale_cash", this.carsale).then(
+    this.formService.create('car_sale_cash', this.carsale).then(
       function(data) {
-        that._state.notifyDataChanged("messagebox", {
-          type: "success",
-          msg: "保存成功。",
+        that._state.notifyDataChanged('messagebox', {
+          type: 'success',
+          msg: '保存成功。',
           time: new Date().getTime()
         });
         that.isEnable = false;
       },
       err => {
-        that._state.notifyDataChanged("messagebox", {
-          type: "error",
-          msg: "保存失败",
+        that._state.notifyDataChanged('messagebox', {
+          type: 'error',
+          msg: '保存失败',
           time: new Date().getTime()
         });
       }
     );
 
     _.each(this.partItem, f => {
-      if (f["Price"]) {
+      if (f['Price']) {
         if (f.UpdateTime) {
           delete f.UpdateTime;
         }
-        f["OrderId"] = this.carsale.OrderId;
-        this.formService
-          .create("car_booking_item", f)
-          .then(function(data) {}, err => {
-            console.log(err);
-          });
+        f['OrderId'] = this.carsale.OrderId;
+        this.formService.create('car_booking_item', f).then(function(data) {}, err => {
+          console.log(err);
+        });
       }
     });
   }
 
-  onSearchItem(query: string = "") {
-    this.popCarItemGrid.setFilter(
-      [
-        { field: "PartType", search: query },
-        { field: "ItemName", search: query }
-      ],
-      false
-    );
+  onSearchItemParts(query: string = '') {
+    this.sourceParts.setFilter([{ field: 'item_name', search: query }, { field: 'item_no', search: query }], false);
   }
-
+  onSearchItemPartsCombo(query: string = '') {
+    this.sourcePartsCombo.setFilter([{ field: 'item_name', search: query }, { field: 'item_no', search: query }], false);
+  }
+  onRadioChange(event) {
+    console.log(event.target.value);
+  }
   showPopCarItem(event): void {
     _.delay(
       function(text) {
-        $(".popover").css("max-width", "620px");
-        $(".popover").css("min-width", "500px");
+        $('.popover').css('max-width', '620px');
+        $('.popover').css('min-width', '500px');
       },
       100,
-      "later"
+      'later'
     );
   }
   //选择房间
   rowItemClicked(event): void {
     if (event.isSelected) {
       const f = _.find(this.partItem, f => {
-        return f.ItemName == event.data.ItemName;
+        return f.ItemName == event.data.item_name;
       });
       if (f) {
         f.count++;
       } else {
         this.partItem.push({
-          ItemType: "自费",
-          ItemName: event.data.ItemName,
+          ItemType: '自费',
+          ItemName: event.data.item_name,
           Count: 1,
-          Service: event.data.PartType,
-          Price: event.data.Price
+          Service: event.data.parttype,
+          Price: event.data.sale_price
         });
       }
+      console.log(this.partItem);
       this.cacalItem();
     }
   }
@@ -520,17 +619,17 @@ export class CarSaleCashNewComponent implements OnInit {
   rowItem2Clicked(event): void {
     if (event.isSelected) {
       const f = _.find(this.partItem, f => {
-        return f.ItemName == event.data.ItemName;
+        return f.ItemName == event.data.item_name;
       });
       if (f) {
         f.count++;
       } else {
         this.partItem.push({
-          ItemType: "免费",
+          ItemType: '免费',
           ItemName: event.data.ItemName,
           Count: 1,
-          Service: event.data.PartType,
-          Price: event.data.Price
+          Service: event.data.parttype,
+          Price: event.data.sale_price
         });
       }
       this.cacalItem();
@@ -539,15 +638,13 @@ export class CarSaleCashNewComponent implements OnInit {
 
   removeItem(itemname) {
     const it = _.find(this.partItem, f => {
-      return f["ItemName"] == itemname;
+      return f['ItemName'] == itemname;
     });
-    if (it && it["Id"]) {
-      this.formService
-        .delete2("car_booking_item", it["Id"])
-        .then(data => {}, err => {});
+    if (it && it['Id']) {
+      this.formService.delete2('car_booking_item', it['Id']).then(data => {}, err => {});
     }
     _.remove(this.partItem, f => {
-      return f["ItemName"] == itemname;
+      return f['ItemName'] == itemname;
     });
     this.cacalItem();
   }
@@ -555,38 +652,38 @@ export class CarSaleCashNewComponent implements OnInit {
   cacalItem() {
     this.carsale.ZhuangxFee = _.sumBy(
       _.filter(this.partItem, f => {
-        return f["ItemType"] == "免费";
+        return f['ItemType'] == '免费';
       }),
       f => {
-        return f["Count"] * f["Price"];
+        return f['Count'] * f['Price'];
       }
     );
 
     this.carsale.DecorateFee = _.sumBy(
       _.filter(this.partItem, f => {
-        return f["ItemType"] == "自费";
+        return f['ItemType'] == '自费';
       }),
       f => {
-        return f["Count"] * f["Price"];
+        return f['Count'] * f['Price'];
       }
     );
     this.priceChange();
   }
 
   onBuyLicense() {
-    if (this.carsale.BuyLicense == "全款") {
+    if (this.carsale.BuyLicense == '全款') {
       this.carsale.LastFee = 0;
       this.carsale.FirstFee = 0;
     }
     this.priceChange();
   }
 
-  onAudit(){
-    this.checkRoles("AuditRoles").then(d => {
+  onAudit() {
+    this.checkRoles('AuditRoles').then(d => {
       if (d == 0) {
-        this._state.notifyDataChanged("messagebox", {
-          type: "warning",
-          msg: "你无权反审核。",
+        this._state.notifyDataChanged('messagebox', {
+          type: 'warning',
+          msg: '你无权反审核。',
           time: new Date().getTime()
         });
       } else {
@@ -598,30 +695,30 @@ export class CarSaleCashNewComponent implements OnInit {
   onAuditYes(): void {
     const that = this;
     const modalRef = this.modalService.open(NgbdModalContent);
-    modalRef.componentInstance.title = "审核交款单";
+    modalRef.componentInstance.title = '审核交款单';
     modalRef.componentInstance.config = this.config;
     modalRef.componentInstance.saveFun = (result, closeBack) => {
       let formValue = JSON.parse(result);
-      formValue["Id"] = that.carsale["Id"];
-      formValue["Auditor"] = sessionStorage.getItem("userName");
-      formValue["AuditTime"] = this._common.getTodayString();
+      formValue['Id'] = that.carsale['Id'];
+      formValue['Auditor'] = sessionStorage.getItem('userName');
+      formValue['AuditTime'] = this._common.getTodayString();
       console.log(formValue);
 
-      that.formService.create("car_sale_cash", formValue).then(
+      that.formService.create('car_sale_cash', formValue).then(
         data => {
           closeBack();
-          this._state.notifyDataChanged("messagebox", {
-            type: "success",
-            msg: "审核成功。",
+          this._state.notifyDataChanged('messagebox', {
+            type: 'success',
+            msg: '审核成功。',
             time: new Date().getTime()
           });
-          if (formValue["AuditResult"] == "通过") {
-            that.saveStatus("已开票");
-          } 
+          if (formValue['AuditResult'] == '通过') {
+            that.saveStatus('已开票');
+          }
         },
         err => {
-          this._state.notifyDataChanged("messagebox", {
-            type: "error",
+          this._state.notifyDataChanged('messagebox', {
+            type: 'error',
             msg: err,
             time: new Date().getTime()
           });
@@ -634,25 +731,21 @@ export class CarSaleCashNewComponent implements OnInit {
   saveStatus(status: string) {
     const that = this;
     const carinfo = { Id: this.carIncomeId, SaleStatus: status };
-    this.formService.create("car_income", carinfo).then(data => {}, err => {});
+    this.formService.create('car_income', carinfo).then(data => {}, err => {});
 
     const customer = {
       Id: this.customerId,
-      CanUpdate: status == "已开票" ? 0 : 1
+      CanUpdate: status == '已开票' ? 0 : 1
     };
-    this.formService.create("car_customer", customer).then(
-      data => {
-      },
-      err => {}
-    );
+    this.formService.create('car_customer', customer).then(data => {}, err => {});
   }
 
-  onNoAudit(){
-    this.checkRoles("AuditRoles").then(d => {
+  onNoAudit() {
+    this.checkRoles('AuditRoles').then(d => {
       if (d == 0) {
-        this._state.notifyDataChanged("messagebox", {
-          type: "warning",
-          msg: "你无权反审核。",
+        this._state.notifyDataChanged('messagebox', {
+          type: 'warning',
+          msg: '你无权反审核。',
           time: new Date().getTime()
         });
       } else {
@@ -663,23 +756,23 @@ export class CarSaleCashNewComponent implements OnInit {
 
   onAuditNot(): void {
     let formValue = {};
-    formValue["Id"] = this.carsale["Id"];
-    formValue["AuditResult"] = " ";
-    formValue["AuditSuggest"] = " ";
-    formValue["Auditor"] = sessionStorage.getItem("userName");
-    formValue["AuditTime"] = this._common.getTodayString();
-    this.formService.create("car_sale_cash", formValue).then(
+    formValue['Id'] = this.carsale['Id'];
+    formValue['AuditResult'] = ' ';
+    formValue['AuditSuggest'] = ' ';
+    formValue['Auditor'] = sessionStorage.getItem('userName');
+    formValue['AuditTime'] = this._common.getTodayString();
+    this.formService.create('car_sale_cash', formValue).then(
       data => {
-        this._state.notifyDataChanged("messagebox", {
-          type: "success",
-          msg: "反审核成功。",
+        this._state.notifyDataChanged('messagebox', {
+          type: 'success',
+          msg: '反审核成功。',
           time: new Date().getTime()
         });
-        this.saveStatus("订单");
+        this.saveStatus('订单');
       },
       err => {
-        this._state.notifyDataChanged("messagebox", {
-          type: "error",
+        this._state.notifyDataChanged('messagebox', {
+          type: 'error',
           msg: err,
           time: new Date().getTime()
         });
@@ -690,16 +783,16 @@ export class CarSaleCashNewComponent implements OnInit {
   checkRoles(power) {
     const that = this;
     return new Promise((resolve, reject) => {
-      const roleIds = sessionStorage.getItem("roleIds");
+      const roleIds = sessionStorage.getItem('roleIds');
       const roleName = that.tableView[power];
       if (roleName) {
-        that.formService.getForms("sys_role").then(
+        that.formService.getForms('sys_role').then(
           data => {
             const roles = data.Data;
             const rl = _.find(roles, f => {
-              return f["RoleName"] == roleName;
+              return f['RoleName'] == roleName;
             });
-            if (rl && roleIds.includes(rl["Id"])) {
+            if (rl && roleIds.includes(rl['Id'])) {
               resolve(1);
             } else {
               resolve(0);
@@ -712,5 +805,4 @@ export class CarSaleCashNewComponent implements OnInit {
       }
     });
   }
-  
 }

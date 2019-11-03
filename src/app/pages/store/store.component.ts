@@ -42,6 +42,9 @@ export class StoreComponent implements OnInit {
     });
   }
 
+  ngOnDestory() {
+      this._state.unsubscribe('messagebox');
+  }
   ngOnInit() {
   }
 }

@@ -11,6 +11,7 @@ import async from 'async';
 
 import { DicService } from '../../basedata/dic/dic.services';
 import { PartsService } from '../../basedata/parts/parts.services';
+import { PartsComboService } from '../../basedata/partscombo/partscombo.services';
 import { FormService } from '../form/form.services';
 import { GlobalState } from '../../../global.state';
 
@@ -18,7 +19,7 @@ import { GlobalState } from '../../../global.state';
   selector: 'app-carsalenew',
   templateUrl: './carsalenew2.component.html',
   styleUrls: ['./carsalenew.component.scss'],
-  providers: [DicService, FormService, PartsService]
+  providers: [DicService, FormService, PartsService, PartsComboService]
 })
 export class CarSaleNewComponent implements OnInit {
   @Input()
@@ -287,6 +288,45 @@ export class CarSaleNewComponent implements OnInit {
       }
     }
   };
+
+  settingsPartsCombo = {
+    pager: {
+      perPage: 15
+    },
+    selectMode: 'multi',
+    mode: 'external',
+    actions: false,
+    hideSubHeader: true,
+    columns: {
+      type_name: {
+        title: '分类',
+        type: 'string',
+        filter: false
+      },
+      item_name: {
+        title: '套餐名称',
+        type: 'string',
+        filter: false
+      },
+      item_no: {
+        title: '套餐编号',
+        type: 'string',
+        filter: false
+      },
+      cost_price: {
+        title: '套餐成本',
+        type: 'string',
+        filter: false
+      },
+      sale_price: {
+        title: '销售价',
+        type: 'string',
+        filter: false
+      }
+    }
+  };
+  sourcePartsCombo: LocalDataSource = new LocalDataSource();
+
   sourceParts: LocalDataSource = new LocalDataSource();
 
   constructor(
@@ -295,6 +335,7 @@ export class CarSaleNewComponent implements OnInit {
     private _dicService: DicService,
     private formService: FormService,
     private partsService: PartsService,
+    private partsComboService: PartsComboService,
     private _router: Router,
     private route: ActivatedRoute
   ) {}
@@ -327,8 +368,23 @@ export class CarSaleNewComponent implements OnInit {
     }
 
     this.getPartsDataList();
+    this.getPartComboDataList();
   }
-
+  getPartComboDataList(): void {
+    this.loading = true;
+    this.partsComboService.getPartsCombo().then(
+      data => {
+        this.loading = false;
+        if (data.Data && data.Data.length > 0) {
+          this.sourcePartsCombo.load(data.Data);
+        }
+      },
+      err => {
+        this.loading = false;
+        this._state.notifyDataChanged('messagebox', { type: 'error', msg: err, time: new Date().getTime() });
+      }
+    );
+  }
   getPartsDataList(): void {
     this.loading = true;
     this.partsService.getParts().then(
@@ -737,7 +793,6 @@ export class CarSaleNewComponent implements OnInit {
     }
   }
 
-  selectedItem = [];
   rowPartsClicked(event): void {
     if (event.isSelected) {
       if (!_.some(this.giveItem, ['itemName', event.data['item_name']])) {
@@ -749,7 +804,7 @@ export class CarSaleNewComponent implements OnInit {
         });
       }
     } else {
-      _.remove(this.selectedItem, function(n) {
+      _.remove(this.giveItem, function(n) {
         return n['itemName'] == event.data['item_name'];
       });
     }

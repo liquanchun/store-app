@@ -102,6 +102,20 @@
       <div class="row">
         <div class="col-md-5 offset-md-1">
           <div class="form-group row">
+            <label for="sale_price" class="col-sm-2 col-form-label">套餐来源</label>
+            <div class="col-sm-10">
+              <select class="form-control" [(ngModel)]="partscombo.parttype">
+                <option value='DN' selected>DN</option>
+                <option value='HZ' selected>HZ</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-5 offset-md-1">
+          <div class="form-group row">
             <div class="col-sm-10 btn-group offset-sm-2">
               <button type="button" [disabled]="isEnable" (click)="onConfirm()"
                 class="btn btn-info">{{ isSaved ? '正在保存...':'保存'}}</button>

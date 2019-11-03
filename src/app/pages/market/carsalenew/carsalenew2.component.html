@@ -155,9 +155,14 @@
     </table>
 
     <div style="padding:8px;font-weight: bold">赠送商品或服务产品</div>
-    <button [disabled]="!isEnable" type="button" (shown)="showPopCustomer()" class="btn btn-light btn-sm"
-      #part="ngbPopover" [ngbPopover]="popContentItem" popoverTitle="项目信息列表" container="body">
+    <button [disabled]="!isEnable" type="button" placement="right" (shown)="showPopCustomer()"
+      class="btn btn-light btn-sm" #part="ngbPopover" [ngbPopover]="popContentItem" popoverTitle="项目信息列表"
+      container="body">
       <i class="fa fa-pencil" aria-hidden="true"></i> 添加项目</button>
+    <button [disabled]="!isEnable" type="button" placement="right" (shown)="showPopCustomer()"
+      class="btn btn-light btn-sm" #partcombo="ngbPopover" [ngbPopover]="popContentCombo" popoverTitle="项目套餐列表"
+      container="body">
+      <i class="fa fa-pencil" aria-hidden="true"></i> 添加套餐</button>
     <table class="table table-bordered table-sm">
       <thead>
         <tr>
@@ -345,6 +350,13 @@
   <ng-template #popContentItem>
     <a href="javascrpit:void(0)" class="close" (click)='part.close()' aria-hidden="true">&times;</a>
     <ng2-smart-table [settings]="settingsParts" [source]="sourceParts" (userRowSelect)="rowPartsClicked($event)">
+    </ng2-smart-table>
+  </ng-template>
+
+  <ng-template #popContentCombo>
+    <a href="javascrpit:void(0)" class="close" (click)='partcombo.close()' aria-hidden="true">&times;</a>
+    <ng2-smart-table [settings]="settingsPartsCombo" [source]="sourcePartsCombo"
+      (userRowSelect)="rowPartsClicked($event)">
     </ng2-smart-table>
   </ng-template>
 

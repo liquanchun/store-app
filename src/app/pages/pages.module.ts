@@ -12,27 +12,18 @@ import { Router, Routes, RouterModule } from '@angular/router';
 import * as _ from 'lodash';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    AppTranslationModule,
-    NgaModule,
-    routing,
-    BrowserAnimationsModule,
-    Select2Module,
-  ],
+  imports: [CommonModule, AppTranslationModule, NgaModule, routing, BrowserAnimationsModule, Select2Module],
   declarations: [Pages]
 })
 export class PagesModule implements OnInit {
   constructor(private router: Router) {
     // console.log(routing.providers);
     // console.log(this.router);
-
     // this.router.config[2].children.push(
     //   { path: 'sys', loadChildren: './sys/sys.module#SysModule' }
     // );
     // this.router.resetConfig(this.router.config);
   }
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 }

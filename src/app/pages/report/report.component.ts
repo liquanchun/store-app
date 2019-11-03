@@ -43,6 +43,9 @@ export class ReportComponent implements OnInit {
     });
   }
 
+  ngOnDestory() {
+      this._state.unsubscribe('messagebox');
+  }
   ngOnInit() {
   }
 }

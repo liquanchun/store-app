@@ -6,8 +6,18 @@ import * as _ from 'lodash';
 @Component({
   selector: 'print-cash-view',
   template: `
-      <div style="padding-top: 3px;padding-bottom: 3px;" class="dropdown">
-      <button style="height:32px;padding:0.1rem 1rem" class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">操作</button>
+    <div style="padding-top: 3px;padding-bottom: 3px;" class="dropdown">
+      <button
+        style="height:32px;padding:0.1rem 1rem"
+        class="btn btn-light dropdown-toggle"
+        type="button"
+        id="dropdownMenuButton"
+        data-toggle="dropdown"
+        aria-haspopup="true"
+        aria-expanded="false"
+      >
+        操作
+      </button>
       <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
         <a class="dropdown-item" (click)="onDetail()" href="javaScript:void(0)">详情</a>
         <a class="dropdown-item" (click)="onClick()" href="javaScript:void(0)">打印交款明细</a>
@@ -16,9 +26,8 @@ import * as _ from 'lodash';
         <a class="dropdown-item" (click)="onClick3()" href="javaScript:void(0)">打印销售合同</a>
       </div>
     </div>
-    `,
+  `
 })
-
 export class PrintCashComponent implements ViewCell, OnInit {
   renderValue: string;
 
@@ -27,19 +36,11 @@ export class PrintCashComponent implements ViewCell, OnInit {
 
   @Output() save: EventEmitter<any> = new EventEmitter();
 
-  currentUser:string;
-  constructor(
-    private _state: GlobalState,
-  ) { }
+  currentUser: string;
+  constructor(private _state: GlobalState) {}
 
   ngOnInit() {
-    this.currentUser = sessionStorage.getItem("userName");
-  }
-  onInvoice(){
-    this.save.emit(this.rowData);
-
-    const getTimestamp = new Date().getTime();
-    this._state.notifyDataChanged('print.carsalecash.invoice', { id: this.value.Id, time: getTimestamp });
+    this.currentUser = sessionStorage.getItem('userName');
   }
   onDetail() {
     this.save.emit(this.rowData);
@@ -48,19 +49,18 @@ export class PrintCashComponent implements ViewCell, OnInit {
     this._state.notifyDataChanged('print.carsalecash.detail', { id: this.value.Id, time: getTimestamp });
   }
   onAudit() {
-
-    if (this.value.Status == "现车") {
+    if (this.value.Status == '现车') {
       this.save.emit(this.rowData);
 
       const getTimestamp = new Date().getTime();
-      this._state.notifyDataChanged("print.carsalecash.audit", {
+      this._state.notifyDataChanged('print.carsalecash.audit', {
         id: this.value.Id,
         time: getTimestamp
       });
     } else {
-      this._state.notifyDataChanged("messagebox", {
-        type: "warning",
-        msg: "只有现车才能审核。",
+      this._state.notifyDataChanged('messagebox', {
+        type: 'warning',
+        msg: '只有现车才能审核。',
         time: new Date().getTime()
       });
     }
@@ -69,7 +69,7 @@ export class PrintCashComponent implements ViewCell, OnInit {
     this.save.emit(this.rowData);
 
     const getTimestamp = new Date().getTime();
-    this._state.notifyDataChanged("print.carsalecash.auditnot", {
+    this._state.notifyDataChanged('print.carsalecash.auditnot', {
       id: this.value.Id,
       time: getTimestamp
     });
@@ -84,7 +84,7 @@ export class PrintCashComponent implements ViewCell, OnInit {
     this.save.emit(this.rowData);
 
     const getTimestamp = new Date().getTime();
-    this._state.notifyDataChanged('print.carsalecash2', { id: this.value.Id, time: getTimestamp,dn:dn });
+    this._state.notifyDataChanged('print.carsalecash2', { id: this.value.Id, time: getTimestamp, dn: dn });
   }
   onClick3() {
     this.save.emit(this.rowData);

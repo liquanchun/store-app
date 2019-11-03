@@ -53,6 +53,11 @@ export class PartsComboComponent implements OnInit {
         title: '项目编号',
         type: 'string',
         filter: false
+      },
+      parttype: {
+        title: '套餐来源',
+        type: 'string',
+        filter: false
       }
     }
   };
@@ -92,7 +97,7 @@ export class PartsComboComponent implements OnInit {
         filter: false
       },
       partslistname: {
-        title: '套餐套餐',
+        title: '套餐项目',
         type: 'string',
         filter: false
       },
@@ -111,6 +116,11 @@ export class PartsComboComponent implements OnInit {
         type: 'string',
         filter: false
       },
+      parttype: {
+        title: '套餐来源',
+        type: 'string',
+        filter: false
+      },
       createdBy: {
         title: '录入人',
         type: 'string',
@@ -124,6 +134,7 @@ export class PartsComboComponent implements OnInit {
     type_name: '',
     item_name: '',
     item_no: '',
+    parttype: '',
     cost_price: 0,
     sale_price: 0
   };
@@ -158,7 +169,13 @@ export class PartsComboComponent implements OnInit {
       label: '套餐项目',
       name: 'item_list',
       placeholder: '输入套餐项目',
-      options: [],
+      validation: [Validators.required]
+    },
+    {
+      type: 'select',
+      label: '套餐来源',
+      name: 'parttype',
+      options: ['DN', 'HZ'],
       validation: [Validators.required]
     },
     {

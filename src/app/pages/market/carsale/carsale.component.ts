@@ -86,6 +86,13 @@ export class CarsaleComponent implements OnInit {
   ];
   printSet: any = ['第一联 销售顾问', '第二联 销售计划', '第三联 财务', '第四联 客户'];
 
+  configAddDeposit: FieldConfig[] = [
+    {
+      type: 'input',
+      label: '追加定价',
+      name: 'AddDeposit'
+    }
+  ];
   //表格视图定义
   tableView: {};
   //表单修改时数据
@@ -128,7 +135,6 @@ export class CarsaleComponent implements OnInit {
     private _config: Config
   ) {}
   ngAfterViewInit() {}
-  ngOnDestroy() {}
   ngOnInit() {
     this.formname = 'carsale';
     this.canUpdate = false;
@@ -141,6 +147,7 @@ export class CarsaleComponent implements OnInit {
     this._state.unsubscribe('print.carsale.audit');
     this._state.unsubscribe('print.carsale.auditnot');
     this._state.unsubscribe('print.carsale');
+    this._state.unsubscribe('print.carsale.adddeposit');
 
     this._state.subscribe('print.carsale.detail', data => {
       this.router.navigate(['/pages/market/carsalenew', this.mainTableID], {
@@ -223,9 +230,60 @@ export class CarsaleComponent implements OnInit {
       }
     });
 
+    this._state.subscribe('print.carsale.adddeposit', data => {
+      this.printOrder = _.find(this.carsaleData, f => {
+        return f['Id'] == data.id;
+      });
+      if (this.printOrder) {
+        this.onAddDeposit(this.printOrder);
+      }
+    });
+
     // _.delay(function (that) {
     //   that.getDataList();
     // }, 1000 * 60, this);
+  }
+  ngOnDestory() {
+    this._state.unsubscribe('print.carsale.detail');
+    this._state.unsubscribe('print.carsale.check');
+    this._state.unsubscribe('print.carsale.audit');
+    this._state.unsubscribe('print.carsale.auditnot');
+    this._state.unsubscribe('print.carsale');
+    this._state.unsubscribe('print.carsale.adddeposit');
+  }
+
+  onAddDeposit(data) {
+    const that = this;
+    const modalRef = this.modalService.open(NgbdModalContent);
+    modalRef.componentInstance.title = '追加定金';
+    modalRef.componentInstance.config = this.configAddDeposit;
+    modalRef.componentInstance.formValue = data;
+    modalRef.componentInstance.saveFun = (result, closeBack) => {
+      let newdata = JSON.parse(result);
+
+      newdata['Id'] = data['Id'];
+      newdata['Deposit'] = data['Deposit'] + _.toNumber(newdata['AddDeposit']);
+      delete newdata['AddDeposit'];
+      console.log('newdata', newdata);
+      that.formService.create('car_booking', newdata).then(
+        data => {
+          closeBack();
+          this._state.notifyDataChanged('messagebox', {
+            type: 'success',
+            msg: '保存成功。',
+            time: new Date().getTime()
+          });
+          that.getDataList();
+        },
+        err => {
+          this._state.notifyDataChanged('messagebox', {
+            type: 'error',
+            msg: err,
+            time: new Date().getTime()
+          });
+        }
+      );
+    };
   }
 
   start() {

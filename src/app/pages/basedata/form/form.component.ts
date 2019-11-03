@@ -97,7 +97,9 @@ export class FormComponent implements OnInit {
       }
     });
   }
-
+  ngOnDestory() {
+    this._state.unsubscribe('newurl');
+  }
   start() {
     this.configAddArr = [];
     this.configUpdateArr = [];

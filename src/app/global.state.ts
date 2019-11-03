@@ -1,15 +1,12 @@
-import { Injectable } from "@angular/core";
-import { Subject } from "rxjs/Subject";
-import * as _ from "lodash";
+import { Injectable } from '@angular/core';
+import { Subject } from 'rxjs/Subject';
+import * as _ from 'lodash';
 @Injectable()
 export class GlobalState {
   private _data = new Subject<Object>();
   private _dataStream$ = this._data.asObservable();
 
-  private _subscriptions: Map<string, Array<Function>> = new Map<
-    string,
-    Array<Function>
-  >();
+  private _subscriptions: Map<string, Array<Function>> = new Map<string, Array<Function>>();
 
   constructor() {
     this._dataStream$.subscribe(data => this._onEvent(data));
@@ -44,10 +41,12 @@ export class GlobalState {
   }
 
   _onEvent(data: any) {
-    let subscribers = this._subscriptions.get(data["event"]) || [];
-
+    let subscribers = this._subscriptions.get(data['event']) || [];
+    if (_.size(subscribers) > 1) {
+      _.drop(subscribers, _.size(subscribers) - 1);
+    }
     subscribers.forEach(callback => {
-      callback.call(null, data["data"]);
+      callback.call(null, data['data']);
     });
   }
 }

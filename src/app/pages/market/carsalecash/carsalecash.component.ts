@@ -217,7 +217,10 @@ export class CarSaleCashComponent implements OnInit {
     private _config: Config
   ) {}
   ngOnDestroy() {
-    this._state = null;
+    this._state.unsubscribe("print.carsalecash.detail");
+    this._state.unsubscribe("print.carsalecash.audit");
+    this._state.unsubscribe("print.carsalecash.auditnot");
+    this._state.unsubscribe("print.carsalecash");
   }
   ngOnInit() {
     this.formname = "carsalecash";
@@ -227,15 +230,12 @@ export class CarSaleCashComponent implements OnInit {
     const that = this;
     this.todayObj = this._common.getTodayObj();
     this.todayStr = this._common.getTodayTime();
+
     this._state.unsubscribe("print.carsalecash.detail");
     this._state.unsubscribe("print.carsalecash.audit");
     this._state.unsubscribe("print.carsalecash.auditnot");
     this._state.unsubscribe("print.carsalecash");
-
-    this._state.subscribe("print.carsalecash.invoice", data => {
-      this.invoiceDate(data.id);
-    });
-
+    
     this._state.subscribe("print.carsalecash.detail", data => {
       this.checkRoles("AuditRoles").then(d => {
         if (d == 1) {

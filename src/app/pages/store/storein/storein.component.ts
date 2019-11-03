@@ -246,6 +246,9 @@ export class StoreinComponent implements OnInit {
     });
     this.getDataList();
   }
+  ngOnDestory() {
+      this._state.unsubscribe('print.storein');
+  }
   onSearch(query: string = '') {
     this.source.setFilter([
       { field: 'billNo', search: query },

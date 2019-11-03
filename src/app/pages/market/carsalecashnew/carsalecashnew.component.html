@@ -31,13 +31,15 @@
           <td>车型</td>
           <td><input readonly [value]="carinfo.CarType" type="text" class="form-control inputline"></td>
           <td>指导价</td>
-          <td><input readonly [value]="carinfo.GuidePrice | numberSeparator" type="text" class="form-control inputline"></td>
+          <td><input readonly [value]="carinfo.GuidePrice | numberSeparator" type="text" class="form-control inputline">
+          </td>
         </tr>
         <tr>
           <td>17位车架号</td>
           <td><input readonly [value]="carinfo.Vinno" type="text" class="form-control inputline"></td>
           <td>外观颜色/内饰</td>
-          <td><input readonly value="{{carinfo.CarColor}}/{{carinfo.CarTrim}}" type="text" class="form-control inputline"></td>
+          <td><input readonly value="{{carinfo.CarColor}}/{{carinfo.CarTrim}}" type="text"
+              class="form-control inputline"></td>
         </tr>
 
         <tr>
@@ -92,63 +94,65 @@
             </select>
           </td>
           <td><strong><span class="reqmark">*</span>优惠金额</strong></td>
-          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.Discount" type="number" min="0" class="form-control"></td>
+          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.Discount" type="number" min="0"
+              class="form-control"></td>
         </tr>
 
         <tr>
           <td valign="middle" style="height:20px;line-height:20px" rowspan="12">付款信息单位：（元）</td>
           <td><span class="reqmark">*</span>新车款金额</td>
-          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.NewCarFee" type="number" min="0" (change)="priceChange()"
-              class="form-control"></td>
+          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.NewCarFee" type="number" min="0"
+              (change)="priceChange()" class="form-control"></td>
           <td>分期首付金额</td>
           <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.FirstFee" type="number" min="0" max="100"
               (change)="priceChange()" class="form-control"></td>
         </tr>
         <tr>
           <td>保险费金额</td>
-          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.InsureFee" type="number" min="0" (change)="priceChange()"
-              class="form-control"></td>
+          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.InsureFee" type="number" min="0"
+              (change)="priceChange()" class="form-control"></td>
           <td>购置税金额</td>
-          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.BuyTaxFee" type="number" min="0" (change)="priceChange()"
-              class="form-control"></td>
+          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.BuyTaxFee" type="number" min="0"
+              (change)="priceChange()" class="form-control"></td>
         </tr>
         <tr>
           <td>代办服务费金额</td>
-          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.FinanceSerFee" type="number" min="0" (change)="priceChange()"
-              class="form-control"></td>
+          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.FinanceSerFee" type="number" min="0"
+              (change)="priceChange()" class="form-control"></td>
           <td>装饰费金额</td>
-          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.DecorateFee" type="number" min="0" (change)="priceChange()"
-              class="form-control"></td>
+          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.DecorateFee" type="number" min="0"
+              (change)="priceChange()" class="form-control"></td>
         </tr>
 
         <tr>
           <td>交车综合服务金额</td>
-          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.TakeAllFee" type="number" min="0" (change)="priceChange()"
-              class="form-control"></td>
+          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.TakeAllFee" type="number" min="0"
+              (change)="priceChange()" class="form-control"></td>
           <td>安心服务费金额</td>
-          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.TakeCareFee" type="number" min="0" (change)="priceChange()"
-              class="form-control"></td>
+          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.TakeCareFee" type="number" min="0"
+              (change)="priceChange()" class="form-control"></td>
         </tr>
 
         <tr>
           <td>贴心服务费金额</td>
-          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.IntimateFee" type="number" min="0" (change)="priceChange()"
-              class="form-control"></td>
+          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.IntimateFee" type="number" min="0"
+              (change)="priceChange()" class="form-control"></td>
           <td>玻璃保障服务费金额</td>
-          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.GlassSerFee" type="number" min="0" (change)="priceChange()"
-              class="form-control"></td>
+          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.GlassSerFee" type="number" min="0"
+              (change)="priceChange()" class="form-control"></td>
         </tr>
         <tr>
           <td>刷卡费金额</td>
-          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.CardCashFee" type="number" min="0" (change)="priceChange()"
-              class="form-control"></td>
+          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.CardCashFee" type="number" min="0"
+              (change)="priceChange()" class="form-control"></td>
           <td>其他金额</td>
-          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.OtherFee" type="number" min="0" (change)="priceChange()"
-              class="form-control"></td>
+          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.OtherFee" type="number" min="0"
+              (change)="priceChange()" class="form-control"></td>
         </tr>
         <tr>
           <td>备注说明</td>
-          <td colspan="3"><input [class.inputline]="!isEnable" [(ngModel)]="carsale.Remark" type="text" class="form-control"></td>
+          <td colspan="3"><input [class.inputline]="!isEnable" [(ngModel)]="carsale.Remark" type="text"
+              class="form-control"></td>
         </tr>
         <tr>
           <td><strong>应收金额总计</strong></td>
@@ -161,8 +165,8 @@
           <td>减：已付订金金额</td>
           <td>{{carsale.Deposit | numberSeparator}}</td>
           <td>旧车置换金额</td>
-          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.OldChangeFee" (change)="priceChange()" type="number"
-              min="0" class="form-control"></td>
+          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.OldChangeFee" (change)="priceChange()"
+              type="number" min="0" class="form-control"></td>
         </tr>
 
         <tr>
@@ -170,8 +174,8 @@
           <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.LastFee" (change)="priceChange()" type="number"
               min="0" class="form-control"></td>
           <td>其他金额</td>
-          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.OtherFee2" (change)="priceChange()" type="number"
-              min="0" class="form-control"></td>
+          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.OtherFee2" (change)="priceChange()"
+              type="number" min="0" class="form-control"></td>
         </tr>
 
         <tr>
@@ -188,11 +192,12 @@
   </div>
 
   <div style="padding:8px;font-weight: bold">精品装饰明细</div>
-  <button [disabled]="!isEnable" placement="right" (shown)="showPopCarItem()" #pitem="ngbPopover" [ngbPopover]="popContentPartItem"
-    popoverTitle="精品装饰列表" type="button" class="btn btn-light btn-sm" container="body">
+  <button [disabled]="!isEnable" placement="right" (shown)="showPopCarItem()" #pitem="ngbPopover"
+    [ngbPopover]="popContentPartItem" popoverTitle="精品装饰列表" type="button" class="btn btn-light btn-sm" container="body">
     <i class="fa fa-pencil" aria-hidden="true"></i> 自费项目</button>
-  <button [disabled]="!isEnable" placement="right" (shown)="showPopCarItem()" #pitem2="ngbPopover" [ngbPopover]="popContentPartItem2"
-    popoverTitle="精品装饰列表" type="button" class="btn btn-light btn-sm" container="body">
+  <button [disabled]="!isEnable" placement="right" (shown)="showPopCarItem()" #pitem2="ngbPopover"
+    [ngbPopover]="popContentPartItem2" popoverTitle="精品装饰列表" type="button" class="btn btn-light btn-sm"
+    container="body">
     <i class="fa fa-pencil" aria-hidden="true"></i> 免费项目</button>
   <table class="table table-bordered table-sm">
     <thead>
@@ -209,9 +214,12 @@
       <tr *ngFor="let item of partItem">
         <td>{{item.ItemType}}</td>
         <td>{{item.Service}}</td>
-        <td><input [class.inputline]="!isEnable" [(ngModel)]="item.ItemName" (change)="cacalItem()" type="text" class="form-control"></td>
-        <td><input [class.inputline]="!isEnable" [(ngModel)]="item.Count" (change)="cacalItem()" type="text" class="form-control"></td>
-        <td><input [class.inputline]="!isEnable" [(ngModel)]="item.Price" (change)="cacalItem()" type="text" class="form-control"></td>
+        <td><input [class.inputline]="!isEnable" [(ngModel)]="item.ItemName" (change)="cacalItem()" type="text"
+            class="form-control"></td>
+        <td><input [class.inputline]="!isEnable" [(ngModel)]="item.Count" (change)="cacalItem()" type="text"
+            class="form-control"></td>
+        <td><input [class.inputline]="!isEnable" [(ngModel)]="item.Price" (change)="cacalItem()" type="text"
+            class="form-control"></td>
         <td>
           <button *ngIf="isEnable" type="button" (click)="removeItem(item.ItemName)" class="btn btn-warning">删除</button>
         </td>
@@ -245,7 +253,8 @@
         </tr>
         <tr>
           <td colspan="2">备注</td>
-          <td colspan="4"><input [class.inputline]="!isEnable" [(ngModel)]="carsale.Remark2" type="text" class="form-control"></td>
+          <td colspan="4"><input [class.inputline]="!isEnable" [(ngModel)]="carsale.Remark2" type="text"
+              class="form-control"></td>
         </tr>
       </tbody>
     </table>
@@ -278,21 +287,27 @@
         <tr>
           <td rowspan="3"><strong>赠送批准明细</strong></td>
           <td>装饰费</td>
-          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.ZhuangxFee" type="number" min="0" class="form-control"></td>
+          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.ZhuangxFee" type="number" min="0"
+              class="form-control"></td>
           <td>汽油费</td>
-          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.GasFee" type="number" min="0" class="form-control"></td>
+          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.GasFee" type="number" min="0"
+              class="form-control"></td>
         </tr>
         <tr>
           <td>保险费</td>
-          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.BaoxianFee" type="number" min="0" class="form-control"></td>
+          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.BaoxianFee" type="number" min="0"
+              class="form-control"></td>
           <td>维修费</td>
-          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.MaintainFee" type="number" min="0" class="form-control"></td>
+          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.MaintainFee" type="number" min="0"
+              class="form-control"></td>
         </tr>
         <tr>
           <td>佣金费</td>
-          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.Commission" type="number" min="0" class="form-control"></td>
+          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.Commission" type="number" min="0"
+              class="form-control"></td>
           <td>其他</td>
-          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.OtherFee3" type="number" min="0" class="form-control"></td>
+          <td><input [class.inputline]="!isEnable" [(ngModel)]="carsale.OtherFee3" type="number" min="0"
+              class="form-control"></td>
         </tr>
       </tbody>
     </table>
@@ -303,8 +318,10 @@
       <button *ngIf="isEnable" type="button" (click)="onConfirm()" class="btn btn-info">{{ isSaved ?
         '正在保存...':'确认保存'}}</button>
       <button type="button" (click)="onBack()" class="btn btn-warning">返回列表</button>
-      <button *ngIf="!isEnable && carsale.AuditResult != '通过'" type="button" (click)="onAudit()" class="btn btn-success">审核</button>
-      <button *ngIf="!isEnable && carsale.AuditResult == '通过'" type="button" (click)="onNoAudit()" class="btn btn-danger">反审核</button>
+      <button *ngIf="!isEnable && carsale.AuditResult != '通过'" type="button" (click)="onAudit()"
+        class="btn btn-success">审核</button>
+      <button *ngIf="!isEnable && carsale.AuditResult == '通过'" type="button" (click)="onNoAudit()"
+        class="btn btn-danger">反审核</button>
     </div>
   </div>
 
@@ -312,14 +329,48 @@
 
 <ng-template #popContentPartItem>
   <a href="javascrpit:void(0)" class="close" (click)='pitem.close()' aria-hidden="true">&times;</a>
-  <search-input (searchClick)="onSearchItem($event)"></search-input>
-  <ng2-smart-table [settings]="settingsItem" [source]="popCarItemGrid" (userRowSelect)="rowItemClicked($event)">
-  </ng2-smart-table>
+  <ngb-tabset>
+    <ngb-tab title="装饰项目">
+      <ng-template ngbTabContent>
+        <search-input (searchClick)="onSearchItemParts($event)"></search-input>
+        <ng2-smart-table [settings]="settingsParts" [source]="sourceParts" (userRowSelect)="rowItemClicked($event)">
+        </ng2-smart-table>
+      </ng-template>
+    </ngb-tab>
+    <ngb-tab title="装饰套餐">
+      <ng-template ngbTabContent>
+        <ng-template ngbTabContent>
+          <search-input (searchClick)="onSearchItemPartsCombo($event)"></search-input>
+          <ng2-smart-table [settings]="settingsPartsCombo" [source]="sourcePartsCombo"
+            (userRowSelect)="rowItemClicked($event)">
+          </ng2-smart-table>
+        </ng-template>
+      </ng-template>
+    </ngb-tab>
+  </ngb-tabset>
+
+
 </ng-template>
 
 <ng-template #popContentPartItem2>
   <a href="javascrpit:void(0)" class="close" (click)='pitem2.close()' aria-hidden="true">&times;</a>
-  <search-input (searchClick)="onSearchItem($event)"></search-input>
-  <ng2-smart-table [settings]="settingsItem" [source]="popCarItemGrid" (userRowSelect)="rowItem2Clicked($event)">
-  </ng2-smart-table>
+  <ngb-tabset>
+    <ngb-tab title="装饰项目">
+      <ng-template ngbTabContent>
+        <search-input (searchClick)="onSearchItemParts($event)"></search-input>
+        <ng2-smart-table [settings]="settingsParts" [source]="sourceParts" (userRowSelect)="rowItem2Clicked($event)">
+        </ng2-smart-table>
+      </ng-template>
+    </ngb-tab>
+    <ngb-tab title="装饰套餐">
+      <ng-template ngbTabContent>
+        <ng-template ngbTabContent>
+          <search-input (searchClick)="onSearchItemPartsCombo($event)"></search-input>
+          <ng2-smart-table [settings]="settingsPartsCombo" [source]="sourcePartsCombo"
+            (userRowSelect)="rowItem2Clicked($event)">
+          </ng2-smart-table>
+        </ng-template>
+      </ng-template>
+    </ngb-tab>
+  </ngb-tabset>
 </ng-template>
