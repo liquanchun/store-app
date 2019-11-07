@@ -83,12 +83,22 @@ export class PrintButtonComponent implements ViewCell, OnInit {
   }
   // 转结算
   onAddDeposit() {
-    this.save.emit(this.rowData);
+    this.checkRoles('DepositRoles').then(d => {
+      if (d == 0) {
+        this._state.notifyDataChanged('messagebox', {
+          type: 'warning',
+          msg: '你无权追加订金。',
+          time: new Date().getTime()
+        });
+      } else {
+        this.save.emit(this.rowData);
 
-    const getTimestamp = new Date().getTime();
-    this._state.notifyDataChanged('print.carsale.adddeposit', {
-      id: this.value.Id,
-      time: getTimestamp
+        const getTimestamp = new Date().getTime();
+        this._state.notifyDataChanged('print.carsale.adddeposit', {
+          id: this.value.Id,
+          time: getTimestamp
+        });
+      }
     });
   }
   onCheck() {
