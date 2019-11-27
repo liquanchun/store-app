@@ -240,7 +240,7 @@ export class StoreoutComponent implements OnInit {
   }
   onSearch(query: string = '') {
     this.source.setFilter(
-      [{ field: 'OrderNo', search: query }, { field: 'operatorTxt', search: query }, { field: 'createdBy', search: query }, { field: 'typeIdTxt', search: query }],
+      [{ field: 'orderNo', search: query }, { field: 'operatorTxt', search: query }, { field: 'createdBy', search: query }, { field: 'typeIdTxt', search: query }],
       false
     );
   }
