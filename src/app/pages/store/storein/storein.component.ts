@@ -251,7 +251,7 @@ export class StoreinComponent implements OnInit {
   }
   onSearch(query: string = '') {
     this.source.setFilter([
-      { field: 'OrderNo', search: query },
+      { field: 'orderNo', search: query },
       { field: 'operatorTxt', search: query },
       { field: 'supplierIdTxt', search: query },
       { field: 'createdBy', search: query },
