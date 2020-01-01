@@ -329,11 +329,12 @@
 
 <ng-template #popContentPartItem>
   <a href="javascrpit:void(0)" class="close" (click)='pitem.close()' aria-hidden="true">&times;</a>
-  <ngb-tabset>
+  <!-- <ngb-tabset>
     <ngb-tab title="装饰项目">
       <ng-template ngbTabContent>
         <search-input (searchClick)="onSearchItemParts($event)"></search-input>
-        <ng2-smart-table [settings]="settingsParts" [source]="sourceParts" (userRowSelect)="rowItemClicked($event)">
+        <ng2-smart-table [settings]="settingsParts" [source]="sourceParts"
+          (userRowSelect)="rowItemClicked($event)">
         </ng2-smart-table>
       </ng-template>
     </ngb-tab>
@@ -347,14 +348,53 @@
         </ng-template>
       </ng-template>
     </ngb-tab>
-  </ngb-tabset>
+  </ngb-tabset> -->
+
+  <div class="accordion" id="accordionExample">
+    <div class="card">
+      <div class="card-header" id="headingOne">
+        <h2 class="mb-0">
+          <button class="btn btn-link" style="color:white" type="button" data-toggle="collapse"
+            data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+            装饰项目
+          </button>
+        </h2>
+      </div>
+
+      <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+        <div class="card-body">
+          <search-input (searchClick)="onSearchItemParts($event)"></search-input>
+          <ng2-smart-table [settings]="settingsParts" [source]="sourceParts" (userRowSelect)="rowItemClicked($event)">
+          </ng2-smart-table>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header" id="headingTwo">
+        <h2 class="mb-0">
+          <button class="btn btn-link collapsed" style="color:white" type="button" data-toggle="collapse"
+            data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+            装饰套餐
+          </button>
+        </h2>
+      </div>
+      <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+        <div class="card-body">
+          <search-input (searchClick)="onSearchItemPartsCombo($event)"></search-input>
+          <ng2-smart-table [settings]="settingsPartsCombo" [source]="sourcePartsCombo"
+            (userRowSelect)="rowItemClicked($event)">
+          </ng2-smart-table>
+        </div>
+      </div>
+    </div>
+  </div>
 
 
 </ng-template>
 
 <ng-template #popContentPartItem2>
   <a href="javascrpit:void(0)" class="close" (click)='pitem2.close()' aria-hidden="true">&times;</a>
-  <ngb-tabset>
+  <!-- <ngb-tabset>
     <ngb-tab title="装饰项目">
       <ng-template ngbTabContent>
         <search-input (searchClick)="onSearchItemParts($event)"></search-input>
@@ -372,5 +412,45 @@
         </ng-template>
       </ng-template>
     </ngb-tab>
-  </ngb-tabset>
+  </ngb-tabset> -->
+
+  <div class="accordion" id="accordionExample">
+    <div class="card">
+      <div class="card-header" id="headingOne">
+        <h2 class="mb-0">
+          <button class="btn btn-link" style="color:white" type="button" data-toggle="collapse"
+            data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+            装饰项目
+          </button>
+        </h2>
+      </div>
+
+      <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+        <div class="card-body">
+          <search-input (searchClick)="onSearchItemParts($event)"></search-input>
+          <ng2-smart-table [settings]="settingsParts" [source]="sourceParts" (userRowSelect)="rowItem2Clicked($event)">
+          </ng2-smart-table>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header" id="headingTwo">
+        <h2 class="mb-0">
+          <button class="btn btn-link collapsed" style="color:white" type="button" data-toggle="collapse"
+            data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+            装饰套餐
+          </button>
+        </h2>
+      </div>
+      <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+        <div class="card-body">
+          <search-input (searchClick)="onSearchItemPartsCombo($event)"></search-input>
+          <ng2-smart-table [settings]="settingsPartsCombo" [source]="sourcePartsCombo"
+            (userRowSelect)="rowItem2Clicked($event)">
+          </ng2-smart-table>
+        </div>
+      </div>
+    </div>
+  </div>
+
 </ng-template>

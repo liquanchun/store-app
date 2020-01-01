@@ -27,8 +27,11 @@
           <div class="form-group row">
             <label for="type_name" class="col-sm-2 col-form-label">分类</label>
             <div class="col-sm-10">
-              <input [(ngModel)]="partscombo.type_name" type="text" class="form-control" id="type_name"
-                placeholder="输入分类">
+              <select class="form-control" id="type_name" [(ngModel)]="partscombo.type_name">
+                <option value='商品' selected>商品</option>
+                <option value='服务'>服务</option>
+              </select>
+
             </div>
           </div>
         </div>
@@ -106,7 +109,7 @@
             <div class="col-sm-10">
               <select class="form-control" [(ngModel)]="partscombo.parttype">
                 <option value='DN' selected>DN</option>
-                <option value='HZ' selected>HZ</option>
+                <option value='HZ'>HZ</option>
               </select>
             </div>
           </div>
