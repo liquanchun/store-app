@@ -59,46 +59,6 @@
 
         <div class="col-2">
           <div class="row">
-            <div style="padding-top:3px;padding-right: 0" class="col-3 text-right"> <label>车架号</label> </div>
-            <div class="col-9">
-              <input type="text" class="form-control" [(ngModel)]="search.carvinno">
-            </div>
-          </div>
-        </div>
-
-      </div>
-      <div class="row">
-        <div class="col-3">
-          <div class="row">
-            <div style="padding-top:3px;padding-right: 0" class="col-3 text-right"> <label>销售结构</label> </div>
-            <div class="col-9">
-              <select [(ngModel)]="search.buytype">
-                <option value="">--请选择--</option>
-                <option [value]="option.name" *ngFor="let option of buytype">
-                  {{ option.name }}
-                </option>
-              </select>
-            </div>
-          </div>
-        </div>
-
-
-        <div class="col-3">
-          <div class="row">
-            <div style="padding-top:3px;padding-right: 0" class="col-3 text-right"> <label>销售分类</label> </div>
-            <div class="col-9">
-              <select [(ngModel)]="search.custtype">
-                <option value="">--请选择--</option>
-                <option [value]="option.name" *ngFor="let option of custtype">
-                  {{ option.name }}
-                </option>
-              </select>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-3">
-          <div class="row">
             <div style="padding-top:3px;padding-right: 0" class="col-3 text-right"> <label>销售顾问</label> </div>
             <div class="col-9">
               <select [(ngModel)]="search.saleman">
@@ -107,6 +67,17 @@
                   {{ option.name }}
                 </option>
               </select>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="row">
+        <div class="col-3">
+          <div class="row">
+            <div style="padding-top:3px;padding-right: 0" class="col-3 text-right"> <label>车架号</label> </div>
+            <div class="col-9">
+              <input type="text" class="form-control" [(ngModel)]="search.carvinno">
             </div>
           </div>
         </div>

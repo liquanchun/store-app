@@ -138,8 +138,7 @@ export class CarstoreComponent implements OnInit {
     this._state.unsubscribe('print.carsalecash.invoice');
     this._state.unsubscribe('print.carsalecash.future');
     this._state.subscribe('print.carsalecash.invoice', data => {
-      console.log('invoice date');
-      this.invoiceDate(data.id);
+      this.invoiceDate(data);
     });
 
     this._state.subscribe('print.carsalecash.future', data => {
@@ -157,7 +156,7 @@ export class CarstoreComponent implements OnInit {
 
       that.formService.create('car_income', formValue).then(
         data => {
-          that.getDataList();
+          // that.getDataList();
         },
         err => {}
       );
@@ -526,20 +525,34 @@ export class CarstoreComponent implements OnInit {
     });
   }
 
-  invoiceDate(id) {
+  invoiceDate(record) {
     const that = this;
     const modalRef = this.modalService.open(NgbdModalContent);
     modalRef.componentInstance.title = '收到发票';
     modalRef.componentInstance.config = this.configInvoice;
     modalRef.componentInstance.saveFun = (result, closeBack) => {
       let formValue = JSON.parse(result);
+      let dt = _.find(this.datalist,f=>{ return f["Id"] == record.id; });
       _.each(this.configInvoice, f => {
         if (f.type === 'datepicker' && formValue[f.name]) {
           formValue[f.name] = this._common.getDateString(formValue[f.name]);
         }
       });
+
+      if(dt["InDate"] && formValue["ReceiveInvoice"]){
+          var oDate1 = new Date(dt["InDate"]);
+          var oDate2 = new Date(formValue["ReceiveInvoice"]);
+          if(oDate1.getTime() > oDate2.getTime()){
+                  this._state.notifyDataChanged('messagebox', {
+                  type: 'warning',
+                  msg: '发票日期不能小于入库日期',
+                  time: new Date().getTime()
+                });
+                return;
+          } 
+      }
+
       formValue['Id'] = this.mainTableID;
-      console.log(formValue);
       //closeBack();
       that.formService.create('car_income', formValue).then(
         data => {

@@ -30,6 +30,7 @@ export class SaleMonthComponent implements OnInit {
     '3系',
     '2系',
     '1系',
+    'X7',
     'X6',
     'X5',
     'X4',

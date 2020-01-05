@@ -55,7 +55,7 @@ export class CarSaleBookComponent implements OnInit {
   ) {}
   ngOnInit() {
     this.getViewName("carsalebook").then(data => {
-      this.getDataList();
+      //this.getDataList();
     });
     this.getCarInfo();
   }
@@ -214,7 +214,7 @@ export class CarSaleBookComponent implements OnInit {
       cardata[key] = val;
       const field = key.split("-")[1];
       save[field] = val;
-      // console.log(save);
+      console.log(save);
       this.formService.create("car_ledger", save).then(
         data => {
           if (_.isArray(data)) {
