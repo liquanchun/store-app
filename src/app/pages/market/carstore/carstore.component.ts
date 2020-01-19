@@ -572,7 +572,7 @@ export class CarstoreComponent implements OnInit {
         }
       });
 
-      if (dt["InDate"] && formValue["ReceiveInvoice"]) {
+      if (dt && dt["InDate"] && formValue["ReceiveInvoice"]) {
         var oDate1 = new Date(dt["InDate"]);
         var oDate2 = new Date(formValue["ReceiveInvoice"]);
         if (oDate1.getTime() > oDate2.getTime()) {
